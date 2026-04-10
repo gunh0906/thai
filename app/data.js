@@ -1,6 +1,6 @@
 window.BASE_DATA = {
   "appTitle": "태국어 포켓북",
-  "generatedAt": "2026-04-10T14:50:17",
+  "generatedAt": "2026-04-10T14:58:08",
   "transliterationStyle": "practical-ko",
   "note": "보강 표현의 발음 표기는 한국어 사용자 기준의 실전용 표기이며, 앱 안에서 직접 수정·추가할 수 있습니다.",
   "scenarios": [
@@ -53,10 +53,10 @@ window.BASE_DATA = {
   "stats": {
     "excelVocab": 328,
     "excelSentences": 32,
-    "supplementalVocab": 684,
-    "supplementalSentences": 388,
-    "totalVocab": 924,
-    "totalSentences": 412
+    "supplementalVocab": 704,
+    "supplementalSentences": 404,
+    "totalVocab": 778,
+    "totalSentences": 397
   },
   "vocab": [
     {
@@ -77,21 +77,39 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-002-마",
+      "id": "supplemental-vocab-598-마",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어1",
-      "thai": "마-",
-      "thaiScript": "",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "마",
+      "thaiScript": "มา",
       "korean": "오다",
-      "note": "",
+      "note": "기본 동사 검색을 위한 핵심 단어",
       "tags": [
+        "기본회화",
         "이동"
       ],
       "keywords": [
+        "มา",
         "오다",
-        "이동"
+        "기본",
+        "동사",
+        "검색을",
+        "위한",
+        "핵심",
+        "단어",
+        "기본회화",
+        "이동",
+        "온다",
+        "와요",
+        "옵니다",
+        "올게요",
+        "교통과",
+        "길찾기",
+        "관련",
+        "찾기와",
+        "교통"
       ]
     },
     {
@@ -187,20 +205,29 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-008-커",
+      "id": "supplemental-vocab-021-아오",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어1",
-      "thai": "커-",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "아오",
       "thaiScript": "",
-      "korean": "주세요",
+      "korean": "원하다 / 주세요",
       "note": "",
       "tags": [
+        "기본회화",
+        "식당",
+        "쇼핑",
         "숫자·시간"
       ],
       "keywords": [
-        "숫자·시간"
+        "아오",
+        "원하다",
+        "식당",
+        "쇼핑",
+        "숫자·시간",
+        "야크",
+        "기본회화"
       ]
     },
     {
@@ -223,22 +250,42 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-010-너이",
+      "id": "supplemental-vocab-603-팽",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어1",
-      "thai": "너이",
-      "thaiScript": "",
-      "korean": "적다",
-      "note": "",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "팽",
+      "thaiScript": "เขียน",
+      "korean": "쓰다",
+      "note": "기본 동사 검색을 위한 핵심 단어",
       "tags": [
-        "기본회화"
+        "기본회화",
+        "이동",
+        "숫자·시간"
       ],
       "keywords": [
-        "너이",
+        "เขียน",
+        "쓰다",
+        "기본",
+        "동사",
+        "검색을",
+        "위한",
+        "핵심",
+        "단어",
+        "기본회화",
+        "이동",
+        "쓴다",
+        "써요",
         "적다",
-        "기본회화"
+        "피안",
+        "일상",
+        "대화와",
+        "휴대폰",
+        "사용",
+        "관련",
+        "숫자·시간",
+        "너이"
       ]
     },
     {
@@ -261,21 +308,30 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-012-닛-너이",
+      "id": "supplemental-vocab-592-너이",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어1",
-      "thai": "닛 너이",
-      "thaiScript": "",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "너이",
+      "thaiScript": "น้อย",
       "korean": "조금",
-      "note": "",
+      "note": "일상 대화와 휴대폰 사용 관련 단어",
       "tags": [
-        "기본회화"
+        "기본회화",
+        "숫자·시간"
       ],
       "keywords": [
         "너이",
-        "기본회화"
+        "น้อย",
+        "일상",
+        "대화와",
+        "휴대폰",
+        "사용",
+        "관련",
+        "단어",
+        "기본회화",
+        "숫자·시간"
       ]
     },
     {
@@ -374,20 +430,21 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-018-안니",
+      "id": "excel-vocab-087-안니",
       "kind": "vocab",
       "source": "excel",
       "sourceLabel": "엑셀",
-      "sheet": "단어1",
+      "sheet": "단어 3",
       "thai": "안니",
       "thaiScript": "",
-      "korean": "이거",
+      "korean": "이것",
       "note": "",
       "tags": [
         "기본회화"
       ],
       "keywords": [
         "안니",
+        "이것",
         "기본회화"
       ]
     },
@@ -611,58 +668,72 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-030-커-톨",
+      "id": "supplemental-vocab-003-커톳-캅-카",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어1",
-      "thai": "커-톨",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "커톳 캅/카",
       "thaiScript": "",
-      "korean": "죄송합니다.",
+      "korean": "실례합니다 / 죄송합니다",
       "note": "",
       "tags": [
+        "기본회화",
         "인사"
       ],
       "keywords": [
+        "커톳",
+        "실례합니다",
         "죄송합니다",
-        "인사"
+        "인사",
+        "기본회화"
       ]
     },
     {
-      "id": "excel-vocab-031-크르앙",
+      "id": "supplemental-vocab-271-크루엉짝",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어1",
-      "thai": "크르앙",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "크루엉짝",
       "thaiScript": "",
       "korean": "기계",
-      "note": "",
+      "note": "현장과 작업 지시",
       "tags": [
-        "기본회화"
+        "기본회화",
+        "일터"
       ],
       "keywords": [
-        "크르앙",
+        "크루엉짝",
         "기계",
+        "현장과",
+        "작업",
+        "지시",
+        "일터",
+        "크르앙",
         "기본회화"
       ]
     },
     {
-      "id": "excel-vocab-032-히우",
+      "id": "supplemental-vocab-244-휴",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어1",
-      "thai": "히우",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "휴",
       "thaiScript": "",
       "korean": "배고프다",
-      "note": "",
+      "note": "몸 상태와 병원",
       "tags": [
-        "기본회화"
+        "기본회화",
+        "건강"
       ],
       "keywords": [
-        "히우",
         "배고프다",
+        "상태와",
+        "병원",
+        "건강",
+        "히우",
         "기본회화"
       ]
     },
@@ -686,22 +757,30 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-034-티나이",
+      "id": "supplemental-vocab-446-티-나이",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어1",
-      "thai": "티나이",
-      "thaiScript": "",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "티 나이",
+      "thaiScript": "ที่ไหน",
       "korean": "어디",
-      "note": "",
+      "note": "교통과 길찾기 관련 단어",
       "tags": [
         "이동"
       ],
       "keywords": [
-        "티나이",
+        "나이",
+        "ที่ไหน",
         "어디",
-        "이동"
+        "교통과",
+        "길찾기",
+        "관련",
+        "단어",
+        "이동",
+        "찾기와",
+        "교통",
+        "티나이"
       ]
     },
     {
@@ -724,19 +803,34 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-036-찬",
+      "id": "supplemental-vocab-672-탕-끌라옹",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어1",
-      "thai": "찬",
-      "thaiScript": "",
-      "korean": "나는",
-      "note": "",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "탕 끌라옹",
+      "thaiScript": "ถ้วย",
+      "korean": "그릇",
+      "note": "식당 추가 요청과 제외 요청에 쓰는 단어",
       "tags": [
-        "기본회화"
+        "기본회화",
+        "식당"
       ],
       "keywords": [
+        "끌라옹",
+        "ถ้วย",
+        "그릇",
+        "식당",
+        "추가",
+        "요청과",
+        "제외",
+        "요청에",
+        "쓰는",
+        "단어",
+        "국그릇",
+        "식당에서",
+        "바로",
+        "위주",
         "나는",
         "기본회화"
       ]
@@ -762,41 +856,72 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-038-씨앙낭",
+      "id": "supplemental-vocab-379-시앙-당",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어1",
-      "thai": "씨앙낭",
-      "thaiScript": "",
-      "korean": "시끄럽다.",
-      "note": "",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "시앙 당",
+      "thaiScript": "เสียงดัง",
+      "korean": "시끄럽다",
+      "note": "방이 시끄럽다고 말할 때 자주 씀",
       "tags": [
+        "이동",
+        "건강",
         "숫자·시간"
       ],
       "keywords": [
-        "씨앙낭",
+        "시앙",
+        "เสียงดัง",
         "시끄럽다",
+        "방이",
+        "시끄럽다고",
+        "말할",
+        "자주",
+        "이동",
+        "건강",
+        "소음",
+        "시끄러워요",
+        "씨앙낭",
         "숫자·시간"
       ]
     },
     {
-      "id": "excel-vocab-039-빠이",
+      "id": "supplemental-vocab-597-빠이",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어1",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
       "thai": "빠이",
-      "thaiScript": "",
+      "thaiScript": "ไป",
       "korean": "가다",
-      "note": "",
+      "note": "기본 동사 검색을 위한 핵심 단어",
       "tags": [
+        "기본회화",
         "이동"
       ],
       "keywords": [
         "빠이",
+        "ไป",
         "가다",
-        "이동"
+        "기본",
+        "동사",
+        "검색을",
+        "위한",
+        "핵심",
+        "단어",
+        "기본회화",
+        "이동",
+        "간다",
+        "가요",
+        "갑니다",
+        "갈게요",
+        "가고싶다",
+        "교통과",
+        "길찾기",
+        "관련",
+        "찾기와",
+        "교통"
       ]
     },
     {
@@ -819,21 +944,33 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-041-헝남",
+      "id": "supplemental-vocab-405-홍-남",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어1",
-      "thai": "헝남",
-      "thaiScript": "",
-      "korean": "화장실",
-      "note": "",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "홍 남",
+      "thaiScript": "ห้องน้ำ",
+      "korean": "욕실 / 화장실",
+      "note": "호텔과 객실 관련 단어",
       "tags": [
-        "건강"
+        "이동",
+        "건강",
+        "숫자·시간"
       ],
       "keywords": [
-        "헝남",
+        "ห้องน้ำ",
+        "욕실",
         "화장실",
+        "호텔과",
+        "객실",
+        "관련",
+        "단어",
+        "이동",
+        "숫자·시간",
+        "찾기와",
+        "교통",
+        "헝남",
         "건강"
       ]
     },
@@ -914,19 +1051,29 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-046-펫",
+      "id": "supplemental-vocab-483-펫",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어1",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
       "thai": "펫",
-      "thaiScript": "",
-      "korean": "매워",
-      "note": "",
+      "thaiScript": "เผ็ด",
+      "korean": "맵다",
+      "note": "식당과 주문 관련 단어",
       "tags": [
-        "기본회화"
+        "기본회화",
+        "식당",
+        "건강"
       ],
       "keywords": [
+        "เผ็ด",
+        "맵다",
+        "식당과",
+        "주문",
+        "관련",
+        "단어",
+        "식당",
+        "건강",
         "매워",
         "기본회화"
       ]
@@ -951,40 +1098,66 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-048-완",
+      "id": "supplemental-vocab-486-완",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어1",
-      "thai": "완-",
-      "thaiScript": "",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "완",
+      "thaiScript": "หวาน",
       "korean": "달다",
-      "note": "",
+      "note": "식당과 주문 관련 단어",
       "tags": [
-        "기본회화"
+        "기본회화",
+        "식당"
       ],
       "keywords": [
+        "หวาน",
         "달다",
+        "식당과",
+        "주문",
+        "관련",
+        "단어",
+        "식당",
+        "식당에서",
+        "바로",
+        "쓰는",
+        "위주",
         "기본회화"
       ]
     },
     {
-      "id": "excel-vocab-049-아이",
+      "id": "supplemental-vocab-541-아이",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어1",
-      "thai": "ㅇ-아이",
-      "thaiScript": "",
-      "korean": "쉽다",
-      "note": "",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "아이",
+      "thaiScript": "ไอ",
+      "korean": "기침",
+      "note": "병원과 응급 상황 관련 단어",
       "tags": [
-        "기본회화"
+        "기본회화",
+        "건강"
       ],
       "keywords": [
         "아이",
+        "ไอ",
+        "기침",
+        "병원과",
+        "응급",
+        "상황",
+        "관련",
+        "단어",
+        "건강",
+        "상태와",
+        "병원",
         "쉽다",
-        "기본회화"
+        "기본회화",
+        "약국에서",
+        "많이",
+        "찾는",
+        "증상"
       ]
     },
     {
@@ -1026,40 +1199,63 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-052-런-마악",
+      "id": "supplemental-vocab-481-철랍",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어1",
-      "thai": "런-마악",
-      "thaiScript": "",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "철랍",
+      "thaiScript": "ร้อน",
       "korean": "뜨겁다",
-      "note": "",
+      "note": "식당과 주문 관련 단어",
       "tags": [
-        "기본회화"
+        "기본회화",
+        "식당",
+        "쇼핑",
+        "건강"
       ],
       "keywords": [
-        "마악",
+        "철랍",
+        "ร้อน",
         "뜨겁다",
-        "기본회화"
+        "식당과",
+        "주문",
+        "관련",
+        "단어",
+        "식당",
+        "쇼핑과",
+        "가격",
+        "흥정용",
+        "쇼핑",
+        "마악",
+        "기본회화",
+        "덥다",
+        "상태와",
+        "병원",
+        "건강"
       ]
     },
     {
-      "id": "excel-vocab-053-나오",
+      "id": "supplemental-vocab-239-나우",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어1",
-      "thai": "나오",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "나우",
       "thaiScript": "",
       "korean": "춥다",
-      "note": "",
+      "note": "몸 상태와 병원",
       "tags": [
-        "기본회화"
+        "기본회화",
+        "건강"
       ],
       "keywords": [
-        "나오",
+        "나우",
         "춥다",
+        "상태와",
+        "병원",
+        "건강",
+        "나오",
         "기본회화"
       ]
     },
@@ -1085,21 +1281,46 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-055-쫍",
+      "id": "supplemental-vocab-572-세럿",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어1",
-      "thai": "쫍",
-      "thaiScript": "",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "세럿",
+      "thaiScript": "เสร็จ",
       "korean": "끝나다",
-      "note": "",
+      "note": "일상 대화와 휴대폰 사용 관련 단어",
       "tags": [
-        "일터"
+        "기본회화",
+        "식당",
+        "이동",
+        "쇼핑",
+        "일터",
+        "숫자·시간"
       ],
       "keywords": [
+        "세럿",
+        "เสร็จ",
         "끝나다",
-        "일터"
+        "일상",
+        "대화와",
+        "휴대폰",
+        "사용",
+        "관련",
+        "단어",
+        "기본회화",
+        "숫자·시간",
+        "쎄씽",
+        "일터",
+        "레오",
+        "기본",
+        "동사와",
+        "위치",
+        "이동",
+        "식당",
+        "쇼핑",
+        "끝났어요",
+        "완료"
       ]
     },
     {
@@ -1121,25 +1342,6 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-057-쎄씽",
-      "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어1",
-      "thai": "쎄씽",
-      "thaiScript": "",
-      "korean": "끝나다",
-      "note": "",
-      "tags": [
-        "일터"
-      ],
-      "keywords": [
-        "쎄씽",
-        "끝나다",
-        "일터"
-      ]
-    },
-    {
       "id": "excel-vocab-058-마이-디",
       "kind": "vocab",
       "source": "excel",
@@ -1156,25 +1358,6 @@ window.BASE_DATA = {
         "마이",
         "안좋아",
         "기본회화"
-      ]
-    },
-    {
-      "id": "excel-vocab-059-셋-레오",
-      "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어1",
-      "thai": "셋 레오-",
-      "thaiScript": "",
-      "korean": "끝나다",
-      "note": "",
-      "tags": [
-        "일터"
-      ],
-      "keywords": [
-        "레오",
-        "끝나다",
-        "일터"
       ]
     },
     {
@@ -1327,22 +1510,31 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-068-타오라이",
+      "id": "supplemental-vocab-510-타오라이",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어1",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
       "thai": "타오라이",
-      "thaiScript": "",
-      "korean": "얼마에요",
-      "note": "",
+      "thaiScript": "เท่าไร",
+      "korean": "얼마",
+      "note": "쇼핑과 결제 관련 단어",
       "tags": [
         "쇼핑"
       ],
       "keywords": [
         "타오라이",
+        "เท่าไร",
+        "얼마",
+        "쇼핑과",
+        "결제",
+        "관련",
+        "단어",
+        "쇼핑",
+        "가격",
+        "흥정용",
         "얼마에요",
-        "쇼핑"
+        "얼마예요"
       ]
     },
     {
@@ -1360,7 +1552,8 @@ window.BASE_DATA = {
       ],
       "keywords": [
         "하자",
-        "기본회화"
+        "기본회화",
+        "만들다"
       ]
     },
     {
@@ -1383,19 +1576,22 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-071-러",
+      "id": "excel-vocab-054-러",
       "kind": "vocab",
       "source": "excel",
       "sourceLabel": "엑셀",
-      "sheet": "단어1",
-      "thai": "러-",
+      "sheet": "단어2",
+      "thai": "러 ∨",
       "thaiScript": "",
-      "korean": "기다리다",
+      "korean": "질문",
       "note": "",
       "tags": [
+        "기본회화",
         "일터"
       ],
       "keywords": [
+        "질문",
+        "기본회화",
         "기다리다",
         "일터"
       ]
@@ -1421,21 +1617,37 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-073-마-악",
+      "id": "supplemental-vocab-591-마크",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어1",
-      "thai": "마-악",
-      "thaiScript": "",
-      "korean": "많이/너무",
-      "note": "",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "마크",
+      "thaiScript": "มาก",
+      "korean": "아주 / 많이",
+      "note": "일상 대화와 휴대폰 사용 관련 단어",
       "tags": [
-        "기본회화"
+        "기본회화",
+        "쇼핑",
+        "숫자·시간"
       ],
       "keywords": [
+        "마크",
+        "มาก",
+        "아주",
         "많이",
-        "기본회화"
+        "일상",
+        "대화와",
+        "휴대폰",
+        "사용",
+        "관련",
+        "단어",
+        "기본회화",
+        "숫자·시간",
+        "쇼핑과",
+        "가격",
+        "흥정용",
+        "쇼핑"
       ]
     },
     {
@@ -1456,20 +1668,31 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-075-차",
+      "id": "supplemental-vocab-479-차",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어1",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
       "thai": "차",
-      "thaiScript": "",
-      "korean": "천천히",
-      "note": "",
+      "thaiScript": "ชา",
+      "korean": "차",
+      "note": "식당과 주문 관련 단어",
       "tags": [
         "기본회화",
+        "식당",
         "숫자·시간"
       ],
       "keywords": [
+        "ชา",
+        "식당과",
+        "주문",
+        "관련",
+        "단어",
+        "식당",
+        "식당에서",
+        "바로",
+        "쓰는",
+        "위주",
         "천천히",
         "기본회화",
         "숫자·시간"
@@ -1607,19 +1830,27 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-083-팍",
+      "id": "supplemental-vocab-132-팍",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어1",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
       "thai": "팍",
       "thaiScript": "",
-      "korean": "쉬다",
-      "note": "",
+      "korean": "채소",
+      "note": "식당에서 바로 쓰는 단어 위주",
       "tags": [
-        "기본회화"
+        "기본회화",
+        "식당"
       ],
       "keywords": [
+        "채소",
+        "식당에서",
+        "바로",
+        "쓰는",
+        "단어",
+        "위주",
+        "식당",
         "쉬다",
         "기본회화"
       ]
@@ -1646,14 +1877,14 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-085-티앙",
+      "id": "excel-vocab-003-티앙",
       "kind": "vocab",
       "source": "excel",
       "sourceLabel": "엑셀",
-      "sheet": "단어1",
+      "sheet": "단어 3",
       "thai": "티앙",
       "thaiScript": "",
-      "korean": "점심",
+      "korean": "점심 (12시)",
       "note": "",
       "tags": [
         "숫자·시간"
@@ -1661,6 +1892,7 @@ window.BASE_DATA = {
       "keywords": [
         "티앙",
         "점심",
+        "12시",
         "숫자·시간"
       ]
     },
@@ -1684,21 +1916,31 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-087-카우",
+      "id": "supplemental-vocab-472-카우",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어1",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
       "thai": "카우",
-      "thaiScript": "",
+      "thaiScript": "ข้าว",
       "korean": "밥",
-      "note": "",
+      "note": "식당과 주문 관련 단어",
       "tags": [
         "식당"
       ],
       "keywords": [
         "카우",
-        "식당"
+        "ข้าว",
+        "식당과",
+        "주문",
+        "관련",
+        "단어",
+        "식당",
+        "카오",
+        "식당에서",
+        "바로",
+        "쓰는",
+        "위주"
       ]
     },
     {
@@ -1722,20 +1964,34 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-089-낀",
+      "id": "supplemental-vocab-599-킨",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어1",
-      "thai": "낀",
-      "thaiScript": "",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "킨",
+      "thaiScript": "กิน",
       "korean": "먹다",
-      "note": "",
+      "note": "기본 동사 검색을 위한 핵심 단어",
       "tags": [
-        "식당"
+        "기본회화",
+        "식당",
+        "이동"
       ],
       "keywords": [
+        "กิน",
         "먹다",
+        "기본",
+        "동사",
+        "검색을",
+        "위한",
+        "핵심",
+        "단어",
+        "기본회화",
+        "이동",
+        "먹는다",
+        "먹어요",
+        "먹고싶다",
         "식당"
       ]
     },
@@ -1760,22 +2016,51 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-091-버엇",
+      "id": "supplemental-vocab-574-쁘읏",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어1",
-      "thai": "버엇",
-      "thaiScript": "",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "쁘읏",
+      "thaiScript": "เปิด",
       "korean": "열다",
-      "note": "",
+      "note": "일상 대화와 휴대폰 사용 관련 단어",
       "tags": [
-        "건강"
+        "기본회화",
+        "식당",
+        "이동",
+        "쇼핑",
+        "건강",
+        "일터",
+        "숫자·시간"
       ],
       "keywords": [
-        "버엇",
+        "쁘읏",
+        "เปิด",
         "열다",
-        "건강"
+        "일상",
+        "대화와",
+        "휴대폰",
+        "사용",
+        "관련",
+        "단어",
+        "기본회화",
+        "숫자·시간",
+        "프엇",
+        "현장과",
+        "작업",
+        "지시",
+        "일터",
+        "버엇",
+        "건강",
+        "기본",
+        "동사와",
+        "위치",
+        "이동",
+        "식당",
+        "쇼핑",
+        "열어요",
+        "열어주세요"
       ]
     },
     {
@@ -1798,40 +2083,64 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-093-삣",
+      "id": "supplemental-vocab-610-닫다",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어1",
-      "thai": "삣",
-      "thaiScript": "",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "닫다",
+      "thaiScript": "ปิด",
       "korean": "닫다",
-      "note": "",
+      "note": "기본 동사와 위치 관련 단어",
       "tags": [
-        "기본회화"
+        "기본회화",
+        "식당",
+        "이동",
+        "쇼핑",
+        "숫자·시간"
       ],
       "keywords": [
         "닫다",
-        "기본회화"
+        "ปิด",
+        "기본",
+        "동사와",
+        "위치",
+        "관련",
+        "단어",
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑",
+        "닫아요",
+        "닫아주세요",
+        "일상",
+        "대화와",
+        "휴대폰",
+        "사용",
+        "숫자·시간"
       ]
     },
     {
-      "id": "excel-vocab-094-므어-완",
+      "id": "supplemental-vocab-310-므어완",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어1",
-      "thai": "므어-완",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "므어완",
       "thaiScript": "",
       "korean": "어제",
-      "note": "",
+      "note": "시간과 날짜",
       "tags": [
         "숫자·시간"
       ],
       "keywords": [
-        "므어",
+        "므어완",
         "어제",
-        "숫자·시간"
+        "시간과",
+        "날짜",
+        "숫자·시간",
+        "므어",
+        "므어완니"
       ]
     },
     {
@@ -1854,21 +2163,23 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-096-완니",
+      "id": "supplemental-vocab-308-완니",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어1",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
       "thai": "완니",
       "thaiScript": "",
       "korean": "오늘",
-      "note": "",
+      "note": "시간과 날짜",
       "tags": [
         "숫자·시간"
       ],
       "keywords": [
         "완니",
         "오늘",
+        "시간과",
+        "날짜",
         "숫자·시간"
       ]
     },
@@ -1891,38 +2202,24 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-098-쓰",
+      "id": "supplemental-vocab-173-쓰",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어1",
-      "thai": "쓰-",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "쓰",
       "thaiScript": "",
       "korean": "사다",
-      "note": "",
+      "note": "쇼핑과 가격 흥정용",
       "tags": [
         "쇼핑"
       ],
       "keywords": [
         "사다",
+        "쇼핑과",
+        "가격",
+        "흥정용",
         "쇼핑"
-      ]
-    },
-    {
-      "id": "excel-vocab-099-찬",
-      "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어1",
-      "thai": "찬",
-      "thaiScript": "",
-      "korean": "층",
-      "note": "",
-      "tags": [
-        "기본회화"
-      ],
-      "keywords": [
-        "기본회화"
       ]
     },
     {
@@ -1981,21 +2278,27 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-003-안딸라이",
+      "id": "supplemental-vocab-294-안따라이",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어2",
-      "thai": "안딸라이",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "안따라이",
       "thaiScript": "",
       "korean": "위험",
-      "note": "",
+      "note": "현장과 작업 지시",
       "tags": [
-        "건강"
+        "건강",
+        "일터"
       ],
       "keywords": [
-        "안딸라이",
+        "안따라이",
         "위험",
+        "현장과",
+        "작업",
+        "지시",
+        "일터",
+        "안딸라이",
         "건강"
       ]
     },
@@ -2091,43 +2394,66 @@ window.BASE_DATA = {
       "keywords": [
         "싸이",
         "넣다",
-        "기본회화"
+        "기본회화",
+        "끼다"
       ]
     },
     {
-      "id": "excel-vocab-009-크랑-나",
+      "id": "supplemental-vocab-568-티-랑",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어2",
-      "thai": "크랑 나",
-      "thaiScript": "",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "티 랑",
+      "thaiScript": "ทีหลัง",
       "korean": "나중에",
-      "note": "",
+      "note": "일상 대화와 휴대폰 사용 관련 단어",
       "tags": [
-        "기본회화"
+        "기본회화",
+        "숫자·시간"
       ],
       "keywords": [
-        "크랑",
+        "ทีหลัง",
         "나중에",
-        "기본회화"
+        "일상",
+        "대화와",
+        "휴대폰",
+        "사용",
+        "관련",
+        "단어",
+        "기본회화",
+        "숫자·시간",
+        "크랑",
+        "카오"
       ]
     },
     {
-      "id": "excel-vocab-010-건",
+      "id": "supplemental-vocab-569-끄론",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어2",
-      "thai": "건-",
-      "thaiScript": "",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "끄론",
+      "thaiScript": "ก่อน",
       "korean": "먼저",
-      "note": "",
+      "note": "일상 대화와 휴대폰 사용 관련 단어",
       "tags": [
-        "일터"
+        "기본회화",
+        "일터",
+        "숫자·시간"
       ],
       "keywords": [
+        "끄론",
+        "ก่อน",
         "먼저",
+        "일상",
+        "대화와",
+        "휴대폰",
+        "사용",
+        "관련",
+        "단어",
+        "기본회화",
+        "숫자·시간",
         "일터"
       ]
     },
@@ -2149,65 +2475,65 @@ window.BASE_DATA = {
         "짜이",
         "집중",
         "이동",
-        "일터"
+        "일터",
+        "싸마티"
       ]
     },
     {
-      "id": "excel-vocab-012-남-마",
+      "id": "supplemental-vocab-615-가지고-오다",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어2",
-      "thai": "남 마-",
-      "thaiScript": "",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "가지고 오다",
+      "thaiScript": "เอามา",
       "korean": "가져오다",
-      "note": "",
-      "tags": [
-        "이동",
-        "일터"
-      ],
-      "keywords": [
-        "가져오다",
-        "이동",
-        "일터"
-      ]
-    },
-    {
-      "id": "excel-vocab-013-미-싸마티",
-      "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어2",
-      "thai": "미-싸마티",
-      "thaiScript": "",
-      "korean": "집중",
-      "note": "",
-      "tags": [
-        "이동",
-        "일터"
-      ],
-      "keywords": [
-        "싸마티",
-        "집중",
-        "이동",
-        "일터"
-      ]
-    },
-    {
-      "id": "excel-vocab-014-랑",
-      "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어2",
-      "thai": "랑",
-      "thaiScript": "",
-      "korean": "물을 사용해 닦다",
-      "note": "",
+      "note": "기본 동사와 위치 관련 단어",
       "tags": [
         "기본회화",
-        "식당"
+        "식당",
+        "이동",
+        "쇼핑",
+        "일터"
       ],
       "keywords": [
+        "가지고",
+        "오다",
+        "เอามา",
+        "가져오다",
+        "기본",
+        "동사와",
+        "위치",
+        "관련",
+        "단어",
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑",
+        "가져와요",
+        "일터"
+      ]
+    },
+    {
+      "id": "supplemental-vocab-210-랑",
+      "kind": "vocab",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "랑",
+      "thaiScript": "",
+      "korean": "아래",
+      "note": "길 찾기와 교통",
+      "tags": [
+        "기본회화",
+        "식당",
+        "이동"
+      ],
+      "keywords": [
+        "아래",
+        "찾기와",
+        "교통",
+        "이동",
         "물을",
         "사용해",
         "닦다",
@@ -2273,22 +2599,36 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-018-파-쳇-또와",
+      "id": "supplemental-vocab-394-파-처뜯-뚜어",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어2",
-      "thai": "파 쳇 또와",
-      "thaiScript": "",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "파 처뜯 뚜어",
+      "thaiScript": "ผ้าเช็ดตัว",
       "korean": "수건",
-      "note": "",
+      "note": "호텔과 객실 관련 단어",
       "tags": [
-        "기본회화"
+        "기본회화",
+        "이동",
+        "숫자·시간"
       ],
       "keywords": [
-        "또와",
+        "처뜯",
+        "뚜어",
+        "ผ้าเช็ดตัว",
         "수건",
-        "기본회화"
+        "호텔과",
+        "객실",
+        "관련",
+        "단어",
+        "이동",
+        "숫자·시간",
+        "또와",
+        "기본회화",
+        "호텔",
+        "비품과",
+        "요청"
       ]
     },
     {
@@ -2322,12 +2662,16 @@ window.BASE_DATA = {
       "korean": "천 / 옷 /의복 / 옷감",
       "note": "",
       "tags": [
+        "기본회화",
         "숫자·시간"
       ],
       "keywords": [
         "의복",
         "옷감",
-        "숫자·시간"
+        "숫자·시간",
+        "쓰아",
+        "기본회화",
+        "능판"
       ]
     },
     {
@@ -2387,19 +2731,26 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-024-왓",
+      "id": "supplemental-vocab-303-왓",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어2",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
       "thai": "왓",
       "thaiScript": "",
-      "korean": "제다(치수 등)",
-      "note": "",
+      "korean": "재다 / 측정하다",
+      "note": "현장과 작업 지시",
       "tags": [
-        "기본회화"
+        "기본회화",
+        "일터"
       ],
       "keywords": [
+        "재다",
+        "측정하다",
+        "현장과",
+        "작업",
+        "지시",
+        "일터",
         "제다",
         "치수",
         "기본회화"
@@ -2438,12 +2789,16 @@ window.BASE_DATA = {
       "korean": "성과 / 결과",
       "note": "",
       "tags": [
+        "기본회화",
+        "인사",
         "일터"
       ],
       "keywords": [
         "성과",
         "결과",
-        "일터"
+        "일터",
+        "인사",
+        "기본회화"
       ]
     },
     {
@@ -2544,24 +2899,6 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-033-껀",
-      "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어2",
-      "thai": "껀-",
-      "thaiScript": "",
-      "korean": "먼저",
-      "note": "",
-      "tags": [
-        "일터"
-      ],
-      "keywords": [
-        "먼저",
-        "일터"
-      ]
-    },
-    {
       "id": "excel-vocab-034-칸",
       "kind": "vocab",
       "source": "excel",
@@ -2637,31 +2974,44 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-038-어억",
+      "id": "supplemental-vocab-619-나가다",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어2",
-      "thai": "어억",
-      "thaiScript": "",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "나가다",
+      "thaiScript": "ออกไป",
       "korean": "나가다",
-      "note": "",
+      "note": "기본 동사와 위치 관련 단어",
       "tags": [
-        "이동"
+        "기본회화",
+        "식당",
+        "이동",
+        "쇼핑"
       ],
       "keywords": [
-        "어억",
         "나가다",
-        "이동"
+        "ออกไป",
+        "기본",
+        "동사와",
+        "위치",
+        "관련",
+        "단어",
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑",
+        "나가요",
+        "어억"
       ]
     },
     {
-      "id": "excel-vocab-039-딸-롯",
+      "id": "excel-vocab-020-투캉",
       "kind": "vocab",
       "source": "excel",
       "sourceLabel": "엑셀",
-      "sheet": "단어2",
-      "thai": "딸 롯-",
+      "sheet": "단어 4",
+      "thai": "투캉",
       "thaiScript": "",
       "korean": "항상",
       "note": "",
@@ -2669,29 +3019,43 @@ window.BASE_DATA = {
         "기본회화"
       ],
       "keywords": [
+        "투캉",
         "항상",
         "기본회화"
       ]
     },
     {
-      "id": "excel-vocab-040-쁠리안",
+      "id": "supplemental-vocab-375-쁠리안",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어2",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
       "thai": "쁠리안",
-      "thaiScript": "",
-      "korean": "갈아입다 / 바꾸다 /교환",
-      "note": "",
+      "thaiScript": "เปลี่ยน",
+      "korean": "바꾸다 / 변경하다",
+      "note": "방 변경, 날짜 변경, 좌석 변경 등에 폭넓게 사용",
       "tags": [
-        "기본회화"
+        "기본회화",
+        "일터"
       ],
       "keywords": [
         "쁠리안",
-        "갈아입다",
+        "เปลี่ยน",
         "바꾸다",
-        "교환",
-        "기본회화"
+        "변경하다",
+        "변경",
+        "날짜",
+        "좌석",
+        "등에",
+        "폭넓게",
+        "사용",
+        "기본회화",
+        "일터",
+        "바꿔",
+        "교체",
+        "갈아",
+        "갈아입다",
+        "교환"
       ]
     },
     {
@@ -2710,24 +3074,6 @@ window.BASE_DATA = {
       "keywords": [
         "고혹",
         "거짓말",
-        "기본회화"
-      ]
-    },
-    {
-      "id": "excel-vocab-042-쓰아",
-      "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어2",
-      "thai": "쓰아",
-      "thaiScript": "",
-      "korean": "옷",
-      "note": "",
-      "tags": [
-        "기본회화"
-      ],
-      "keywords": [
-        "쓰아",
         "기본회화"
       ]
     },
@@ -2804,21 +3150,33 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-047-두",
+      "id": "supplemental-vocab-601-두",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어2",
-      "thai": "두-",
-      "thaiScript": "",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "두",
+      "thaiScript": "ดู",
       "korean": "보다",
-      "note": "",
+      "note": "기본 동사 검색을 위한 핵심 단어",
       "tags": [
-        "기본회화"
+        "기본회화",
+        "이동"
       ],
       "keywords": [
+        "ดู",
         "보다",
-        "기본회화"
+        "기본",
+        "동사",
+        "검색을",
+        "위한",
+        "핵심",
+        "단어",
+        "기본회화",
+        "이동",
+        "본다",
+        "봐요",
+        "보여줘"
       ]
     },
     {
@@ -2840,12 +3198,12 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-049-퐝",
+      "id": "supplemental-vocab-074-다이-인",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어2",
-      "thai": "퐝",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "다이 인",
       "thaiScript": "",
       "korean": "듣다",
       "note": "",
@@ -2853,25 +3211,8 @@ window.BASE_DATA = {
         "기본회화"
       ],
       "keywords": [
+        "다이",
         "듣다",
-        "기본회화"
-      ]
-    },
-    {
-      "id": "excel-vocab-050-돈-띠",
-      "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어2",
-      "thai": "돈 띠",
-      "thaiScript": "",
-      "korean": "맞다",
-      "note": "",
-      "tags": [
-        "기본회화"
-      ],
-      "keywords": [
-        "맞다",
         "기본회화"
       ]
     },
@@ -2933,38 +3274,23 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-054-러",
+      "id": "supplemental-vocab-104-쿠나-초",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어2",
-      "thai": "러 ∨",
-      "thaiScript": "",
-      "korean": "질문",
-      "note": "",
-      "tags": [
-        "기본회화"
-      ],
-      "keywords": [
-        "질문",
-        "기본회화"
-      ]
-    },
-    {
-      "id": "excel-vocab-055-쿤",
-      "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어2",
-      "thai": "쿤",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "쿠나 초",
       "thaiScript": "",
       "korean": "당신",
       "note": "",
       "tags": [
-        "기본회화"
+        "기본회화",
+        "인사"
       ],
       "keywords": [
+        "쿠나",
         "당신",
+        "인사",
         "기본회화"
       ]
     },
@@ -3025,21 +3351,25 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-059-던-바이",
+      "id": "supplemental-vocab-312-바이",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어2",
-      "thai": "던 바이",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "바이",
       "thaiScript": "",
       "korean": "오후",
-      "note": "",
+      "note": "시간과 날짜",
       "tags": [
-        "기본회화"
+        "기본회화",
+        "숫자·시간"
       ],
       "keywords": [
         "바이",
         "오후",
+        "시간과",
+        "날짜",
+        "숫자·시간",
         "기본회화"
       ]
     },
@@ -3063,21 +3393,29 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-061-능",
+      "id": "supplemental-vocab-354-능",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어2",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
       "thai": "능",
       "thaiScript": "",
-      "korean": "하나",
-      "note": "",
+      "korean": "찌다",
+      "note": "생활 단어 추가",
       "tags": [
-        "기본회화"
+        "기본회화",
+        "식당",
+        "쇼핑"
       ],
       "keywords": [
-        "하나",
-        "기본회화"
+        "찌다",
+        "생활",
+        "단어",
+        "추가",
+        "기본회화",
+        "쇼핑",
+        "식당",
+        "하나"
       ]
     },
     {
@@ -3181,10 +3519,12 @@ window.BASE_DATA = {
       "korean": "넷",
       "note": "",
       "tags": [
-        "기본회화"
+        "기본회화",
+        "쇼핑"
       ],
       "keywords": [
-        "기본회화"
+        "기본회화",
+        "쇼핑"
       ]
     },
     {
@@ -3388,20 +3728,32 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-079-씹",
+      "id": "supplemental-vocab-688-카이",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어2",
-      "thai": "씹",
-      "thaiScript": "",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "카이",
+      "thaiScript": "ไข้",
       "korean": "열",
-      "note": "",
+      "note": "병원과 약국에서 많이 찾는 증상 단어",
       "tags": [
         "건강"
       ],
       "keywords": [
-        "건강"
+        "카이",
+        "ไข้",
+        "병원과",
+        "약국에서",
+        "많이",
+        "찾는",
+        "증상",
+        "단어",
+        "건강",
+        "열나요",
+        "응급",
+        "상황",
+        "관련"
       ]
     },
     {
@@ -3570,24 +3922,6 @@ window.BASE_DATA = {
       "keywords": [
         "오전",
         "3시",
-        "숫자·시간"
-      ]
-    },
-    {
-      "id": "excel-vocab-089-능판",
-      "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어2",
-      "thai": "능판",
-      "thaiScript": "",
-      "korean": "천",
-      "note": "",
-      "tags": [
-        "숫자·시간"
-      ],
-      "keywords": [
-        "능판",
         "숫자·시간"
       ]
     },
@@ -3848,40 +4182,26 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-003-티앙",
+      "id": "supplemental-vocab-469-메누",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어 3",
-      "thai": "티앙",
-      "thaiScript": "",
-      "korean": "점심 (12시)",
-      "note": "",
-      "tags": [
-        "숫자·시간"
-      ],
-      "keywords": [
-        "티앙",
-        "점심",
-        "12시",
-        "숫자·시간"
-      ]
-    },
-    {
-      "id": "excel-vocab-006-메-누",
-      "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어 3",
-      "thai": "메-누-",
-      "thaiScript": "",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "메누",
+      "thaiScript": "เมนู",
       "korean": "메뉴",
-      "note": "",
+      "note": "식당과 주문 관련 단어",
       "tags": [
         "식당"
       ],
       "keywords": [
+        "메누",
+        "เมนู",
         "메뉴",
+        "식당과",
+        "주문",
+        "관련",
+        "단어",
         "식당"
       ]
     },
@@ -3926,21 +4246,29 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-009-허",
+      "id": "supplemental-vocab-507-하우-끌랍",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어 3",
-      "thai": "허",
-      "thaiScript": "",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "하우 끌랍",
+      "thaiScript": "เอากลับบ้าน",
       "korean": "포장",
-      "note": "",
+      "note": "식당과 주문 관련 단어",
       "tags": [
         "식당"
       ],
       "keywords": [
+        "하우",
+        "끌랍",
+        "เอากลับบ้าน",
         "포장",
-        "식당"
+        "식당과",
+        "주문",
+        "관련",
+        "단어",
+        "식당",
+        "테이크아웃"
       ]
     },
     {
@@ -3963,21 +4291,36 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-011-하이",
+      "id": "supplemental-vocab-616-주다",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어 3",
-      "thai": "하이",
-      "thaiScript": "",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "주다",
+      "thaiScript": "ให้",
       "korean": "주다",
-      "note": "",
+      "note": "기본 동사와 위치 관련 단어",
       "tags": [
+        "기본회화",
+        "식당",
+        "이동",
+        "쇼핑",
         "숫자·시간"
       ],
       "keywords": [
-        "하이",
         "주다",
+        "ให้",
+        "기본",
+        "동사와",
+        "위치",
+        "관련",
+        "단어",
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑",
+        "줘요",
+        "하이",
         "숫자·시간"
       ]
     },
@@ -4267,25 +4610,6 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-028-카우짜이-캅",
-      "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어 3",
-      "thai": "카우짜이 캅",
-      "thaiScript": "",
-      "korean": "이해했어요",
-      "note": "",
-      "tags": [
-        "기본회화"
-      ],
-      "keywords": [
-        "카우짜이",
-        "이해했어요",
-        "기본회화"
-      ]
-    },
-    {
       "id": "excel-vocab-029-씹란",
       "kind": "vocab",
       "source": "excel",
@@ -4381,23 +4705,33 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-034-카오-짜이",
+      "id": "supplemental-vocab-576-카오짜이",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어 3",
-      "thai": "카오 짜이",
-      "thaiScript": "",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "카오짜이",
+      "thaiScript": "เข้าใจ",
       "korean": "이해하다",
-      "note": "",
+      "note": "일상 대화와 휴대폰 사용 관련 단어",
       "tags": [
-        "기본회화"
+        "기본회화",
+        "숫자·시간"
       ],
       "keywords": [
-        "카오",
-        "짜이",
+        "카오짜이",
+        "เข้าใจ",
         "이해하다",
-        "기본회화"
+        "일상",
+        "대화와",
+        "휴대폰",
+        "사용",
+        "관련",
+        "단어",
+        "기본회화",
+        "숫자·시간",
+        "카오",
+        "짜이"
       ]
     },
     {
@@ -4509,21 +4843,31 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-041-낭쓰능한",
+      "id": "supplemental-vocab-388-패스폿",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어 3",
-      "thai": "낭쓰능한",
-      "thaiScript": "",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "패스폿",
+      "thaiScript": "พาสปอร์ต",
       "korean": "여권",
-      "note": "",
+      "note": "호텔과 객실 관련 단어",
       "tags": [
-        "기본회화"
+        "기본회화",
+        "이동",
+        "숫자·시간"
       ],
       "keywords": [
-        "낭쓰능한",
+        "패스폿",
+        "พาสปอร์ต",
         "여권",
+        "호텔과",
+        "객실",
+        "관련",
+        "단어",
+        "이동",
+        "숫자·시간",
+        "낭쓰능한",
         "기본회화"
       ]
     },
@@ -4584,39 +4928,56 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-045-롭",
+      "id": "supplemental-vocab-357-롭",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어 3",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
       "thai": "롭",
       "thaiScript": "",
-      "korean": "마이너스",
-      "note": "",
+      "korean": "맛 / 향",
+      "note": "생활 단어 추가",
       "tags": [
-        "기본회화"
+        "기본회화",
+        "식당",
+        "쇼핑"
       ],
       "keywords": [
-        "마이너스",
-        "기본회화"
+        "생활",
+        "단어",
+        "추가",
+        "기본회화",
+        "쇼핑",
+        "식당",
+        "마이너스"
       ]
     },
     {
-      "id": "excel-vocab-046-가앙갱",
+      "id": "supplemental-vocab-675-깡깽",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어 3",
-      "thai": "가앙갱",
-      "thaiScript": "",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "깡깽",
+      "thaiScript": "กางเกง",
       "korean": "바지",
-      "note": "",
+      "note": "쇼핑할 때 사이즈와 상품 상태를 묻는 단어",
       "tags": [
-        "기본회화"
+        "기본회화",
+        "쇼핑"
       ],
       "keywords": [
-        "가앙갱",
+        "깡깽",
+        "กางเกง",
         "바지",
+        "쇼핑할",
+        "사이즈와",
+        "상품",
+        "상태를",
+        "묻는",
+        "단어",
+        "쇼핑",
+        "가앙갱",
         "기본회화"
       ]
     },
@@ -4769,7 +5130,8 @@ window.BASE_DATA = {
       "keywords": [
         "알러이",
         "맛있다",
-        "식당"
+        "식당",
+        "아로이"
       ]
     },
     {
@@ -5056,20 +5418,25 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-070-팅",
+      "id": "supplemental-vocab-286-토",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어 3",
-      "thai": "팅",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "토",
       "thaiScript": "",
       "korean": "버리다",
-      "note": "",
+      "note": "현장과 작업 지시",
       "tags": [
-        "기본회화"
+        "기본회화",
+        "일터"
       ],
       "keywords": [
         "버리다",
+        "현장과",
+        "작업",
+        "지시",
+        "일터",
         "기본회화"
       ]
     },
@@ -5112,43 +5479,6 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-073-싸이",
-      "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어 3",
-      "thai": "싸이",
-      "thaiScript": "",
-      "korean": "끼다",
-      "note": "",
-      "tags": [
-        "기본회화"
-      ],
-      "keywords": [
-        "싸이",
-        "끼다",
-        "기본회화"
-      ]
-    },
-    {
-      "id": "excel-vocab-074-곤",
-      "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어 3",
-      "thai": "곤",
-      "thaiScript": "",
-      "korean": "먼저",
-      "note": "",
-      "tags": [
-        "일터"
-      ],
-      "keywords": [
-        "먼저",
-        "일터"
-      ]
-    },
-    {
       "id": "excel-vocab-075-담",
       "kind": "vocab",
       "source": "excel",
@@ -5163,25 +5493,6 @@ window.BASE_DATA = {
       ],
       "keywords": [
         "검정",
-        "기본회화"
-      ]
-    },
-    {
-      "id": "excel-vocab-076-카오-나",
-      "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어 3",
-      "thai": "카오 나",
-      "thaiScript": "",
-      "korean": "나중에",
-      "note": "",
-      "tags": [
-        "기본회화"
-      ],
-      "keywords": [
-        "카오",
-        "나중에",
         "기본회화"
       ]
     },
@@ -5261,22 +5572,39 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-081-티니",
+      "id": "supplemental-vocab-605-여기",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어 3",
-      "thai": "티니",
-      "thaiScript": "",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "여기",
+      "thaiScript": "ที่นี่",
       "korean": "여기",
-      "note": "",
+      "note": "기본 동사와 위치 관련 단어",
       "tags": [
-        "기본회화"
+        "기본회화",
+        "식당",
+        "이동",
+        "쇼핑"
       ],
       "keywords": [
-        "티니",
         "여기",
-        "기본회화"
+        "ที่นี่",
+        "기본",
+        "동사와",
+        "위치",
+        "관련",
+        "단어",
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑",
+        "이곳",
+        "여기서",
+        "트롱",
+        "찾기와",
+        "교통",
+        "티니"
       ]
     },
     {
@@ -5298,22 +5626,39 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-083-티난",
+      "id": "supplemental-vocab-606-저기",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어 3",
-      "thai": "티난",
-      "thaiScript": "",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "저기",
+      "thaiScript": "ตรงนั้น",
       "korean": "저기",
-      "note": "",
+      "note": "기본 동사와 위치 관련 단어",
       "tags": [
-        "기본회화"
+        "기본회화",
+        "식당",
+        "이동",
+        "쇼핑"
       ],
       "keywords": [
-        "티난",
         "저기",
-        "기본회화"
+        "ตรงนั้น",
+        "기본",
+        "동사와",
+        "위치",
+        "관련",
+        "단어",
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑",
+        "저곳",
+        "저기서",
+        "트롱",
+        "찾기와",
+        "교통",
+        "티난"
       ]
     },
     {
@@ -5353,25 +5698,6 @@ window.BASE_DATA = {
         "저기",
         "약간",
         "건강"
-      ]
-    },
-    {
-      "id": "excel-vocab-087-안니",
-      "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어 3",
-      "thai": "안니",
-      "thaiScript": "",
-      "korean": "이것",
-      "note": "",
-      "tags": [
-        "기본회화"
-      ],
-      "keywords": [
-        "안니",
-        "이것",
-        "기본회화"
       ]
     },
     {
@@ -5450,21 +5776,35 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-092-썸",
+      "id": "supplemental-vocab-423-쏨",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어 3",
-      "thai": "썸",
-      "thaiScript": "",
-      "korean": "고치다/수리하다",
-      "note": "",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "쏨",
+      "thaiScript": "ซ่อม",
+      "korean": "수리하다",
+      "note": "호텔과 객실 관련 단어",
       "tags": [
-        "기본회화"
+        "기본회화",
+        "이동",
+        "일터",
+        "숫자·시간"
       ],
       "keywords": [
-        "고치다",
+        "ซ่อม",
         "수리하다",
+        "호텔과",
+        "객실",
+        "관련",
+        "단어",
+        "이동",
+        "숫자·시간",
+        "현장과",
+        "작업",
+        "지시",
+        "일터",
+        "고치다",
         "기본회화"
       ]
     },
@@ -5488,23 +5828,30 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-094-쌍아한",
+      "id": "supplemental-vocab-506-루엉",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어 3",
-      "thai": "쌍아한",
-      "thaiScript": "",
-      "korean": "주문하다",
-      "note": "",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "루엉",
+      "thaiScript": "สั่ง",
+      "korean": "이야기하다 / 주문하다",
+      "note": "식당과 주문 관련 단어",
       "tags": [
         "식당",
         "숫자·시간"
       ],
       "keywords": [
-        "쌍아한",
+        "루엉",
+        "สั่ง",
+        "이야기하다",
         "주문하다",
+        "식당과",
+        "주문",
+        "관련",
+        "단어",
         "식당",
+        "쌍아한",
         "숫자·시간"
       ]
     },
@@ -5756,25 +6103,41 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-009-마이-써바이",
+      "id": "supplemental-vocab-538-뿌왓-후아",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어 4",
-      "thai": "마이 써바이",
-      "thaiScript": "",
-      "korean": "감기/두통/기침",
-      "note": "",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "뿌왓 후아",
+      "thaiScript": "ปวดหัว",
+      "korean": "두통",
+      "note": "병원과 응급 상황 관련 단어",
       "tags": [
         "건강"
       ],
       "keywords": [
+        "뿌왓",
+        "후아",
+        "ปวดหัว",
+        "두통",
+        "병원과",
+        "응급",
+        "상황",
+        "관련",
+        "단어",
+        "건강",
+        "푸앗",
+        "상태와",
+        "병원",
         "마이",
         "써바이",
         "감기",
-        "두통",
         "기침",
-        "건강"
+        "약국에서",
+        "많이",
+        "찾는",
+        "증상",
+        "머리 아픔"
       ]
     },
     {
@@ -5794,23 +6157,6 @@ window.BASE_DATA = {
         "썹다",
         "1주일",
         "숫자·시간"
-      ]
-    },
-    {
-      "id": "excel-vocab-011-완",
-      "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어 4",
-      "thai": "완",
-      "thaiScript": "",
-      "korean": "일",
-      "note": "",
-      "tags": [
-        "기본회화"
-      ],
-      "keywords": [
-        "기본회화"
       ]
     },
     {
@@ -5871,76 +6217,86 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-vocab-015-완-풋",
+      "id": "supplemental-vocab-333-완-푸트",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어 4",
-      "thai": "완 풋",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "완 푸트",
       "thaiScript": "",
       "korean": "수요일",
-      "note": "",
+      "note": "시간과 날짜",
       "tags": [
         "숫자·시간"
       ],
       "keywords": [
+        "푸트",
         "수요일",
+        "시간과",
+        "날짜",
         "숫자·시간"
       ]
     },
     {
-      "id": "excel-vocab-016-완-팔르한",
+      "id": "supplemental-vocab-334-완-프르헛",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어 4",
-      "thai": "완 팔르한",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "완 프르헛",
       "thaiScript": "",
       "korean": "목요일",
-      "note": "",
+      "note": "시간과 날짜",
       "tags": [
         "숫자·시간"
       ],
       "keywords": [
-        "팔르한",
+        "프르헛",
         "목요일",
-        "숫자·시간"
+        "시간과",
+        "날짜",
+        "숫자·시간",
+        "팔르한"
       ]
     },
     {
-      "id": "excel-vocab-017-완-숙",
+      "id": "supplemental-vocab-335-완-쑥",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어 4",
-      "thai": "완 숙",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "완 쑥",
       "thaiScript": "",
       "korean": "금요일",
-      "note": "",
+      "note": "시간과 날짜",
       "tags": [
         "숫자·시간"
       ],
       "keywords": [
         "금요일",
+        "시간과",
+        "날짜",
         "숫자·시간"
       ]
     },
     {
-      "id": "excel-vocab-018-완-싸오",
+      "id": "supplemental-vocab-336-완-싸오",
       "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어 4",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
       "thai": "완 싸오",
       "thaiScript": "",
       "korean": "토요일",
-      "note": "",
+      "note": "시간과 날짜",
       "tags": [
         "숫자·시간"
       ],
       "keywords": [
         "싸오",
         "토요일",
+        "시간과",
+        "날짜",
         "숫자·시간"
       ]
     },
@@ -5960,25 +6316,6 @@ window.BASE_DATA = {
       "keywords": [
         "르양",
         "했어",
-        "기본회화"
-      ]
-    },
-    {
-      "id": "excel-vocab-020-투캉",
-      "kind": "vocab",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "단어 4",
-      "thai": "투캉",
-      "thaiScript": "",
-      "korean": "항상",
-      "note": "",
-      "tags": [
-        "기본회화"
-      ],
-      "keywords": [
-        "투캉",
-        "항상",
         "기본회화"
       ]
     },
@@ -6183,28 +6520,6 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-003-커톳-캅-카",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "커톳 캅/카",
-      "thaiScript": "",
-      "korean": "실례합니다 / 죄송합니다",
-      "note": "",
-      "tags": [
-        "인사",
-        "기본회화"
-      ],
-      "keywords": [
-        "커톳",
-        "실례합니다",
-        "죄송합니다",
-        "인사",
-        "기본회화"
-      ]
-    },
-    {
       "id": "supplemental-vocab-004-마이-벤-라이",
       "kind": "vocab",
       "source": "supplemental",
@@ -6336,25 +6651,34 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-010-츄어이-두어이",
+      "id": "supplemental-vocab-559-추아이-두아이",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "츄어이 두어이",
-      "thaiScript": "",
+      "thai": "추아이 두아이",
+      "thaiScript": "ช่วยด้วย",
       "korean": "도와주세요",
-      "note": "",
+      "note": "병원과 응급 상황 관련 단어",
       "tags": [
         "기본회화",
         "건강"
       ],
       "keywords": [
+        "추아이",
+        "두아이",
+        "ช่วยด้วย",
+        "도와주세요",
+        "병원과",
+        "응급",
+        "상황",
+        "관련",
+        "단어",
+        "건강",
+        "도움",
         "츄어이",
         "두어이",
-        "도와주세요",
-        "기본회화",
-        "건강"
+        "기본회화"
       ]
     },
     {
@@ -6377,196 +6701,162 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-012-다이",
+      "id": "supplemental-vocab-593-다이",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
       "thai": "다이",
-      "thaiScript": "",
-      "korean": "할 수 있다 / 가능하다",
-      "note": "",
+      "thaiScript": "ได้",
+      "korean": "가능하다",
+      "note": "일상 대화와 휴대폰 사용 관련 단어",
       "tags": [
-        "기본회화"
+        "기본회화",
+        "숫자·시간"
       ],
       "keywords": [
         "다이",
+        "ได้",
         "가능하다",
-        "기본회화"
+        "일상",
+        "대화와",
+        "휴대폰",
+        "사용",
+        "관련",
+        "단어",
+        "기본회화",
+        "숫자·시간"
       ]
     },
     {
-      "id": "supplemental-vocab-013-마이-다이",
+      "id": "supplemental-vocab-594-마이-다이",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
       "thai": "마이 다이",
-      "thaiScript": "",
-      "korean": "안 된다 / 못 한다",
-      "note": "",
+      "thaiScript": "ไม่ได้",
+      "korean": "안 된다",
+      "note": "일상 대화와 휴대폰 사용 관련 단어",
       "tags": [
-        "기본회화"
+        "기본회화",
+        "숫자·시간"
       ],
       "keywords": [
         "마이",
         "다이",
+        "ไม่ได้",
         "된다",
-        "한다",
-        "기본회화"
+        "일상",
+        "대화와",
+        "휴대폰",
+        "사용",
+        "관련",
+        "단어",
+        "기본회화",
+        "숫자·시간",
+        "한다"
       ]
     },
     {
-      "id": "supplemental-vocab-014-아로이",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "아로이",
-      "thaiScript": "",
-      "korean": "맛있다",
-      "note": "",
-      "tags": [
-        "식당"
-      ],
-      "keywords": [
-        "아로이",
-        "맛있다",
-        "식당"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-015-펫",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "펫",
-      "thaiScript": "",
-      "korean": "맵다",
-      "note": "",
-      "tags": [
-        "식당",
-        "건강"
-      ],
-      "keywords": [
-        "맵다",
-        "식당",
-        "건강"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-016-마이-펫",
+      "id": "supplemental-vocab-484-마이-펫",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
       "thai": "마이 펫",
-      "thaiScript": "",
+      "thaiScript": "ไม่เผ็ด",
       "korean": "안 맵게",
-      "note": "",
+      "note": "식당과 주문 관련 단어",
       "tags": [
         "식당"
       ],
       "keywords": [
         "마이",
+        "ไม่เผ็ด",
         "맵게",
-        "식당"
+        "식당과",
+        "주문",
+        "관련",
+        "단어",
+        "식당",
+        "안맵게"
       ]
     },
     {
-      "id": "supplemental-vocab-017-남-쁠라오",
+      "id": "supplemental-vocab-475-남",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "남 쁠라오",
-      "thaiScript": "",
-      "korean": "생수 / 물",
-      "note": "",
+      "thai": "남",
+      "thaiScript": "น้ำ",
+      "korean": "물",
+      "note": "식당과 주문 관련 단어",
       "tags": [
         "식당"
       ],
       "keywords": [
+        "น้ำ",
+        "식당과",
+        "주문",
+        "관련",
+        "단어",
+        "식당",
         "쁠라오",
-        "생수",
-        "식당"
+        "생수"
       ]
     },
     {
-      "id": "supplemental-vocab-018-남-캥",
+      "id": "supplemental-vocab-668-남-캥",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
       "thai": "남 캥",
-      "thaiScript": "",
+      "thaiScript": "น้ำแข็ง",
       "korean": "얼음",
-      "note": "",
+      "note": "식당 추가 요청과 제외 요청에 쓰는 단어",
       "tags": [
         "식당"
       ],
       "keywords": [
+        "น้ำแข็ง",
         "얼음",
-        "식당"
+        "식당",
+        "추가",
+        "요청과",
+        "제외",
+        "요청에",
+        "쓰는",
+        "단어",
+        "식당과",
+        "주문",
+        "관련"
       ]
     },
     {
-      "id": "supplemental-vocab-019-아한",
+      "id": "supplemental-vocab-471-아한",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
       "thai": "아한",
-      "thaiScript": "",
+      "thaiScript": "อาหาร",
       "korean": "음식",
-      "note": "",
+      "note": "식당과 주문 관련 단어",
       "tags": [
         "식당"
       ],
       "keywords": [
         "아한",
+        "อาหาร",
         "음식",
+        "식당과",
+        "주문",
+        "관련",
+        "단어",
         "식당"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-020-긴",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "긴",
-      "thaiScript": "",
-      "korean": "먹다",
-      "note": "",
-      "tags": [
-        "식당"
-      ],
-      "keywords": [
-        "먹다",
-        "식당"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-021-아오",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "아오",
-      "thaiScript": "",
-      "korean": "원하다 / 주세요",
-      "note": "",
-      "tags": [
-        "식당",
-        "쇼핑"
-      ],
-      "keywords": [
-        "아오",
-        "원하다",
-        "식당",
-        "쇼핑"
       ]
     },
     {
@@ -6736,66 +7026,94 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-030-끌라이",
+      "id": "supplemental-vocab-447-끌라이",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
       "thai": "끌라이",
-      "thaiScript": "",
+      "thaiScript": "ใกล้",
       "korean": "가깝다",
-      "note": "",
+      "note": "교통과 길찾기 관련 단어",
       "tags": [
         "이동"
       ],
       "keywords": [
         "끌라이",
+        "ใกล้",
         "가깝다",
-        "이동"
+        "교통과",
+        "길찾기",
+        "관련",
+        "단어",
+        "이동",
+        "찾기와",
+        "교통"
       ]
     },
     {
-      "id": "supplemental-vocab-031-글라이",
+      "id": "supplemental-vocab-449-끌라이-마이",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "글라이",
-      "thaiScript": "",
+      "thai": "끌라이 마이",
+      "thaiScript": "ไกล",
       "korean": "멀다",
-      "note": "",
+      "note": "교통과 길찾기 관련 단어",
       "tags": [
         "이동"
       ],
       "keywords": [
-        "글라이",
+        "끌라이",
+        "마이",
+        "ไกล",
         "멀다",
-        "이동"
+        "교통과",
+        "길찾기",
+        "관련",
+        "단어",
+        "이동",
+        "글라이",
+        "찾기와",
+        "교통"
       ]
     },
     {
-      "id": "supplemental-vocab-032-톤니",
+      "id": "supplemental-vocab-567-또온-니",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "톤니",
-      "thaiScript": "",
+      "thai": "또온 니",
+      "thaiScript": "ตอนนี้",
       "korean": "지금",
-      "note": "",
+      "note": "일상 대화와 휴대폰 사용 관련 단어",
       "tags": [
+        "기본회화",
         "이동",
         "숫자·시간"
       ],
       "keywords": [
-        "톤니",
+        "또온",
+        "ตอนนี้",
         "지금",
-        "이동",
-        "숫자·시간"
+        "일상",
+        "대화와",
+        "휴대폰",
+        "사용",
+        "관련",
+        "단어",
+        "기본회화",
+        "숫자·시간",
+        "시간과",
+        "날짜",
+        "톤니",
+        "이동"
       ]
     },
     {
-      "id": "supplemental-vocab-033-프룽니",
+      "id": "supplemental-vocab-309-프룽니",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -6803,37 +7121,20 @@ window.BASE_DATA = {
       "thai": "프룽니",
       "thaiScript": "",
       "korean": "내일",
-      "note": "",
+      "note": "시간과 날짜",
       "tags": [
         "숫자·시간"
       ],
       "keywords": [
         "프룽니",
         "내일",
+        "시간과",
+        "날짜",
         "숫자·시간"
       ]
     },
     {
-      "id": "supplemental-vocab-034-므어완니",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "므어완니",
-      "thaiScript": "",
-      "korean": "어제",
-      "note": "",
-      "tags": [
-        "숫자·시간"
-      ],
-      "keywords": [
-        "므어완니",
-        "어제",
-        "숫자·시간"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-035-차오",
+      "id": "supplemental-vocab-311-차오",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -6841,51 +7142,49 @@ window.BASE_DATA = {
       "thai": "차오",
       "thaiScript": "",
       "korean": "아침",
-      "note": "",
+      "note": "시간과 날짜",
       "tags": [
         "숫자·시간"
       ],
       "keywords": [
         "차오",
         "아침",
+        "시간과",
+        "날짜",
         "숫자·시간"
       ]
     },
     {
-      "id": "supplemental-vocab-036-옌",
+      "id": "supplemental-vocab-482-옌",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
       "thai": "옌",
-      "thaiScript": "",
-      "korean": "저녁",
-      "note": "",
+      "thaiScript": "เย็น",
+      "korean": "차갑다",
+      "note": "식당과 주문 관련 단어",
       "tags": [
+        "식당",
+        "쇼핑",
         "숫자·시간"
       ],
       "keywords": [
+        "เย็น",
+        "차갑다",
+        "식당과",
+        "주문",
+        "관련",
+        "단어",
+        "식당",
+        "쇼핑과",
+        "가격",
+        "흥정용",
+        "쇼핑",
         "저녁",
-        "숫자·시간"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-037-타오라이",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "타오라이",
-      "thaiScript": "",
-      "korean": "얼마예요?",
-      "note": "",
-      "tags": [
-        "쇼핑"
-      ],
-      "keywords": [
-        "타오라이",
-        "얼마예요",
-        "쇼핑"
+        "숫자·시간",
+        "시간과",
+        "날짜"
       ]
     },
     {
@@ -6929,39 +7228,32 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-040-씨",
+      "id": "supplemental-vocab-512-싸이",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "씨",
-      "thaiScript": "",
-      "korean": "색",
-      "note": "",
-      "tags": [
-        "쇼핑"
-      ],
-      "keywords": [
-        "쇼핑"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-041-사이",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "사이",
-      "thaiScript": "",
+      "thai": "싸이",
+      "thaiScript": "ไซซ์",
       "korean": "사이즈",
-      "note": "",
+      "note": "쇼핑과 결제 관련 단어",
       "tags": [
         "쇼핑"
       ],
       "keywords": [
-        "사이",
+        "싸이",
+        "ไซซ์",
         "사이즈",
-        "쇼핑"
+        "쇼핑과",
+        "결제",
+        "관련",
+        "단어",
+        "쇼핑",
+        "크기",
+        "카낫",
+        "가격",
+        "흥정용",
+        "사이"
       ]
     },
     {
@@ -7044,21 +7336,31 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-046-쨉",
+      "id": "supplemental-vocab-537-쩹",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "쨉",
-      "thaiScript": "",
+      "thai": "쩹",
+      "thaiScript": "เจ็บ",
       "korean": "아프다",
-      "note": "",
+      "note": "병원과 응급 상황 관련 단어",
       "tags": [
         "건강"
       ],
       "keywords": [
+        "เจ็บ",
         "아프다",
-        "건강"
+        "병원과",
+        "응급",
+        "상황",
+        "관련",
+        "단어",
+        "건강",
+        "쁘아이",
+        "병들다",
+        "상태와",
+        "병원"
       ]
     },
     {
@@ -7083,27 +7385,42 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-048-푸앗-통",
+      "id": "supplemental-vocab-539-뿌왓-텅",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "푸앗 통",
-      "thaiScript": "",
-      "korean": "배가 아프다",
-      "note": "",
+      "thai": "뿌왓 텅",
+      "thaiScript": "ปวดท้อง",
+      "korean": "복통",
+      "note": "병원과 응급 상황 관련 단어",
       "tags": [
         "건강"
       ],
       "keywords": [
+        "뿌왓",
+        "ปวดท้อง",
+        "복통",
+        "병원과",
+        "응급",
+        "상황",
+        "관련",
+        "단어",
+        "건강",
         "푸앗",
+        "상태와",
+        "병원",
         "배가",
         "아프다",
-        "건강"
+        "약국에서",
+        "많이",
+        "찾는",
+        "증상",
+        "배 아픔"
       ]
     },
     {
-      "id": "supplemental-vocab-049-벤-카이",
+      "id": "supplemental-vocab-250-벤-카이",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -7111,7 +7428,7 @@ window.BASE_DATA = {
       "thai": "벤 카이",
       "thaiScript": "",
       "korean": "열이 나다",
-      "note": "",
+      "note": "몸 상태와 병원",
       "tags": [
         "건강"
       ],
@@ -7119,63 +7436,68 @@ window.BASE_DATA = {
         "카이",
         "열이",
         "나다",
-        "건강"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-050-롱-파야반",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "롱 파야반",
-      "thaiScript": "",
-      "korean": "병원",
-      "note": "",
-      "tags": [
-        "건강"
-      ],
-      "keywords": [
-        "파야반",
+        "상태와",
         "병원",
         "건강"
       ]
     },
     {
-      "id": "supplemental-vocab-051-야",
+      "id": "supplemental-vocab-656-롱-파야반",
+      "kind": "vocab",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "롱 파야반",
+      "thaiScript": "โรงพยาบาล",
+      "korean": "병원",
+      "note": "길 찾기와 목적지 검색에 자주 나오는 장소",
+      "tags": [
+        "이동",
+        "쇼핑",
+        "건강"
+      ],
+      "keywords": [
+        "파야반",
+        "โรงพยาบาล",
+        "병원",
+        "찾기와",
+        "목적지",
+        "검색에",
+        "자주",
+        "나오는",
+        "장소",
+        "이동",
+        "쇼핑",
+        "병원과",
+        "응급",
+        "상황",
+        "관련",
+        "단어",
+        "건강",
+        "상태와"
+      ]
+    },
+    {
+      "id": "supplemental-vocab-549-야",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
       "thai": "야",
-      "thaiScript": "",
+      "thaiScript": "ยา",
       "korean": "약",
-      "note": "",
+      "note": "병원과 응급 상황 관련 단어",
       "tags": [
         "건강"
       ],
       "keywords": [
+        "ยา",
+        "병원과",
+        "응급",
+        "상황",
+        "관련",
+        "단어",
         "건강"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-052-홍-남",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "홍 남",
-      "thaiScript": "",
-      "korean": "화장실",
-      "note": "",
-      "tags": [
-        "건강",
-        "이동"
-      ],
-      "keywords": [
-        "화장실",
-        "건강",
-        "이동"
       ]
     },
     {
@@ -7444,25 +7766,6 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-066-야크",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "야크",
-      "thaiScript": "",
-      "korean": "원하다",
-      "note": "",
-      "tags": [
-        "기본회화"
-      ],
-      "keywords": [
-        "야크",
-        "원하다",
-        "기본회화"
-      ]
-    },
-    {
       "id": "supplemental-vocab-067-마이-아오",
       "kind": "vocab",
       "source": "supplemental",
@@ -7527,58 +7830,70 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-070-츄어이",
+      "id": "supplemental-vocab-425-추아이",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "츄어이",
-      "thaiScript": "",
+      "thai": "추아이",
+      "thaiScript": "ช่วย",
       "korean": "도와주다",
-      "note": "",
+      "note": "호텔과 객실 관련 단어",
       "tags": [
-        "기본회화"
+        "기본회화",
+        "이동",
+        "숫자·시간"
       ],
       "keywords": [
-        "츄어이",
+        "추아이",
+        "ช่วย",
         "도와주다",
+        "호텔과",
+        "객실",
+        "관련",
+        "단어",
+        "이동",
+        "숫자·시간",
+        "츄어이",
         "기본회화"
       ]
     },
     {
-      "id": "supplemental-vocab-071-북-와",
+      "id": "supplemental-vocab-602-풋",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "북 와",
-      "thaiScript": "",
+      "thai": "풋",
+      "thaiScript": "พูด",
       "korean": "말하다",
-      "note": "",
+      "note": "기본 동사 검색을 위한 핵심 단어",
       "tags": [
-        "기본회화"
+        "기본회화",
+        "이동",
+        "숫자·시간"
       ],
       "keywords": [
+        "พูด",
         "말하다",
-        "기본회화"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-072-탐",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "탐",
-      "thaiScript": "",
-      "korean": "하다 / 만들다",
-      "note": "",
-      "tags": [
-        "기본회화"
-      ],
-      "keywords": [
-        "만들다",
-        "기본회화"
+        "기본",
+        "동사",
+        "검색을",
+        "위한",
+        "핵심",
+        "단어",
+        "기본회화",
+        "이동",
+        "말한다",
+        "말해요",
+        "말해줘",
+        "피묻",
+        "일상",
+        "대화와",
+        "휴대폰",
+        "사용",
+        "관련",
+        "숫자·시간"
       ]
     },
     {
@@ -7600,80 +7915,33 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-074-다이-인",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "다이 인",
-      "thaiScript": "",
-      "korean": "듣다",
-      "note": "",
-      "tags": [
-        "기본회화"
-      ],
-      "keywords": [
-        "다이",
-        "듣다",
-        "기본회화"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-075-헨",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "헨",
-      "thaiScript": "",
-      "korean": "보다",
-      "note": "",
-      "tags": [
-        "기본회화"
-      ],
-      "keywords": [
-        "보다",
-        "기본회화"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-076-카오짜이",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "카오짜이",
-      "thaiScript": "",
-      "korean": "이해하다",
-      "note": "",
-      "tags": [
-        "기본회화"
-      ],
-      "keywords": [
-        "카오짜이",
-        "이해하다",
-        "기본회화"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-077-마이-카오짜이",
+      "id": "supplemental-vocab-577-마이-카오짜이",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
       "thai": "마이 카오짜이",
-      "thaiScript": "",
+      "thaiScript": "ไม่เข้าใจ",
       "korean": "이해 못하다",
-      "note": "",
+      "note": "일상 대화와 휴대폰 사용 관련 단어",
       "tags": [
-        "기본회화"
+        "기본회화",
+        "숫자·시간"
       ],
       "keywords": [
         "마이",
         "카오짜이",
+        "ไม่เข้าใจ",
         "이해",
         "못하다",
-        "기본회화"
+        "일상",
+        "대화와",
+        "휴대폰",
+        "사용",
+        "관련",
+        "단어",
+        "기본회화",
+        "숫자·시간"
       ]
     },
     {
@@ -7830,24 +8098,6 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-086-차-차",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "차 차",
-      "thaiScript": "",
-      "korean": "천천히",
-      "note": "",
-      "tags": [
-        "기본회화"
-      ],
-      "keywords": [
-        "천천히",
-        "기본회화"
-      ]
-    },
-    {
       "id": "supplemental-vocab-087-일릭-너이",
       "kind": "vocab",
       "source": "supplemental",
@@ -7994,33 +8244,12 @@ window.BASE_DATA = {
       "korean": "잘 지내요?",
       "note": "",
       "tags": [
-        "인사",
-        "기본회화"
+        "기본회화",
+        "인사"
       ],
       "keywords": [
         "사바이",
         "마이",
-        "지내요",
-        "인사",
-        "기본회화"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-095-사바이-디",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "사바이 디",
-      "thaiScript": "",
-      "korean": "잘 지내요",
-      "note": "",
-      "tags": [
-        "인사",
-        "기본회화"
-      ],
-      "keywords": [
-        "사바이",
         "지내요",
         "인사",
         "기본회화"
@@ -8196,46 +8425,6 @@ window.BASE_DATA = {
         "쵸크",
         "행운을",
         "빌어요",
-        "인사",
-        "기본회화"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-104-쿠나-초",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "쿠나 초",
-      "thaiScript": "",
-      "korean": "당신",
-      "note": "",
-      "tags": [
-        "인사",
-        "기본회화"
-      ],
-      "keywords": [
-        "쿠나",
-        "당신",
-        "인사",
-        "기본회화"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-105-폰",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "폰",
-      "thaiScript": "",
-      "korean": "저",
-      "note": "",
-      "tags": [
-        "인사",
-        "기본회화"
-      ],
-      "keywords": [
         "인사",
         "기본회화"
       ]
@@ -8471,24 +8660,33 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-117-추어",
+      "id": "supplemental-vocab-596-츼",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "추어",
-      "thaiScript": "",
+      "thai": "츼",
+      "thaiScript": "ชื่อ",
       "korean": "이름",
-      "note": "",
+      "note": "일상 대화와 휴대폰 사용 관련 단어",
       "tags": [
+        "기본회화",
         "인사",
-        "기본회화"
+        "숫자·시간"
       ],
       "keywords": [
-        "추어",
+        "ชื่อ",
         "이름",
-        "인사",
-        "기본회화"
+        "일상",
+        "대화와",
+        "휴대폰",
+        "사용",
+        "관련",
+        "단어",
+        "기본회화",
+        "숫자·시간",
+        "추어",
+        "인사"
       ]
     },
     {
@@ -8513,75 +8711,62 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-119-카오",
+      "id": "supplemental-vocab-473-카우-팟",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "카오",
-      "thaiScript": "",
-      "korean": "밥",
-      "note": "식당에서 바로 쓰는 단어 위주",
-      "tags": [
-        "식당"
-      ],
-      "keywords": [
-        "카오",
-        "식당에서",
-        "바로",
-        "쓰는",
-        "단어",
-        "위주",
-        "식당"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-120-카오-팟",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "카오 팟",
-      "thaiScript": "",
+      "thai": "카우 팟",
+      "thaiScript": "ข้าวผัด",
       "korean": "볶음밥",
-      "note": "식당에서 바로 쓰는 단어 위주",
+      "note": "식당과 주문 관련 단어",
       "tags": [
         "식당"
       ],
       "keywords": [
-        "카오",
+        "카우",
+        "ข้าวผัด",
         "볶음밥",
+        "식당과",
+        "주문",
+        "관련",
+        "단어",
+        "식당",
+        "카오",
         "식당에서",
         "바로",
         "쓰는",
-        "단어",
-        "위주",
-        "식당"
+        "위주"
       ]
     },
     {
-      "id": "supplemental-vocab-121-쿠어이-띠아오",
+      "id": "supplemental-vocab-474-꿰이띠여우",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "쿠어이 띠아오",
-      "thaiScript": "",
+      "thai": "꿰이띠여우",
+      "thaiScript": "ก๋วยเตี๋ยว",
       "korean": "국수",
-      "note": "식당에서 바로 쓰는 단어 위주",
+      "note": "식당과 주문 관련 단어",
       "tags": [
         "식당"
       ],
       "keywords": [
+        "꿰이띠여우",
+        "ก๋วยเตี๋ยว",
+        "국수",
+        "식당과",
+        "주문",
+        "관련",
+        "단어",
+        "식당",
         "쿠어이",
         "띠아오",
-        "국수",
         "식당에서",
         "바로",
         "쓰는",
-        "단어",
-        "위주",
-        "식당"
+        "위주"
       ]
     },
     {
@@ -8683,121 +8868,141 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-126-까이",
+      "id": "supplemental-vocab-493-까이",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
       "thai": "까이",
-      "thaiScript": "",
+      "thaiScript": "ไก่",
       "korean": "닭고기",
-      "note": "식당에서 바로 쓰는 단어 위주",
+      "note": "식당과 주문 관련 단어",
       "tags": [
         "식당"
       ],
       "keywords": [
         "까이",
+        "ไก่",
         "닭고기",
+        "식당과",
+        "주문",
+        "관련",
+        "단어",
+        "식당",
         "식당에서",
         "바로",
         "쓰는",
-        "단어",
-        "위주",
-        "식당"
+        "위주"
       ]
     },
     {
-      "id": "supplemental-vocab-127-무",
+      "id": "supplemental-vocab-492-무",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
       "thai": "무",
-      "thaiScript": "",
+      "thaiScript": "หมู",
       "korean": "돼지고기",
-      "note": "식당에서 바로 쓰는 단어 위주",
+      "note": "식당과 주문 관련 단어",
       "tags": [
         "식당"
       ],
       "keywords": [
+        "หมู",
         "돼지고기",
+        "식당과",
+        "주문",
+        "관련",
+        "단어",
+        "식당",
         "식당에서",
         "바로",
         "쓰는",
-        "단어",
-        "위주",
-        "식당"
+        "위주"
       ]
     },
     {
-      "id": "supplemental-vocab-128-느아",
+      "id": "supplemental-vocab-494-느아",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
       "thai": "느아",
-      "thaiScript": "",
+      "thaiScript": "เนื้อ",
       "korean": "소고기",
-      "note": "식당에서 바로 쓰는 단어 위주",
+      "note": "식당과 주문 관련 단어",
       "tags": [
         "식당"
       ],
       "keywords": [
         "느아",
+        "เนื้อ",
         "소고기",
+        "식당과",
+        "주문",
+        "관련",
+        "단어",
+        "식당",
         "식당에서",
         "바로",
         "쓰는",
-        "단어",
-        "위주",
-        "식당"
+        "위주"
       ]
     },
     {
-      "id": "supplemental-vocab-129-꿍",
+      "id": "supplemental-vocab-495-꿍",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
       "thai": "꿍",
-      "thaiScript": "",
+      "thaiScript": "กุ้ง",
       "korean": "새우",
-      "note": "식당에서 바로 쓰는 단어 위주",
+      "note": "식당과 주문 관련 단어",
       "tags": [
         "식당"
       ],
       "keywords": [
+        "กุ้ง",
         "새우",
+        "식당과",
+        "주문",
+        "관련",
+        "단어",
+        "식당",
         "식당에서",
         "바로",
         "쓰는",
-        "단어",
-        "위주",
-        "식당"
+        "위주"
       ]
     },
     {
-      "id": "supplemental-vocab-130-쁠라",
+      "id": "supplemental-vocab-496-쁠라",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
       "thai": "쁠라",
-      "thaiScript": "",
+      "thaiScript": "ปลา",
       "korean": "생선",
-      "note": "식당에서 바로 쓰는 단어 위주",
+      "note": "식당과 주문 관련 단어",
       "tags": [
         "식당"
       ],
       "keywords": [
         "쁠라",
+        "ปลา",
         "생선",
+        "식당과",
+        "주문",
+        "관련",
+        "단어",
+        "식당",
         "식당에서",
         "바로",
         "쓰는",
-        "단어",
-        "위주",
-        "식당"
+        "위주"
       ]
     },
     {
@@ -8816,29 +9021,6 @@ window.BASE_DATA = {
       "keywords": [
         "카이",
         "계란",
-        "식당에서",
-        "바로",
-        "쓰는",
-        "단어",
-        "위주",
-        "식당"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-132-팍",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "팍",
-      "thaiScript": "",
-      "korean": "채소",
-      "note": "식당에서 바로 쓰는 단어 위주",
-      "tags": [
-        "식당"
-      ],
-      "keywords": [
-        "채소",
         "식당에서",
         "바로",
         "쓰는",
@@ -8872,48 +9054,31 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-134-커피",
+      "id": "supplemental-vocab-478-까페",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "커피",
-      "thaiScript": "",
+      "thai": "까페",
+      "thaiScript": "กาแฟ",
       "korean": "커피",
-      "note": "식당에서 바로 쓰는 단어 위주",
+      "note": "식당과 주문 관련 단어",
       "tags": [
         "식당"
       ],
       "keywords": [
+        "까페",
+        "กาแฟ",
         "커피",
+        "식당과",
+        "주문",
+        "관련",
+        "단어",
+        "식당",
         "식당에서",
         "바로",
         "쓰는",
-        "단어",
-        "위주",
-        "식당"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-135-차",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "차",
-      "thaiScript": "",
-      "korean": "차",
-      "note": "식당에서 바로 쓰는 단어 위주",
-      "tags": [
-        "식당"
-      ],
-      "keywords": [
-        "식당에서",
-        "바로",
-        "쓰는",
-        "단어",
-        "위주",
-        "식당"
+        "위주"
       ]
     },
     {
@@ -8989,96 +9154,123 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-139-남-옌",
+      "id": "supplemental-vocab-408-남-옌",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
       "thai": "남 옌",
-      "thaiScript": "",
-      "korean": "차가운 물",
-      "note": "식당에서 바로 쓰는 단어 위주",
+      "thaiScript": "น้ำเย็น",
+      "korean": "차가운 물 / 냉수",
+      "note": "호텔과 객실 관련 단어",
       "tags": [
-        "식당"
+        "식당",
+        "이동",
+        "숫자·시간"
       ],
       "keywords": [
+        "น้ำเย็น",
         "차가운",
+        "냉수",
+        "호텔과",
+        "객실",
+        "관련",
+        "단어",
+        "이동",
+        "숫자·시간",
         "식당에서",
         "바로",
         "쓰는",
-        "단어",
         "위주",
         "식당"
       ]
     },
     {
-      "id": "supplemental-vocab-140-남-론",
+      "id": "supplemental-vocab-407-남-론",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
       "thai": "남 론",
-      "thaiScript": "",
-      "korean": "뜨거운 물",
-      "note": "식당에서 바로 쓰는 단어 위주",
+      "thaiScript": "น้ำร้อน",
+      "korean": "뜨거운 물 / 온수",
+      "note": "호텔과 객실 관련 단어",
       "tags": [
-        "식당"
+        "식당",
+        "이동",
+        "숫자·시간"
       ],
       "keywords": [
+        "น้ำร้อน",
         "뜨거운",
+        "온수",
+        "호텔과",
+        "객실",
+        "관련",
+        "단어",
+        "이동",
+        "숫자·시간",
         "식당에서",
         "바로",
         "쓰는",
-        "단어",
         "위주",
         "식당"
       ]
     },
     {
-      "id": "supplemental-vocab-141-남-완",
+      "id": "supplemental-vocab-480-남-완",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
       "thai": "남 완",
-      "thaiScript": "",
+      "thaiScript": "น้ำหวาน",
       "korean": "단 음료",
-      "note": "식당에서 바로 쓰는 단어 위주",
+      "note": "식당과 주문 관련 단어",
       "tags": [
         "식당"
       ],
       "keywords": [
+        "น้ำหวาน",
         "음료",
+        "식당과",
+        "주문",
+        "관련",
+        "단어",
+        "식당",
         "식당에서",
         "바로",
         "쓰는",
-        "단어",
-        "위주",
-        "식당"
+        "위주"
       ]
     },
     {
-      "id": "supplemental-vocab-142-마이-완",
+      "id": "supplemental-vocab-487-마이-완",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
       "thai": "마이 완",
-      "thaiScript": "",
+      "thaiScript": "ไม่หวาน",
       "korean": "안 달게",
-      "note": "식당에서 바로 쓰는 단어 위주",
+      "note": "식당과 주문 관련 단어",
       "tags": [
         "식당"
       ],
       "keywords": [
         "마이",
+        "ไม่หวาน",
         "달게",
+        "식당과",
+        "주문",
+        "관련",
+        "단어",
+        "식당",
+        "설탕 빼",
         "식당에서",
         "바로",
         "쓰는",
-        "단어",
-        "위주",
-        "식당"
+        "위주"
       ]
     },
     {
@@ -9106,27 +9298,32 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-144-펫-너이",
+      "id": "supplemental-vocab-485-펫-너이",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
       "thai": "펫 너이",
-      "thaiScript": "",
+      "thaiScript": "เผ็ดน้อย",
       "korean": "조금 맵게",
-      "note": "식당에서 바로 쓰는 단어 위주",
+      "note": "식당과 주문 관련 단어",
       "tags": [
         "식당"
       ],
       "keywords": [
         "너이",
+        "เผ็ดน้อย",
         "맵게",
+        "식당과",
+        "주문",
+        "관련",
+        "단어",
+        "식당",
+        "덜 맵게",
         "식당에서",
         "바로",
         "쓰는",
-        "단어",
-        "위주",
-        "식당"
+        "위주"
       ]
     },
     {
@@ -9206,50 +9403,58 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-148-킴",
+      "id": "supplemental-vocab-488-켐",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "킴",
-      "thaiScript": "",
+      "thai": "켐",
+      "thaiScript": "เค็ม",
       "korean": "짜다",
-      "note": "식당에서 바로 쓰는 단어 위주",
+      "note": "식당과 주문 관련 단어",
       "tags": [
         "식당"
       ],
       "keywords": [
+        "เค็ม",
         "짜다",
+        "식당과",
+        "주문",
+        "관련",
+        "단어",
+        "식당",
         "식당에서",
         "바로",
         "쓰는",
-        "단어",
-        "위주",
-        "식당"
+        "위주"
       ]
     },
     {
-      "id": "supplemental-vocab-150-프리여우",
+      "id": "supplemental-vocab-489-프리여우",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
       "thai": "프리여우",
-      "thaiScript": "",
+      "thaiScript": "เปรี้ยว",
       "korean": "시다",
-      "note": "식당에서 바로 쓰는 단어 위주",
+      "note": "식당과 주문 관련 단어",
       "tags": [
         "식당"
       ],
       "keywords": [
         "프리여우",
+        "เปรี้ยว",
         "시다",
+        "식당과",
+        "주문",
+        "관련",
+        "단어",
+        "식당",
         "식당에서",
         "바로",
         "쓰는",
-        "단어",
-        "위주",
-        "식당"
+        "위주"
       ]
     },
     {
@@ -9350,73 +9555,66 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-155-찬",
+      "id": "supplemental-vocab-500-커-업",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "찬",
-      "thaiScript": "",
-      "korean": "그릇",
-      "note": "식당에서 바로 쓰는 단어 위주",
-      "tags": [
-        "식당"
-      ],
-      "keywords": [
-        "그릇",
-        "식당에서",
-        "바로",
-        "쓰는",
-        "단어",
-        "위주",
-        "식당"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-156-꺼엡",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "꺼엡",
-      "thaiScript": "",
+      "thai": "커 업",
+      "thaiScript": "ช้อน",
       "korean": "숟가락",
-      "note": "식당에서 바로 쓰는 단어 위주",
+      "note": "식당과 주문 관련 단어",
       "tags": [
         "식당"
       ],
       "keywords": [
-        "꺼엡",
+        "ช้อน",
         "숟가락",
+        "식당과",
+        "주문",
+        "관련",
+        "단어",
+        "식당",
+        "꺼엡",
         "식당에서",
         "바로",
         "쓰는",
-        "단어",
         "위주",
-        "식당"
+        "추가",
+        "요청과",
+        "제외",
+        "요청에"
       ]
     },
     {
-      "id": "supplemental-vocab-157-쏨",
+      "id": "supplemental-vocab-501-쏨",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
       "thai": "쏨",
-      "thaiScript": "",
+      "thaiScript": "ส้อม",
       "korean": "포크",
-      "note": "식당에서 바로 쓰는 단어 위주",
+      "note": "식당과 주문 관련 단어",
       "tags": [
         "식당"
       ],
       "keywords": [
+        "ส้อม",
         "포크",
+        "식당과",
+        "주문",
+        "관련",
+        "단어",
+        "식당",
         "식당에서",
         "바로",
         "쓰는",
-        "단어",
         "위주",
-        "식당"
+        "추가",
+        "요청과",
+        "제외",
+        "요청에"
       ]
     },
     {
@@ -9443,49 +9641,61 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-159-깨우",
+      "id": "supplemental-vocab-505-깨우",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
       "thai": "깨우",
-      "thaiScript": "",
-      "korean": "컵 / 잔",
-      "note": "식당에서 바로 쓰는 단어 위주",
+      "thaiScript": "แก้ว",
+      "korean": "컵",
+      "note": "식당과 주문 관련 단어",
       "tags": [
         "식당"
       ],
       "keywords": [
         "깨우",
+        "แก้ว",
+        "식당과",
+        "주문",
+        "관련",
+        "단어",
+        "식당",
         "식당에서",
         "바로",
         "쓰는",
-        "단어",
-        "위주",
-        "식당"
+        "위주"
       ]
     },
     {
-      "id": "supplemental-vocab-160-쫀",
+      "id": "supplemental-vocab-504-빤",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "쫀",
-      "thaiScript": "",
+      "thai": "빤",
+      "thaiScript": "จาน",
       "korean": "접시",
-      "note": "식당에서 바로 쓰는 단어 위주",
+      "note": "식당과 주문 관련 단어",
       "tags": [
         "식당"
       ],
       "keywords": [
+        "จาน",
         "접시",
+        "식당과",
+        "주문",
+        "관련",
+        "단어",
+        "식당",
         "식당에서",
         "바로",
         "쓰는",
-        "단어",
         "위주",
-        "식당"
+        "추가",
+        "요청과",
+        "제외",
+        "요청에"
       ]
     },
     {
@@ -9581,46 +9791,28 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-165-라카",
+      "id": "supplemental-vocab-509-라카",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
       "thai": "라카",
-      "thaiScript": "",
+      "thaiScript": "ราคา",
       "korean": "가격",
-      "note": "쇼핑과 가격 흥정용",
+      "note": "쇼핑과 결제 관련 단어",
       "tags": [
         "쇼핑"
       ],
       "keywords": [
         "라카",
+        "ราคา",
         "가격",
         "쇼핑과",
-        "흥정용",
-        "쇼핑"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-166-타오라이",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "타오라이",
-      "thaiScript": "",
-      "korean": "얼마",
-      "note": "쇼핑과 가격 흥정용",
-      "tags": [
-        "쇼핑"
-      ],
-      "keywords": [
-        "타오라이",
-        "얼마",
-        "쇼핑과",
-        "가격",
-        "흥정용",
-        "쇼핑"
+        "결제",
+        "관련",
+        "단어",
+        "쇼핑",
+        "흥정용"
       ]
     },
     {
@@ -9692,45 +9884,53 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-170-툭",
+      "id": "supplemental-vocab-532-뚝",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "툭",
-      "thaiScript": "",
+      "thai": "뚝",
+      "thaiScript": "ถูก",
       "korean": "싸다",
-      "note": "쇼핑과 가격 흥정용",
+      "note": "쇼핑과 결제 관련 단어",
       "tags": [
         "쇼핑"
       ],
       "keywords": [
+        "ถูก",
         "싸다",
         "쇼핑과",
+        "결제",
+        "관련",
+        "단어",
+        "쇼핑",
         "가격",
-        "흥정용",
-        "쇼핑"
+        "흥정용"
       ]
     },
     {
-      "id": "supplemental-vocab-171-팽",
+      "id": "supplemental-vocab-531-쌍",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "팽",
-      "thaiScript": "",
+      "thai": "쌍",
+      "thaiScript": "แพง",
       "korean": "비싸다",
-      "note": "쇼핑과 가격 흥정용",
+      "note": "쇼핑과 결제 관련 단어",
       "tags": [
         "쇼핑"
       ],
       "keywords": [
+        "แพง",
         "비싸다",
         "쇼핑과",
+        "결제",
+        "관련",
+        "단어",
+        "쇼핑",
         "가격",
-        "흥정용",
-        "쇼핑"
+        "흥정용"
       ]
     },
     {
@@ -9755,113 +9955,83 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-174-롱",
+      "id": "supplemental-vocab-526-투엄",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "롱",
-      "thaiScript": "",
-      "korean": "입어보다 / 시험해보다",
-      "note": "쇼핑과 가격 흥정용",
+      "thai": "투엄",
+      "thaiScript": "ลอง",
+      "korean": "시도하다 / 입어보다",
+      "note": "쇼핑과 결제 관련 단어",
       "tags": [
         "쇼핑"
       ],
       "keywords": [
+        "투엄",
+        "ลอง",
+        "시도하다",
         "입어보다",
-        "시험해보다",
         "쇼핑과",
-        "가격",
-        "흥정용",
-        "쇼핑"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-175-롱-싸이",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "롱 싸이",
-      "thaiScript": "",
-      "korean": "입어보다",
-      "note": "쇼핑과 가격 흥정용",
-      "tags": [
-        "쇼핑"
-      ],
-      "keywords": [
+        "결제",
+        "관련",
+        "단어",
+        "쇼핑",
         "싸이",
-        "입어보다",
-        "쇼핑과",
         "가격",
         "흥정용",
-        "쇼핑"
+        "시험해보다"
       ]
     },
     {
-      "id": "supplemental-vocab-176-카낫",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "카낫",
-      "thaiScript": "",
-      "korean": "크기 / 사이즈",
-      "note": "쇼핑과 가격 흥정용",
-      "tags": [
-        "쇼핑"
-      ],
-      "keywords": [
-        "카낫",
-        "크기",
-        "사이즈",
-        "쇼핑과",
-        "가격",
-        "흥정용",
-        "쇼핑"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-177-씨-댕",
+      "id": "supplemental-vocab-516-씨-댕",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
       "thai": "씨 댕",
-      "thaiScript": "",
+      "thaiScript": "สีแดง",
       "korean": "빨간색",
-      "note": "쇼핑과 가격 흥정용",
+      "note": "쇼핑과 결제 관련 단어",
       "tags": [
         "쇼핑"
       ],
       "keywords": [
+        "สีแดง",
         "빨간색",
         "쇼핑과",
+        "결제",
+        "관련",
+        "단어",
+        "쇼핑",
         "가격",
-        "흥정용",
-        "쇼핑"
+        "흥정용"
       ]
     },
     {
-      "id": "supplemental-vocab-178-씨-남-응은",
+      "id": "supplemental-vocab-517-씨-남-응은",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
       "thai": "씨 남 응은",
-      "thaiScript": "",
+      "thaiScript": "สีน้ำเงิน",
       "korean": "파란색",
-      "note": "쇼핑과 가격 흥정용",
+      "note": "쇼핑과 결제 관련 단어",
       "tags": [
         "쇼핑"
       ],
       "keywords": [
         "응은",
+        "สีน้ำเงิน",
         "파란색",
         "쇼핑과",
+        "결제",
+        "관련",
+        "단어",
+        "쇼핑",
         "가격",
-        "흥정용",
-        "쇼핑"
+        "흥정용"
       ]
     },
     {
@@ -9887,25 +10057,29 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-180-씨-르앙",
+      "id": "supplemental-vocab-518-씨-르앙",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
       "thai": "씨 르앙",
-      "thaiScript": "",
+      "thaiScript": "สีเหลือง",
       "korean": "노란색",
-      "note": "쇼핑과 가격 흥정용",
+      "note": "쇼핑과 결제 관련 단어",
       "tags": [
         "쇼핑"
       ],
       "keywords": [
         "르앙",
+        "สีเหลือง",
         "노란색",
         "쇼핑과",
+        "결제",
+        "관련",
+        "단어",
+        "쇼핑",
         "가격",
-        "흥정용",
-        "쇼핑"
+        "흥정용"
       ]
     },
     {
@@ -9930,25 +10104,30 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-182-씨-카오",
+      "id": "supplemental-vocab-515-씨-카우",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "씨 카오",
-      "thaiScript": "",
+      "thai": "씨 카우",
+      "thaiScript": "สีขาว",
       "korean": "흰색",
-      "note": "쇼핑과 가격 흥정용",
+      "note": "쇼핑과 결제 관련 단어",
       "tags": [
         "쇼핑"
       ],
       "keywords": [
-        "카오",
+        "카우",
+        "สีขาว",
         "흰색",
         "쇼핑과",
+        "결제",
+        "관련",
+        "단어",
+        "쇼핑",
+        "카오",
         "가격",
-        "흥정용",
-        "쇼핑"
+        "흥정용"
       ]
     },
     {
@@ -9996,25 +10175,30 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-185-쑤아이",
+      "id": "supplemental-vocab-533-수아이",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "쑤아이",
-      "thaiScript": "",
+      "thai": "수아이",
+      "thaiScript": "สวย",
       "korean": "예쁘다",
-      "note": "쇼핑과 가격 흥정용",
+      "note": "쇼핑과 결제 관련 단어",
       "tags": [
         "쇼핑"
       ],
       "keywords": [
-        "쑤아이",
+        "수아이",
+        "สวย",
         "예쁘다",
         "쇼핑과",
+        "결제",
+        "관련",
+        "단어",
+        "쇼핑",
+        "쑤아이",
         "가격",
-        "흥정용",
-        "쇼핑"
+        "흥정용"
       ]
     },
     {
@@ -10040,29 +10224,6 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-187-마크",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "마크",
-      "thaiScript": "",
-      "korean": "많이 / 아주",
-      "note": "쇼핑과 가격 흥정용",
-      "tags": [
-        "쇼핑"
-      ],
-      "keywords": [
-        "마크",
-        "많이",
-        "아주",
-        "쇼핑과",
-        "가격",
-        "흥정용",
-        "쇼핑"
-      ]
-    },
-    {
       "id": "supplemental-vocab-188-바앱",
       "kind": "vocab",
       "source": "supplemental",
@@ -10079,48 +10240,6 @@ window.BASE_DATA = {
         "바앱",
         "스타일",
         "타입",
-        "쇼핑과",
-        "가격",
-        "흥정용",
-        "쇼핑"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-189-론",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "론",
-      "thaiScript": "",
-      "korean": "뜨겁다",
-      "note": "쇼핑과 가격 흥정용",
-      "tags": [
-        "쇼핑"
-      ],
-      "keywords": [
-        "뜨겁다",
-        "쇼핑과",
-        "가격",
-        "흥정용",
-        "쇼핑"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-190-옌",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "옌",
-      "thaiScript": "",
-      "korean": "차갑다",
-      "note": "쇼핑과 가격 흥정용",
-      "tags": [
-        "쇼핑"
-      ],
-      "keywords": [
-        "차갑다",
         "쇼핑과",
         "가격",
         "흥정용",
@@ -10265,47 +10384,56 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-197-응은-솟",
+      "id": "supplemental-vocab-522-응은-쏫",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "응은 솟",
-      "thaiScript": "",
+      "thai": "응은 쏫",
+      "thaiScript": "เงินสด",
       "korean": "현금",
-      "note": "쇼핑과 가격 흥정용",
+      "note": "쇼핑과 결제 관련 단어",
       "tags": [
         "쇼핑"
       ],
       "keywords": [
         "응은",
+        "เงินสด",
         "현금",
         "쇼핑과",
+        "결제",
+        "관련",
+        "단어",
+        "쇼핑",
         "가격",
-        "흥정용",
-        "쇼핑"
+        "흥정용"
       ]
     },
     {
-      "id": "supplemental-vocab-198-빤지",
+      "id": "supplemental-vocab-525-반찌",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "빤지",
-      "thaiScript": "",
+      "thai": "반찌",
+      "thaiScript": "ใบเสร็จ",
       "korean": "영수증",
-      "note": "쇼핑과 가격 흥정용",
+      "note": "쇼핑과 결제 관련 단어",
       "tags": [
         "쇼핑"
       ],
       "keywords": [
-        "빤지",
+        "반찌",
+        "ใบเสร็จ",
         "영수증",
         "쇼핑과",
+        "결제",
+        "관련",
+        "단어",
+        "쇼핑",
+        "빤지",
         "가격",
-        "흥정용",
-        "쇼핑"
+        "흥정용"
       ]
     },
     {
@@ -10355,27 +10483,6 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-203-티-나이",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "티 나이",
-      "thaiScript": "",
-      "korean": "어디",
-      "note": "길 찾기와 교통",
-      "tags": [
-        "이동"
-      ],
-      "keywords": [
-        "나이",
-        "어디",
-        "찾기와",
-        "교통",
-        "이동"
-      ]
-    },
-    {
       "id": "supplemental-vocab-204-크랭-래오",
       "kind": "vocab",
       "source": "supplemental",
@@ -10392,48 +10499,6 @@ window.BASE_DATA = {
         "크랭",
         "래오",
         "다시",
-        "찾기와",
-        "교통",
-        "이동"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-205-트롱-니",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "트롱 니",
-      "thaiScript": "",
-      "korean": "여기",
-      "note": "길 찾기와 교통",
-      "tags": [
-        "이동"
-      ],
-      "keywords": [
-        "트롱",
-        "여기",
-        "찾기와",
-        "교통",
-        "이동"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-206-트롱-논",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "트롱 논",
-      "thaiScript": "",
-      "korean": "저기",
-      "note": "길 찾기와 교통",
-      "tags": [
-        "이동"
-      ],
-      "keywords": [
-        "트롱",
-        "저기",
         "찾기와",
         "교통",
         "이동"
@@ -10459,26 +10524,6 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-210-랑",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "랑",
-      "thaiScript": "",
-      "korean": "아래",
-      "note": "길 찾기와 교통",
-      "tags": [
-        "이동"
-      ],
-      "keywords": [
-        "아래",
-        "찾기와",
-        "교통",
-        "이동"
-      ]
-    },
-    {
       "id": "supplemental-vocab-211-나",
       "kind": "vocab",
       "source": "supplemental",
@@ -10487,25 +10532,6 @@ window.BASE_DATA = {
       "thai": "나",
       "thaiScript": "",
       "korean": "앞",
-      "note": "길 찾기와 교통",
-      "tags": [
-        "이동"
-      ],
-      "keywords": [
-        "찾기와",
-        "교통",
-        "이동"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-212-랑",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "랑",
-      "thaiScript": "",
-      "korean": "뒤",
       "note": "길 찾기와 교통",
       "tags": [
         "이동"
@@ -10599,88 +10625,122 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-217-타논",
+      "id": "supplemental-vocab-452-차넌",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "타논",
-      "thaiScript": "",
+      "thai": "차넌",
+      "thaiScript": "ถนน",
       "korean": "도로",
-      "note": "길 찾기와 교통",
+      "note": "교통과 길찾기 관련 단어",
       "tags": [
         "이동"
       ],
       "keywords": [
-        "타논",
+        "차넌",
+        "ถนน",
         "도로",
+        "교통과",
+        "길찾기",
+        "관련",
+        "단어",
+        "이동",
+        "타논",
         "찾기와",
-        "교통",
-        "이동"
+        "교통"
       ]
     },
     {
-      "id": "supplemental-vocab-218-쏘이",
+      "id": "supplemental-vocab-453-소이",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "쏘이",
-      "thaiScript": "",
+      "thai": "소이",
+      "thaiScript": "ซอย",
       "korean": "골목",
-      "note": "길 찾기와 교통",
+      "note": "교통과 길찾기 관련 단어",
       "tags": [
         "이동"
       ],
       "keywords": [
-        "쏘이",
+        "소이",
+        "ซอย",
         "골목",
+        "교통과",
+        "길찾기",
+        "관련",
+        "단어",
+        "이동",
+        "쏘이",
         "찾기와",
-        "교통",
-        "이동"
+        "교통"
       ]
     },
     {
-      "id": "supplemental-vocab-219-차이-하드",
+      "id": "supplemental-vocab-661-차이-핫",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "차이 하드",
-      "thaiScript": "",
+      "thai": "차이 핫",
+      "thaiScript": "ชายหาด",
       "korean": "해변",
-      "note": "길 찾기와 교통",
+      "note": "길 찾기와 목적지 검색에 자주 나오는 장소",
       "tags": [
-        "이동"
+        "이동",
+        "쇼핑"
       ],
       "keywords": [
         "차이",
-        "하드",
+        "ชายหาด",
         "해변",
         "찾기와",
-        "교통",
-        "이동"
+        "목적지",
+        "검색에",
+        "자주",
+        "나오는",
+        "장소",
+        "이동",
+        "쇼핑",
+        "바다",
+        "하드",
+        "교통"
       ]
     },
     {
-      "id": "supplemental-vocab-220-싼암빈",
+      "id": "supplemental-vocab-450-싸남-빈",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "싼암빈",
-      "thaiScript": "",
+      "thai": "싸남 빈",
+      "thaiScript": "สนามบิน",
       "korean": "공항",
-      "note": "길 찾기와 교통",
+      "note": "교통과 길찾기 관련 단어",
       "tags": [
-        "이동"
+        "이동",
+        "쇼핑"
       ],
       "keywords": [
-        "싼암빈",
+        "싸남",
+        "สนามบิน",
         "공항",
+        "교통과",
+        "길찾기",
+        "관련",
+        "단어",
+        "이동",
+        "싼암빈",
         "찾기와",
         "교통",
-        "이동"
+        "목적지",
+        "검색에",
+        "자주",
+        "나오는",
+        "장소",
+        "쇼핑"
       ]
     },
     {
@@ -10705,44 +10765,65 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-222-홍-팍",
+      "id": "supplemental-vocab-374-홍",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "홍 팍",
-      "thaiScript": "",
-      "korean": "숙소 / 방",
-      "note": "길 찾기와 교통",
+      "thai": "홍",
+      "thaiScript": "ห้อง",
+      "korean": "방 / 객실",
+      "note": "호텔, 숙소, 방 이야기할 때 기본 단어",
       "tags": [
-        "이동"
+        "이동",
+        "쇼핑"
       ],
       "keywords": [
+        "ห้อง",
+        "객실",
+        "호텔",
         "숙소",
+        "이야기할",
+        "기본",
+        "단어",
+        "이동",
+        "쇼핑",
+        "숙소방",
         "찾기와",
-        "교통",
-        "이동"
+        "교통"
       ]
     },
     {
-      "id": "supplemental-vocab-223-탈랏",
+      "id": "supplemental-vocab-520-탈랏",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
       "thai": "탈랏",
-      "thaiScript": "",
+      "thaiScript": "ตลาด",
       "korean": "시장",
-      "note": "길 찾기와 교통",
+      "note": "쇼핑과 결제 관련 단어",
       "tags": [
-        "이동"
+        "이동",
+        "쇼핑"
       ],
       "keywords": [
         "탈랏",
+        "ตลาด",
         "시장",
+        "쇼핑과",
+        "결제",
+        "관련",
+        "단어",
+        "쇼핑",
         "찾기와",
         "교통",
-        "이동"
+        "이동",
+        "목적지",
+        "검색에",
+        "자주",
+        "나오는",
+        "장소"
       ]
     },
     {
@@ -10767,85 +10848,106 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-225-싸타니",
+      "id": "supplemental-vocab-434-싸타니",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
       "thai": "싸타니",
-      "thaiScript": "",
+      "thaiScript": "สถานี",
       "korean": "역 / 정류장",
-      "note": "길 찾기와 교통",
+      "note": "교통과 길찾기 관련 단어",
       "tags": [
         "이동"
       ],
       "keywords": [
         "싸타니",
+        "สถานี",
         "정류장",
+        "교통과",
+        "길찾기",
+        "관련",
+        "단어",
+        "이동",
         "찾기와",
-        "교통",
-        "이동"
+        "교통"
       ]
     },
     {
-      "id": "supplemental-vocab-226-롯-메",
+      "id": "supplemental-vocab-431-롯-메",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
       "thai": "롯 메",
-      "thaiScript": "",
+      "thaiScript": "รถเมล์",
       "korean": "버스",
-      "note": "길 찾기와 교통",
+      "note": "교통과 길찾기 관련 단어",
       "tags": [
         "이동"
       ],
       "keywords": [
+        "รถเมล์",
         "버스",
+        "교통과",
+        "길찾기",
+        "관련",
+        "단어",
+        "이동",
         "찾기와",
-        "교통",
-        "이동"
+        "교통"
       ]
     },
     {
-      "id": "supplemental-vocab-227-롯",
+      "id": "supplemental-vocab-432-롯-파이",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "롯ไฟ",
-      "thaiScript": "",
+      "thai": "롯 파이",
+      "thaiScript": "รถไฟ",
       "korean": "기차",
-      "note": "길 찾기와 교통",
+      "note": "교통과 길찾기 관련 단어",
       "tags": [
         "이동"
       ],
       "keywords": [
-        "롯ไฟ",
+        "파이",
+        "รถไฟ",
         "기차",
+        "교통과",
+        "길찾기",
+        "관련",
+        "단어",
+        "이동",
+        "롯ไฟ",
         "찾기와",
-        "교통",
-        "이동"
+        "교통"
       ]
     },
     {
-      "id": "supplemental-vocab-228-롯-택시",
+      "id": "supplemental-vocab-429-택시",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "롯 택시",
-      "thaiScript": "",
+      "thai": "택시",
+      "thaiScript": "แท็กซี่",
       "korean": "택시",
-      "note": "길 찾기와 교통",
+      "note": "교통과 길찾기 관련 단어",
       "tags": [
         "이동"
       ],
       "keywords": [
         "택시",
+        "แท็กซี่",
+        "교통과",
+        "길찾기",
+        "관련",
+        "단어",
+        "이동",
         "찾기와",
-        "교통",
-        "이동"
+        "교통"
       ]
     },
     {
@@ -10913,65 +11015,82 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-232-삐우",
+      "id": "supplemental-vocab-435-뿌아",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "삐우",
-      "thaiScript": "",
+      "thai": "뿌아",
+      "thaiScript": "ตั๋ว",
       "korean": "표 / 티켓",
-      "note": "길 찾기와 교통",
+      "note": "교통과 길찾기 관련 단어",
       "tags": [
         "이동"
       ],
       "keywords": [
-        "삐우",
+        "뿌아",
+        "ตั๋ว",
         "티켓",
+        "교통과",
+        "길찾기",
+        "관련",
+        "단어",
+        "이동",
+        "삐우",
         "찾기와",
-        "교통",
-        "이동"
+        "교통"
       ]
     },
     {
-      "id": "supplemental-vocab-233-쫀-뜽",
+      "id": "supplemental-vocab-438-뜽",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "쫀 뜽",
-      "thaiScript": "",
+      "thai": "뜽",
+      "thaiScript": "ถึง",
       "korean": "도착하다",
-      "note": "길 찾기와 교통",
+      "note": "교통과 길찾기 관련 단어",
       "tags": [
         "이동"
       ],
       "keywords": [
+        "ถึง",
         "도착하다",
+        "교통과",
+        "길찾기",
+        "관련",
+        "단어",
+        "이동",
         "찾기와",
-        "교통",
-        "이동"
+        "교통"
       ]
     },
     {
-      "id": "supplemental-vocab-234-옥-떠앙",
+      "id": "supplemental-vocab-439-억-떠앙",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "옥 떠앙",
-      "thaiScript": "",
+      "thai": "억 떠앙",
+      "thaiScript": "ออกเดินทาง",
       "korean": "출발하다",
-      "note": "길 찾기와 교통",
+      "note": "교통과 길찾기 관련 단어",
       "tags": [
         "이동"
       ],
       "keywords": [
         "떠앙",
+        "ออกเดินทาง",
         "출발하다",
+        "교통과",
+        "길찾기",
+        "관련",
+        "단어",
+        "이동",
+        "출발",
         "찾기와",
-        "교통",
-        "이동"
+        "교통"
       ]
     },
     {
@@ -10993,89 +11112,6 @@ window.BASE_DATA = {
         "찾기와",
         "교통",
         "이동"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-237-쩹",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "쩹",
-      "thaiScript": "",
-      "korean": "아프다",
-      "note": "몸 상태와 병원",
-      "tags": [
-        "건강"
-      ],
-      "keywords": [
-        "아프다",
-        "상태와",
-        "병원",
-        "건강"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-238-쁘아이",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "쁘아이",
-      "thaiScript": "",
-      "korean": "아프다 / 병들다",
-      "note": "몸 상태와 병원",
-      "tags": [
-        "건강"
-      ],
-      "keywords": [
-        "쁘아이",
-        "아프다",
-        "병들다",
-        "상태와",
-        "병원",
-        "건강"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-239-나우",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "나우",
-      "thaiScript": "",
-      "korean": "춥다",
-      "note": "몸 상태와 병원",
-      "tags": [
-        "건강"
-      ],
-      "keywords": [
-        "나우",
-        "춥다",
-        "상태와",
-        "병원",
-        "건강"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-240-론",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "론",
-      "thaiScript": "",
-      "korean": "덥다",
-      "note": "몸 상태와 병원",
-      "tags": [
-        "건강"
-      ],
-      "keywords": [
-        "덥다",
-        "상태와",
-        "병원",
-        "건강"
       ]
     },
     {
@@ -11142,151 +11178,98 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-244-휴",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "휴",
-      "thaiScript": "",
-      "korean": "배고프다",
-      "note": "몸 상태와 병원",
-      "tags": [
-        "건강"
-      ],
-      "keywords": [
-        "배고프다",
-        "상태와",
-        "병원",
-        "건강"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-245-푸앗-후아",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "푸앗 후아",
-      "thaiScript": "",
-      "korean": "두통",
-      "note": "몸 상태와 병원",
-      "tags": [
-        "건강"
-      ],
-      "keywords": [
-        "푸앗",
-        "후아",
-        "두통",
-        "상태와",
-        "병원",
-        "건강"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-246-푸앗-통",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "푸앗 통",
-      "thaiScript": "",
-      "korean": "복통",
-      "note": "몸 상태와 병원",
-      "tags": [
-        "건강"
-      ],
-      "keywords": [
-        "푸앗",
-        "복통",
-        "상태와",
-        "병원",
-        "건강"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-247-쩹-커",
+      "id": "supplemental-vocab-687-쩹-커",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
       "thai": "쩹 커",
-      "thaiScript": "",
-      "korean": "목이 아프다",
-      "note": "몸 상태와 병원",
+      "thaiScript": "เจ็บคอ",
+      "korean": "목 통증",
+      "note": "병원과 약국에서 많이 찾는 증상 단어",
       "tags": [
         "건강"
       ],
       "keywords": [
+        "เจ็บคอ",
+        "통증",
+        "병원과",
+        "약국에서",
+        "많이",
+        "찾는",
+        "증상",
+        "단어",
+        "건강",
+        "목이 아파요",
+        "목 통증",
         "목이",
         "아프다",
+        "응급",
+        "상황",
+        "관련",
         "상태와",
-        "병원",
-        "건강"
+        "병원"
       ]
     },
     {
-      "id": "supplemental-vocab-248-아이",
+      "id": "supplemental-vocab-542-남-묵",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "아이",
-      "thaiScript": "",
-      "korean": "기침",
-      "note": "몸 상태와 병원",
-      "tags": [
-        "건강"
-      ],
-      "keywords": [
-        "아이",
-        "기침",
-        "상태와",
-        "병원",
-        "건강"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-249-남-무크",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "남 무크",
-      "thaiScript": "",
+      "thai": "남 묵",
+      "thaiScript": "น้ำมูก",
       "korean": "콧물",
-      "note": "몸 상태와 병원",
+      "note": "병원과 응급 상황 관련 단어",
       "tags": [
         "건강"
       ],
       "keywords": [
-        "무크",
+        "น้ำมูก",
         "콧물",
+        "병원과",
+        "응급",
+        "상황",
+        "관련",
+        "단어",
+        "건강",
+        "무크",
         "상태와",
-        "병원",
-        "건강"
+        "병원"
       ]
     },
     {
-      "id": "supplemental-vocab-251-위안-후아",
+      "id": "supplemental-vocab-544-윈-후아",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "위안 후아",
-      "thaiScript": "",
+      "thai": "윈 후아",
+      "thaiScript": "เวียนหัว",
       "korean": "어지럽다",
-      "note": "몸 상태와 병원",
+      "note": "병원과 응급 상황 관련 단어",
       "tags": [
         "건강"
       ],
       "keywords": [
-        "위안",
         "후아",
+        "เวียนหัว",
         "어지럽다",
+        "병원과",
+        "응급",
+        "상황",
+        "관련",
+        "단어",
+        "건강",
+        "위안",
         "상태와",
         "병원",
-        "건강"
+        "어지러움",
+        "약국에서",
+        "많이",
+        "찾는",
+        "증상",
+        "어지러워요"
       ]
     },
     {
@@ -11314,85 +11297,95 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-253-판-플래",
+      "id": "supplemental-vocab-694-미-플래",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "판 플래",
-      "thaiScript": "",
+      "thai": "미 플래",
+      "thaiScript": "มีแผล",
       "korean": "상처",
-      "note": "몸 상태와 병원",
+      "note": "병원과 약국에서 많이 찾는 증상 단어",
       "tags": [
         "건강"
       ],
       "keywords": [
         "플래",
+        "มีแผล",
         "상처",
+        "병원과",
+        "약국에서",
+        "많이",
+        "찾는",
+        "증상",
+        "단어",
+        "건강",
         "상태와",
-        "병원",
-        "건강"
+        "병원"
       ]
     },
     {
-      "id": "supplemental-vocab-254-렁-파야반",
+      "id": "supplemental-vocab-550-라안-야",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "렁 파야반",
-      "thaiScript": "",
-      "korean": "병원",
-      "note": "몸 상태와 병원",
-      "tags": [
-        "건강"
-      ],
-      "keywords": [
-        "파야반",
-        "병원",
-        "상태와",
-        "건강"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-255-란-카이-야",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "란 카이 야",
-      "thaiScript": "",
+      "thai": "라안 야",
+      "thaiScript": "ร้านยา",
       "korean": "약국",
-      "note": "몸 상태와 병원",
+      "note": "병원과 응급 상황 관련 단어",
       "tags": [
+        "이동",
+        "쇼핑",
         "건강"
       ],
       "keywords": [
-        "카이",
+        "라안",
+        "ร้านยา",
         "약국",
+        "병원과",
+        "응급",
+        "상황",
+        "관련",
+        "단어",
+        "건강",
+        "카이",
         "상태와",
         "병원",
-        "건강"
+        "찾기와",
+        "목적지",
+        "검색에",
+        "자주",
+        "나오는",
+        "장소",
+        "이동",
+        "쇼핑"
       ]
     },
     {
-      "id": "supplemental-vocab-256-모",
+      "id": "supplemental-vocab-566-모",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
       "thai": "모",
-      "thaiScript": "",
+      "thaiScript": "หมอ",
       "korean": "의사",
-      "note": "몸 상태와 병원",
+      "note": "병원과 응급 상황 관련 단어",
       "tags": [
         "건강"
       ],
       "keywords": [
+        "หมอ",
         "의사",
+        "병원과",
+        "응급",
+        "상황",
+        "관련",
+        "단어",
+        "건강",
         "상태와",
-        "병원",
-        "건강"
+        "병원"
       ]
     },
     {
@@ -11417,24 +11410,30 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-258-야",
+      "id": "supplemental-vocab-564-야-깨-풋",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "야แก้ปวด",
-      "thaiScript": "",
+      "thai": "야 깨 풋",
+      "thaiScript": "ยาแก้ปวด",
       "korean": "진통제",
-      "note": "몸 상태와 병원",
+      "note": "병원과 응급 상황 관련 단어",
       "tags": [
         "건강"
       ],
       "keywords": [
-        "야แก้ปวด",
+        "ยาแก้ปวด",
         "진통제",
+        "병원과",
+        "응급",
+        "상황",
+        "관련",
+        "단어",
+        "건강",
+        "야แก้ปวด",
         "상태와",
-        "병원",
-        "건강"
+        "병원"
       ]
     },
     {
@@ -11459,24 +11458,43 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-260-파악-폰",
+      "id": "supplemental-vocab-624-쉬다",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "파악 폰",
-      "thaiScript": "",
+      "thai": "쉬다",
+      "thaiScript": "พัก",
       "korean": "쉬다",
-      "note": "몸 상태와 병원",
+      "note": "기본 동사와 위치 관련 단어",
       "tags": [
+        "기본회화",
+        "식당",
+        "이동",
+        "쇼핑",
         "건강"
       ],
       "keywords": [
-        "파악",
         "쉬다",
+        "พัก",
+        "기본",
+        "동사와",
+        "위치",
+        "관련",
+        "단어",
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑",
+        "쉬어요",
+        "พักผ่อน",
+        "병원과",
+        "응급",
+        "상황",
+        "건강",
+        "파악",
         "상태와",
-        "병원",
-        "건강"
+        "병원"
       ]
     },
     {
@@ -11614,27 +11632,6 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-267-쏨",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "쏨",
-      "thaiScript": "",
-      "korean": "수리하다",
-      "note": "현장과 작업 지시",
-      "tags": [
-        "일터"
-      ],
-      "keywords": [
-        "수리하다",
-        "현장과",
-        "작업",
-        "지시",
-        "일터"
-      ]
-    },
-    {
       "id": "supplemental-vocab-268-리앙",
       "kind": "vocab",
       "source": "supplemental",
@@ -11693,28 +11690,6 @@ window.BASE_DATA = {
       "keywords": [
         "쑤언",
         "일부",
-        "현장과",
-        "작업",
-        "지시",
-        "일터"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-271-크루엉짝",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "크루엉짝",
-      "thaiScript": "",
-      "korean": "기계",
-      "note": "현장과 작업 지시",
-      "tags": [
-        "일터"
-      ],
-      "keywords": [
-        "크루엉짝",
-        "기계",
         "현장과",
         "작업",
         "지시",
@@ -11963,28 +11938,6 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-283-프엇",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "프엇",
-      "thaiScript": "",
-      "korean": "열다",
-      "note": "현장과 작업 지시",
-      "tags": [
-        "일터"
-      ],
-      "keywords": [
-        "프엇",
-        "열다",
-        "현장과",
-        "작업",
-        "지시",
-        "일터"
-      ]
-    },
-    {
       "id": "supplemental-vocab-284-윳",
       "kind": "vocab",
       "source": "supplemental",
@@ -12028,27 +11981,6 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-286-토",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "토",
-      "thaiScript": "",
-      "korean": "버리다",
-      "note": "현장과 작업 지시",
-      "tags": [
-        "일터"
-      ],
-      "keywords": [
-        "버리다",
-        "현장과",
-        "작업",
-        "지시",
-        "일터"
-      ]
-    },
-    {
       "id": "supplemental-vocab-287-깨",
       "kind": "vocab",
       "source": "supplemental",
@@ -12071,20 +12003,35 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-288-낭",
+      "id": "supplemental-vocab-620-앉다",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "낭",
-      "thaiScript": "",
+      "thai": "앉다",
+      "thaiScript": "นั่ง",
       "korean": "앉다",
-      "note": "현장과 작업 지시",
+      "note": "기본 동사와 위치 관련 단어",
       "tags": [
+        "기본회화",
+        "식당",
+        "이동",
+        "쇼핑",
         "일터"
       ],
       "keywords": [
         "앉다",
+        "นั่ง",
+        "기본",
+        "동사와",
+        "위치",
+        "관련",
+        "단어",
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑",
+        "앉아요",
         "현장과",
         "작업",
         "지시",
@@ -12195,28 +12142,6 @@ window.BASE_DATA = {
       "keywords": [
         "플롯파이",
         "안전",
-        "현장과",
-        "작업",
-        "지시",
-        "일터"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-294-안따라이",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "안따라이",
-      "thaiScript": "",
-      "korean": "위험",
-      "note": "현장과 작업 지시",
-      "tags": [
-        "일터"
-      ],
-      "keywords": [
-        "안따라이",
-        "위험",
         "현장과",
         "작업",
         "지시",
@@ -12353,19 +12278,29 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-301-팟",
+      "id": "supplemental-vocab-353-팟",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
       "thai": "팟",
       "thaiScript": "",
-      "korean": "절단하다",
-      "note": "현장과 작업 지시",
+      "korean": "볶다",
+      "note": "생활 단어 추가",
       "tags": [
+        "기본회화",
+        "식당",
+        "쇼핑",
         "일터"
       ],
       "keywords": [
+        "볶다",
+        "생활",
+        "단어",
+        "추가",
+        "기본회화",
+        "쇼핑",
+        "식당",
         "절단하다",
         "현장과",
         "작업",
@@ -12388,28 +12323,6 @@ window.BASE_DATA = {
       ],
       "keywords": [
         "용접하다",
-        "현장과",
-        "작업",
-        "지시",
-        "일터"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-303-왓",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "왓",
-      "thaiScript": "",
-      "korean": "재다 / 측정하다",
-      "note": "현장과 작업 지시",
-      "tags": [
-        "일터"
-      ],
-      "keywords": [
-        "재다",
-        "측정하다",
         "현장과",
         "작업",
         "지시",
@@ -12506,48 +12419,6 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-310-므어완",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "므어완",
-      "thaiScript": "",
-      "korean": "어제",
-      "note": "시간과 날짜",
-      "tags": [
-        "숫자·시간"
-      ],
-      "keywords": [
-        "므어완",
-        "어제",
-        "시간과",
-        "날짜",
-        "숫자·시간"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-312-바이",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "바이",
-      "thaiScript": "",
-      "korean": "오후",
-      "note": "시간과 날짜",
-      "tags": [
-        "숫자·시간"
-      ],
-      "keywords": [
-        "바이",
-        "오후",
-        "시간과",
-        "날짜",
-        "숫자·시간"
-      ]
-    },
-    {
       "id": "supplemental-vocab-314-끙큰",
       "kind": "vocab",
       "source": "supplemental",
@@ -12562,26 +12433,6 @@ window.BASE_DATA = {
       ],
       "keywords": [
         "끙큰",
-        "시간과",
-        "날짜",
-        "숫자·시간"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-315-덴-니",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "덴 니",
-      "thaiScript": "",
-      "korean": "지금",
-      "note": "시간과 날짜",
-      "tags": [
-        "숫자·시간"
-      ],
-      "keywords": [
-        "지금",
         "시간과",
         "날짜",
         "숫자·시간"
@@ -12936,68 +12787,6 @@ window.BASE_DATA = {
       "keywords": [
         "ธันวาคม",
         "12월",
-        "시간과",
-        "날짜",
-        "숫자·시간"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-333-완-푸트",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "완 푸트",
-      "thaiScript": "",
-      "korean": "수요일",
-      "note": "시간과 날짜",
-      "tags": [
-        "숫자·시간"
-      ],
-      "keywords": [
-        "푸트",
-        "수요일",
-        "시간과",
-        "날짜",
-        "숫자·시간"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-334-완-프르헛",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "완 프르헛",
-      "thaiScript": "",
-      "korean": "목요일",
-      "note": "시간과 날짜",
-      "tags": [
-        "숫자·시간"
-      ],
-      "keywords": [
-        "프르헛",
-        "목요일",
-        "시간과",
-        "날짜",
-        "숫자·시간"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-335-완-쑥",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "완 쑥",
-      "thaiScript": "",
-      "korean": "금요일",
-      "note": "시간과 날짜",
-      "tags": [
-        "숫자·시간"
-      ],
-      "keywords": [
-        "금요일",
         "시간과",
         "날짜",
         "숫자·시간"
@@ -13418,56 +13207,6 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-353-팟",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "팟",
-      "thaiScript": "",
-      "korean": "볶다",
-      "note": "생활 단어 추가",
-      "tags": [
-        "기본회화",
-        "쇼핑",
-        "식당"
-      ],
-      "keywords": [
-        "볶다",
-        "생활",
-        "단어",
-        "추가",
-        "기본회화",
-        "쇼핑",
-        "식당"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-354-능",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "능",
-      "thaiScript": "",
-      "korean": "찌다",
-      "note": "생활 단어 추가",
-      "tags": [
-        "기본회화",
-        "쇼핑",
-        "식당"
-      ],
-      "keywords": [
-        "찌다",
-        "생활",
-        "단어",
-        "추가",
-        "기본회화",
-        "쇼핑",
-        "식당"
-      ]
-    },
-    {
       "id": "supplemental-vocab-355-쏫",
       "kind": "vocab",
       "source": "supplemental",
@@ -13509,30 +13248,6 @@ window.BASE_DATA = {
       ],
       "keywords": [
         "기름지다",
-        "생활",
-        "단어",
-        "추가",
-        "기본회화",
-        "쇼핑",
-        "식당"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-357-롭",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "롭",
-      "thaiScript": "",
-      "korean": "맛 / 향",
-      "note": "생활 단어 추가",
-      "tags": [
-        "기본회화",
-        "쇼핑",
-        "식당"
-      ],
-      "keywords": [
         "생활",
         "단어",
         "추가",
@@ -13747,75 +13462,102 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-366-배터리",
+      "id": "supplemental-vocab-585-배터리",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
       "thai": "배터리",
-      "thaiScript": "",
+      "thaiScript": "แบตเตอรี่",
       "korean": "배터리",
-      "note": "생활 단어 추가",
+      "note": "일상 대화와 휴대폰 사용 관련 단어",
       "tags": [
         "기본회화",
+        "식당",
         "쇼핑",
-        "식당"
+        "숫자·시간"
       ],
       "keywords": [
         "배터리",
-        "생활",
+        "แบตเตอรี่",
+        "일상",
+        "대화와",
+        "휴대폰",
+        "사용",
+        "관련",
         "단어",
-        "추가",
         "기본회화",
+        "숫자·시간",
+        "생활",
+        "추가",
         "쇼핑",
         "식당"
       ]
     },
     {
-      "id": "supplemental-vocab-367-차지",
+      "id": "supplemental-vocab-586-사아짜",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "차지",
-      "thaiScript": "",
+      "thai": "사아짜",
+      "thaiScript": "ชาร์จ",
       "korean": "충전",
-      "note": "생활 단어 추가",
+      "note": "일상 대화와 휴대폰 사용 관련 단어",
       "tags": [
         "기본회화",
+        "식당",
         "쇼핑",
-        "식당"
+        "숫자·시간"
       ],
       "keywords": [
-        "차지",
+        "사아짜",
+        "ชาร์จ",
         "충전",
-        "생활",
+        "일상",
+        "대화와",
+        "휴대폰",
+        "사용",
+        "관련",
         "단어",
-        "추가",
         "기본회화",
+        "숫자·시간",
+        "차지",
+        "생활",
+        "추가",
         "쇼핑",
         "식당"
       ]
     },
     {
-      "id": "supplemental-vocab-368-와이파이",
+      "id": "supplemental-vocab-409-와이파이",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
       "thai": "와이파이",
-      "thaiScript": "",
+      "thaiScript": "ไวไฟ",
       "korean": "와이파이",
-      "note": "생활 단어 추가",
+      "note": "호텔과 객실 관련 단어",
       "tags": [
         "기본회화",
+        "식당",
+        "이동",
         "쇼핑",
-        "식당"
+        "숫자·시간"
       ],
       "keywords": [
         "와이파이",
-        "생활",
+        "ไวไฟ",
+        "호텔과",
+        "객실",
+        "관련",
         "단어",
+        "이동",
+        "숫자·시간",
+        "wifi",
+        "인터넷",
+        "생활",
         "추가",
         "기본회화",
         "쇼핑",
@@ -13823,25 +13565,35 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-369-랏-파쑤엇",
+      "id": "supplemental-vocab-410-랏-핫",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "랏 파쑤엇",
-      "thaiScript": "",
+      "thai": "랏 핫",
+      "thaiScript": "รหัส",
       "korean": "비밀번호",
-      "note": "생활 단어 추가",
+      "note": "호텔과 객실 관련 단어",
       "tags": [
         "기본회화",
+        "식당",
+        "이동",
         "쇼핑",
-        "식당"
+        "숫자·시간"
       ],
       "keywords": [
-        "파쑤엇",
+        "รหัส",
         "비밀번호",
-        "생활",
+        "호텔과",
+        "객실",
+        "관련",
         "단어",
+        "이동",
+        "숫자·시간",
+        "비번",
+        "패스워드",
+        "파쑤엇",
+        "생활",
         "추가",
         "기본회화",
         "쇼핑",
@@ -13901,28 +13653,41 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-372-룹",
+      "id": "supplemental-vocab-582-루쁘",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "룹",
-      "thaiScript": "",
+      "thai": "루쁘",
+      "thaiScript": "รูป",
       "korean": "사진",
-      "note": "생활 단어 추가",
+      "note": "일상 대화와 휴대폰 사용 관련 단어",
       "tags": [
         "기본회화",
+        "식당",
+        "이동",
         "쇼핑",
-        "식당"
+        "숫자·시간"
       ],
       "keywords": [
+        "루쁘",
+        "รูป",
         "사진",
-        "생활",
+        "일상",
+        "대화와",
+        "휴대폰",
+        "사용",
+        "관련",
         "단어",
-        "추가",
         "기본회화",
+        "숫자·시간",
+        "생활",
+        "추가",
         "쇼핑",
-        "식당"
+        "식당",
+        "휴대폰과",
+        "인터넷",
+        "이동"
       ]
     },
     {
@@ -13949,65 +13714,6 @@ window.BASE_DATA = {
         "기본회화",
         "쇼핑",
         "식당"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-374-홍",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "홍",
-      "thaiScript": "ห้อง",
-      "korean": "방 / 객실",
-      "note": "호텔, 숙소, 방 이야기할 때 기본 단어",
-      "tags": [
-        "이동",
-        "쇼핑"
-      ],
-      "keywords": [
-        "ห้อง",
-        "객실",
-        "호텔",
-        "숙소",
-        "이야기할",
-        "기본",
-        "단어",
-        "이동",
-        "쇼핑",
-        "숙소방"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-375-쁠리안",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "쁠리안",
-      "thaiScript": "เปลี่ยน",
-      "korean": "바꾸다 / 변경하다",
-      "note": "방 변경, 날짜 변경, 좌석 변경 등에 폭넓게 사용",
-      "tags": [
-        "기본회화",
-        "일터"
-      ],
-      "keywords": [
-        "쁠리안",
-        "เปลี่ยน",
-        "바꾸다",
-        "변경하다",
-        "변경",
-        "날짜",
-        "좌석",
-        "등에",
-        "폭넓게",
-        "사용",
-        "기본회화",
-        "일터",
-        "바꿔",
-        "교체",
-        "갈아"
       ]
     },
     {
@@ -14061,61 +13767,41 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-378-에어-마이-옌",
+      "id": "supplemental-vocab-640-애-마이-옌",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "에어 마이 옌",
+      "thai": "애 마이 옌",
       "thaiScript": "แอร์ไม่เย็น",
-      "korean": "에어컨이 시원하지 않다",
-      "note": "방 문제 설명용",
-      "tags": [
-        "건강",
-        "이동"
-      ],
-      "keywords": [
-        "에어",
-        "마이",
-        "แอร์ไม่เย็น",
-        "에어컨이",
-        "시원하지",
-        "않다",
-        "문제",
-        "설명용",
-        "건강",
-        "이동",
-        "에어컨",
-        "에어컨안시원해요",
-        "냉방문제"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-379-시앙-당",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "시앙 당",
-      "thaiScript": "เสียงดัง",
-      "korean": "시끄럽다",
-      "note": "방이 시끄럽다고 말할 때 자주 씀",
+      "korean": "에어컨이 안 시원해요",
+      "note": "객실 문제를 설명할 때 쓰는 표현",
       "tags": [
         "이동",
         "건강"
       ],
       "keywords": [
-        "시앙",
-        "เสียงดัง",
-        "시끄럽다",
-        "방이",
-        "시끄럽다고",
-        "말할",
-        "자주",
+        "마이",
+        "แอร์ไม่เย็น",
+        "에어컨이",
+        "시원해요",
+        "객실",
+        "문제를",
+        "설명할",
+        "쓰는",
+        "표현",
         "이동",
         "건강",
-        "소음",
-        "시끄러워요"
+        "에어컨",
+        "냉방",
+        "에어컨 안 돼요",
+        "에어",
+        "시원하지",
+        "않다",
+        "문제",
+        "설명용",
+        "에어컨안시원해요",
+        "냉방문제"
       ]
     },
     {
@@ -14339,32 +14025,6 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-388-패스폿",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "패스폿",
-      "thaiScript": "พาสปอร์ต",
-      "korean": "여권",
-      "note": "호텔과 객실 관련 단어",
-      "tags": [
-        "이동",
-        "숫자·시간"
-      ],
-      "keywords": [
-        "패스폿",
-        "พาสปอร์ต",
-        "여권",
-        "호텔과",
-        "객실",
-        "관련",
-        "단어",
-        "이동",
-        "숫자·시간"
-      ]
-    },
-    {
       "id": "supplemental-vocab-389-키카드",
       "kind": "vocab",
       "source": "supplemental",
@@ -14494,34 +14154,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-394-파-처뜯-뚜어",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "파 처뜯 뚜어",
-      "thaiScript": "ผ้าเช็ดตัว",
-      "korean": "수건",
-      "note": "호텔과 객실 관련 단어",
-      "tags": [
-        "이동",
-        "숫자·시간"
-      ],
-      "keywords": [
-        "처뜯",
-        "뚜어",
-        "ผ้าเช็ดตัว",
-        "수건",
-        "호텔과",
-        "객실",
-        "관련",
-        "단어",
-        "이동",
-        "숫자·시간"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-395-파-훔",
+      "id": "supplemental-vocab-627-파-훔",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -14529,7 +14162,7 @@ window.BASE_DATA = {
       "thai": "파 훔",
       "thaiScript": "ผ้าห่ม",
       "korean": "담요",
-      "note": "호텔과 객실 관련 단어",
+      "note": "호텔 비품과 객실 요청 관련 단어",
       "tags": [
         "이동",
         "숫자·시간"
@@ -14537,16 +14170,20 @@ window.BASE_DATA = {
       "keywords": [
         "ผ้าห่ม",
         "담요",
-        "호텔과",
+        "호텔",
+        "비품과",
         "객실",
+        "요청",
         "관련",
         "단어",
         "이동",
+        "이불",
+        "호텔과",
         "숫자·시간"
       ]
     },
     {
-      "id": "supplemental-vocab-396-머언",
+      "id": "supplemental-vocab-626-머언",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -14554,7 +14191,7 @@ window.BASE_DATA = {
       "thai": "머언",
       "thaiScript": "หมอน",
       "korean": "베개",
-      "note": "호텔과 객실 관련 단어",
+      "note": "호텔 비품과 객실 요청 관련 단어",
       "tags": [
         "이동",
         "숫자·시간"
@@ -14563,11 +14200,14 @@ window.BASE_DATA = {
         "머언",
         "หมอน",
         "베개",
-        "호텔과",
+        "호텔",
+        "비품과",
         "객실",
+        "요청",
         "관련",
         "단어",
         "이동",
+        "호텔과",
         "숫자·시간"
       ]
     },
@@ -14730,7 +14370,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-403-하이-프옴",
+      "id": "supplemental-vocab-636-하이-프옴",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -14738,7 +14378,7 @@ window.BASE_DATA = {
       "thai": "하이 프옴",
       "thaiScript": "ไดร์เป่าผม",
       "korean": "드라이기",
-      "note": "호텔과 객실 관련 단어",
+      "note": "호텔 비품과 객실 요청 관련 단어",
       "tags": [
         "이동",
         "숫자·시간"
@@ -14748,11 +14388,14 @@ window.BASE_DATA = {
         "프옴",
         "ไดร์เป่าผม",
         "드라이기",
-        "호텔과",
+        "호텔",
+        "비품과",
         "객실",
+        "요청",
         "관련",
         "단어",
         "이동",
+        "호텔과",
         "숫자·시간"
       ]
     },
@@ -14774,32 +14417,6 @@ window.BASE_DATA = {
         "니라파이",
         "ตู้นิรภัย",
         "금고",
-        "호텔과",
-        "객실",
-        "관련",
-        "단어",
-        "이동",
-        "숫자·시간"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-405-홍-남",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "홍 남",
-      "thaiScript": "ห้องน้ำ",
-      "korean": "욕실 / 화장실",
-      "note": "호텔과 객실 관련 단어",
-      "tags": [
-        "이동",
-        "숫자·시간"
-      ],
-      "keywords": [
-        "ห้องน้ำ",
-        "욕실",
-        "화장실",
         "호텔과",
         "객실",
         "관련",
@@ -14832,85 +14449,6 @@ window.BASE_DATA = {
         "단어",
         "이동",
         "숫자·시간"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-407-남-론",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "남 론",
-      "thaiScript": "น้ำร้อน",
-      "korean": "뜨거운 물 / 온수",
-      "note": "호텔과 객실 관련 단어",
-      "tags": [
-        "이동",
-        "숫자·시간"
-      ],
-      "keywords": [
-        "น้ำร้อน",
-        "뜨거운",
-        "온수",
-        "호텔과",
-        "객실",
-        "관련",
-        "단어",
-        "이동",
-        "숫자·시간"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-408-남-옌",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "남 옌",
-      "thaiScript": "น้ำเย็น",
-      "korean": "차가운 물 / 냉수",
-      "note": "호텔과 객실 관련 단어",
-      "tags": [
-        "이동",
-        "숫자·시간"
-      ],
-      "keywords": [
-        "น้ำเย็น",
-        "차가운",
-        "냉수",
-        "호텔과",
-        "객실",
-        "관련",
-        "단어",
-        "이동",
-        "숫자·시간"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-410-랏-핫",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "랏 핫",
-      "thaiScript": "รหัส",
-      "korean": "비밀번호",
-      "note": "호텔과 객실 관련 단어",
-      "tags": [
-        "이동",
-        "숫자·시간"
-      ],
-      "keywords": [
-        "รหัส",
-        "비밀번호",
-        "호텔과",
-        "객실",
-        "관련",
-        "단어",
-        "이동",
-        "숫자·시간",
-        "비번",
-        "패스워드"
       ]
     },
     {
@@ -15059,6 +14597,7 @@ window.BASE_DATA = {
       "note": "호텔과 객실 관련 단어",
       "tags": [
         "이동",
+        "쇼핑",
         "숫자·시간"
       ],
       "keywords": [
@@ -15070,7 +14609,11 @@ window.BASE_DATA = {
         "관련",
         "단어",
         "이동",
-        "숫자·시간"
+        "숫자·시간",
+        "매칭",
+        "쇼핑과",
+        "결제",
+        "쇼핑"
       ]
     },
     {
@@ -15258,32 +14801,6 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-425-추아이",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "추아이",
-      "thaiScript": "ช่วย",
-      "korean": "도와주다",
-      "note": "호텔과 객실 관련 단어",
-      "tags": [
-        "이동",
-        "숫자·시간"
-      ],
-      "keywords": [
-        "추아이",
-        "ช่วย",
-        "도와주다",
-        "호텔과",
-        "객실",
-        "관련",
-        "단어",
-        "이동",
-        "숫자·시간"
-      ]
-    },
-    {
       "id": "supplemental-vocab-426-끄룽립",
       "kind": "vocab",
       "source": "supplemental",
@@ -15310,16 +14827,17 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-427-쁠럭-파이",
+      "id": "supplemental-vocab-587-쁠럭-파이",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
       "thai": "쁠럭 파이",
       "thaiScript": "ปลั๊กไฟ",
-      "korean": "콘센트",
-      "note": "호텔과 객실 관련 단어",
+      "korean": "플러그 / 콘센트",
+      "note": "일상 대화와 휴대폰 사용 관련 단어",
       "tags": [
+        "기본회화",
         "이동",
         "숫자·시간"
       ],
@@ -15327,14 +14845,23 @@ window.BASE_DATA = {
         "쁠럭",
         "파이",
         "ปลั๊กไฟ",
+        "플러그",
         "콘센트",
-        "호텔과",
-        "객실",
+        "일상",
+        "대화와",
+        "휴대폰",
+        "사용",
         "관련",
         "단어",
-        "이동",
+        "기본회화",
         "숫자·시간",
-        "충전기 꽂는 곳"
+        "호텔과",
+        "객실",
+        "이동",
+        "충전기 꽂는 곳",
+        "호텔",
+        "비품과",
+        "요청"
       ]
     },
     {
@@ -15362,30 +14889,10 @@ window.BASE_DATA = {
         "이동",
         "숫자·시간",
         "charger",
-        "충전"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-429-택시",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "택시",
-      "thaiScript": "แท็กซี่",
-      "korean": "택시",
-      "note": "교통과 길찾기 관련 단어",
-      "tags": [
-        "이동"
-      ],
-      "keywords": [
-        "택시",
-        "แท็กซี่",
-        "교통과",
-        "길찾기",
-        "관련",
-        "단어",
-        "이동"
+        "충전",
+        "호텔",
+        "비품과",
+        "요청"
       ]
     },
     {
@@ -15404,30 +14911,6 @@ window.BASE_DATA = {
       "keywords": [
         "그랩",
         "แกร็บ",
-        "교통과",
-        "길찾기",
-        "관련",
-        "단어",
-        "이동"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-432-롯-파이",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "롯 파이",
-      "thaiScript": "รถไฟ",
-      "korean": "기차",
-      "note": "교통과 길찾기 관련 단어",
-      "tags": [
-        "이동"
-      ],
-      "keywords": [
-        "파이",
-        "รถไฟ",
-        "기차",
         "교통과",
         "길찾기",
         "관련",
@@ -15460,78 +14943,6 @@ window.BASE_DATA = {
         "이동",
         "bts",
         "mrt"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-435-뿌아",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "뿌아",
-      "thaiScript": "ตั๋ว",
-      "korean": "표 / 티켓",
-      "note": "교통과 길찾기 관련 단어",
-      "tags": [
-        "이동"
-      ],
-      "keywords": [
-        "뿌아",
-        "ตั๋ว",
-        "티켓",
-        "교통과",
-        "길찾기",
-        "관련",
-        "단어",
-        "이동"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-438-뜽",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "뜽",
-      "thaiScript": "ถึง",
-      "korean": "도착하다",
-      "note": "교통과 길찾기 관련 단어",
-      "tags": [
-        "이동"
-      ],
-      "keywords": [
-        "ถึง",
-        "도착하다",
-        "교통과",
-        "길찾기",
-        "관련",
-        "단어",
-        "이동"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-439-억-떠앙",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "억 떠앙",
-      "thaiScript": "ออกเดินทาง",
-      "korean": "출발하다",
-      "note": "교통과 길찾기 관련 단어",
-      "tags": [
-        "이동"
-      ],
-      "keywords": [
-        "떠앙",
-        "ออกเดินทาง",
-        "출발하다",
-        "교통과",
-        "길찾기",
-        "관련",
-        "단어",
-        "이동",
-        "출발"
       ]
     },
     {
@@ -15711,55 +15122,6 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-449-끌라이-마이",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "끌라이 마이",
-      "thaiScript": "ไกล",
-      "korean": "멀다",
-      "note": "교통과 길찾기 관련 단어",
-      "tags": [
-        "이동"
-      ],
-      "keywords": [
-        "끌라이",
-        "마이",
-        "ไกล",
-        "멀다",
-        "교통과",
-        "길찾기",
-        "관련",
-        "단어",
-        "이동"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-450-싸남-빈",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "싸남 빈",
-      "thaiScript": "สนามบิน",
-      "korean": "공항",
-      "note": "교통과 길찾기 관련 단어",
-      "tags": [
-        "이동"
-      ],
-      "keywords": [
-        "싸남",
-        "สนามบิน",
-        "공항",
-        "교통과",
-        "길찾기",
-        "관련",
-        "단어",
-        "이동"
-      ]
-    },
-    {
       "id": "supplemental-vocab-451-터미널",
       "kind": "vocab",
       "source": "supplemental",
@@ -15775,54 +15137,6 @@ window.BASE_DATA = {
       "keywords": [
         "터미널",
         "เทอร์มินัล",
-        "교통과",
-        "길찾기",
-        "관련",
-        "단어",
-        "이동"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-452-차넌",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "차넌",
-      "thaiScript": "ถนน",
-      "korean": "도로",
-      "note": "교통과 길찾기 관련 단어",
-      "tags": [
-        "이동"
-      ],
-      "keywords": [
-        "차넌",
-        "ถนน",
-        "도로",
-        "교통과",
-        "길찾기",
-        "관련",
-        "단어",
-        "이동"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-453-소이",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "소이",
-      "thaiScript": "ซอย",
-      "korean": "골목",
-      "note": "교통과 길찾기 관련 단어",
-      "tags": [
-        "이동"
-      ],
-      "keywords": [
-        "소이",
-        "ซอย",
-        "골목",
         "교통과",
         "길찾기",
         "관련",
@@ -15854,6 +15168,29 @@ window.BASE_DATA = {
         "단어",
         "이동",
         "빨리"
+      ]
+    },
+    {
+      "id": "supplemental-vocab-455-차-차",
+      "kind": "vocab",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "차 차",
+      "thaiScript": "ช้าๆ",
+      "korean": "천천히",
+      "note": "교통과 길찾기 관련 단어",
+      "tags": [
+        "이동"
+      ],
+      "keywords": [
+        "ช้าๆ",
+        "천천히",
+        "교통과",
+        "길찾기",
+        "관련",
+        "단어",
+        "이동"
       ]
     },
     {
@@ -16170,30 +15507,6 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-469-메누",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "메누",
-      "thaiScript": "เมนู",
-      "korean": "메뉴",
-      "note": "식당과 주문 관련 단어",
-      "tags": [
-        "식당"
-      ],
-      "keywords": [
-        "메누",
-        "เมนู",
-        "메뉴",
-        "식당과",
-        "주문",
-        "관련",
-        "단어",
-        "식당"
-      ]
-    },
-    {
       "id": "supplemental-vocab-470-메누-룹",
       "kind": "vocab",
       "source": "supplemental",
@@ -16220,172 +15533,39 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-473-카우-팟",
+      "id": "supplemental-vocab-635-남-드음",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "카우 팟",
-      "thaiScript": "ข้าวผัด",
-      "korean": "볶음밥",
-      "note": "식당과 주문 관련 단어",
-      "tags": [
-        "식당"
-      ],
-      "keywords": [
-        "카우",
-        "ข้าวผัด",
-        "볶음밥",
-        "식당과",
-        "주문",
-        "관련",
-        "단어",
-        "식당"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-474-꿰이띠여우",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "꿰이띠여우",
-      "thaiScript": "ก๋วยเตี๋ยว",
-      "korean": "국수",
-      "note": "식당과 주문 관련 단어",
-      "tags": [
-        "식당"
-      ],
-      "keywords": [
-        "꿰이띠여우",
-        "ก๋วยเตี๋ยว",
-        "국수",
-        "식당과",
-        "주문",
-        "관련",
-        "단어",
-        "식당"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-475-남",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "남",
-      "thaiScript": "น้ำ",
-      "korean": "물",
-      "note": "식당과 주문 관련 단어",
-      "tags": [
-        "식당"
-      ],
-      "keywords": [
-        "น้ำ",
-        "식당과",
-        "주문",
-        "관련",
-        "단어",
-        "식당"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-476-남-쁠라오",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "남 쁠라오",
-      "thaiScript": "น้ำเปล่า",
+      "thai": "남 드음",
+      "thaiScript": "น้ำดื่ม",
       "korean": "생수",
-      "note": "식당과 주문 관련 단어",
+      "note": "호텔 비품과 객실 요청 관련 단어",
       "tags": [
-        "식당"
+        "식당",
+        "이동"
       ],
       "keywords": [
+        "드음",
+        "น้ำดื่ม",
+        "생수",
+        "호텔",
+        "비품과",
+        "객실",
+        "요청",
+        "관련",
+        "단어",
+        "이동",
         "쁠라오",
         "น้ำเปล่า",
-        "생수",
         "식당과",
         "주문",
-        "관련",
-        "단어",
         "식당"
       ]
     },
     {
-      "id": "supplemental-vocab-478-까페",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "까페",
-      "thaiScript": "กาแฟ",
-      "korean": "커피",
-      "note": "식당과 주문 관련 단어",
-      "tags": [
-        "식당"
-      ],
-      "keywords": [
-        "까페",
-        "กาแฟ",
-        "커피",
-        "식당과",
-        "주문",
-        "관련",
-        "단어",
-        "식당"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-481-철랍",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "철랍",
-      "thaiScript": "ร้อน",
-      "korean": "뜨겁다",
-      "note": "식당과 주문 관련 단어",
-      "tags": [
-        "식당"
-      ],
-      "keywords": [
-        "철랍",
-        "ร้อน",
-        "뜨겁다",
-        "식당과",
-        "주문",
-        "관련",
-        "단어",
-        "식당"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-488-켐",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "켐",
-      "thaiScript": "เค็ม",
-      "korean": "짜다",
-      "note": "식당과 주문 관련 단어",
-      "tags": [
-        "식당"
-      ],
-      "keywords": [
-        "เค็ม",
-        "짜다",
-        "식당과",
-        "주문",
-        "관련",
-        "단어",
-        "식당"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-490-파크-치",
+      "id": "supplemental-vocab-669-파크-치",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -16393,7 +15573,7 @@ window.BASE_DATA = {
       "thai": "파크 치",
       "thaiScript": "ผักชี",
       "korean": "고수",
-      "note": "식당과 주문 관련 단어",
+      "note": "식당 추가 요청과 제외 요청에 쓰는 단어",
       "tags": [
         "식당"
       ],
@@ -16401,11 +15581,16 @@ window.BASE_DATA = {
         "파크",
         "ผักชี",
         "고수",
+        "식당",
+        "추가",
+        "요청과",
+        "제외",
+        "요청에",
+        "쓰는",
+        "단어",
         "식당과",
         "주문",
-        "관련",
-        "단어",
-        "식당"
+        "관련"
       ]
     },
     {
@@ -16486,54 +15671,38 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-499-알러지",
+      "id": "supplemental-vocab-693-패",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "알러지",
+      "thai": "패",
       "thaiScript": "แพ้",
       "korean": "알레르기",
-      "note": "식당과 주문 관련 단어",
+      "note": "병원과 약국에서 많이 찾는 증상 단어",
       "tags": [
-        "식당"
+        "식당",
+        "건강"
       ],
       "keywords": [
-        "알러지",
         "แพ้",
         "알레르기",
+        "병원과",
+        "약국에서",
+        "많이",
+        "찾는",
+        "증상",
+        "단어",
+        "건강",
+        "알러지",
         "식당과",
         "주문",
         "관련",
-        "단어",
         "식당"
       ]
     },
     {
-      "id": "supplemental-vocab-500-커-업",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "커 업",
-      "thaiScript": "ช้อน",
-      "korean": "숟가락",
-      "note": "식당과 주문 관련 단어",
-      "tags": [
-        "식당"
-      ],
-      "keywords": [
-        "ช้อน",
-        "숟가락",
-        "식당과",
-        "주문",
-        "관련",
-        "단어",
-        "식당"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-502-찌업",
+      "id": "supplemental-vocab-666-찌업",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -16541,7 +15710,7 @@ window.BASE_DATA = {
       "thai": "찌업",
       "thaiScript": "ตะเกียบ",
       "korean": "젓가락",
-      "note": "식당과 주문 관련 단어",
+      "note": "식당 추가 요청과 제외 요청에 쓰는 단어",
       "tags": [
         "식당"
       ],
@@ -16549,133 +15718,48 @@ window.BASE_DATA = {
         "찌업",
         "ตะเกียบ",
         "젓가락",
+        "식당",
+        "추가",
+        "요청과",
+        "제외",
+        "요청에",
+        "쓰는",
+        "단어",
         "식당과",
         "주문",
-        "관련",
-        "단어",
-        "식당"
+        "관련"
       ]
     },
     {
-      "id": "supplemental-vocab-503-까닫",
+      "id": "supplemental-vocab-667-까닫-티츄",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "까닫",
+      "thai": "까닫 티츄",
       "thaiScript": "กระดาษทิชชู่",
-      "korean": "냅킨 / 휴지",
-      "note": "식당과 주문 관련 단어",
+      "korean": "냅킨",
+      "note": "식당 추가 요청과 제외 요청에 쓰는 단어",
       "tags": [
         "식당"
       ],
       "keywords": [
         "까닫",
+        "티츄",
         "กระดาษทิชชู่",
         "냅킨",
+        "식당",
+        "추가",
+        "요청과",
+        "제외",
+        "요청에",
+        "쓰는",
+        "단어",
+        "티슈",
         "휴지",
         "식당과",
         "주문",
-        "관련",
-        "단어",
-        "식당"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-504-빤",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "빤",
-      "thaiScript": "จาน",
-      "korean": "접시",
-      "note": "식당과 주문 관련 단어",
-      "tags": [
-        "식당"
-      ],
-      "keywords": [
-        "จาน",
-        "접시",
-        "식당과",
-        "주문",
-        "관련",
-        "단어",
-        "식당"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-505-깨우",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "깨우",
-      "thaiScript": "แก้ว",
-      "korean": "컵",
-      "note": "식당과 주문 관련 단어",
-      "tags": [
-        "식당"
-      ],
-      "keywords": [
-        "깨우",
-        "แก้ว",
-        "식당과",
-        "주문",
-        "관련",
-        "단어",
-        "식당"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-506-루엉",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "루엉",
-      "thaiScript": "สั่ง",
-      "korean": "이야기하다 / 주문하다",
-      "note": "식당과 주문 관련 단어",
-      "tags": [
-        "식당"
-      ],
-      "keywords": [
-        "루엉",
-        "สั่ง",
-        "이야기하다",
-        "주문하다",
-        "식당과",
-        "주문",
-        "관련",
-        "단어",
-        "식당"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-507-하우-끌랍",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "하우 끌랍",
-      "thaiScript": "เอากลับบ้าน",
-      "korean": "포장",
-      "note": "식당과 주문 관련 단어",
-      "tags": [
-        "식당"
-      ],
-      "keywords": [
-        "하우",
-        "끌랍",
-        "เอากลับบ้าน",
-        "포장",
-        "식당과",
-        "주문",
-        "관련",
-        "단어",
-        "식당",
-        "테이크아웃"
+        "관련"
       ]
     },
     {
@@ -16729,28 +15813,25 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-512-싸이",
+      "id": "supplemental-vocab-513-씨",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "싸이",
-      "thaiScript": "ไซซ์",
-      "korean": "사이즈",
+      "thai": "씨",
+      "thaiScript": "สี",
+      "korean": "색",
       "note": "쇼핑과 결제 관련 단어",
       "tags": [
         "쇼핑"
       ],
       "keywords": [
-        "싸이",
-        "ไซซ์",
-        "사이즈",
+        "สี",
         "쇼핑과",
         "결제",
         "관련",
         "단어",
-        "쇼핑",
-        "크기"
+        "쇼핑"
       ]
     },
     {
@@ -16777,100 +15858,36 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-515-씨-카우",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "씨 카우",
-      "thaiScript": "สีขาว",
-      "korean": "흰색",
-      "note": "쇼핑과 결제 관련 단어",
-      "tags": [
-        "쇼핑"
-      ],
-      "keywords": [
-        "카우",
-        "สีขาว",
-        "흰색",
-        "쇼핑과",
-        "결제",
-        "관련",
-        "단어",
-        "쇼핑"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-519-매칭",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "매칭",
-      "thaiScript": "กระเป๋า",
-      "korean": "가방",
-      "note": "쇼핑과 결제 관련 단어",
-      "tags": [
-        "쇼핑"
-      ],
-      "keywords": [
-        "매칭",
-        "กระเป๋า",
-        "가방",
-        "쇼핑과",
-        "결제",
-        "관련",
-        "단어",
-        "쇼핑"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-521-하앙",
+      "id": "supplemental-vocab-655-하앙",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
       "thai": "하앙",
       "thaiScript": "ห้าง",
-      "korean": "백화점 / 몰",
-      "note": "쇼핑과 결제 관련 단어",
+      "korean": "쇼핑몰",
+      "note": "길 찾기와 목적지 검색에 자주 나오는 장소",
       "tags": [
+        "이동",
         "쇼핑"
       ],
       "keywords": [
         "하앙",
         "ห้าง",
+        "쇼핑몰",
+        "찾기와",
+        "목적지",
+        "검색에",
+        "자주",
+        "나오는",
+        "장소",
+        "이동",
+        "쇼핑",
         "백화점",
         "쇼핑과",
         "결제",
         "관련",
-        "단어",
-        "쇼핑",
-        "쇼핑몰"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-522-응은-쏫",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "응은 쏫",
-      "thaiScript": "เงินสด",
-      "korean": "현금",
-      "note": "쇼핑과 결제 관련 단어",
-      "tags": [
-        "쇼핑"
-      ],
-      "keywords": [
-        "응은",
-        "เงินสด",
-        "현금",
-        "쇼핑과",
-        "결제",
-        "관련",
-        "단어",
-        "쇼핑"
+        "단어"
       ]
     },
     {
@@ -16917,55 +15934,6 @@ window.BASE_DATA = {
         "qr",
         "결제",
         "쇼핑과",
-        "관련",
-        "단어",
-        "쇼핑"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-525-반찌",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "반찌",
-      "thaiScript": "ใบเสร็จ",
-      "korean": "영수증",
-      "note": "쇼핑과 결제 관련 단어",
-      "tags": [
-        "쇼핑"
-      ],
-      "keywords": [
-        "반찌",
-        "ใบเสร็จ",
-        "영수증",
-        "쇼핑과",
-        "결제",
-        "관련",
-        "단어",
-        "쇼핑"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-526-투엄",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "투엄",
-      "thaiScript": "ลอง",
-      "korean": "시도하다 / 입어보다",
-      "note": "쇼핑과 결제 관련 단어",
-      "tags": [
-        "쇼핑"
-      ],
-      "keywords": [
-        "투엄",
-        "ลอง",
-        "시도하다",
-        "입어보다",
-        "쇼핑과",
-        "결제",
         "관련",
         "단어",
         "쇼핑"
@@ -17071,76 +16039,6 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-531-쌍",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "쌍",
-      "thaiScript": "แพง",
-      "korean": "비싸다",
-      "note": "쇼핑과 결제 관련 단어",
-      "tags": [
-        "쇼핑"
-      ],
-      "keywords": [
-        "แพง",
-        "비싸다",
-        "쇼핑과",
-        "결제",
-        "관련",
-        "단어",
-        "쇼핑"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-532-뚝",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "뚝",
-      "thaiScript": "ถูก",
-      "korean": "싸다",
-      "note": "쇼핑과 결제 관련 단어",
-      "tags": [
-        "쇼핑"
-      ],
-      "keywords": [
-        "ถูก",
-        "싸다",
-        "쇼핑과",
-        "결제",
-        "관련",
-        "단어",
-        "쇼핑"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-533-수아이",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "수아이",
-      "thaiScript": "สวย",
-      "korean": "예쁘다",
-      "note": "쇼핑과 결제 관련 단어",
-      "tags": [
-        "쇼핑"
-      ],
-      "keywords": [
-        "수아이",
-        "สวย",
-        "예쁘다",
-        "쇼핑과",
-        "결제",
-        "관련",
-        "단어",
-        "쇼핑"
-      ]
-    },
-    {
       "id": "supplemental-vocab-534-마이-쭈엉",
       "kind": "vocab",
       "source": "supplemental",
@@ -17167,27 +16065,32 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-535-콩-콴",
+      "id": "supplemental-vocab-680-컹-콴",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "콩 콴",
+      "thai": "컹 콴",
       "thaiScript": "ของขวัญ",
-      "korean": "선물",
-      "note": "쇼핑과 결제 관련 단어",
+      "korean": "기념품",
+      "note": "쇼핑할 때 사이즈와 상품 상태를 묻는 단어",
       "tags": [
         "쇼핑"
       ],
       "keywords": [
         "ของขวัญ",
+        "기념품",
+        "쇼핑할",
+        "사이즈와",
+        "상품",
+        "상태를",
+        "묻는",
+        "단어",
+        "쇼핑",
         "선물",
         "쇼핑과",
         "결제",
-        "관련",
-        "단어",
-        "쇼핑",
-        "기념품"
+        "관련"
       ]
     },
     {
@@ -17217,152 +16120,36 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-538-뿌왓-후아",
+      "id": "supplemental-vocab-691-클른-사이",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "뿌왓 후아",
-      "thaiScript": "ปวดหัว",
-      "korean": "두통",
-      "note": "병원과 응급 상황 관련 단어",
-      "tags": [
-        "건강"
-      ],
-      "keywords": [
-        "뿌왓",
-        "후아",
-        "ปวดหัว",
-        "두통",
-        "병원과",
-        "응급",
-        "상황",
-        "관련",
-        "단어",
-        "건강"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-539-뿌왓-텅",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "뿌왓 텅",
-      "thaiScript": "ปวดท้อง",
-      "korean": "복통",
-      "note": "병원과 응급 상황 관련 단어",
-      "tags": [
-        "건강"
-      ],
-      "keywords": [
-        "뿌왓",
-        "ปวดท้อง",
-        "복통",
-        "병원과",
-        "응급",
-        "상황",
-        "관련",
-        "단어",
-        "건강"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-542-남-묵",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "남 묵",
-      "thaiScript": "น้ำมูก",
-      "korean": "콧물",
-      "note": "병원과 응급 상황 관련 단어",
-      "tags": [
-        "건강"
-      ],
-      "keywords": [
-        "น้ำมูก",
-        "콧물",
-        "병원과",
-        "응급",
-        "상황",
-        "관련",
-        "단어",
-        "건강"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-543-카이",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "카이",
-      "thaiScript": "ไข้",
-      "korean": "열",
-      "note": "병원과 응급 상황 관련 단어",
-      "tags": [
-        "건강"
-      ],
-      "keywords": [
-        "카이",
-        "ไข้",
-        "병원과",
-        "응급",
-        "상황",
-        "관련",
-        "단어",
-        "건강"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-544-윈-후아",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "윈 후아",
-      "thaiScript": "เวียนหัว",
-      "korean": "어지럽다",
-      "note": "병원과 응급 상황 관련 단어",
-      "tags": [
-        "건강"
-      ],
-      "keywords": [
-        "후아",
-        "เวียนหัว",
-        "어지럽다",
-        "병원과",
-        "응급",
-        "상황",
-        "관련",
-        "단어",
-        "건강"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-545-클라잉",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "클라잉",
+      "thai": "클른 사이",
       "thaiScript": "คลื่นไส้",
-      "korean": "메스껍다",
-      "note": "병원과 응급 상황 관련 단어",
+      "korean": "메스꺼움",
+      "note": "병원과 약국에서 많이 찾는 증상 단어",
       "tags": [
         "건강"
       ],
       "keywords": [
-        "클라잉",
+        "클른",
+        "사이",
         "คลื่นไส้",
-        "메스껍다",
+        "메스꺼움",
         "병원과",
+        "약국에서",
+        "많이",
+        "찾는",
+        "증상",
+        "단어",
+        "건강",
+        "속 울렁거림",
+        "클라잉",
+        "메스껍다",
         "응급",
         "상황",
-        "관련",
-        "단어",
-        "건강"
+        "관련"
       ]
     },
     {
@@ -17391,7 +16178,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-547-통-씨아",
+      "id": "supplemental-vocab-690-통-씨아",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -17399,7 +16186,7 @@ window.BASE_DATA = {
       "thai": "통 씨아",
       "thaiScript": "ท้องเสีย",
       "korean": "설사",
-      "note": "병원과 응급 상황 관련 단어",
+      "note": "병원과 약국에서 많이 찾는 증상 단어",
       "tags": [
         "건강"
       ],
@@ -17408,60 +16195,15 @@ window.BASE_DATA = {
         "ท้องเสีย",
         "설사",
         "병원과",
+        "약국에서",
+        "많이",
+        "찾는",
+        "증상",
+        "단어",
+        "건강",
         "응급",
         "상황",
-        "관련",
-        "단어",
-        "건강"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-548-팍-폰",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "팍 폰",
-      "thaiScript": "พักผ่อน",
-      "korean": "쉬다",
-      "note": "병원과 응급 상황 관련 단어",
-      "tags": [
-        "건강"
-      ],
-      "keywords": [
-        "พักผ่อน",
-        "쉬다",
-        "병원과",
-        "응급",
-        "상황",
-        "관련",
-        "단어",
-        "건강"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-550-라안-야",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "라안 야",
-      "thaiScript": "ร้านยา",
-      "korean": "약국",
-      "note": "병원과 응급 상황 관련 단어",
-      "tags": [
-        "건강"
-      ],
-      "keywords": [
-        "라안",
-        "ร้านยา",
-        "약국",
-        "병원과",
-        "응급",
-        "상황",
-        "관련",
-        "단어",
-        "건강"
+        "관련"
       ]
     },
     {
@@ -17648,33 +16390,6 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-559-추아이-두아이",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "추아이 두아이",
-      "thaiScript": "ช่วยด้วย",
-      "korean": "도와주세요",
-      "note": "병원과 응급 상황 관련 단어",
-      "tags": [
-        "건강"
-      ],
-      "keywords": [
-        "추아이",
-        "두아이",
-        "ช่วยด้วย",
-        "도와주세요",
-        "병원과",
-        "응급",
-        "상황",
-        "관련",
-        "단어",
-        "건강",
-        "도움"
-      ]
-    },
-    {
       "id": "supplemental-vocab-560-패-야",
       "kind": "vocab",
       "source": "supplemental",
@@ -17776,30 +16491,6 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-564-야-깨-풋",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "야 깨 풋",
-      "thaiScript": "ยาแก้ปวด",
-      "korean": "진통제",
-      "note": "병원과 응급 상황 관련 단어",
-      "tags": [
-        "건강"
-      ],
-      "keywords": [
-        "ยาแก้ปวด",
-        "진통제",
-        "병원과",
-        "응급",
-        "상황",
-        "관련",
-        "단어",
-        "건강"
-      ]
-    },
-    {
       "id": "supplemental-vocab-565-크림",
       "kind": "vocab",
       "source": "supplemental",
@@ -17822,89 +16513,6 @@ window.BASE_DATA = {
         "관련",
         "단어",
         "건강"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-567-또온-니",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "또온 니",
-      "thaiScript": "ตอนนี้",
-      "korean": "지금",
-      "note": "일상 대화와 휴대폰 사용 관련 단어",
-      "tags": [
-        "기본회화",
-        "숫자·시간"
-      ],
-      "keywords": [
-        "또온",
-        "ตอนนี้",
-        "지금",
-        "일상",
-        "대화와",
-        "휴대폰",
-        "사용",
-        "관련",
-        "단어",
-        "기본회화",
-        "숫자·시간"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-568-티-랑",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "티 랑",
-      "thaiScript": "ทีหลัง",
-      "korean": "나중에",
-      "note": "일상 대화와 휴대폰 사용 관련 단어",
-      "tags": [
-        "기본회화",
-        "숫자·시간"
-      ],
-      "keywords": [
-        "ทีหลัง",
-        "나중에",
-        "일상",
-        "대화와",
-        "휴대폰",
-        "사용",
-        "관련",
-        "단어",
-        "기본회화",
-        "숫자·시간"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-569-끄론",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "끄론",
-      "thaiScript": "ก่อน",
-      "korean": "먼저",
-      "note": "일상 대화와 휴대폰 사용 관련 단어",
-      "tags": [
-        "기본회화",
-        "숫자·시간"
-      ],
-      "keywords": [
-        "끄론",
-        "ก่อน",
-        "먼저",
-        "일상",
-        "대화와",
-        "휴대폰",
-        "사용",
-        "관련",
-        "단어",
-        "기본회화",
-        "숫자·시간"
       ]
     },
     {
@@ -17936,169 +16544,77 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-571-로",
+      "id": "supplemental-vocab-611-기다리다",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "로",
+      "thai": "기다리다",
       "thaiScript": "รอ",
       "korean": "기다리다",
-      "note": "일상 대화와 휴대폰 사용 관련 단어",
+      "note": "기본 동사와 위치 관련 단어",
       "tags": [
         "기본회화",
+        "식당",
+        "이동",
+        "쇼핑",
         "숫자·시간"
       ],
       "keywords": [
-        "รอ",
         "기다리다",
+        "รอ",
+        "기본",
+        "동사와",
+        "위치",
+        "관련",
+        "단어",
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑",
+        "기다려요",
+        "기다려주세요",
         "일상",
         "대화와",
         "휴대폰",
         "사용",
-        "관련",
-        "단어",
-        "기본회화",
         "숫자·시간"
       ]
     },
     {
-      "id": "supplemental-vocab-572-세럿",
+      "id": "supplemental-vocab-612-시작하다",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 단어",
-      "thai": "세럿",
-      "thaiScript": "เสร็จ",
-      "korean": "끝나다",
-      "note": "일상 대화와 휴대폰 사용 관련 단어",
-      "tags": [
-        "기본회화",
-        "숫자·시간"
-      ],
-      "keywords": [
-        "세럿",
-        "เสร็จ",
-        "끝나다",
-        "일상",
-        "대화와",
-        "휴대폰",
-        "사용",
-        "관련",
-        "단어",
-        "기본회화",
-        "숫자·시간"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-573-름",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "름",
+      "thai": "시작하다",
       "thaiScript": "เริ่ม",
       "korean": "시작하다",
-      "note": "일상 대화와 휴대폰 사용 관련 단어",
+      "note": "기본 동사와 위치 관련 단어",
       "tags": [
         "기본회화",
+        "식당",
+        "이동",
+        "쇼핑",
         "숫자·시간"
       ],
       "keywords": [
-        "เริ่ม",
         "시작하다",
+        "เริ่ม",
+        "기본",
+        "동사와",
+        "위치",
+        "관련",
+        "단어",
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑",
+        "시작해요",
         "일상",
         "대화와",
         "휴대폰",
         "사용",
-        "관련",
-        "단어",
-        "기본회화",
-        "숫자·시간"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-574-쁘읏",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "쁘읏",
-      "thaiScript": "เปิด",
-      "korean": "열다",
-      "note": "일상 대화와 휴대폰 사용 관련 단어",
-      "tags": [
-        "기본회화",
-        "숫자·시간"
-      ],
-      "keywords": [
-        "쁘읏",
-        "เปิด",
-        "열다",
-        "일상",
-        "대화와",
-        "휴대폰",
-        "사용",
-        "관련",
-        "단어",
-        "기본회화",
-        "숫자·시간"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-578-피묻",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "피묻",
-      "thaiScript": "พูด",
-      "korean": "말하다",
-      "note": "일상 대화와 휴대폰 사용 관련 단어",
-      "tags": [
-        "기본회화",
-        "숫자·시간"
-      ],
-      "keywords": [
-        "피묻",
-        "พูด",
-        "말하다",
-        "일상",
-        "대화와",
-        "휴대폰",
-        "사용",
-        "관련",
-        "단어",
-        "기본회화",
-        "숫자·시간"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-579-피안",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "피안",
-      "thaiScript": "เขียน",
-      "korean": "쓰다 / 적다",
-      "note": "일상 대화와 휴대폰 사용 관련 단어",
-      "tags": [
-        "기본회화",
-        "숫자·시간"
-      ],
-      "keywords": [
-        "피안",
-        "เขียน",
-        "쓰다",
-        "적다",
-        "일상",
-        "대화와",
-        "휴대폰",
-        "사용",
-        "관련",
-        "단어",
-        "기본회화",
         "숫자·시간"
       ]
     },
@@ -18147,34 +16663,6 @@ window.BASE_DATA = {
         "초이",
         "ชี้",
         "가리키다",
-        "일상",
-        "대화와",
-        "휴대폰",
-        "사용",
-        "관련",
-        "단어",
-        "기본회화",
-        "숫자·시간"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-582-루쁘",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "루쁘",
-      "thaiScript": "รูป",
-      "korean": "사진",
-      "note": "일상 대화와 휴대폰 사용 관련 단어",
-      "tags": [
-        "기본회화",
-        "숫자·시간"
-      ],
-      "keywords": [
-        "루쁘",
-        "รูป",
-        "사진",
         "일상",
         "대화와",
         "휴대폰",
@@ -18243,64 +16731,6 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-586-사아짜",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "사아짜",
-      "thaiScript": "ชาร์จ",
-      "korean": "충전",
-      "note": "일상 대화와 휴대폰 사용 관련 단어",
-      "tags": [
-        "기본회화",
-        "숫자·시간"
-      ],
-      "keywords": [
-        "사아짜",
-        "ชาร์จ",
-        "충전",
-        "일상",
-        "대화와",
-        "휴대폰",
-        "사용",
-        "관련",
-        "단어",
-        "기본회화",
-        "숫자·시간"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-587-쁠럭-파이",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "쁠럭 파이",
-      "thaiScript": "ปลั๊กไฟ",
-      "korean": "플러그 / 콘센트",
-      "note": "일상 대화와 휴대폰 사용 관련 단어",
-      "tags": [
-        "기본회화",
-        "숫자·시간"
-      ],
-      "keywords": [
-        "쁠럭",
-        "파이",
-        "ปลั๊กไฟ",
-        "플러그",
-        "콘센트",
-        "일상",
-        "대화와",
-        "휴대폰",
-        "사용",
-        "관련",
-        "단어",
-        "기본회화",
-        "숫자·시간"
-      ]
-    },
-    {
       "id": "supplemental-vocab-588-심-카드",
       "kind": "vocab",
       "source": "supplemental",
@@ -18312,6 +16742,7 @@ window.BASE_DATA = {
       "note": "일상 대화와 휴대폰 사용 관련 단어",
       "tags": [
         "기본회화",
+        "이동",
         "숫자·시간"
       ],
       "keywords": [
@@ -18325,7 +16756,10 @@ window.BASE_DATA = {
         "관련",
         "단어",
         "기본회화",
-        "숫자·시간"
+        "숫자·시간",
+        "휴대폰과",
+        "인터넷",
+        "이동"
       ]
     },
     {
@@ -18340,6 +16774,7 @@ window.BASE_DATA = {
       "note": "일상 대화와 휴대폰 사용 관련 단어",
       "tags": [
         "기본회화",
+        "이동",
         "숫자·시간"
       ],
       "keywords": [
@@ -18354,7 +16789,10 @@ window.BASE_DATA = {
         "단어",
         "기본회화",
         "숫자·시간",
-        "번역기"
+        "번역기",
+        "휴대폰과",
+        "인터넷",
+        "이동"
       ]
     },
     {
@@ -18374,119 +16812,6 @@ window.BASE_DATA = {
       "keywords": [
         "로트",
         "จริงๆ",
-        "일상",
-        "대화와",
-        "휴대폰",
-        "사용",
-        "관련",
-        "단어",
-        "기본회화",
-        "숫자·시간"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-591-마크",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "마크",
-      "thaiScript": "มาก",
-      "korean": "아주 / 많이",
-      "note": "일상 대화와 휴대폰 사용 관련 단어",
-      "tags": [
-        "기본회화",
-        "숫자·시간"
-      ],
-      "keywords": [
-        "마크",
-        "มาก",
-        "아주",
-        "많이",
-        "일상",
-        "대화와",
-        "휴대폰",
-        "사용",
-        "관련",
-        "단어",
-        "기본회화",
-        "숫자·시간"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-592-너이",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "너이",
-      "thaiScript": "น้อย",
-      "korean": "조금",
-      "note": "일상 대화와 휴대폰 사용 관련 단어",
-      "tags": [
-        "기본회화",
-        "숫자·시간"
-      ],
-      "keywords": [
-        "너이",
-        "น้อย",
-        "일상",
-        "대화와",
-        "휴대폰",
-        "사용",
-        "관련",
-        "단어",
-        "기본회화",
-        "숫자·시간"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-593-다이",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "다이",
-      "thaiScript": "ได้",
-      "korean": "가능하다",
-      "note": "일상 대화와 휴대폰 사용 관련 단어",
-      "tags": [
-        "기본회화",
-        "숫자·시간"
-      ],
-      "keywords": [
-        "다이",
-        "ได้",
-        "가능하다",
-        "일상",
-        "대화와",
-        "휴대폰",
-        "사용",
-        "관련",
-        "단어",
-        "기본회화",
-        "숫자·시간"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-594-마이-다이",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "마이 다이",
-      "thaiScript": "ไม่ได้",
-      "korean": "안 된다",
-      "note": "일상 대화와 휴대폰 사용 관련 단어",
-      "tags": [
-        "기본회화",
-        "숫자·시간"
-      ],
-      "keywords": [
-        "마이",
-        "다이",
-        "ไม่ได้",
-        "된다",
         "일상",
         "대화와",
         "휴대폰",
@@ -18525,63 +16850,6 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-596-츼",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "츼",
-      "thaiScript": "ชื่อ",
-      "korean": "이름",
-      "note": "일상 대화와 휴대폰 사용 관련 단어",
-      "tags": [
-        "기본회화",
-        "숫자·시간"
-      ],
-      "keywords": [
-        "ชื่อ",
-        "이름",
-        "일상",
-        "대화와",
-        "휴대폰",
-        "사용",
-        "관련",
-        "단어",
-        "기본회화",
-        "숫자·시간"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-599-킨",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "킨",
-      "thaiScript": "กิน",
-      "korean": "먹다",
-      "note": "기본 동사 검색을 위한 핵심 단어",
-      "tags": [
-        "기본회화",
-        "이동"
-      ],
-      "keywords": [
-        "กิน",
-        "먹다",
-        "기본",
-        "동사",
-        "검색을",
-        "위한",
-        "핵심",
-        "단어",
-        "기본회화",
-        "이동",
-        "먹는다",
-        "먹어요",
-        "먹고싶다"
-      ]
-    },
-    {
       "id": "supplemental-vocab-600-듬",
       "kind": "vocab",
       "source": "supplemental",
@@ -18609,66 +16877,6 @@ window.BASE_DATA = {
         "마신다",
         "마셔요",
         "마시고싶다"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-602-풋",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "풋",
-      "thaiScript": "พูด",
-      "korean": "말하다",
-      "note": "기본 동사 검색을 위한 핵심 단어",
-      "tags": [
-        "기본회화",
-        "이동"
-      ],
-      "keywords": [
-        "พูด",
-        "말하다",
-        "기본",
-        "동사",
-        "검색을",
-        "위한",
-        "핵심",
-        "단어",
-        "기본회화",
-        "이동",
-        "말한다",
-        "말해요",
-        "말해줘"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-603-팽",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "팽",
-      "thaiScript": "เขียน",
-      "korean": "쓰다",
-      "note": "기본 동사 검색을 위한 핵심 단어",
-      "tags": [
-        "기본회화",
-        "이동"
-      ],
-      "keywords": [
-        "เขียน",
-        "쓰다",
-        "기본",
-        "동사",
-        "검색을",
-        "위한",
-        "핵심",
-        "단어",
-        "기본회화",
-        "이동",
-        "쓴다",
-        "써요",
-        "적다"
       ]
     },
     {
@@ -18700,7 +16908,258 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-608-슬리퍼",
+      "id": "supplemental-vocab-607-안",
+      "kind": "vocab",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "안",
+      "thaiScript": "ข้างใน",
+      "korean": "안 / 내부",
+      "note": "기본 동사와 위치 관련 단어",
+      "tags": [
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑"
+      ],
+      "keywords": [
+        "ข้างใน",
+        "내부",
+        "기본",
+        "동사와",
+        "위치",
+        "관련",
+        "단어",
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑",
+        "안쪽"
+      ]
+    },
+    {
+      "id": "supplemental-vocab-608-밖",
+      "kind": "vocab",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "밖",
+      "thaiScript": "ข้างนอก",
+      "korean": "밖 / 외부",
+      "note": "기본 동사와 위치 관련 단어",
+      "tags": [
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑"
+      ],
+      "keywords": [
+        "ข้างนอก",
+        "외부",
+        "기본",
+        "동사와",
+        "위치",
+        "관련",
+        "단어",
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑",
+        "바깥",
+        "밖에"
+      ]
+    },
+    {
+      "id": "supplemental-vocab-614-사용하다",
+      "kind": "vocab",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "사용하다",
+      "thaiScript": "ใช้",
+      "korean": "사용하다",
+      "note": "기본 동사와 위치 관련 단어",
+      "tags": [
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑"
+      ],
+      "keywords": [
+        "사용하다",
+        "ใช้",
+        "기본",
+        "동사와",
+        "위치",
+        "관련",
+        "단어",
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑",
+        "써요",
+        "사용해요"
+      ]
+    },
+    {
+      "id": "supplemental-vocab-617-받다",
+      "kind": "vocab",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "받다",
+      "thaiScript": "รับ",
+      "korean": "받다",
+      "note": "기본 동사와 위치 관련 단어",
+      "tags": [
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑"
+      ],
+      "keywords": [
+        "받다",
+        "รับ",
+        "기본",
+        "동사와",
+        "위치",
+        "관련",
+        "단어",
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑",
+        "받아요"
+      ]
+    },
+    {
+      "id": "supplemental-vocab-618-들어가다",
+      "kind": "vocab",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "들어가다",
+      "thaiScript": "เข้าไป",
+      "korean": "들어가다",
+      "note": "기본 동사와 위치 관련 단어",
+      "tags": [
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑"
+      ],
+      "keywords": [
+        "들어가다",
+        "เข้าไป",
+        "기본",
+        "동사와",
+        "위치",
+        "관련",
+        "단어",
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑",
+        "들어가요"
+      ]
+    },
+    {
+      "id": "supplemental-vocab-621-서다",
+      "kind": "vocab",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "서다",
+      "thaiScript": "ยืน",
+      "korean": "서다",
+      "note": "기본 동사와 위치 관련 단어",
+      "tags": [
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑"
+      ],
+      "keywords": [
+        "서다",
+        "ยืน",
+        "기본",
+        "동사와",
+        "위치",
+        "관련",
+        "단어",
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑",
+        "서요"
+      ]
+    },
+    {
+      "id": "supplemental-vocab-622-자다",
+      "kind": "vocab",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "자다",
+      "thaiScript": "นอน",
+      "korean": "자다",
+      "note": "기본 동사와 위치 관련 단어",
+      "tags": [
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑"
+      ],
+      "keywords": [
+        "자다",
+        "นอน",
+        "기본",
+        "동사와",
+        "위치",
+        "관련",
+        "단어",
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑",
+        "자요",
+        "잘게요"
+      ]
+    },
+    {
+      "id": "supplemental-vocab-623-일하다",
+      "kind": "vocab",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "일하다",
+      "thaiScript": "ทำงาน",
+      "korean": "일하다",
+      "note": "기본 동사와 위치 관련 단어",
+      "tags": [
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑"
+      ],
+      "keywords": [
+        "일하다",
+        "ทำงาน",
+        "기본",
+        "동사와",
+        "위치",
+        "관련",
+        "단어",
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑",
+        "일해요"
+      ]
+    },
+    {
+      "id": "supplemental-vocab-628-슬리퍼",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -18726,7 +17185,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-609-마이-콰엔-쓰아",
+      "id": "supplemental-vocab-629-마이-콰엔-쓰아",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -18754,7 +17213,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-610-끄라닷-참라",
+      "id": "supplemental-vocab-630-끄라닷-참라",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -18783,7 +17242,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-611-사분",
+      "id": "supplemental-vocab-631-사분",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -18809,7 +17268,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-612-샴푸",
+      "id": "supplemental-vocab-632-샴푸",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -18834,7 +17293,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-613-약-시-판",
+      "id": "supplemental-vocab-633-약-시-판",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -18859,7 +17318,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-614-쁘랭-시-판",
+      "id": "supplemental-vocab-634-쁘랭-시-판",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -18885,33 +17344,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-615-남-드음",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "남 드음",
-      "thaiScript": "น้ำดื่ม",
-      "korean": "생수",
-      "note": "호텔 비품과 객실 요청 관련 단어",
-      "tags": [
-        "이동"
-      ],
-      "keywords": [
-        "드음",
-        "น้ำดื่ม",
-        "생수",
-        "호텔",
-        "비품과",
-        "객실",
-        "요청",
-        "관련",
-        "단어",
-        "이동"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-617-아댑터",
+      "id": "supplemental-vocab-637-아댑터",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -18939,38 +17372,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-620-애-마이-옌",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "애 마이 옌",
-      "thaiScript": "แอร์ไม่เย็น",
-      "korean": "에어컨이 안 시원해요",
-      "note": "객실 문제를 설명할 때 쓰는 표현",
-      "tags": [
-        "이동",
-        "건강"
-      ],
-      "keywords": [
-        "마이",
-        "แอร์ไม่เย็น",
-        "에어컨이",
-        "시원해요",
-        "객실",
-        "문제를",
-        "설명할",
-        "쓰는",
-        "표현",
-        "이동",
-        "건강",
-        "에어컨",
-        "냉방",
-        "에어컨 안 돼요"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-621-남-론-마이-옥",
+      "id": "supplemental-vocab-641-남-론-마이-옥",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19001,7 +17403,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-622-홍-니-끌린-마이-디",
+      "id": "supplemental-vocab-642-홍-니-끌린-마이-디",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19033,7 +17435,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-623-쁘라뚜-삐뜨-마이-다이",
+      "id": "supplemental-vocab-643-쁘라뚜-삐뜨-마이-다이",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19066,7 +17468,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-624-쁘라뚜-록-마이-다이",
+      "id": "supplemental-vocab-644-쁘라뚜-록-마이-다이",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19098,7 +17500,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-625-홍-니-시앙-당",
+      "id": "supplemental-vocab-645-홍-니-시앙-당",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19127,7 +17529,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-626-홍-남-르아",
+      "id": "supplemental-vocab-646-홍-남-르아",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19159,7 +17561,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-627-파이-마이-띳",
+      "id": "supplemental-vocab-647-파이-마이-띳",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19190,7 +17592,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-628-티-마이-떵",
+      "id": "supplemental-vocab-648-티-마이-떵",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19221,7 +17623,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-629-뚜-니라파이-쁫-마이-다이",
+      "id": "supplemental-vocab-649-뚜-니라파이-쁫-마이-다이",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19253,7 +17655,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-630-홍-니-쁘록",
+      "id": "supplemental-vocab-650-홍-니-쁘록",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19283,7 +17685,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-631-미-양-융",
+      "id": "supplemental-vocab-651-미-양-융",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19311,7 +17713,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-633-싸타니-롯파이파",
+      "id": "supplemental-vocab-653-싸타니-롯파이파",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19343,36 +17745,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-635-하앙",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "하앙",
-      "thaiScript": "ห้าง",
-      "korean": "쇼핑몰",
-      "note": "길 찾기와 목적지 검색에 자주 나오는 장소",
-      "tags": [
-        "이동",
-        "쇼핑"
-      ],
-      "keywords": [
-        "하앙",
-        "ห้าง",
-        "쇼핑몰",
-        "찾기와",
-        "목적지",
-        "검색에",
-        "자주",
-        "나오는",
-        "장소",
-        "이동",
-        "쇼핑",
-        "백화점"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-638-싸타니-땀롯",
+      "id": "supplemental-vocab-658-싸타니-땀롯",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19401,7 +17774,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-639-싸탄-툿",
+      "id": "supplemental-vocab-659-싸탄-툿",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19429,7 +17802,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-640-왓",
+      "id": "supplemental-vocab-660-왓",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19456,36 +17829,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-641-차이-핫",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "차이 핫",
-      "thaiScript": "ชายหาด",
-      "korean": "해변",
-      "note": "길 찾기와 목적지 검색에 자주 나오는 장소",
-      "tags": [
-        "이동",
-        "쇼핑"
-      ],
-      "keywords": [
-        "차이",
-        "ชายหาด",
-        "해변",
-        "찾기와",
-        "목적지",
-        "검색에",
-        "자주",
-        "나오는",
-        "장소",
-        "이동",
-        "쇼핑",
-        "바다"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-642-세븐",
+      "id": "supplemental-vocab-662-세븐",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19514,7 +17858,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-643-뚜-atm",
+      "id": "supplemental-vocab-663-뚜-atm",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19542,35 +17886,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-647-까닫-티츄",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "까닫 티츄",
-      "thaiScript": "กระดาษทิชชู่",
-      "korean": "냅킨",
-      "note": "식당 추가 요청과 제외 요청에 쓰는 단어",
-      "tags": [
-        "식당"
-      ],
-      "keywords": [
-        "까닫",
-        "티츄",
-        "กระดาษทิชชู่",
-        "냅킨",
-        "식당",
-        "추가",
-        "요청과",
-        "제외",
-        "요청에",
-        "쓰는",
-        "단어",
-        "티슈"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-650-프릭",
+      "id": "supplemental-vocab-670-프릭",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19596,7 +17912,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-651-남-플라",
+      "id": "supplemental-vocab-671-남-플라",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19623,59 +17939,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-652-탕-끌라옹",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "탕 끌라옹",
-      "thaiScript": "ถ้วย",
-      "korean": "그릇",
-      "note": "식당 추가 요청과 제외 요청에 쓰는 단어",
-      "tags": [
-        "식당"
-      ],
-      "keywords": [
-        "끌라옹",
-        "ถ้วย",
-        "그릇",
-        "식당",
-        "추가",
-        "요청과",
-        "제외",
-        "요청에",
-        "쓰는",
-        "단어",
-        "국그릇"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-653-짠",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "짠",
-      "thaiScript": "จาน",
-      "korean": "접시",
-      "note": "식당 추가 요청과 제외 요청에 쓰는 단어",
-      "tags": [
-        "식당"
-      ],
-      "keywords": [
-        "จาน",
-        "접시",
-        "식당",
-        "추가",
-        "요청과",
-        "제외",
-        "요청에",
-        "쓰는",
-        "단어"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-654-쓰어",
+      "id": "supplemental-vocab-674-쓰어",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19702,33 +17966,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-655-깡깽",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "깡깽",
-      "thaiScript": "กางเกง",
-      "korean": "바지",
-      "note": "쇼핑할 때 사이즈와 상품 상태를 묻는 단어",
-      "tags": [
-        "쇼핑"
-      ],
-      "keywords": [
-        "깡깽",
-        "กางเกง",
-        "바지",
-        "쇼핑할",
-        "사이즈와",
-        "상품",
-        "상태를",
-        "묻는",
-        "단어",
-        "쇼핑"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-656-끄롱타오",
+      "id": "supplemental-vocab-676-끄롱타오",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19754,7 +17992,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-657-그라뻐오-당",
+      "id": "supplemental-vocab-677-그라뻐오-당",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19780,7 +18018,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-658-왠딷",
+      "id": "supplemental-vocab-678-왠딷",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19807,7 +18045,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-659-목",
+      "id": "supplemental-vocab-679-목",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19832,33 +18070,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-660-컹-콴",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "컹 콴",
-      "thaiScript": "ของขวัญ",
-      "korean": "기념품",
-      "note": "쇼핑할 때 사이즈와 상품 상태를 묻는 단어",
-      "tags": [
-        "쇼핑"
-      ],
-      "keywords": [
-        "ของขวัญ",
-        "기념품",
-        "쇼핑할",
-        "사이즈와",
-        "상품",
-        "상태를",
-        "묻는",
-        "단어",
-        "쇼핑",
-        "선물"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-661-콩-마이",
+      "id": "supplemental-vocab-681-콩-마이",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19885,7 +18097,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-662-콩-디폿",
+      "id": "supplemental-vocab-682-콩-디폿",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19914,7 +18126,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-663-까낫-야이",
+      "id": "supplemental-vocab-683-까낫-야이",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19943,7 +18155,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-664-까낫-렉",
+      "id": "supplemental-vocab-684-까낫-렉",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19972,140 +18184,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-667-쩹-커",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "쩹 커",
-      "thaiScript": "เจ็บคอ",
-      "korean": "목 통증",
-      "note": "병원과 약국에서 많이 찾는 증상 단어",
-      "tags": [
-        "건강"
-      ],
-      "keywords": [
-        "เจ็บคอ",
-        "통증",
-        "병원과",
-        "약국에서",
-        "많이",
-        "찾는",
-        "증상",
-        "단어",
-        "건강",
-        "목이 아파요",
-        "목 통증"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-671-클른-사이",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "클른 사이",
-      "thaiScript": "คลื่นไส้",
-      "korean": "메스꺼움",
-      "note": "병원과 약국에서 많이 찾는 증상 단어",
-      "tags": [
-        "건강"
-      ],
-      "keywords": [
-        "클른",
-        "사이",
-        "คลื่นไส้",
-        "메스꺼움",
-        "병원과",
-        "약국에서",
-        "많이",
-        "찾는",
-        "증상",
-        "단어",
-        "건강",
-        "속 울렁거림"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-672-윈-후아",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "윈 후아",
-      "thaiScript": "เวียนหัว",
-      "korean": "어지러움",
-      "note": "병원과 약국에서 많이 찾는 증상 단어",
-      "tags": [
-        "건강"
-      ],
-      "keywords": [
-        "후아",
-        "เวียนหัว",
-        "어지러움",
-        "병원과",
-        "약국에서",
-        "많이",
-        "찾는",
-        "증상",
-        "단어",
-        "건강",
-        "어지러워요"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-673-패",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "패",
-      "thaiScript": "แพ้",
-      "korean": "알레르기",
-      "note": "병원과 약국에서 많이 찾는 증상 단어",
-      "tags": [
-        "건강"
-      ],
-      "keywords": [
-        "แพ้",
-        "알레르기",
-        "병원과",
-        "약국에서",
-        "많이",
-        "찾는",
-        "증상",
-        "단어",
-        "건강"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-674-미-플래",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "미 플래",
-      "thaiScript": "มีแผล",
-      "korean": "상처",
-      "note": "병원과 약국에서 많이 찾는 증상 단어",
-      "tags": [
-        "건강"
-      ],
-      "keywords": [
-        "플래",
-        "มีแผล",
-        "상처",
-        "병원과",
-        "약국에서",
-        "많이",
-        "찾는",
-        "증상",
-        "단어",
-        "건강"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-675-쨉-랭",
+      "id": "supplemental-vocab-695-쨉-랭",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -20133,7 +18212,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-676-핫-나이",
+      "id": "supplemental-vocab-696-핫-나이",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -20162,7 +18241,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-678-패키지-넷",
+      "id": "supplemental-vocab-698-패키지-넷",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -20190,7 +18269,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-679-핫스팟",
+      "id": "supplemental-vocab-699-핫스팟",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -20215,7 +18294,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-680-케이블",
+      "id": "supplemental-vocab-700-케이블",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -20242,7 +18321,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-681-빠워뱅크",
+      "id": "supplemental-vocab-701-빠워뱅크",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -20268,7 +18347,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-682-애프",
+      "id": "supplemental-vocab-702-애프",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -20284,32 +18363,6 @@ window.BASE_DATA = {
       "keywords": [
         "애프",
         "แอป",
-        "휴대폰과",
-        "인터넷",
-        "관련",
-        "단어",
-        "기본회화",
-        "이동"
-      ]
-    },
-    {
-      "id": "supplemental-vocab-683-번-쁠래",
-      "kind": "vocab",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 단어",
-      "thai": "번 쁠래",
-      "thaiScript": "แปลภาษา",
-      "korean": "번역기",
-      "note": "휴대폰과 인터넷 관련 단어",
-      "tags": [
-        "기본회화",
-        "이동"
-      ],
-      "keywords": [
-        "쁠래",
-        "แปลภาษา",
-        "번역기",
         "휴대폰과",
         "인터넷",
         "관련",
@@ -20720,25 +18773,35 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "excel-sentence-020-허-하이-너이-캅",
+      "id": "supplemental-sentence-186-하우-끌랍-반-캅",
       "kind": "sentence",
-      "source": "excel",
-      "sourceLabel": "엑셀",
-      "sheet": "문장1",
-      "thai": "허 하이 너이 캅",
-      "thaiScript": "",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 문장",
+      "thai": "하우 끌랍 반 캅",
+      "thaiScript": "เอากลับบ้านครับ",
       "korean": "포장해 주세요",
-      "note": "",
+      "note": "식당과 주문 관련 문장",
       "tags": [
         "식당",
         "숫자·시간"
       ],
       "keywords": [
+        "하우",
+        "끌랍",
+        "เอากลับบ้านครับ",
+        "포장해",
+        "식당과",
+        "주문",
+        "관련",
+        "문장",
+        "식당",
+        "포장",
         "하이",
         "너이",
-        "포장해",
-        "식당",
-        "숫자·시간"
+        "숫자·시간",
+        "아오",
+        "글랍"
       ]
     },
     {
@@ -20994,49 +19057,61 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-sentence-001-사왓디-캅-폼-마짝-까올리",
+      "id": "supplemental-sentence-061-사왓디-캅-완니-사바이-디-마이",
       "kind": "sentence",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 문장",
-      "thai": "사왓디 캅 폼 마짝 까올리",
+      "thai": "사왓디 캅 완니 사바이 디 마이",
       "thaiScript": "",
-      "korean": "안녕하세요, 저는 한국에서 왔어요.",
+      "korean": "안녕하세요, 오늘 잘 지내세요?",
       "note": "",
       "tags": [
-        "인사",
-        "기본회화"
+        "기본회화",
+        "인사"
       ],
       "keywords": [
         "사왓디",
+        "완니",
+        "사바이",
+        "마이",
+        "안녕하세요",
+        "오늘",
+        "지내세요",
+        "인사",
         "마짝",
         "까올리",
-        "안녕하세요",
         "한국에서",
         "왔어요",
-        "인사",
         "기본회화"
       ]
     },
     {
-      "id": "supplemental-sentence-002-컵쿤-막-캅",
+      "id": "supplemental-sentence-240-컵쿤-막-캅",
       "kind": "sentence",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 문장",
       "thai": "컵쿤 막 캅",
-      "thaiScript": "",
-      "korean": "정말 감사합니다.",
-      "note": "",
+      "thaiScript": "ขอบคุณมากครับ",
+      "korean": "정말 감사합니다",
+      "note": "일상 대화와 휴대폰 사용 관련 문장",
       "tags": [
-        "인사",
-        "기본회화"
+        "기본회화",
+        "인사"
       ],
       "keywords": [
         "컵쿤",
+        "ขอบคุณมากครับ",
         "감사합니다",
-        "인사",
-        "기본회화"
+        "일상",
+        "대화와",
+        "휴대폰",
+        "사용",
+        "관련",
+        "문장",
+        "기본회화",
+        "인사"
       ]
     },
     {
@@ -21112,23 +19187,33 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-sentence-006-러-사끄루-나-캅",
+      "id": "supplemental-sentence-232-로-사끄룻-캅",
       "kind": "sentence",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 문장",
-      "thai": "러 사끄루 나 캅",
-      "thaiScript": "",
-      "korean": "잠깐만 기다려 주세요.",
-      "note": "",
+      "thai": "로 사끄룻 캅",
+      "thaiScript": "รอสักครู่ครับ",
+      "korean": "잠깐만 기다려 주세요",
+      "note": "일상 대화와 휴대폰 사용 관련 문장",
       "tags": [
-        "기본회화"
+        "기본회화",
+        "일터"
       ],
       "keywords": [
-        "사끄루",
+        "사끄룻",
+        "รอสักครู่ครับ",
         "잠깐만",
         "기다려",
-        "기본회화"
+        "일상",
+        "대화와",
+        "휴대폰",
+        "사용",
+        "관련",
+        "문장",
+        "기본회화",
+        "사끄루",
+        "일터"
       ]
     },
     {
@@ -21194,7 +19279,8 @@ window.BASE_DATA = {
         "마이",
         "라이",
         "괜찮아요",
-        "기본회화"
+        "기본회화",
+        "괜찮습니다"
       ]
     },
     {
@@ -21222,22 +19308,27 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-sentence-011-커-남-쁠라오-능-쿠앗-캅",
+      "id": "supplemental-sentence-179-커-남-능-콧-캅",
       "kind": "sentence",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 문장",
-      "thai": "커 남 쁠라오 능 쿠앗 캅",
-      "thaiScript": "",
-      "korean": "물 한 병 주세요.",
-      "note": "",
+      "thai": "커 남 능 콧 캅",
+      "thaiScript": "ขอน้ำหนึ่งขวดครับ",
+      "korean": "물 한 병 주세요",
+      "note": "식당과 주문 관련 문장",
       "tags": [
         "식당"
       ],
       "keywords": [
+        "ขอน้ำหนึ่งขวดครับ",
+        "식당과",
+        "주문",
+        "관련",
+        "문장",
+        "식당",
         "쁠라오",
-        "쿠앗",
-        "식당"
+        "쿠앗"
       ]
     },
     {
@@ -21329,21 +19420,27 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-sentence-016-커-남-캥-너이-캅",
+      "id": "supplemental-sentence-344-커-남-캥-너이-캅",
       "kind": "sentence",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 문장",
       "thai": "커 남 캥 너이 캅",
-      "thaiScript": "",
-      "korean": "얼음 조금 주세요.",
-      "note": "",
+      "thaiScript": "ขอน้ำแข็งหน่อยครับ",
+      "korean": "얼음 조금 주세요",
+      "note": "식당에서 바로 쓰는 요청형 문장",
       "tags": [
         "식당"
       ],
       "keywords": [
         "너이",
+        "ขอน้ำแข็งหน่อยครับ",
         "얼음",
+        "식당에서",
+        "바로",
+        "쓰는",
+        "요청형",
+        "문장",
         "식당"
       ]
     },
@@ -21369,43 +19466,29 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-sentence-018-낀-티니-캅",
+      "id": "supplemental-sentence-187-탄-티니-캅",
       "kind": "sentence",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 문장",
-      "thai": "낀 티니 캅",
-      "thaiScript": "",
-      "korean": "여기서 먹을게요.",
-      "note": "",
+      "thai": "탄 티니 캅",
+      "thaiScript": "ทานที่นี่ครับ",
+      "korean": "여기서 먹을게요",
+      "note": "식당과 주문 관련 문장",
       "tags": [
         "식당"
       ],
       "keywords": [
         "티니",
+        "ทานที่นี่ครับ",
         "여기서",
         "먹을게요",
-        "식당"
-      ]
-    },
-    {
-      "id": "supplemental-sentence-019-아오-글랍-반-캅",
-      "kind": "sentence",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 문장",
-      "thai": "아오 글랍 반 캅",
-      "thaiScript": "",
-      "korean": "포장해 주세요.",
-      "note": "",
-      "tags": [
-        "식당"
-      ],
-      "keywords": [
-        "아오",
-        "글랍",
-        "포장해",
-        "식당"
+        "식당과",
+        "주문",
+        "관련",
+        "문장",
+        "식당",
+        "매장 식사"
       ]
     },
     {
@@ -21550,45 +19633,63 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-sentence-026-홍-남-유-티-나이-캅",
+      "id": "supplemental-sentence-387-홍-남-유-티-나이-캅",
       "kind": "sentence",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 문장",
       "thai": "홍 남 유 티 나이 캅",
-      "thaiScript": "",
+      "thaiScript": "ห้องน้ำอยู่ที่ไหนครับ",
       "korean": "화장실이 어디예요?",
-      "note": "",
+      "note": "화장실을 찾거나 가고 싶을 때 쓰는 문장",
       "tags": [
-        "건강",
-        "이동"
+        "기본회화",
+        "이동",
+        "건강"
       ],
       "keywords": [
         "나이",
+        "ห้องน้ำอยู่ที่ไหนครับ",
         "화장실이",
         "어디예요",
-        "건강",
-        "이동"
+        "화장실을",
+        "찾거나",
+        "가고",
+        "싶을",
+        "쓰는",
+        "문장",
+        "이동",
+        "기본회화",
+        "화장실어디",
+        "화장실이어디예요",
+        "건강"
       ]
     },
     {
-      "id": "supplemental-sentence-027-안니-타오라이-캅",
+      "id": "supplemental-sentence-196-안-니-타오라이-캅",
       "kind": "sentence",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 문장",
-      "thai": "안니 타오라이 캅",
-      "thaiScript": "",
+      "thai": "안 니 타오라이 캅",
+      "thaiScript": "อันนี้เท่าไรครับ",
       "korean": "이거 얼마예요?",
-      "note": "",
+      "note": "쇼핑과 결제 관련 문장",
       "tags": [
         "쇼핑"
       ],
       "keywords": [
-        "안니",
         "타오라이",
+        "อันนี้เท่าไรครับ",
         "얼마예요",
-        "쇼핑"
+        "쇼핑과",
+        "결제",
+        "관련",
+        "문장",
+        "쇼핑",
+        "얼마",
+        "가격",
+        "안니"
       ]
     },
     {
@@ -21615,22 +19716,28 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-sentence-029-미-씨-은-마이-캅",
+      "id": "supplemental-sentence-200-미-씨-은-마이-캅",
       "kind": "sentence",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 문장",
       "thai": "미 씨 은 마이 캅",
-      "thaiScript": "",
+      "thaiScript": "มีสีอื่นไหมครับ",
       "korean": "다른 색 있어요?",
-      "note": "",
+      "note": "쇼핑과 결제 관련 문장",
       "tags": [
         "쇼핑"
       ],
       "keywords": [
         "마이",
+        "มีสีอื่นไหมครับ",
         "다른",
-        "쇼핑"
+        "쇼핑과",
+        "결제",
+        "관련",
+        "문장",
+        "쇼핑",
+        "다른 색"
       ]
     },
     {
@@ -21678,12 +19785,12 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-sentence-032-카드-다이-마이-캅",
+      "id": "supplemental-sentence-084-밧-크레딧-다이-마이-캅",
       "kind": "sentence",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 문장",
-      "thai": "카드 다이 마이 캅",
+      "thai": "밧 크레딧 다이 마이 캅",
       "thaiScript": "",
       "korean": "카드 결제 되나요?",
       "note": "",
@@ -21691,9 +19798,10 @@ window.BASE_DATA = {
         "쇼핑"
       ],
       "keywords": [
-        "카드",
+        "크레딧",
         "다이",
         "마이",
+        "카드",
         "결제",
         "되나요",
         "쇼핑"
@@ -21721,32 +19829,46 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-sentence-034-폼-푸앗-통",
+      "id": "supplemental-sentence-213-폼-뿌왓-텅-캅",
       "kind": "sentence",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 문장",
-      "thai": "폼 푸앗 통",
-      "thaiScript": "",
-      "korean": "배가 아파요.",
-      "note": "",
+      "thai": "폼 뿌왓 텅 캅",
+      "thaiScript": "ผมปวดท้องครับ",
+      "korean": "배가 아파요",
+      "note": "병원과 응급 상황 관련 문장",
       "tags": [
         "건강"
       ],
       "keywords": [
-        "푸앗",
+        "뿌왓",
+        "ผมปวดท้องครับ",
         "배가",
         "아파요",
-        "건강"
+        "병원과",
+        "응급",
+        "상황",
+        "관련",
+        "문장",
+        "건강",
+        "복통",
+        "푸앗",
+        "복통이",
+        "증상을",
+        "설명하고",
+        "약을",
+        "묻는",
+        "배 아픔"
       ]
     },
     {
-      "id": "supplemental-sentence-035-폼-벤-카이",
+      "id": "supplemental-sentence-100-폼-벤-카이-크랍",
       "kind": "sentence",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 문장",
-      "thai": "폼 벤 카이",
+      "thai": "폼 벤 카이 크랍",
       "thaiScript": "",
       "korean": "열이 나는 것 같아요.",
       "note": "",
@@ -21755,6 +19877,7 @@ window.BASE_DATA = {
       ],
       "keywords": [
         "카이",
+        "크랍",
         "열이",
         "나는",
         "같아요",
@@ -21829,27 +19952,6 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-sentence-039-로-껀-나-캅",
-      "kind": "sentence",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 문장",
-      "thai": "로 껀 나 캅",
-      "thaiScript": "",
-      "korean": "잠깐만 기다려 주세요.",
-      "note": "",
-      "tags": [
-        "일터",
-        "기본회화"
-      ],
-      "keywords": [
-        "잠깐만",
-        "기다려",
-        "일터",
-        "기본회화"
-      ]
-    },
-    {
       "id": "supplemental-sentence-040-름-다이-러이",
       "kind": "sentence",
       "source": "supplemental",
@@ -21914,12 +20016,12 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-sentence-043-트루앗-이끈-크랑-나-캅",
+      "id": "supplemental-sentence-108-item",
       "kind": "sentence",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 문장",
-      "thai": "트루앗 이끈 크랑 나 캅",
+      "thai": "ตรวจ อีก ครั้ง นะ ครับ",
       "thaiScript": "",
       "korean": "한 번 더 확인해 주세요.",
       "note": "",
@@ -21927,11 +20029,16 @@ window.BASE_DATA = {
         "일터"
       ],
       "keywords": [
+        "ตรวจ",
+        "อีก",
+        "ครั้ง",
+        "นะ",
+        "ครับ",
+        "확인해",
+        "일터",
         "트루앗",
         "이끈",
-        "크랑",
-        "확인해",
-        "일터"
+        "크랑"
       ]
     },
     {
@@ -22129,44 +20236,6 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-sentence-053-콥-쿤-막-캅",
-      "kind": "sentence",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 문장",
-      "thai": "콥 쿤 막 캅",
-      "thaiScript": "",
-      "korean": "정말 감사합니다.",
-      "note": "",
-      "tags": [
-        "기본회화"
-      ],
-      "keywords": [
-        "감사합니다",
-        "기본회화"
-      ]
-    },
-    {
-      "id": "supplemental-sentence-054-마이-벤-라이-캅",
-      "kind": "sentence",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 문장",
-      "thai": "마이 벤 라이 캅",
-      "thaiScript": "",
-      "korean": "괜찮습니다.",
-      "note": "",
-      "tags": [
-        "기본회화"
-      ],
-      "keywords": [
-        "마이",
-        "라이",
-        "괜찮습니다",
-        "기본회화"
-      ]
-    },
-    {
       "id": "supplemental-sentence-055-폼-카오짜이-래오",
       "kind": "sentence",
       "source": "supplemental",
@@ -22295,30 +20364,6 @@ window.BASE_DATA = {
         "크게",
         "말해",
         "기본회화"
-      ]
-    },
-    {
-      "id": "supplemental-sentence-061-사왓디-캅-완니-사바이-디-마이",
-      "kind": "sentence",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 문장",
-      "thai": "사왓디 캅 완니 사바이 디 마이",
-      "thaiScript": "",
-      "korean": "안녕하세요, 오늘 잘 지내세요?",
-      "note": "",
-      "tags": [
-        "인사"
-      ],
-      "keywords": [
-        "사왓디",
-        "완니",
-        "사바이",
-        "마이",
-        "안녕하세요",
-        "오늘",
-        "지내세요",
-        "인사"
       ]
     },
     {
@@ -22454,23 +20499,29 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-sentence-068-커-남-쁠라오-씽-쿠앗-캅",
+      "id": "supplemental-sentence-343-커-남-쁠라오-능-콧-캅",
       "kind": "sentence",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 문장",
-      "thai": "커 남 쁠라오 씽 쿠앗 캅",
-      "thaiScript": "",
-      "korean": "생수 한 병 주세요.",
-      "note": "",
+      "thai": "커 남 쁠라오 능 콧 캅",
+      "thaiScript": "ขอน้ำเปล่าหนึ่งขวดครับ",
+      "korean": "생수 한 병 주세요",
+      "note": "식당에서 바로 쓰는 요청형 문장",
       "tags": [
         "식당"
       ],
       "keywords": [
         "쁠라오",
-        "쿠앗",
+        "ขอน้ำเปล่าหนึ่งขวดครับ",
         "생수",
-        "식당"
+        "식당에서",
+        "바로",
+        "쓰는",
+        "요청형",
+        "문장",
+        "식당",
+        "쿠앗"
       ]
     },
     {
@@ -22642,49 +20693,68 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-sentence-078-폼-패-아한-탈레",
+      "id": "supplemental-sentence-185-폼-패-아한-탈레-캅",
       "kind": "sentence",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 문장",
-      "thai": "폼 패 아한 탈레",
-      "thaiScript": "",
-      "korean": "저는 해산물 알레르기가 있어요.",
-      "note": "",
+      "thai": "폼 패 아한 탈레 캅",
+      "thaiScript": "ผมแพ้อาหารทะเลครับ",
+      "korean": "저는 해산물 알레르기가 있어요",
+      "note": "식당과 주문 관련 문장",
       "tags": [
         "식당"
       ],
       "keywords": [
         "아한",
         "탈레",
+        "ผมแพ้อาหารทะเลครับ",
         "해산물",
         "알레르기가",
-        "식당"
+        "식당과",
+        "주문",
+        "관련",
+        "문장",
+        "식당",
+        "해산물 알레르기"
       ]
     },
     {
-      "id": "supplemental-sentence-080-롯-라카-이끈-노이-다이-마이",
+      "id": "supplemental-sentence-366-롯-라카-이익-너이-다이-마이-캅",
       "kind": "sentence",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 문장",
-      "thai": "롯 라카 이끈 노이 다이 마이",
-      "thaiScript": "",
-      "korean": "조금만 더 깎아주실 수 있나요?",
-      "note": "",
+      "thai": "롯 라카 이익 너이 다이 마이 캅",
+      "thaiScript": "ลดราคาอีกหน่อยได้ไหมครับ",
+      "korean": "조금만 더 깎아 주실 수 있나요?",
+      "note": "쇼핑과 결제 상황에 자주 나오는 문장",
       "tags": [
         "쇼핑"
       ],
       "keywords": [
         "라카",
-        "이끈",
-        "노이",
+        "이익",
+        "너이",
         "다이",
         "마이",
+        "ลดราคาอีกหน่อยได้ไหมครับ",
         "조금만",
-        "깎아주실",
+        "깎아",
+        "주실",
         "있나요",
-        "쇼핑"
+        "쇼핑과",
+        "결제",
+        "상황에",
+        "자주",
+        "나오는",
+        "문장",
+        "쇼핑",
+        "깎아주세요",
+        "할인",
+        "이끈",
+        "노이",
+        "깎아주실"
       ]
     },
     {
@@ -22752,46 +20822,30 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-sentence-084-밧-크레딧-다이-마이-캅",
+      "id": "supplemental-sentence-204-커-바이-셋-두아이-캅",
       "kind": "sentence",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 문장",
-      "thai": "밧 크레딧 다이 마이 캅",
-      "thaiScript": "",
-      "korean": "카드 결제 되나요?",
-      "note": "",
+      "thai": "커 바이 셋 두아이 캅",
+      "thaiScript": "ขอใบเสร็จด้วยครับ",
+      "korean": "영수증 주세요",
+      "note": "쇼핑과 결제 관련 문장",
       "tags": [
         "쇼핑"
       ],
       "keywords": [
-        "크레딧",
-        "다이",
-        "마이",
-        "카드",
-        "결제",
-        "되나요",
-        "쇼핑"
-      ]
-    },
-    {
-      "id": "supplemental-sentence-085-커-빤지-두어이-캅",
-      "kind": "sentence",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 문장",
-      "thai": "커 빤지 두어이 캅",
-      "thaiScript": "",
-      "korean": "영수증 주세요.",
-      "note": "",
-      "tags": [
-        "쇼핑"
-      ],
-      "keywords": [
-        "빤지",
-        "두어이",
+        "바이",
+        "두아이",
+        "ขอใบเสร็จด้วยครับ",
         "영수증",
-        "쇼핑"
+        "쇼핑과",
+        "결제",
+        "관련",
+        "문장",
+        "쇼핑",
+        "빤지",
+        "두어이"
       ]
     },
     {
@@ -23105,28 +21159,6 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-sentence-100-폼-벤-카이-크랍",
-      "kind": "sentence",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 문장",
-      "thai": "폼 벤 카이 크랍",
-      "thaiScript": "",
-      "korean": "열이 나는 것 같아요.",
-      "note": "",
-      "tags": [
-        "건강"
-      ],
-      "keywords": [
-        "카이",
-        "크랍",
-        "열이",
-        "나는",
-        "같아요",
-        "건강"
-      ]
-    },
-    {
       "id": "supplemental-sentence-101-커-야-개-둸앗-너이-캅",
       "kind": "sentence",
       "source": "supplemental",
@@ -23275,29 +21307,6 @@ window.BASE_DATA = {
         "작업",
         "시작해도",
         "됩니다",
-        "일터"
-      ]
-    },
-    {
-      "id": "supplemental-sentence-108-item",
-      "kind": "sentence",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 문장",
-      "thai": "ตรวจ อีก ครั้ง นะ ครับ",
-      "thaiScript": "",
-      "korean": "한 번 더 확인해 주세요.",
-      "note": "",
-      "tags": [
-        "일터"
-      ],
-      "keywords": [
-        "ตรวจ",
-        "อีก",
-        "ครั้ง",
-        "นะ",
-        "ครับ",
-        "확인해",
         "일터"
       ]
     },
@@ -23875,30 +21884,39 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-sentence-132-에어-마이-옌",
+      "id": "supplemental-sentence-271-애-마이-옌-캅",
       "kind": "sentence",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 문장",
-      "thai": "에어 마이 옌",
-      "thaiScript": "แอร์ไม่เย็น",
+      "thai": "애 마이 옌 캅",
+      "thaiScript": "แอร์ไม่เย็นครับ",
       "korean": "에어컨이 안 시원해요",
-      "note": "방 변경 이유 설명",
+      "note": "객실 문제 설명과 방 변경 요청 문장",
       "tags": [
-        "건강",
-        "이동"
+        "이동",
+        "건강"
       ],
       "keywords": [
-        "에어",
         "마이",
-        "แอร์ไม่เย็น",
+        "แอร์ไม่เย็นครับ",
         "에어컨이",
         "시원해요",
+        "객실",
+        "문제",
+        "설명과",
         "변경",
+        "요청",
+        "문장",
+        "이동",
+        "건강",
+        "에어컨",
+        "냉방",
+        "에어컨 안 돼요",
+        "에어",
+        "แอร์ไม่เย็น",
         "이유",
         "설명",
-        "건강",
-        "이동",
         "에어컨이안시원해요",
         "에어컨문제",
         "냉방문제"
@@ -23934,31 +21952,40 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-sentence-134-나머이-론-마이-탐-응안",
+      "id": "supplemental-sentence-273-남-론-마이-옥-캅",
       "kind": "sentence",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 문장",
-      "thai": "나머이 론 마이 탐 응안",
-      "thaiScript": "น้ำร้อนไม่ทำงาน",
+      "thai": "남 론 마이 옥 캅",
+      "thaiScript": "น้ำร้อนไม่ออกครับ",
       "korean": "온수가 안 나와요",
-      "note": "숙소 문제 설명용",
+      "note": "객실 문제 설명과 방 변경 요청 문장",
       "tags": [
-        "건강",
-        "이동"
+        "이동",
+        "건강"
       ],
       "keywords": [
-        "나머이",
         "마이",
-        "응안",
-        "น้ำร้อนไม่ทำงาน",
+        "น้ำร้อนไม่ออกครับ",
         "온수가",
         "나와요",
-        "숙소",
+        "객실",
         "문제",
-        "설명용",
-        "건강",
+        "설명과",
+        "변경",
+        "요청",
+        "문장",
         "이동",
+        "건강",
+        "온수",
+        "뜨거운물",
+        "온수 안 나와요",
+        "나머이",
+        "응안",
+        "น้ำร้อนไม่ทำงาน",
+        "숙소",
+        "설명용",
         "온수안나와요",
         "뜨거운물안나와요",
         "온수문제"
@@ -23995,29 +22022,40 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-sentence-136-폼-마이-사두억-홍-니",
+      "id": "supplemental-sentence-377-홍-니-마이-사두억-캅",
       "kind": "sentence",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 문장",
-      "thai": "폼 마이 사두억 홍 니",
-      "thaiScript": "ผมไม่สะดวกห้องนี้",
+      "thai": "홍 니 마이 사두억 캅",
+      "thaiScript": "ห้องนี้ไม่สะดวกครับ",
       "korean": "이 방은 불편해요",
-      "note": "짧게 불편을 설명",
+      "note": "객실 변경과 숙소 요청 검색을 더 잘 잡는 문장",
       "tags": [
+        "기본회화",
         "이동",
         "건강"
       ],
       "keywords": [
         "마이",
         "사두억",
-        "ผมไม่สะดวกห้องนี้",
+        "ห้องนี้ไม่สะดวกครับ",
         "방은",
         "불편해요",
+        "객실",
+        "변경과",
+        "숙소",
+        "요청",
+        "검색을",
+        "잡는",
+        "문장",
+        "이동",
+        "기본회화",
+        "방이 불편해요",
+        "ผมไม่สะดวกห้องนี้",
         "짧게",
         "불편을",
         "설명",
-        "이동",
         "건강",
         "방이불편해요",
         "객실불편"
@@ -24683,15 +22721,15 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-sentence-158-빠이-싸남-빈-캅",
+      "id": "supplemental-sentence-295-빠이-싸남-빈-캅",
       "kind": "sentence",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 문장",
       "thai": "빠이 싸남 빈 캅",
       "thaiScript": "ไปสนามบินครับ",
-      "korean": "공항까지 가 주세요",
-      "note": "택시와 대중교통 관련 문장",
+      "korean": "공항으로 가 주세요",
+      "note": "목적지를 말하고 거리나 이동을 묻는 문장",
       "tags": [
         "이동"
       ],
@@ -24699,13 +22737,20 @@ window.BASE_DATA = {
         "빠이",
         "싸남",
         "ไปสนามบินครับ",
+        "공항으로",
+        "목적지를",
+        "말하고",
+        "거리나",
+        "이동을",
+        "묻는",
+        "문장",
+        "이동",
+        "공항",
+        "공항 가 주세요",
         "공항까지",
         "택시와",
         "대중교통",
-        "관련",
-        "문장",
-        "이동",
-        "공항"
+        "관련"
       ]
     },
     {
@@ -25249,29 +23294,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-sentence-179-커-남-능-콧-캅",
-      "kind": "sentence",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 문장",
-      "thai": "커 남 능 콧 캅",
-      "thaiScript": "ขอน้ำหนึ่งขวดครับ",
-      "korean": "물 한 병 주세요",
-      "note": "식당과 주문 관련 문장",
-      "tags": [
-        "식당"
-      ],
-      "keywords": [
-        "ขอน้ำหนึ่งขวดครับ",
-        "식당과",
-        "주문",
-        "관련",
-        "문장",
-        "식당"
-      ]
-    },
-    {
-      "id": "supplemental-sentence-180-마이-아오-남-캥-캅",
+      "id": "supplemental-sentence-345-마이-아오-남-캥-캅",
       "kind": "sentence",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -25279,7 +23302,7 @@ window.BASE_DATA = {
       "thai": "마이 아오 남 캥 캅",
       "thaiScript": "ไม่เอาน้ำแข็งครับ",
       "korean": "얼음 빼 주세요",
-      "note": "식당과 주문 관련 문장",
+      "note": "식당에서 바로 쓰는 요청형 문장",
       "tags": [
         "식당"
       ],
@@ -25288,12 +23311,16 @@ window.BASE_DATA = {
         "아오",
         "ไม่เอาน้ำแข็งครับ",
         "얼음",
-        "식당과",
-        "주문",
-        "관련",
+        "식당에서",
+        "바로",
+        "쓰는",
+        "요청형",
         "문장",
         "식당",
-        "얼음 빼"
+        "얼음 빼",
+        "식당과",
+        "주문",
+        "관련"
       ]
     },
     {
@@ -25347,7 +23374,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-sentence-183-마이-싸이-파크-치-캅",
+      "id": "supplemental-sentence-346-마이-싸이-파크-치-캅",
       "kind": "sentence",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -25355,7 +23382,7 @@ window.BASE_DATA = {
       "thai": "마이 싸이 파크 치 캅",
       "thaiScript": "ไม่ใส่ผักชีครับ",
       "korean": "고수 빼 주세요",
-      "note": "식당과 주문 관련 문장",
+      "note": "식당에서 바로 쓰는 요청형 문장",
       "tags": [
         "식당"
       ],
@@ -25365,12 +23392,16 @@ window.BASE_DATA = {
         "파크",
         "ไม่ใส่ผักชีครับ",
         "고수",
-        "식당과",
-        "주문",
-        "관련",
+        "식당에서",
+        "바로",
+        "쓰는",
+        "요청형",
         "문장",
         "식당",
-        "고수 빼"
+        "고수 빼",
+        "식당과",
+        "주문",
+        "관련"
       ]
     },
     {
@@ -25397,85 +23428,6 @@ window.BASE_DATA = {
         "문장",
         "식당",
         "돼지고기 빼"
-      ]
-    },
-    {
-      "id": "supplemental-sentence-185-폼-패-아한-탈레-캅",
-      "kind": "sentence",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 문장",
-      "thai": "폼 패 아한 탈레 캅",
-      "thaiScript": "ผมแพ้อาหารทะเลครับ",
-      "korean": "저는 해산물 알레르기가 있어요",
-      "note": "식당과 주문 관련 문장",
-      "tags": [
-        "식당"
-      ],
-      "keywords": [
-        "아한",
-        "탈레",
-        "ผมแพ้อาหารทะเลครับ",
-        "해산물",
-        "알레르기가",
-        "식당과",
-        "주문",
-        "관련",
-        "문장",
-        "식당",
-        "해산물 알레르기"
-      ]
-    },
-    {
-      "id": "supplemental-sentence-186-하우-끌랍-반-캅",
-      "kind": "sentence",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 문장",
-      "thai": "하우 끌랍 반 캅",
-      "thaiScript": "เอากลับบ้านครับ",
-      "korean": "포장해 주세요",
-      "note": "식당과 주문 관련 문장",
-      "tags": [
-        "식당"
-      ],
-      "keywords": [
-        "하우",
-        "끌랍",
-        "เอากลับบ้านครับ",
-        "포장해",
-        "식당과",
-        "주문",
-        "관련",
-        "문장",
-        "식당",
-        "포장"
-      ]
-    },
-    {
-      "id": "supplemental-sentence-187-탄-티니-캅",
-      "kind": "sentence",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 문장",
-      "thai": "탄 티니 캅",
-      "thaiScript": "ทานที่นี่ครับ",
-      "korean": "여기서 먹을게요",
-      "note": "식당과 주문 관련 문장",
-      "tags": [
-        "식당"
-      ],
-      "keywords": [
-        "티니",
-        "ทานที่นี่ครับ",
-        "여기서",
-        "먹을게요",
-        "식당과",
-        "주문",
-        "관련",
-        "문장",
-        "식당",
-        "매장 식사"
       ]
     },
     {
@@ -25633,27 +23585,33 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-sentence-194-커-촌-펌-능-칸-캅",
+      "id": "supplemental-sentence-351-커-커-업-펌-능-안-캅",
       "kind": "sentence",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 문장",
-      "thai": "커 촌 펌 능 칸 캅",
-      "thaiScript": "ขอช้อนเพิ่มหนึ่งคันครับ",
+      "thai": "커 커 업 펌 능 안 캅",
+      "thaiScript": "ขอช้อนเพิ่มหนึ่งอันครับ",
       "korean": "숟가락 하나 더 주세요",
-      "note": "식당과 주문 관련 문장",
+      "note": "식당에서 바로 쓰는 요청형 문장",
       "tags": [
         "식당"
       ],
       "keywords": [
-        "ขอช้อนเพิ่มหนึ่งคันครับ",
+        "ขอช้อนเพิ่มหนึ่งอันครับ",
         "숟가락",
         "하나",
+        "식당에서",
+        "바로",
+        "쓰는",
+        "요청형",
+        "문장",
+        "식당",
+        "숟가락 추가",
+        "ขอช้อนเพิ่มหนึ่งคันครับ",
         "식당과",
         "주문",
-        "관련",
-        "문장",
-        "식당"
+        "관련"
       ]
     },
     {
@@ -25680,32 +23638,6 @@ window.BASE_DATA = {
         "관련",
         "문장",
         "식당"
-      ]
-    },
-    {
-      "id": "supplemental-sentence-196-안-니-타오라이-캅",
-      "kind": "sentence",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 문장",
-      "thai": "안 니 타오라이 캅",
-      "thaiScript": "อันนี้เท่าไรครับ",
-      "korean": "이거 얼마예요?",
-      "note": "쇼핑과 결제 관련 문장",
-      "tags": [
-        "쇼핑"
-      ],
-      "keywords": [
-        "타오라이",
-        "อันนี้เท่าไรครับ",
-        "얼마예요",
-        "쇼핑과",
-        "결제",
-        "관련",
-        "문장",
-        "쇼핑",
-        "얼마",
-        "가격"
       ]
     },
     {
@@ -25868,80 +23800,65 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-sentence-204-커-바이-셋-두아이-캅",
+      "id": "supplemental-sentence-371-커-허-콩-콴-하이-너이-캅",
       "kind": "sentence",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 문장",
-      "thai": "커 바이 셋 두아이 캅",
-      "thaiScript": "ขอใบเสร็จด้วยครับ",
-      "korean": "영수증 주세요",
-      "note": "쇼핑과 결제 관련 문장",
-      "tags": [
-        "쇼핑"
-      ],
-      "keywords": [
-        "바이",
-        "두아이",
-        "ขอใบเสร็จด้วยครับ",
-        "영수증",
-        "쇼핑과",
-        "결제",
-        "관련",
-        "문장",
-        "쇼핑"
-      ]
-    },
-    {
-      "id": "supplemental-sentence-205-추아이-허-콩-콴-하이-너이-캅",
-      "kind": "sentence",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 문장",
-      "thai": "추아이 허 콩 콴 하이 너이 캅",
+      "thai": "커 허 콩 콴 하이 너이 캅",
       "thaiScript": "ช่วยห่อของขวัญให้หน่อยครับ",
-      "korean": "선물용으로 포장해 주세요",
-      "note": "쇼핑과 결제 관련 문장",
+      "korean": "선물 포장해 주세요",
+      "note": "쇼핑과 결제 상황에 자주 나오는 문장",
       "tags": [
         "쇼핑"
       ],
       "keywords": [
-        "추아이",
         "하이",
         "너이",
         "ช่วยห่อของขวัญให้หน่อยครับ",
-        "선물용으로",
+        "선물",
         "포장해",
         "쇼핑과",
         "결제",
-        "관련",
+        "상황에",
+        "자주",
+        "나오는",
         "문장",
         "쇼핑",
-        "선물 포장"
+        "선물 포장",
+        "추아이",
+        "선물용으로",
+        "관련"
       ]
     },
     {
-      "id": "supplemental-sentence-206-안-니-컹-마이-마이-캅",
+      "id": "supplemental-sentence-364-안-니-콩-마이-마이-캅",
       "kind": "sentence",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 문장",
-      "thai": "안 니 컹 마이 마이 캅",
+      "thai": "안 니 콩 마이 마이 캅",
       "thaiScript": "อันนี้ของใหม่ไหมครับ",
-      "korean": "이거 새 제품이에요?",
-      "note": "쇼핑과 결제 관련 문장",
+      "korean": "이거 새 상품 맞아요?",
+      "note": "쇼핑과 결제 상황에 자주 나오는 문장",
       "tags": [
         "쇼핑"
       ],
       "keywords": [
         "마이",
         "อันนี้ของใหม่ไหมครับ",
-        "제품이에요",
+        "상품",
+        "맞아요",
         "쇼핑과",
         "결제",
-        "관련",
+        "상황에",
+        "자주",
+        "나오는",
         "문장",
         "쇼핑",
+        "새 상품",
+        "제품이에요",
+        "관련",
         "새 제품"
       ]
     },
@@ -26108,59 +24025,44 @@ window.BASE_DATA = {
         "관련",
         "문장",
         "건강",
-        "두통"
+        "두통",
+        "두통이",
+        "증상을",
+        "설명하고",
+        "약을",
+        "묻는",
+        "머리 아픔"
       ]
     },
     {
-      "id": "supplemental-sentence-213-폼-뿌왓-텅-캅",
+      "id": "supplemental-sentence-325-폼-카이-캅",
       "kind": "sentence",
       "source": "supplemental",
       "sourceLabel": "확장",
       "sheet": "확장 문장",
-      "thai": "폼 뿌왓 텅 캅",
-      "thaiScript": "ผมปวดท้องครับ",
-      "korean": "배가 아파요",
-      "note": "병원과 응급 상황 관련 문장",
-      "tags": [
-        "건강"
-      ],
-      "keywords": [
-        "뿌왓",
-        "ผมปวดท้องครับ",
-        "배가",
-        "아파요",
-        "병원과",
-        "응급",
-        "상황",
-        "관련",
-        "문장",
-        "건강",
-        "복통"
-      ]
-    },
-    {
-      "id": "supplemental-sentence-214-폼-미-카이-캅",
-      "kind": "sentence",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 문장",
-      "thai": "폼 미 카이 캅",
-      "thaiScript": "ผมมีไข้ครับ",
+      "thai": "폼 카이 캅",
+      "thaiScript": "ผมไข้ครับ",
       "korean": "열이 있어요",
-      "note": "병원과 응급 상황 관련 문장",
+      "note": "증상을 설명하고 약을 묻는 문장",
       "tags": [
         "건강"
       ],
       "keywords": [
         "카이",
-        "ผมมีไข้ครับ",
+        "ผมไข้ครับ",
         "열이",
+        "증상을",
+        "설명하고",
+        "약을",
+        "묻는",
+        "문장",
+        "건강",
+        "열나요",
+        "ผมมีไข้ครับ",
         "병원과",
         "응급",
         "상황",
-        "관련",
-        "문장",
-        "건강"
+        "관련"
       ]
     },
     {
@@ -26187,7 +24089,11 @@ window.BASE_DATA = {
         "관련",
         "문장",
         "건강",
-        "기침"
+        "기침",
+        "증상을",
+        "설명하고",
+        "약을",
+        "묻는"
       ]
     },
     {
@@ -26213,7 +24119,13 @@ window.BASE_DATA = {
         "관련",
         "문장",
         "건강",
-        "목이 아파요"
+        "목이 아파요",
+        "통증이",
+        "증상을",
+        "설명하고",
+        "약을",
+        "묻는",
+        "목 통증"
       ]
     },
     {
@@ -26638,33 +24550,6 @@ window.BASE_DATA = {
         "지금",
         "바로",
         "돼요",
-        "일상",
-        "대화와",
-        "휴대폰",
-        "사용",
-        "관련",
-        "문장",
-        "기본회화"
-      ]
-    },
-    {
-      "id": "supplemental-sentence-232-로-사끄룻-캅",
-      "kind": "sentence",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 문장",
-      "thai": "로 사끄룻 캅",
-      "thaiScript": "รอสักครู่ครับ",
-      "korean": "잠깐만 기다려 주세요",
-      "note": "일상 대화와 휴대폰 사용 관련 문장",
-      "tags": [
-        "기본회화"
-      ],
-      "keywords": [
-        "사끄룻",
-        "รอสักครู่ครับ",
-        "잠깐만",
-        "기다려",
         "일상",
         "대화와",
         "휴대폰",
@@ -27742,38 +25627,6 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-sentence-271-애-마이-옌-캅",
-      "kind": "sentence",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 문장",
-      "thai": "애 마이 옌 캅",
-      "thaiScript": "แอร์ไม่เย็นครับ",
-      "korean": "에어컨이 안 시원해요",
-      "note": "객실 문제 설명과 방 변경 요청 문장",
-      "tags": [
-        "이동",
-        "건강"
-      ],
-      "keywords": [
-        "마이",
-        "แอร์ไม่เย็นครับ",
-        "에어컨이",
-        "시원해요",
-        "객실",
-        "문제",
-        "설명과",
-        "변경",
-        "요청",
-        "문장",
-        "이동",
-        "건강",
-        "에어컨",
-        "냉방",
-        "에어컨 안 돼요"
-      ]
-    },
-    {
       "id": "supplemental-sentence-272-애-마이-옌-캅-커-쁠리안-홍-다이-마이-캅",
       "kind": "sentence",
       "source": "supplemental",
@@ -27812,38 +25665,6 @@ window.BASE_DATA = {
         "에어컨 안 돼요",
         "방 바꿔주세요",
         "객실 변경"
-      ]
-    },
-    {
-      "id": "supplemental-sentence-273-남-론-마이-옥-캅",
-      "kind": "sentence",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 문장",
-      "thai": "남 론 마이 옥 캅",
-      "thaiScript": "น้ำร้อนไม่ออกครับ",
-      "korean": "온수가 안 나와요",
-      "note": "객실 문제 설명과 방 변경 요청 문장",
-      "tags": [
-        "이동",
-        "건강"
-      ],
-      "keywords": [
-        "마이",
-        "น้ำร้อนไม่ออกครับ",
-        "온수가",
-        "나와요",
-        "객실",
-        "문제",
-        "설명과",
-        "변경",
-        "요청",
-        "문장",
-        "이동",
-        "건강",
-        "온수",
-        "뜨거운물",
-        "온수 안 나와요"
       ]
     },
     {
@@ -28619,35 +26440,6 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-sentence-295-빠이-싸남-빈-캅",
-      "kind": "sentence",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 문장",
-      "thai": "빠이 싸남 빈 캅",
-      "thaiScript": "ไปสนามบินครับ",
-      "korean": "공항으로 가 주세요",
-      "note": "목적지를 말하고 거리나 이동을 묻는 문장",
-      "tags": [
-        "이동"
-      ],
-      "keywords": [
-        "빠이",
-        "싸남",
-        "ไปสนามบินครับ",
-        "공항으로",
-        "목적지를",
-        "말하고",
-        "거리나",
-        "이동을",
-        "묻는",
-        "문장",
-        "이동",
-        "공항",
-        "공항 가 주세요"
-      ]
-    },
-    {
       "id": "supplemental-sentence-296-짜악-티-니-빠이-싸남-빈-끌라이-마이-캅",
       "kind": "sentence",
       "source": "supplemental",
@@ -29389,34 +27181,6 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-sentence-319-폼-뿌왓-후아-캅",
-      "kind": "sentence",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 문장",
-      "thai": "폼 뿌왓 후아 캅",
-      "thaiScript": "ผมปวดหัวครับ",
-      "korean": "두통이 있어요",
-      "note": "증상을 설명하고 약을 묻는 문장",
-      "tags": [
-        "건강"
-      ],
-      "keywords": [
-        "뿌왓",
-        "후아",
-        "ผมปวดหัวครับ",
-        "두통이",
-        "증상을",
-        "설명하고",
-        "약을",
-        "묻는",
-        "문장",
-        "건강",
-        "머리 아픔",
-        "두통"
-      ]
-    },
-    {
       "id": "supplemental-sentence-320-미-야-삼럽-뿌왓-후아-마이-캅",
       "kind": "sentence",
       "source": "supplemental",
@@ -29447,33 +27211,6 @@ window.BASE_DATA = {
         "머리 아픔",
         "두통",
         "두통 약"
-      ]
-    },
-    {
-      "id": "supplemental-sentence-321-폼-뿌왓-텅-캅",
-      "kind": "sentence",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 문장",
-      "thai": "폼 뿌왓 텅 캅",
-      "thaiScript": "ผมปวดท้องครับ",
-      "korean": "복통이 있어요",
-      "note": "증상을 설명하고 약을 묻는 문장",
-      "tags": [
-        "건강"
-      ],
-      "keywords": [
-        "뿌왓",
-        "ผมปวดท้องครับ",
-        "복통이",
-        "증상을",
-        "설명하고",
-        "약을",
-        "묻는",
-        "문장",
-        "건강",
-        "배 아픔",
-        "복통"
       ]
     },
     {
@@ -29509,32 +27246,6 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-sentence-323-폼-쩹-커-캅",
-      "kind": "sentence",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 문장",
-      "thai": "폼 쩹 커 캅",
-      "thaiScript": "ผมเจ็บคอครับ",
-      "korean": "목 통증이 있어요",
-      "note": "증상을 설명하고 약을 묻는 문장",
-      "tags": [
-        "건강"
-      ],
-      "keywords": [
-        "ผมเจ็บคอครับ",
-        "통증이",
-        "증상을",
-        "설명하고",
-        "약을",
-        "묻는",
-        "문장",
-        "건강",
-        "목이 아파요",
-        "목 통증"
-      ]
-    },
-    {
       "id": "supplemental-sentence-324-미-야-삼럽-쩹-커-마이-캅",
       "kind": "sentence",
       "source": "supplemental",
@@ -29566,32 +27277,6 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-sentence-325-폼-카이-캅",
-      "kind": "sentence",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 문장",
-      "thai": "폼 카이 캅",
-      "thaiScript": "ผมไข้ครับ",
-      "korean": "열이 있어요",
-      "note": "증상을 설명하고 약을 묻는 문장",
-      "tags": [
-        "건강"
-      ],
-      "keywords": [
-        "카이",
-        "ผมไข้ครับ",
-        "열이",
-        "증상을",
-        "설명하고",
-        "약을",
-        "묻는",
-        "문장",
-        "건강",
-        "열나요"
-      ]
-    },
-    {
       "id": "supplemental-sentence-326-미-야-삼럽-카이-마이-캅",
       "kind": "sentence",
       "source": "supplemental",
@@ -29620,32 +27305,6 @@ window.BASE_DATA = {
         "건강",
         "열나요",
         "열 약"
-      ]
-    },
-    {
-      "id": "supplemental-sentence-327-폼-아이-캅",
-      "kind": "sentence",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 문장",
-      "thai": "폼 아이 캅",
-      "thaiScript": "ผมไอครับ",
-      "korean": "기침이 있어요",
-      "note": "증상을 설명하고 약을 묻는 문장",
-      "tags": [
-        "건강"
-      ],
-      "keywords": [
-        "아이",
-        "ผมไอครับ",
-        "기침이",
-        "증상을",
-        "설명하고",
-        "약을",
-        "묻는",
-        "문장",
-        "건강",
-        "기침"
       ]
     },
     {
@@ -30090,31 +27749,6 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-sentence-343-커-남-쁠라오-능-콧-캅",
-      "kind": "sentence",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 문장",
-      "thai": "커 남 쁠라오 능 콧 캅",
-      "thaiScript": "ขอน้ำเปล่าหนึ่งขวดครับ",
-      "korean": "생수 한 병 주세요",
-      "note": "식당에서 바로 쓰는 요청형 문장",
-      "tags": [
-        "식당"
-      ],
-      "keywords": [
-        "쁠라오",
-        "ขอน้ำเปล่าหนึ่งขวดครับ",
-        "생수",
-        "식당에서",
-        "바로",
-        "쓰는",
-        "요청형",
-        "문장",
-        "식당"
-      ]
-    },
-    {
       "id": "supplemental-sentence-347-커-파크-치-이익-너이-캅",
       "kind": "sentence",
       "source": "supplemental",
@@ -30219,32 +27853,6 @@ window.BASE_DATA = {
         "요청형",
         "문장",
         "식당"
-      ]
-    },
-    {
-      "id": "supplemental-sentence-351-커-커-업-펌-능-안-캅",
-      "kind": "sentence",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 문장",
-      "thai": "커 커 업 펌 능 안 캅",
-      "thaiScript": "ขอช้อนเพิ่มหนึ่งอันครับ",
-      "korean": "숟가락 하나 더 주세요",
-      "note": "식당에서 바로 쓰는 요청형 문장",
-      "tags": [
-        "식당"
-      ],
-      "keywords": [
-        "ขอช้อนเพิ่มหนึ่งอันครับ",
-        "숟가락",
-        "하나",
-        "식당에서",
-        "바로",
-        "쓰는",
-        "요청형",
-        "문장",
-        "식당",
-        "숟가락 추가"
       ]
     },
     {
@@ -30589,34 +28197,6 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-sentence-364-안-니-콩-마이-마이-캅",
-      "kind": "sentence",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 문장",
-      "thai": "안 니 콩 마이 마이 캅",
-      "thaiScript": "อันนี้ของใหม่ไหมครับ",
-      "korean": "이거 새 상품 맞아요?",
-      "note": "쇼핑과 결제 상황에 자주 나오는 문장",
-      "tags": [
-        "쇼핑"
-      ],
-      "keywords": [
-        "마이",
-        "อันนี้ของใหม่ไหมครับ",
-        "상품",
-        "맞아요",
-        "쇼핑과",
-        "결제",
-        "상황에",
-        "자주",
-        "나오는",
-        "문장",
-        "쇼핑",
-        "새 상품"
-      ]
-    },
-    {
       "id": "supplemental-sentence-365-안-니-미-땀니-마이-캅",
       "kind": "sentence",
       "source": "supplemental",
@@ -30643,41 +28223,6 @@ window.BASE_DATA = {
         "문장",
         "쇼핑",
         "불량"
-      ]
-    },
-    {
-      "id": "supplemental-sentence-366-롯-라카-이익-너이-다이-마이-캅",
-      "kind": "sentence",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 문장",
-      "thai": "롯 라카 이익 너이 다이 마이 캅",
-      "thaiScript": "ลดราคาอีกหน่อยได้ไหมครับ",
-      "korean": "조금만 더 깎아 주실 수 있나요?",
-      "note": "쇼핑과 결제 상황에 자주 나오는 문장",
-      "tags": [
-        "쇼핑"
-      ],
-      "keywords": [
-        "라카",
-        "이익",
-        "너이",
-        "다이",
-        "마이",
-        "ลดราคาอีกหน่อยได้ไหมครับ",
-        "조금만",
-        "깎아",
-        "주실",
-        "있나요",
-        "쇼핑과",
-        "결제",
-        "상황에",
-        "자주",
-        "나오는",
-        "문장",
-        "쇼핑",
-        "깎아주세요",
-        "할인"
       ]
     },
     {
@@ -30802,35 +28347,6 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-sentence-371-커-허-콩-콴-하이-너이-캅",
-      "kind": "sentence",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 문장",
-      "thai": "커 허 콩 콴 하이 너이 캅",
-      "thaiScript": "ช่วยห่อของขวัญให้หน่อยครับ",
-      "korean": "선물 포장해 주세요",
-      "note": "쇼핑과 결제 상황에 자주 나오는 문장",
-      "tags": [
-        "쇼핑"
-      ],
-      "keywords": [
-        "하이",
-        "너이",
-        "ช่วยห่อของขวัญให้หน่อยครับ",
-        "선물",
-        "포장해",
-        "쇼핑과",
-        "결제",
-        "상황에",
-        "자주",
-        "나오는",
-        "문장",
-        "쇼핑",
-        "선물 포장"
-      ]
-    },
-    {
       "id": "supplemental-sentence-372-미-홍-응읍-마이-캅",
       "kind": "sentence",
       "source": "supplemental",
@@ -30841,8 +28357,8 @@ window.BASE_DATA = {
       "korean": "조용한 방 있나요?",
       "note": "객실 변경과 숙소 요청 검색을 더 잘 잡는 문장",
       "tags": [
-        "이동",
-        "기본회화"
+        "기본회화",
+        "이동"
       ],
       "keywords": [
         "응읍",
@@ -30859,7 +28375,10 @@ window.BASE_DATA = {
         "문장",
         "이동",
         "기본회화",
-        "조용한 방"
+        "조용한 방",
+        "시앙",
+        "มีห้องที่ไม่มีเสียงดังไหมครับ",
+        "소음 없는 방"
       ]
     },
     {
@@ -30993,38 +28512,6 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-sentence-377-홍-니-마이-사두억-캅",
-      "kind": "sentence",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 문장",
-      "thai": "홍 니 마이 사두억 캅",
-      "thaiScript": "ห้องนี้ไม่สะดวกครับ",
-      "korean": "이 방은 불편해요",
-      "note": "객실 변경과 숙소 요청 검색을 더 잘 잡는 문장",
-      "tags": [
-        "이동",
-        "기본회화"
-      ],
-      "keywords": [
-        "마이",
-        "사두억",
-        "ห้องนี้ไม่สะดวกครับ",
-        "방은",
-        "불편해요",
-        "객실",
-        "변경과",
-        "숙소",
-        "요청",
-        "검색을",
-        "잡는",
-        "문장",
-        "이동",
-        "기본회화",
-        "방이 불편해요"
-      ]
-    },
-    {
       "id": "supplemental-sentence-378-폼-야크-다이-홍-티-디-꽈-니-캅",
       "kind": "sentence",
       "source": "supplemental",
@@ -31089,38 +28576,6 @@ window.BASE_DATA = {
         "이동",
         "기본회화",
         "냄새 안 나는 방"
-      ]
-    },
-    {
-      "id": "supplemental-sentence-380-미-홍-티-마이-미-시앙-당-마이-캅",
-      "kind": "sentence",
-      "source": "supplemental",
-      "sourceLabel": "확장",
-      "sheet": "확장 문장",
-      "thai": "미 홍 티 마이 미 시앙 당 마이 캅",
-      "thaiScript": "มีห้องที่ไม่มีเสียงดังไหมครับ",
-      "korean": "조용한 방 있나요?",
-      "note": "객실 변경과 숙소 요청 검색을 더 잘 잡는 문장",
-      "tags": [
-        "이동",
-        "기본회화"
-      ],
-      "keywords": [
-        "마이",
-        "시앙",
-        "มีห้องที่ไม่มีเสียงดังไหมครับ",
-        "조용한",
-        "있나요",
-        "객실",
-        "변경과",
-        "숙소",
-        "요청",
-        "검색을",
-        "잡는",
-        "문장",
-        "이동",
-        "기본회화",
-        "소음 없는 방"
       ]
     },
     {
@@ -31340,6 +28795,593 @@ window.BASE_DATA = {
         "기본회화",
         "화장실가야해요",
         "화장실가야해"
+      ]
+    },
+    {
+      "id": "supplemental-sentence-389-유-티-나이-캅",
+      "kind": "sentence",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 문장",
+      "thai": "유 티 나이 캅",
+      "thaiScript": "อยู่ที่ไหนครับ",
+      "korean": "어디에요?",
+      "note": "기본 생활 동사 검색을 위한 자주 쓰는 문장",
+      "tags": [
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑"
+      ],
+      "keywords": [
+        "나이",
+        "อยู่ที่ไหนครับ",
+        "어디에요",
+        "기본",
+        "생활",
+        "동사",
+        "검색을",
+        "위한",
+        "자주",
+        "쓰는",
+        "문장",
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑",
+        "어디예요"
+      ]
+    },
+    {
+      "id": "supplemental-sentence-390-폼-짜-빠이-티-니-캅",
+      "kind": "sentence",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 문장",
+      "thai": "폼 짜 빠이 티 니 캅",
+      "thaiScript": "ผมจะไปที่นี่ครับ",
+      "korean": "저는 여기로 가요",
+      "note": "기본 생활 동사 검색을 위한 자주 쓰는 문장",
+      "tags": [
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑"
+      ],
+      "keywords": [
+        "빠이",
+        "ผมจะไปที่นี่ครับ",
+        "여기로",
+        "가요",
+        "기본",
+        "생활",
+        "동사",
+        "검색을",
+        "위한",
+        "자주",
+        "쓰는",
+        "문장",
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑",
+        "여기로가요",
+        "간다"
+      ]
+    },
+    {
+      "id": "supplemental-sentence-391-폼-짜-마-이익-크랑-캅",
+      "kind": "sentence",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 문장",
+      "thai": "폼 짜 마 이익 크랑 캅",
+      "thaiScript": "ผมจะมาอีกครั้งครับ",
+      "korean": "다시 올게요",
+      "note": "기본 생활 동사 검색을 위한 자주 쓰는 문장",
+      "tags": [
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑"
+      ],
+      "keywords": [
+        "이익",
+        "크랑",
+        "ผมจะมาอีกครั้งครับ",
+        "다시",
+        "올게요",
+        "기본",
+        "생활",
+        "동사",
+        "검색을",
+        "위한",
+        "자주",
+        "쓰는",
+        "문장",
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑",
+        "다시올게요",
+        "온다"
+      ]
+    },
+    {
+      "id": "supplemental-sentence-392-추아이-쁫-쁘라뚜-하이-너이-캅",
+      "kind": "sentence",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 문장",
+      "thai": "추아이 쁫 쁘라뚜 하이 너이 캅",
+      "thaiScript": "ช่วยเปิดประตูให้หน่อยครับ",
+      "korean": "문 좀 열어 주세요",
+      "note": "기본 생활 동사 검색을 위한 자주 쓰는 문장",
+      "tags": [
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑"
+      ],
+      "keywords": [
+        "추아이",
+        "쁘라뚜",
+        "하이",
+        "너이",
+        "ช่วยเปิดประตูให้หน่อยครับ",
+        "열어",
+        "기본",
+        "생활",
+        "동사",
+        "검색을",
+        "위한",
+        "자주",
+        "쓰는",
+        "문장",
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑",
+        "문열어주세요",
+        "열다"
+      ]
+    },
+    {
+      "id": "supplemental-sentence-393-추아이-삐뜨-쁘라뚜-하이-너이-캅",
+      "kind": "sentence",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 문장",
+      "thai": "추아이 삐뜨 쁘라뚜 하이 너이 캅",
+      "thaiScript": "ช่วยปิดประตูให้หน่อยครับ",
+      "korean": "문 좀 닫아 주세요",
+      "note": "기본 생활 동사 검색을 위한 자주 쓰는 문장",
+      "tags": [
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑"
+      ],
+      "keywords": [
+        "추아이",
+        "삐뜨",
+        "쁘라뚜",
+        "하이",
+        "너이",
+        "ช่วยปิดประตูให้หน่อยครับ",
+        "닫아",
+        "기본",
+        "생활",
+        "동사",
+        "검색을",
+        "위한",
+        "자주",
+        "쓰는",
+        "문장",
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑",
+        "문닫아주세요",
+        "닫다"
+      ]
+    },
+    {
+      "id": "supplemental-sentence-394-커-로-너이-캅",
+      "kind": "sentence",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 문장",
+      "thai": "커 로 너이 캅",
+      "thaiScript": "ขอรอหน่อยครับ",
+      "korean": "잠깐 기다려 주세요",
+      "note": "기본 생활 동사 검색을 위한 자주 쓰는 문장",
+      "tags": [
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑"
+      ],
+      "keywords": [
+        "너이",
+        "ขอรอหน่อยครับ",
+        "잠깐",
+        "기다려",
+        "기본",
+        "생활",
+        "동사",
+        "검색을",
+        "위한",
+        "자주",
+        "쓰는",
+        "문장",
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑",
+        "기다려주세요",
+        "기다리다"
+      ]
+    },
+    {
+      "id": "supplemental-sentence-395-폼-로-유-티-니-캅",
+      "kind": "sentence",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 문장",
+      "thai": "폼 로 유 티 니 캅",
+      "thaiScript": "ผมรออยู่ที่นี่ครับ",
+      "korean": "저는 여기서 기다릴게요",
+      "note": "기본 생활 동사 검색을 위한 자주 쓰는 문장",
+      "tags": [
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑"
+      ],
+      "keywords": [
+        "ผมรออยู่ที่นี่ครับ",
+        "여기서",
+        "기다릴게요",
+        "기본",
+        "생활",
+        "동사",
+        "검색을",
+        "위한",
+        "자주",
+        "쓰는",
+        "문장",
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑",
+        "여기서기다릴게요"
+      ]
+    },
+    {
+      "id": "supplemental-sentence-396-폼-키른-아한-니-캅",
+      "kind": "sentence",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 문장",
+      "thai": "폼 키른 아한 니 캅",
+      "thaiScript": "ผมกินอันนี้ครับ",
+      "korean": "이거 먹을게요",
+      "note": "기본 생활 동사 검색을 위한 자주 쓰는 문장",
+      "tags": [
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑"
+      ],
+      "keywords": [
+        "키른",
+        "아한",
+        "ผมกินอันนี้ครับ",
+        "먹을게요",
+        "기본",
+        "생활",
+        "동사",
+        "검색을",
+        "위한",
+        "자주",
+        "쓰는",
+        "문장",
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑",
+        "먹는다",
+        "이거먹을게요"
+      ]
+    },
+    {
+      "id": "supplemental-sentence-397-폼-듬-남-니-캅",
+      "kind": "sentence",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 문장",
+      "thai": "폼 듬 남 니 캅",
+      "thaiScript": "ผมดื่มน้ำนี้ครับ",
+      "korean": "이 물 마실게요",
+      "note": "기본 생활 동사 검색을 위한 자주 쓰는 문장",
+      "tags": [
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑"
+      ],
+      "keywords": [
+        "ผมดื่มน้ำนี้ครับ",
+        "마실게요",
+        "기본",
+        "생활",
+        "동사",
+        "검색을",
+        "위한",
+        "자주",
+        "쓰는",
+        "문장",
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑",
+        "마신다",
+        "물마실게요"
+      ]
+    },
+    {
+      "id": "supplemental-sentence-398-폼-짜-낭-티-니-캅",
+      "kind": "sentence",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 문장",
+      "thai": "폼 짜 낭 티 니 캅",
+      "thaiScript": "ผมจะนั่งที่นี่ครับ",
+      "korean": "여기 앉을게요",
+      "note": "기본 생활 동사 검색을 위한 자주 쓰는 문장",
+      "tags": [
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑"
+      ],
+      "keywords": [
+        "ผมจะนั่งที่นี่ครับ",
+        "여기",
+        "앉을게요",
+        "기본",
+        "생활",
+        "동사",
+        "검색을",
+        "위한",
+        "자주",
+        "쓰는",
+        "문장",
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑",
+        "앉다"
+      ]
+    },
+    {
+      "id": "supplemental-sentence-399-폼-짜-큰-빠이-캅",
+      "kind": "sentence",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 문장",
+      "thai": "폼 짜 큰 빠이 캅",
+      "thaiScript": "ผมจะเข้าไปครับ",
+      "korean": "저는 들어갈게요",
+      "note": "기본 생활 동사 검색을 위한 자주 쓰는 문장",
+      "tags": [
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑"
+      ],
+      "keywords": [
+        "빠이",
+        "ผมจะเข้าไปครับ",
+        "들어갈게요",
+        "기본",
+        "생활",
+        "동사",
+        "검색을",
+        "위한",
+        "자주",
+        "쓰는",
+        "문장",
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑",
+        "들어가다"
+      ]
+    },
+    {
+      "id": "supplemental-sentence-400-폼-짜-억-빠이-캅",
+      "kind": "sentence",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 문장",
+      "thai": "폼 짜 억 빠이 캅",
+      "thaiScript": "ผมจะออกไปครับ",
+      "korean": "저는 나갈게요",
+      "note": "기본 생활 동사 검색을 위한 자주 쓰는 문장",
+      "tags": [
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑"
+      ],
+      "keywords": [
+        "빠이",
+        "ผมจะออกไปครับ",
+        "나갈게요",
+        "기본",
+        "생활",
+        "동사",
+        "검색을",
+        "위한",
+        "자주",
+        "쓰는",
+        "문장",
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑",
+        "나가다"
+      ]
+    },
+    {
+      "id": "supplemental-sentence-401-폼-짜-팍-너이-캅",
+      "kind": "sentence",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 문장",
+      "thai": "폼 짜 팍 너이 캅",
+      "thaiScript": "ผมจะพักหน่อยครับ",
+      "korean": "저는 좀 쉴게요",
+      "note": "기본 생활 동사 검색을 위한 자주 쓰는 문장",
+      "tags": [
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑"
+      ],
+      "keywords": [
+        "너이",
+        "ผมจะพักหน่อยครับ",
+        "쉴게요",
+        "기본",
+        "생활",
+        "동사",
+        "검색을",
+        "위한",
+        "자주",
+        "쓰는",
+        "문장",
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑",
+        "쉬다"
+      ]
+    },
+    {
+      "id": "supplemental-sentence-402-폼-짜-탐-응안-떠-캅",
+      "kind": "sentence",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 문장",
+      "thai": "폼 짜 탐 응안 떠 캅",
+      "thaiScript": "ผมจะทำงานต่อครับ",
+      "korean": "계속 일할게요",
+      "note": "기본 생활 동사 검색을 위한 자주 쓰는 문장",
+      "tags": [
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑"
+      ],
+      "keywords": [
+        "응안",
+        "ผมจะทำงานต่อครับ",
+        "계속",
+        "일할게요",
+        "기본",
+        "생활",
+        "동사",
+        "검색을",
+        "위한",
+        "자주",
+        "쓰는",
+        "문장",
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑",
+        "일하다"
+      ]
+    },
+    {
+      "id": "supplemental-sentence-403-안-니-차이-다이-마이-캅",
+      "kind": "sentence",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 문장",
+      "thai": "안 니 차이 다이 마이 캅",
+      "thaiScript": "อันนี้ใช้ได้ไหมครับ",
+      "korean": "이거 사용해도 돼요?",
+      "note": "기본 생활 동사 검색을 위한 자주 쓰는 문장",
+      "tags": [
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑"
+      ],
+      "keywords": [
+        "차이",
+        "다이",
+        "마이",
+        "อันนี้ใช้ได้ไหมครับ",
+        "사용해도",
+        "돼요",
+        "기본",
+        "생활",
+        "동사",
+        "검색을",
+        "위한",
+        "자주",
+        "쓰는",
+        "문장",
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑",
+        "사용해도돼요",
+        "사용하다"
+      ]
+    },
+    {
+      "id": "supplemental-sentence-404-추아이-아오-안-니-마-하이-너이-캅",
+      "kind": "sentence",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 문장",
+      "thai": "추아이 아오 안 니 마 하이 너이 캅",
+      "thaiScript": "ช่วยเอาอันนี้มาให้หน่อยครับ",
+      "korean": "이거 좀 가져다 주세요",
+      "note": "기본 생활 동사 검색을 위한 자주 쓰는 문장",
+      "tags": [
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑"
+      ],
+      "keywords": [
+        "추아이",
+        "아오",
+        "하이",
+        "너이",
+        "ช่วยเอาอันนี้มาให้หน่อยครับ",
+        "가져다",
+        "기본",
+        "생활",
+        "동사",
+        "검색을",
+        "위한",
+        "자주",
+        "쓰는",
+        "문장",
+        "기본회화",
+        "이동",
+        "식당",
+        "쇼핑",
+        "가져다주세요",
+        "가져오다"
       ]
     }
   ]

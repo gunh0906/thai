@@ -809,6 +809,24 @@ def normalize_for_id(value: str) -> str:
     return text or "item"
 
 
+def normalize_compact(value: str) -> str:
+    text = clean_text(value).lower()
+    text = re.sub(r"[^0-9a-z가-힣\u0E00-\u0E7F]+", "", text)
+    return text
+
+
+def split_korean_variants(value: str) -> list[str]:
+    parts = [clean_text(part) for part in re.split(r"[/|,·]", clean_text(value)) if clean_text(part)]
+    if not parts:
+        return []
+    variants: list[str] = []
+    for part in parts:
+        compact = normalize_compact(part)
+        if compact and compact not in variants:
+            variants.append(compact)
+    return variants
+
+
 def extract_keywords(*parts: str) -> list[str]:
     text = " ".join(clean_text(part) for part in parts if clean_text(part))
     tokens: list[str] = []
@@ -1037,19 +1055,66 @@ def build_supplemental_entries() -> tuple[list[dict], list[dict]]:
     return vocab_entries, sentence_entries
 
 
+def entry_preference_score(entry: dict) -> tuple[int, int, int, int]:
+    has_script = int(bool(clean_text(entry.get("thaiScript", ""))))
+    has_note = int(bool(clean_text(entry.get("note", ""))))
+    keyword_count = len(entry.get("keywords", []))
+    korean_penalty = -len(clean_text(entry.get("korean", "")))
+    return (has_script, has_note, keyword_count, korean_penalty)
+
+
+def entries_overlap(left: dict, right: dict) -> bool:
+    left_thai = normalize_compact(left.get("thaiScript") or left.get("thai", ""))
+    right_thai = normalize_compact(right.get("thaiScript") or right.get("thai", ""))
+    if left_thai and right_thai and left_thai == right_thai:
+        return True
+
+    left_korean = normalize_compact(left.get("korean", ""))
+    right_korean = normalize_compact(right.get("korean", ""))
+    if left_korean and right_korean and left_korean == right_korean:
+        return True
+
+    left_variants = split_korean_variants(left.get("korean", ""))
+    right_variants = split_korean_variants(right.get("korean", ""))
+    if left_thai and right_thai and left_variants and right_variants:
+        if any(item in right_variants for item in left_variants):
+            return True
+
+    return False
+
+
+def merge_entries(base: dict, incoming: dict) -> dict:
+    preferred = base if entry_preference_score(base) >= entry_preference_score(incoming) else incoming
+    other = incoming if preferred is base else base
+
+    merged = dict(preferred)
+    if not clean_text(merged.get("thaiScript", "")):
+        merged["thaiScript"] = clean_text(other.get("thaiScript", ""))
+    if not clean_text(merged.get("note", "")):
+        merged["note"] = clean_text(other.get("note", ""))
+
+    merged["tags"] = sorted(
+        set((preferred.get("tags") or []) + (other.get("tags") or [])),
+        key=lambda item: SCENARIO_ORDER.get(item, 999),
+    )
+    merged["keywords"] = list(dict.fromkeys((preferred.get("keywords") or []) + (other.get("keywords") or [])))
+    return merged
+
+
 def deduplicate_entries(entries: list[dict]) -> list[dict]:
     deduped: list[dict] = []
-    seen: set[tuple[str, str, str]] = set()
     for entry in entries:
-        key = (
-            entry["kind"],
-            normalize_for_id(entry["thai"]),
-            normalize_for_id(entry["korean"]),
-        )
-        if key in seen:
-            continue
-        seen.add(key)
-        deduped.append(entry)
+        merged = False
+        for index, existing in enumerate(deduped):
+            if existing["kind"] != entry["kind"]:
+                continue
+            if not entries_overlap(existing, entry):
+                continue
+            deduped[index] = merge_entries(existing, entry)
+            merged = True
+            break
+        if not merged:
+            deduped.append(entry)
     return deduped
 
 

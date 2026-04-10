@@ -1,6 +1,6 @@
 const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
-const APP_VERSION = "20260410e";
+const APP_VERSION = "20260410f";
 
 const baseData = window.BASE_DATA || {
   appTitle: "태국어 포켓북",
@@ -191,9 +191,9 @@ const QUERY_ALIASES = [
     tags: ["이동", "건강"],
   },
   {
-    matches: ["화장실간다", "화장실가고싶어", "화장실가고싶어요", "화장실가", "화장실가야해"],
+    matches: ["화장실간다", "화장실가고싶어", "화장실가고싶어요", "화장실가", "화장실가야해", "화장실어디에요", "화장실어디예요", "화장실이어디예요"],
     primary: ["화장실", "가다"],
-    related: ["화장실 가고 싶어요", "화장실 어디예요", "화장실"],
+    related: ["화장실 가고 싶어요", "화장실 어디예요", "화장실", "어디"],
     display: ["화장실", "가다"],
     tags: ["이동", "기본회화"],
   },
@@ -1025,6 +1025,11 @@ function findExactEntry(entries, searchProfile) {
   }) || null;
 }
 
+function isActionPhraseQuery(searchProfile) {
+  if (!searchProfile.query) return false;
+  return /\s/.test(searchProfile.query) || searchProfile.directTerms.length >= 2;
+}
+
 function renderScenarioChips() {
   elements.scenarioChips.innerHTML = "";
   baseData.scenarios.forEach((scenario) => {
@@ -1297,12 +1302,13 @@ function render() {
   const numberMode = generated.vocab.length > 0;
   const searchProfile = buildSearchProfile(state.query, [...merged.vocab, ...merged.sentences]);
   const exactSentenceMatch = numberMode ? null : findExactEntry(merged.sentences, searchProfile);
+  const actionPhraseMode = !numberMode && isActionPhraseQuery(searchProfile);
   const allVocabResults = numberMode
     ? generated.vocab
     : uniqueById([...generated.vocab, ...getVocabResults(merged.vocab, searchProfile)]);
   const vocabSeeds = allVocabResults;
   const vocabResults = state.query
-    ? exactSentenceMatch
+    ? exactSentenceMatch || actionPhraseMode
       ? []
       : allVocabResults.slice(0, RESULT_LIMITS.vocab)
     : [];
@@ -1342,6 +1348,8 @@ function render() {
       ? "숫자는 태국어 읽기와 태국 숫자 표기를 함께 보여줍니다."
       : exactSentenceMatch
         ? "이 검색어는 정확히 맞는 회화가 있어서 아래 문장을 먼저 보여줍니다."
+      : actionPhraseMode
+        ? "문장형 검색이라서 회화를 먼저 보여줍니다."
       : "문장을 잘게 풀어서 먼저 잡아둘 단어부터 보여줍니다."
     : "검색어를 넣으면 관련 단어가 나옵니다.";
   elements.sentenceMeta.textContent = state.query
@@ -1357,7 +1365,7 @@ function render() {
   renderEntryStack(
     elements.vocabResults,
     vocabResults,
-    exactSentenceMatch
+    exactSentenceMatch || actionPhraseMode
       ? "정확히 맞는 회화를 아래에서 먼저 확인해 보세요."
       : "맞는 단어가 아직 없습니다. 더 짧은 핵심어로 검색해 보세요."
   );
