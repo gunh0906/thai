@@ -1,6 +1,6 @@
 const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
-const APP_VERSION = "20260410g";
+const APP_VERSION = "20260410i";
 
 const baseData = window.BASE_DATA || {
   appTitle: "태국어 포켓북",
@@ -142,6 +142,7 @@ const QUERY_PARTS = [
   { patterns: [/마시다|마셔|마신다/], primary: ["마시다"], related: ["물", "음료"], display: ["마시다"], tags: ["식당", "기본회화"] },
   { patterns: [/보다|봐요|본다/], primary: ["보다"], related: ["여기", "보여주세요"], display: ["보다"], tags: ["기본회화"] },
   { patterns: [/말하다|말해|말해요|말한다/], primary: ["말하다"], related: ["천천히", "다시"], display: ["말하다"], tags: ["기본회화"] },
+  { patterns: [/이해|알겠|알겠습니다|알겠어/], primary: ["이해"], related: ["이해해요", "이해하나요", "이해합니다", "알겠습니다"], display: ["이해"], tags: ["기본회화"] },
   { patterns: [/병원|약국|약|아파|두통|열/], primary: ["병원", "약"], related: ["아프다", "두통", "열"], display: ["병원"], tags: ["건강"] },
   { patterns: [/와이파이|wifi|인터넷|비밀번호/i], primary: ["와이파이"], related: ["비밀번호", "인터넷"], display: ["와이파이"], tags: ["이동"] },
   { patterns: [/천천히|다시|이해|못 알아|못알아/], primary: ["천천히", "다시"], related: ["이해", "한 번 더"], display: ["다시"], tags: ["기본회화"] },
@@ -223,6 +224,13 @@ const QUERY_ALIASES = [
     primary: ["잘못", "틀리다", "방법"],
     related: ["그건 잘못된 방법이야", "다르게 해야 해요", "이건 맞는 방법이에요"],
     display: ["잘못된 방법"],
+    tags: ["기본회화"],
+  },
+  {
+    matches: ["이해", "이해해", "이해해요", "이해합니다", "이해하나요", "이해하니", "이해못해", "이해못해요", "이해안돼요", "알겠습니다", "알겠어요"],
+    primary: ["이해"],
+    related: ["이해해요", "이해하나요", "이해합니다", "이해했어요", "이해 못해요"],
+    display: ["이해"],
     tags: ["기본회화"],
   },
 ];
@@ -845,6 +853,9 @@ function scoreEntry(entry, searchProfile, kind) {
 
   const index = buildSearchIndex(entry);
   const searchableFields = [index.korean, index.thai, index.thaiScript, index.note, ...index.keywords];
+  const hasThaiScript = Boolean(getThaiScriptText(entry));
+  const queryNegative = hasNegativeMeaning(searchProfile.query);
+  const entryNegative = hasNegativeMeaning(entry.korean) || hasNegativeMeaning(entry.note);
   let score = 0;
   let directMatch = false;
   const primaryHits = new Set();
@@ -896,6 +907,16 @@ function scoreEntry(entry, searchProfile, kind) {
   if (kind === "sentence" && primaryHits.size) {
     score += 40;
   }
+  if (hasThaiScript) {
+    score += 35;
+  } else {
+    score -= 90;
+  }
+  if (!queryNegative && entryNegative) {
+    score -= 180;
+  } else if (queryNegative && !entryNegative) {
+    score -= 70;
+  }
 
   const hasPrimaryPlan = searchProfile.minimumPrimaryHits > 0;
   const vocabPrimaryThreshold = searchProfile.minimumPrimaryHits > 1 ? 1 : searchProfile.minimumPrimaryHits;
@@ -927,6 +948,9 @@ function getVocabResults(entries, searchProfile) {
     .sort((left, right) => {
       if (right.match.score !== left.match.score) return right.match.score - left.match.score;
       if (right.match.primaryHits !== left.match.primaryHits) return right.match.primaryHits - left.match.primaryHits;
+      const leftThai = Boolean(getThaiScriptText(left.entry));
+      const rightThai = Boolean(getThaiScriptText(right.entry));
+      if (leftThai !== rightThai) return Number(rightThai) - Number(leftThai);
       if (left.entry.korean.length !== right.entry.korean.length) {
         return left.entry.korean.length - right.entry.korean.length;
       }
@@ -977,6 +1001,9 @@ function getSentenceResults(entries, searchProfile, vocabSeeds) {
     .filter(({ match }) => match.matched)
     .sort((left, right) => {
       if (right.match.score !== left.match.score) return right.match.score - left.match.score;
+      const leftThai = Boolean(getThaiScriptText(left.entry));
+      const rightThai = Boolean(getThaiScriptText(right.entry));
+      if (leftThai !== rightThai) return Number(rightThai) - Number(leftThai);
       return right.match.primaryHits - left.match.primaryHits;
     });
 
@@ -997,6 +1024,9 @@ function getSentenceResults(entries, searchProfile, vocabSeeds) {
     .filter(({ score, sharedPrimary }) => sharedPrimary >= 1 || score >= (searchProfile.minimumPrimaryHits > 1 ? 220 : 150))
     .sort((left, right) => {
       if (right.score !== left.score) return right.score - left.score;
+      const leftThai = Boolean(getThaiScriptText(left.entry));
+      const rightThai = Boolean(getThaiScriptText(right.entry));
+      if (leftThai !== rightThai) return Number(rightThai) - Number(leftThai);
       return right.sharedPrimary - left.sharedPrimary;
     });
 
@@ -1019,7 +1049,7 @@ function findExactEntry(entries, searchProfile) {
   if (!searchProfile.query) return null;
   return entries.find((entry) => {
     const index = buildSearchIndex(entry);
-    return [index.korean, index.thai, index.thaiScript, ...index.keywords].some(
+    return [index.korean, index.thai, index.thaiScript].some(
       (field) => field && field === searchProfile.compact
     );
   }) || null;
@@ -1111,6 +1141,10 @@ function getThaiScriptText(entry) {
   return THAI_SCRIPT_REGEX.test(String(entry.thai || "")) ? String(entry.thai || "").trim() : "";
 }
 
+function hasNegativeMeaning(text) {
+  return /(안|못|없|말고|잘못|틀리|아니)/.test(normalizeText(text));
+}
+
 function openMenu() {
   state.menuOpen = true;
   document.body.classList.add("menu-open");
@@ -1199,6 +1233,11 @@ function createEntryCard(entry) {
     footer.appendChild(button);
     hasFooterAction = true;
     card.appendChild(panel);
+  } else if (!thaiScriptText) {
+    const missingNote = document.createElement("p");
+    missingNote.className = "entry-note";
+    missingNote.textContent = "태국 문자 보강중";
+    card.appendChild(missingNote);
   }
 
   if (hasFooterAction) {
