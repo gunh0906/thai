@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta
+      name="description"
+      content="태국어 단어와 문장을 한국어로 검색하고, 상황별로 빠르게 찾을 수 있는 모바일 웹 단어장"
+    />
+    <meta name="theme-color" content="#ff8a3d" />
+    <title>태국어 포켓북</title>
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div class="eyebrow">Thai Pocketbook</div>
+        <h1>태국어 포켓북</h1>
+        <p class="hero-copy">
+          엑셀 단어장 + 확장 표현 + 내가 추가한 문장을 한 번에 검색하세요.
+          한국어로 찾으면 관련 단어와 예문이 같이 나옵니다.
+        </p>
+
+        <label class="search-panel" for="searchInput">
+          <span class="search-label">검색</span>
+          <input
+            id="searchInput"
+            type="search"
+            autocomplete="off"
+            placeholder="예: 물, 계산, 병원, 안녕하세요, 깎아주세요"
+          />
+          <button id="clearSearchButton" class="ghost-button" type="button">
+            지우기
+          </button>
+        </label>
+
+        <div class="hero-meta">
+          <div class="hero-note" id="datasetNote"></div>
+          <div class="hero-note">휴대폰에 저장하려면 브라우저 메뉴에서 홈 화면에 추가하세요.</div>
+        </div>
+      </header>
+
+      <main class="content-stack">
+        <section class="panel">
+          <div class="section-top">
+            <div>
+              <p class="section-kicker">빠른 탐색</p>
+              <h2>상황별 필터</h2>
+            </div>
+            <button id="resetFiltersButton" class="ghost-button" type="button">
+              필터 초기화
+            </button>
+          </div>
+          <div id="scenarioChips" class="chip-row"></div>
+          <div id="activeSummary" class="active-summary"></div>
+        </section>
+
+        <section class="stats-grid" id="statsGrid"></section>
+
+        <section class="panel spotlight-panel">
+          <div class="section-top">
+            <div>
+              <p class="section-kicker">문장 추천</p>
+              <h2>관련 문장</h2>
+            </div>
+            <button id="clearSelectionButton" class="ghost-button" type="button">
+              선택 해제
+            </button>
+          </div>
+          <p class="section-description" id="relatedDescription">
+            검색어 또는 선택한 단어를 기준으로 연결된 문장을 보여줍니다.
+          </p>
+          <div id="relatedSentences" class="card-stack"></div>
+        </section>
+
+        <section class="result-grid">
+          <section class="panel">
+            <div class="section-top">
+              <div>
+                <p class="section-kicker">단어</p>
+                <h2>검색 결과</h2>
+              </div>
+              <p class="section-description" id="vocabMeta"></p>
+            </div>
+            <div id="vocabResults" class="card-stack"></div>
+          </section>
+
+          <section class="panel">
+            <div class="section-top">
+              <div>
+                <p class="section-kicker">문장</p>
+                <h2>예문 결과</h2>
+              </div>
+              <p class="section-description" id="sentenceMeta"></p>
+            </div>
+            <div id="sentenceResults" class="card-stack"></div>
+          </section>
+        </section>
+
+        <section class="panel">
+          <div class="section-top">
+            <div>
+              <p class="section-kicker">내 데이터</p>
+              <h2>단어나 문장 추가</h2>
+            </div>
+            <p class="section-description">휴대폰에서도 바로 보강할 수 있습니다.</p>
+          </div>
+
+          <form id="entryForm" class="entry-form">
+            <div class="form-grid">
+              <label>
+                <span>구분</span>
+                <select name="kind">
+                  <option value="vocab">단어</option>
+                  <option value="sentence">문장</option>
+                </select>
+              </label>
+
+              <label class="wide">
+                <span>태국어 발음 표기</span>
+                <input
+                  name="thai"
+                  type="text"
+                  placeholder="예: 사왓디 캅, 체크 빈, 홍 남 유 티 나이"
+                  required
+                />
+              </label>
+
+              <label class="wide">
+                <span>한국어 뜻</span>
+                <input
+                  name="korean"
+                  type="text"
+                  placeholder="예: 안녕하세요 / 계산 부탁해요 / 화장실이 어디예요?"
+                  required
+                />
+              </label>
+
+              <label class="wide">
+                <span>상황 태그</span>
+                <input
+                  name="tags"
+                  type="text"
+                  placeholder="예: 인사, 식당, 쇼핑"
+                />
+              </label>
+
+              <label class="wide">
+                <span>메모</span>
+                <textarea
+                  name="note"
+                  rows="3"
+                  placeholder="예: 매장에서 자주 씀 / 남성은 캅, 여성은 카"
+                ></textarea>
+              </label>
+            </div>
+
+            <div class="form-actions">
+              <button class="primary-button" type="submit">저장하기</button>
+              <p id="saveFeedback" class="feedback-text" aria-live="polite"></p>
+            </div>
+          </form>
+        </section>
+
+        <section class="panel">
+          <div class="section-top">
+            <div>
+              <p class="section-kicker">백업</p>
+              <h2>내가 추가한 항목 관리</h2>
+            </div>
+            <p class="section-description">JSON으로 내보내고 다시 가져올 수 있습니다.</p>
+          </div>
+
+          <div class="backup-actions">
+            <button id="exportButton" class="ghost-button" type="button">
+              내 데이터 내보내기
+            </button>
+            <button id="importButton" class="ghost-button" type="button">
+              JSON 가져오기
+            </button>
+            <button id="clearCustomButton" class="ghost-button danger" type="button">
+              내가 추가한 항목 비우기
+            </button>
+            <input id="importInput" type="file" accept="application/json,.json" hidden />
+          </div>
+
+          <div id="customSummary" class="active-summary"></div>
+          <div id="customEntries" class="card-stack compact"></div>
+        </section>
+      </main>
+    </div>
+
+    <script src="./data.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>

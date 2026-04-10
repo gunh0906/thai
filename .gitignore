@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+proofshot-artifacts/
+dist/
+*.png
+*.tmp
+*.log
+app-local/
