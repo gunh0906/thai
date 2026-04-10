@@ -22,8 +22,7 @@
         <div class="eyebrow">Thai Pocketbook</div>
         <h1>태국어 포켓북</h1>
         <p class="hero-copy">
-          엑셀 단어장 + 확장 표현 + 내가 추가한 문장을 한 번에 검색하세요.
-          한국어로 찾으면 관련 단어와 예문이 같이 나옵니다.
+          한국어로 찾으면 단어와 예문이 함께 나옵니다.
         </p>
 
         <label class="search-panel" for="searchInput">
@@ -40,8 +39,8 @@
         </label>
 
         <div class="hero-meta">
+          <div class="hero-note" id="searchStatus"></div>
           <div class="hero-note" id="datasetNote"></div>
-          <div class="hero-note">휴대폰에 저장하려면 브라우저 메뉴에서 홈 화면에 추가하세요.</div>
         </div>
       </header>
 
@@ -58,27 +57,20 @@
           </div>
           <div id="scenarioChips" class="chip-row"></div>
           <div id="activeSummary" class="active-summary"></div>
+          <div class="quick-search" id="quickSearchChips"></div>
         </section>
 
-        <section class="stats-grid" id="statsGrid"></section>
-
-        <section class="panel spotlight-panel">
+        <section class="panel" id="homeGuidePanel">
           <div class="section-top">
             <div>
-              <p class="section-kicker">문장 추천</p>
-              <h2>관련 문장</h2>
+              <p class="section-kicker">빠르게 시작</p>
+              <h2>자주 찾는 표현</h2>
             </div>
-            <button id="clearSelectionButton" class="ghost-button" type="button">
-              선택 해제
-            </button>
           </div>
-          <p class="section-description" id="relatedDescription">
-            검색어 또는 선택한 단어를 기준으로 연결된 문장을 보여줍니다.
-          </p>
-          <div id="relatedSentences" class="card-stack"></div>
+          <div id="homeGuideGrid" class="guide-grid"></div>
         </section>
 
-        <section class="result-grid">
+        <section class="result-grid" id="resultGrid">
           <section class="panel">
             <div class="section-top">
               <div>
@@ -100,6 +92,22 @@
             </div>
             <div id="sentenceResults" class="card-stack"></div>
           </section>
+        </section>
+
+        <section class="panel spotlight-panel" id="relatedPanel">
+          <div class="section-top">
+            <div>
+              <p class="section-kicker">문장 추천</p>
+              <h2>관련 문장</h2>
+            </div>
+            <button id="clearSelectionButton" class="ghost-button" type="button">
+              선택 해제
+            </button>
+          </div>
+          <p class="section-description" id="relatedDescription">
+            검색어 또는 선택한 단어를 기준으로 연결된 문장을 보여줍니다.
+          </p>
+          <div id="relatedSentences" class="card-stack"></div>
         </section>
 
         <section class="panel">
@@ -191,6 +199,16 @@
 
           <div id="customSummary" class="active-summary"></div>
           <div id="customEntries" class="card-stack compact"></div>
+        </section>
+
+        <section class="panel" id="statsPanel">
+          <div class="section-top">
+            <div>
+              <p class="section-kicker">데이터</p>
+              <h2>단어장 현황</h2>
+            </div>
+          </div>
+          <section class="stats-grid" id="statsGrid"></section>
         </section>
       </main>
     </div>

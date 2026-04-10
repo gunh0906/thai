@@ -14,7 +14,14 @@ const elements = {
   resetFiltersButton: document.querySelector("#resetFiltersButton"),
   clearSelectionButton: document.querySelector("#clearSelectionButton"),
   scenarioChips: document.querySelector("#scenarioChips"),
+  quickSearchChips: document.querySelector("#quickSearchChips"),
   activeSummary: document.querySelector("#activeSummary"),
+  searchStatus: document.querySelector("#searchStatus"),
+  homeGuidePanel: document.querySelector("#homeGuidePanel"),
+  homeGuideGrid: document.querySelector("#homeGuideGrid"),
+  resultGrid: document.querySelector("#resultGrid"),
+  relatedPanel: document.querySelector("#relatedPanel"),
+  statsPanel: document.querySelector("#statsPanel"),
   statsGrid: document.querySelector("#statsGrid"),
   datasetNote: document.querySelector("#datasetNote"),
   relatedDescription: document.querySelector("#relatedDescription"),
@@ -41,6 +48,16 @@ const baseData = window.BASE_DATA || {
   sentences: [],
   stats: {},
 };
+
+const QUICK_SEARCHES = ["물", "계산", "화장실", "병원", "안녕하세요", "감사합니다", "깎아주세요", "천천히"];
+const GUIDE_CARDS = [
+  { title: "식당", description: "물, 계산, 안 맵게, 포장", query: "계산", scenario: "식당" },
+  { title: "이동", description: "어디, 왼쪽, 오른쪽, 가까워요", query: "어디", scenario: "이동" },
+  { title: "쇼핑", description: "얼마, 카드, 깎아주세요, 사이즈", query: "얼마", scenario: "쇼핑" },
+  { title: "건강", description: "병원, 약, 아파요, 화장실", query: "병원", scenario: "건강" },
+  { title: "기본회화", description: "천천히, 다시, 도와주세요", query: "천천히", scenario: "기본회화" },
+  { title: "인사", description: "안녕하세요, 감사합니다, 이름", query: "안녕하세요", scenario: "인사" },
+];
 
 function readStateFromUrl() {
   const params = new URLSearchParams(window.location.search);
@@ -292,6 +309,45 @@ function renderChips() {
   });
 }
 
+function renderQuickSearches() {
+  elements.quickSearchChips.innerHTML = "";
+  QUICK_SEARCHES.forEach((query) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "chip";
+    button.textContent = query;
+    button.addEventListener("click", () => {
+      state.query = query;
+      state.selectedVocabId = null;
+      render();
+    });
+    elements.quickSearchChips.appendChild(button);
+  });
+}
+
+function renderGuideCards() {
+  elements.homeGuideGrid.innerHTML = "";
+  GUIDE_CARDS.forEach((cardInfo) => {
+    const card = document.createElement("button");
+    card.type = "button";
+    card.className = "guide-card";
+    card.addEventListener("click", () => {
+      state.query = cardInfo.query;
+      state.scenario = cardInfo.scenario;
+      state.selectedVocabId = null;
+      render();
+    });
+
+    const title = document.createElement("h3");
+    title.textContent = cardInfo.title;
+    const description = document.createElement("p");
+    description.textContent = cardInfo.description;
+
+    card.append(title, description);
+    elements.homeGuideGrid.appendChild(card);
+  });
+}
+
 function createTag(tag) {
   const span = document.createElement("span");
   span.className = "tag";
@@ -480,10 +536,16 @@ function render() {
   const sentenceResults = getRankedEntries(merged.sentences, state.query).slice(0, 18);
   const relatedSentences = getRelatedSentences(merged.sentences, vocabResults);
   const selected = vocabResults.find((entry) => entry.id === state.selectedVocabId) || null;
+  const isBrowsing = !state.query && state.scenario === "all" && !state.selectedVocabId;
 
   elements.searchInput.value = state.query;
   elements.datasetNote.textContent = baseData.note || "";
-  elements.activeSummary.textContent = getSummaryText(vocabResults, sentenceResults);
+  elements.activeSummary.textContent = isBrowsing
+    ? "검색어를 입력하거나 자주 찾는 표현을 눌러 바로 시작하세요."
+    : getSummaryText(vocabResults, sentenceResults);
+  elements.searchStatus.textContent = isBrowsing
+    ? "검색어를 넣으면 단어와 예문이 바로 아래에 뜹니다."
+    : `현재 결과: 단어 ${vocabResults.length}개, 문장 ${sentenceResults.length}개`;
   elements.vocabMeta.textContent = `${vocabResults.length}개 표시 중`;
   elements.sentenceMeta.textContent = `${sentenceResults.length}개 표시 중`;
   elements.relatedDescription.textContent = selected
@@ -491,8 +553,14 @@ function render() {
     : state.query
       ? `검색어 "${state.query}"와 연결된 문장을 우선 보여줍니다.`
       : "검색어 또는 선택한 단어를 기준으로 연결된 문장을 보여줍니다.";
+  elements.homeGuidePanel.hidden = !isBrowsing;
+  elements.resultGrid.hidden = isBrowsing;
+  elements.relatedPanel.hidden = isBrowsing;
+  elements.statsPanel.hidden = isBrowsing;
 
   renderChips();
+  renderQuickSearches();
+  renderGuideCards();
   renderStats(merged);
   renderEntryStack(
     elements.vocabResults,

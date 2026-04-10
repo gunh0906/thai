@@ -1,4 +1,4 @@
-const CACHE_NAME = "thai-pocketbook-v1";
+const CACHE_NAME = "thai-pocketbook-v2";
 const APP_ASSETS = [
   "./",
   "./index.html",
@@ -10,6 +10,7 @@ const APP_ASSETS = [
 ];
 
 self.addEventListener("install", (event) => {
+  self.skipWaiting();
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_ASSETS)));
 });
 
@@ -20,9 +21,10 @@ self.addEventListener("activate", (event) => {
         keys
           .filter((key) => key !== CACHE_NAME)
           .map((key) => caches.delete(key))
-      )
+        )
     )
   );
+  self.clients.claim();
 });
 
 self.addEventListener("fetch", (event) => {

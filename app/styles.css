@@ -72,13 +72,10 @@ button {
 }
 
 .hero {
-  position: sticky;
-  top: 0;
-  z-index: 10;
   margin-bottom: 16px;
-  padding: 18px;
+  padding: 16px;
   border: 1px solid rgba(255, 255, 255, 0.42);
-  border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+  border-radius: 0 0 24px 24px;
   background:
     linear-gradient(135deg, rgba(255, 138, 61, 0.92), rgba(255, 179, 71, 0.78)),
     linear-gradient(135deg, rgba(13, 143, 120, 0.18), rgba(13, 143, 120, 0.04));
@@ -108,10 +105,10 @@ button {
 }
 
 .hero-copy {
-  max-width: 44rem;
-  margin: 12px 0 18px;
+  max-width: 36rem;
+  margin: 8px 0 12px;
   color: rgba(255, 249, 242, 0.92);
-  line-height: 1.55;
+  line-height: 1.45;
 }
 
 .search-panel {
@@ -147,15 +144,15 @@ button {
 .hero-meta {
   display: grid;
   gap: 8px;
-  margin-top: 12px;
+  margin-top: 10px;
 }
 
 .hero-note {
-  padding: 10px 12px;
+  padding: 9px 11px;
   border-radius: var(--radius-sm);
   background: rgba(255, 255, 255, 0.18);
-  font-size: 0.92rem;
-  line-height: 1.45;
+  font-size: 0.88rem;
+  line-height: 1.4;
 }
 
 .content-stack {
@@ -196,6 +193,13 @@ button {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+}
+
+.quick-search {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
 }
 
 .chip {
@@ -388,6 +392,31 @@ button {
   grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
 }
 
+.guide-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.guide-card {
+  padding: 16px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--line);
+  background: var(--surface-strong);
+}
+
+.guide-card h3 {
+  margin: 0 0 6px;
+  font-size: 1rem;
+}
+
+.guide-card p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.45;
+  font-size: 0.93rem;
+}
+
 .entry-form,
 .form-grid {
   display: grid;
@@ -456,8 +485,7 @@ button {
   }
 
   .hero {
-    position: static;
-    padding: 16px;
+    padding: 14px;
     border-radius: 0 0 22px 22px;
   }
 
