@@ -1,6 +1,6 @@
 window.BASE_DATA = {
   "appTitle": "태국어 포켓북",
-  "generatedAt": "2026-04-10T14:16:56",
+  "generatedAt": "2026-04-10T14:32:26",
   "transliterationStyle": "practical-ko",
   "note": "보강 표현의 발음 표기는 한국어 사용자 기준의 실전용 표기이며, 앱 안에서 직접 수정·추가할 수 있습니다.",
   "scenarios": [

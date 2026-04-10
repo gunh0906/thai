@@ -1,5 +1,6 @@
 const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
+const APP_VERSION = "20260410c";
 
 const baseData = window.BASE_DATA || {
   appTitle: "태국어 포켓북",
@@ -24,12 +25,29 @@ const QUICK_SEARCHES = [
 
 const STOPWORDS = new Set(["이", "그", "저", "것", "거", "좀", "더", "요", "은", "는", "이거"]);
 const THAI_SCRIPT_REGEX = /[\u0E00-\u0E7F]/;
+const NUMBER_QUERY_REGEX = /^[+-]?(?:(?:\d+(?:\.\d+)?)|(?:\.\d+))$/;
 
 const RESULT_LIMITS = {
   vocab: 8,
   sentences: 10,
   seedEntries: 6,
 };
+
+const THAI_NUMERAL_DIGITS = ["๐", "๑", "๒", "๓", "๔", "๕", "๖", "๗", "๘", "๙"];
+const NUMBER_WORDS_SCRIPT = ["ศูนย์", "หนึ่ง", "สอง", "สาม", "สี่", "ห้า", "หก", "เจ็ด", "แปด", "เก้า"];
+const NUMBER_WORDS_LATIN = ["sun", "nueng", "song", "sam", "si", "ha", "hok", "chet", "paet", "kao"];
+const NUMBER_ET_SCRIPT = "เอ็ด";
+const NUMBER_ET_LATIN = "et";
+const NUMBER_YI_SCRIPT = "ยี่";
+const NUMBER_YI_LATIN = "yi";
+const NUMBER_UNITS = [
+  { script: "แสน", latin: "saen" },
+  { script: "หมื่น", latin: "muen" },
+  { script: "พัน", latin: "phan" },
+  { script: "ร้อย", latin: "roi" },
+  { script: "สิบ", latin: "sip" },
+  { script: "", latin: "" },
+];
 
 const QUERY_BUNDLES = [
   {
@@ -136,23 +154,23 @@ const QUERY_ALIASES = [
     tags: ["이동", "건강"],
   },
   {
-    matches: ["얼마에요", "얼마예요", "가격", "요금", "비용", "얼마"],
+    matches: ["얼마에요", "얼마예요", "가격", "요금", "비용", "얼마", "깎아주세요", "할인", "비싸요", "싸요"],
     primary: ["얼마", "가격"],
-    related: ["비용", "요금", "할인", "깎아주세요"],
+    related: ["비용", "요금", "할인", "깎아주세요", "비싸다", "싸다", "카드", "현금"],
     display: ["가격"],
     tags: ["쇼핑"],
   },
   {
-    matches: ["계산해주세요", "계산", "결제", "카드돼요", "카드되나요", "영수증"],
+    matches: ["계산해주세요", "계산", "결제", "카드돼요", "카드되나요", "영수증", "환불", "교환", "큐알", "qr"],
     primary: ["계산", "결제"],
-    related: ["카드", "영수증", "체크빌"],
+    related: ["카드", "영수증", "체크빌", "환불", "교환", "QR 결제"],
     display: ["계산"],
     tags: ["식당", "쇼핑"],
   },
   {
-    matches: ["와이파이", "wifi", "비밀번호", "패스워드", "인터넷"],
+    matches: ["와이파이", "wifi", "비밀번호", "패스워드", "인터넷", "와이파이비번", "인터넷안돼요"],
     primary: ["와이파이", "인터넷"],
-    related: ["비밀번호", "패스워드"],
+    related: ["비밀번호", "패스워드", "와이파이 비밀번호", "인터넷 안 돼요"],
     display: ["와이파이"],
     tags: ["이동"],
   },
@@ -171,16 +189,16 @@ const QUERY_ALIASES = [
     tags: ["건강"],
   },
   {
-    matches: ["택시", "공항", "지하철", "역", "길", "주소", "지도"],
+    matches: ["택시", "공항", "지하철", "역", "길", "주소", "지도", "미터", "택시불러주세요", "공항가주세요"],
     primary: ["택시", "가다", "어디"],
-    related: ["공항", "지하철역", "주소", "지도", "길"],
+    related: ["공항", "지하철역", "주소", "지도", "길", "미터", "택시 불러주세요"],
     display: ["이동"],
     tags: ["이동"],
   },
   {
-    matches: ["안맵게", "덜맵게", "고수빼", "포장", "추천메뉴", "메뉴"],
+    matches: ["안맵게", "덜맵게", "고수빼", "포장", "추천메뉴", "메뉴", "채식", "비건", "얼음빼"],
     primary: ["메뉴", "음식"],
-    related: ["안 맵게", "덜 맵게", "고수 빼", "포장", "추천"],
+    related: ["안 맵게", "덜 맵게", "고수 빼", "포장", "추천", "채식", "얼음 빼"],
     display: ["식당"],
     tags: ["식당"],
   },
@@ -409,6 +427,242 @@ function buildSearchIndex(entry) {
     ].map((item) => compactText(item))
   );
   return { korean, thai, thaiScript, note, keywords, tokens };
+}
+
+function normalizeNumberQuery(query) {
+  const cleaned = String(query || "").trim().replace(/,/g, "");
+  if (!NUMBER_QUERY_REGEX.test(cleaned)) return "";
+  if (cleaned.startsWith("+")) return cleaned.slice(1);
+  if (cleaned.startsWith(".")) return `0${cleaned}`;
+  if (cleaned.startsWith("-.")) return `-0${cleaned.slice(1)}`;
+  return cleaned;
+}
+
+function toThaiNumeralDigits(text) {
+  return String(text || "").replace(/\d/g, (digit) => THAI_NUMERAL_DIGITS[Number(digit)]);
+}
+
+function stripLeadingZeros(numberText) {
+  const stripped = String(numberText || "").replace(/^0+(?=\d)/, "");
+  return stripped || "0";
+}
+
+function convertUnderMillionToThaiTokens(numberText) {
+  const normalized = stripLeadingZeros(numberText);
+  if (normalized === "0") {
+    return {
+      script: [NUMBER_WORDS_SCRIPT[0]],
+      latin: [NUMBER_WORDS_LATIN[0]],
+    };
+  }
+
+  const padded = normalized.padStart(6, "0").split("").map(Number);
+  const script = [];
+  const latin = [];
+
+  padded.forEach((digit, index) => {
+    if (!digit) return;
+
+    const isTens = index === 4;
+    const isOnes = index === 5;
+    const hasHigherInGroup = padded.slice(0, 5).some((value) => value > 0);
+    const unit = NUMBER_UNITS[index];
+
+    if (isTens) {
+      if (digit === 1) {
+        script.push(unit.script);
+        latin.push(unit.latin);
+        return;
+      }
+      if (digit === 2) {
+        script.push(`${NUMBER_YI_SCRIPT}${unit.script}`);
+        latin.push(`${NUMBER_YI_LATIN} ${unit.latin}`);
+        return;
+      }
+      script.push(`${NUMBER_WORDS_SCRIPT[digit]}${unit.script}`);
+      latin.push(`${NUMBER_WORDS_LATIN[digit]} ${unit.latin}`);
+      return;
+    }
+
+    if (isOnes) {
+      if (digit === 1 && hasHigherInGroup) {
+        script.push(NUMBER_ET_SCRIPT);
+        latin.push(NUMBER_ET_LATIN);
+        return;
+      }
+      script.push(NUMBER_WORDS_SCRIPT[digit]);
+      latin.push(NUMBER_WORDS_LATIN[digit]);
+      return;
+    }
+
+    script.push(`${NUMBER_WORDS_SCRIPT[digit]}${unit.script}`);
+    latin.push(`${NUMBER_WORDS_LATIN[digit]} ${unit.latin}`);
+  });
+
+  return { script, latin };
+}
+
+function convertIntegerToThaiTokens(numberText) {
+  const normalized = stripLeadingZeros(numberText);
+  if (normalized === "0") {
+    return {
+      script: [NUMBER_WORDS_SCRIPT[0]],
+      latin: [NUMBER_WORDS_LATIN[0]],
+    };
+  }
+
+  const groups = [];
+  for (let index = normalized.length; index > 0; index -= 6) {
+    groups.unshift(normalized.slice(Math.max(0, index - 6), index));
+  }
+
+  const script = [];
+  const latin = [];
+
+  groups.forEach((group, index) => {
+    const isZeroGroup = /^0+$/.test(group);
+    const repeatMillions = groups.length - index - 1;
+    if (!isZeroGroup) {
+      const converted = convertUnderMillionToThaiTokens(group);
+      script.push(...converted.script);
+      latin.push(...converted.latin);
+    }
+
+    if (repeatMillions > 0 && (!isZeroGroup || script.length)) {
+      const millionScript = "ล้าน".repeat(repeatMillions);
+      const millionLatin = Array(repeatMillions).fill("lan").join(" ");
+      script.push(millionScript);
+      latin.push(millionLatin);
+    }
+  });
+
+  return { script, latin };
+}
+
+function convertNumberToThai(query) {
+  const normalized = normalizeNumberQuery(query);
+  if (!normalized) return null;
+
+  const negative = normalized.startsWith("-");
+  const absolute = negative ? normalized.slice(1) : normalized;
+  const parts = absolute.split(".");
+  const integerPart = stripLeadingZeros(parts[0] || "0");
+  const fractionPart = parts.length > 1 ? parts[1] : "";
+  const integerTokens = convertIntegerToThaiTokens(integerPart);
+
+  const scriptTokens = [];
+  const latinTokens = [];
+
+  if (negative) {
+    scriptTokens.push("ลบ");
+    latinTokens.push("lop");
+  }
+
+  scriptTokens.push(...integerTokens.script);
+  latinTokens.push(...integerTokens.latin);
+
+  if (fractionPart) {
+    scriptTokens.push("จุด");
+    latinTokens.push("chut");
+    fractionPart.split("").forEach((digit) => {
+      scriptTokens.push(NUMBER_WORDS_SCRIPT[Number(digit)]);
+      latinTokens.push(NUMBER_WORDS_LATIN[Number(digit)]);
+    });
+  }
+
+  const thaiDigits = `${negative ? "-" : ""}${toThaiNumeralDigits(integerPart)}${fractionPart ? `.${toThaiNumeralDigits(fractionPart)}` : ""}`;
+
+  return {
+    normalized,
+    thaiDigits,
+    thaiScript: scriptTokens.join(""),
+    thaiLatin: latinTokens.join(" "),
+    isDecimal: Boolean(fractionPart),
+    isNegative: negative,
+    integerPart,
+    fractionPart,
+  };
+}
+
+function buildGeneratedNumberEntries(query) {
+  const converted = convertNumberToThai(query);
+  if (!converted) {
+    return { vocab: [], sentences: [] };
+  }
+
+  const notePieces = ["태국어 숫자 읽기"];
+  if (converted.isDecimal) notePieces.push("소수점은 뒤 숫자를 하나씩 읽습니다");
+  if (converted.isNegative) notePieces.push("음수는 앞에 ลบ를 붙입니다");
+
+  const baseEntry = hydrateEntry(
+    {
+      id: `generated-number-read-${converted.normalized}`,
+      kind: "vocab",
+      source: "generated",
+      sheet: "숫자 변환",
+      thai: converted.thaiLatin,
+      thaiScript: converted.thaiScript,
+      korean: query,
+      note: notePieces.join(" · "),
+      tags: ["숫자·시간", "쇼핑"],
+      keywords: [query, converted.normalized, converted.thaiDigits, "숫자", "가격", "수량"],
+    },
+    "vocab"
+  );
+
+  const digitEntry = hydrateEntry(
+    {
+      id: `generated-number-digits-${converted.normalized}`,
+      kind: "vocab",
+      source: "generated",
+      sheet: "숫자 변환",
+      thai: converted.thaiDigits,
+      thaiScript: converted.thaiDigits,
+      korean: `${query} 태국 숫자`,
+      note: "태국 숫자 표기",
+      tags: ["숫자·시간"],
+      keywords: [query, converted.normalized, converted.thaiDigits, "태국 숫자", "숫자 표기"],
+    },
+    "vocab"
+  );
+
+  const sentenceEntries = [
+    hydrateEntry(
+      {
+        id: `generated-number-say-${converted.normalized}`,
+        kind: "sentence",
+        source: "generated",
+        sheet: "숫자 변환",
+        thai: converted.thaiLatin,
+        thaiScript: converted.thaiScript,
+        korean: `${query} 읽기`,
+        note: "숫자를 그대로 읽을 때",
+        tags: ["숫자·시간"],
+        keywords: [query, converted.normalized, converted.thaiDigits, "숫자 읽기"],
+      },
+      "sentence"
+    ),
+    hydrateEntry(
+      {
+        id: `generated-number-price-${converted.normalized}`,
+        kind: "sentence",
+        source: "generated",
+        sheet: "숫자 변환",
+        thai: `${converted.thaiLatin} baht`,
+        thaiScript: `${converted.thaiScript}บาท`,
+        korean: `${query} 바트`,
+        note: "가격으로 바로 보여주기",
+        tags: ["쇼핑", "숫자·시간"],
+        keywords: [query, converted.normalized, converted.thaiDigits, "바트", "가격", "금액"],
+      },
+      "sentence"
+    ),
+  ];
+
+  return {
+    vocab: [baseEntry, digitEntry],
+    sentences: sentenceEntries,
+  };
 }
 
 function collectSeedEntries(entries, compactQuery) {
@@ -972,12 +1226,21 @@ function isBrowsingState() {
 
 function render() {
   const merged = getMergedData();
+  const generated = buildGeneratedNumberEntries(state.query);
+  const numberMode = generated.vocab.length > 0;
   const searchProfile = buildSearchProfile(state.query, [...merged.vocab, ...merged.sentences]);
-  const allVocabResults = getVocabResults(merged.vocab, searchProfile);
+  const allVocabResults = numberMode
+    ? generated.vocab
+    : uniqueById([...generated.vocab, ...getVocabResults(merged.vocab, searchProfile)]);
   const vocabSeeds = allVocabResults;
   const vocabResults = state.query ? allVocabResults.slice(0, RESULT_LIMITS.vocab) : [];
   const sentenceResults = state.query
-    ? getSentenceResults(merged.sentences, searchProfile, vocabSeeds).slice(0, RESULT_LIMITS.sentences)
+    ? (numberMode
+        ? generated.sentences
+        : uniqueById([
+            ...generated.sentences,
+            ...getSentenceResults(merged.sentences, searchProfile, vocabSeeds),
+          ]).slice(0, RESULT_LIMITS.sentences))
     : [];
   const browsing = isBrowsingState();
   const expandedHint = searchProfile.displayTerms.length ? ` · 함께 찾은 핵심어: ${searchProfile.displayTerms.join(" / ")}` : "";
@@ -989,7 +1252,9 @@ function render() {
 
   elements.searchStatus.textContent = browsing
     ? "한국어로 검색하면 단어를 먼저, 바로 쓸 회화를 그 아래에 보여줍니다."
-    : `검색됨: 단어 ${vocabResults.length}개 · 회화 ${sentenceResults.length}개${expandedHint}`;
+    : numberMode
+      ? `숫자 변환: 읽기 ${vocabResults.length}개 · 활용 ${sentenceResults.length}개${expandedHint}`
+      : `검색됨: 단어 ${vocabResults.length}개 · 회화 ${sentenceResults.length}개${expandedHint}`;
 
   elements.filterSummary.textContent =
     state.scenario === "all"
@@ -1001,10 +1266,14 @@ function render() {
     : `검색어 "${state.query}"를 핵심 단어와 회화로 나눠서 찾고 있습니다.`;
 
   elements.vocabMeta.textContent = state.query
-    ? "문장을 잘게 풀어서 먼저 잡아둘 단어부터 보여줍니다."
+    ? numberMode
+      ? "숫자는 태국어 읽기와 태국 숫자 표기를 함께 보여줍니다."
+      : "문장을 잘게 풀어서 먼저 잡아둘 단어부터 보여줍니다."
     : "검색어를 넣으면 관련 단어가 나옵니다.";
   elements.sentenceMeta.textContent = state.query
-    ? "위 단어를 바탕으로 바로 보여주기 좋은 회화만 추렸습니다."
+    ? numberMode
+      ? "가격이나 수량으로 바로 보여줄 수 있게 같이 만들었습니다."
+      : "위 단어를 바탕으로 바로 보여주기 좋은 회화만 추렸습니다."
     : "검색어를 넣으면 관련 회화가 나옵니다.";
 
   renderScenarioChips();
