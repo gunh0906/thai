@@ -1,6 +1,6 @@
 const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
-const APP_VERSION = "20260410d";
+const APP_VERSION = "20260410e";
 
 const baseData = window.BASE_DATA || {
   appTitle: "태국어 포켓북",
@@ -101,7 +101,7 @@ const QUERY_BUNDLES = [
   {
     patterns: [/(화장실|욕실|변기)/],
     primary: ["화장실"],
-    related: ["화장실 문제", "어디", "욕실"],
+    related: ["화장실 어디예요", "가다", "욕실"],
     display: ["화장실"],
     tags: ["이동", "건강"],
   },
@@ -135,7 +135,13 @@ const QUERY_PARTS = [
   { patterns: [/얼마|가격|비싸|깎/], primary: ["얼마", "가격"], related: ["비싸다", "깎아주세요"], display: ["가격"], tags: ["쇼핑"] },
   { patterns: [/계산|결제|영수증|카드/], primary: ["계산"], related: ["결제", "영수증", "카드"], display: ["계산"], tags: ["식당", "쇼핑"] },
   { patterns: [/물|생수/], primary: ["물", "생수"], related: ["차가운 물", "따뜻한 물"], display: ["물"], tags: ["식당", "건강"] },
-  { patterns: [/화장실|욕실|변기/], primary: ["화장실"], related: ["욕실", "문제"], display: ["화장실"], tags: ["이동", "건강"] },
+  { patterns: [/화장실|욕실|변기/], primary: ["화장실"], related: ["욕실", "어디", "가다"], display: ["화장실"], tags: ["이동", "건강"] },
+  { patterns: [/가다|간다|가요|갑니다|갈게|갈래|가고|갔다/], primary: ["가다"], related: ["어디", "화장실", "공항"], display: ["가다"], tags: ["이동", "기본회화"] },
+  { patterns: [/오다|온다|와요|옵니다|올게|오고|왔다/], primary: ["오다"], related: ["여기로 오세요"], display: ["오다"], tags: ["이동", "기본회화"] },
+  { patterns: [/먹다|먹어요|먹는다|먹고/], primary: ["먹다"], related: ["메뉴", "음식"], display: ["먹다"], tags: ["식당", "기본회화"] },
+  { patterns: [/마시다|마셔|마신다/], primary: ["마시다"], related: ["물", "음료"], display: ["마시다"], tags: ["식당", "기본회화"] },
+  { patterns: [/보다|봐요|본다/], primary: ["보다"], related: ["여기", "보여주세요"], display: ["보다"], tags: ["기본회화"] },
+  { patterns: [/말하다|말해|말해요|말한다/], primary: ["말하다"], related: ["천천히", "다시"], display: ["말하다"], tags: ["기본회화"] },
   { patterns: [/병원|약국|약|아파|두통|열/], primary: ["병원", "약"], related: ["아프다", "두통", "열"], display: ["병원"], tags: ["건강"] },
   { patterns: [/와이파이|wifi|인터넷|비밀번호/i], primary: ["와이파이"], related: ["비밀번호", "인터넷"], display: ["와이파이"], tags: ["이동"] },
   { patterns: [/천천히|다시|이해|못 알아|못알아/], primary: ["천천히", "다시"], related: ["이해", "한 번 더"], display: ["다시"], tags: ["기본회화"] },
@@ -180,9 +186,16 @@ const QUERY_ALIASES = [
   {
     matches: ["화장실", "욕실", "샤워", "온수"],
     primary: ["화장실", "욕실"],
-    related: ["샤워기", "온수", "물"],
+    related: ["화장실 어디예요", "화장실 가고 싶어요", "가다", "샤워기", "온수"],
     display: ["화장실"],
     tags: ["이동", "건강"],
+  },
+  {
+    matches: ["화장실간다", "화장실가고싶어", "화장실가고싶어요", "화장실가", "화장실가야해"],
+    primary: ["화장실", "가다"],
+    related: ["화장실 가고 싶어요", "화장실 어디예요", "화장실"],
+    display: ["화장실", "가다"],
+    tags: ["이동", "기본회화"],
   },
   {
     matches: ["병원", "약국", "아파요", "두통", "복통", "응급실", "열나요"],
@@ -623,7 +636,7 @@ function buildGeneratedNumberEntries(query) {
     return { vocab: [], sentences: [] };
   }
 
-  const notePieces = ["태국어 숫자 읽기"];
+  const notePieces = ["한국어식 발음"];
   if (converted.isDecimal) notePieces.push("소수점은 뒤 숫자를 하나씩 읽습니다");
   if (converted.isNegative) notePieces.push("음수는 앞에 ลบ를 붙입니다");
 

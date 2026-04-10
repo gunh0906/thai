@@ -1,6 +1,6 @@
 window.BASE_DATA = {
   "appTitle": "태국어 포켓북",
-  "generatedAt": "2026-04-10T14:44:50",
+  "generatedAt": "2026-04-10T14:50:17",
   "transliterationStyle": "practical-ko",
   "note": "보강 표현의 발음 표기는 한국어 사용자 기준의 실전용 표기이며, 앱 안에서 직접 수정·추가할 수 있습니다.",
   "scenarios": [
@@ -53,10 +53,10 @@ window.BASE_DATA = {
   "stats": {
     "excelVocab": 328,
     "excelSentences": 32,
-    "supplementalVocab": 676,
-    "supplementalSentences": 384,
-    "totalVocab": 919,
-    "totalSentences": 409
+    "supplementalVocab": 684,
+    "supplementalSentences": 388,
+    "totalVocab": 924,
+    "totalSentences": 412
   },
   "vocab": [
     {
@@ -18552,7 +18552,155 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-600-슬리퍼",
+      "id": "supplemental-vocab-599-킨",
+      "kind": "vocab",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "킨",
+      "thaiScript": "กิน",
+      "korean": "먹다",
+      "note": "기본 동사 검색을 위한 핵심 단어",
+      "tags": [
+        "기본회화",
+        "이동"
+      ],
+      "keywords": [
+        "กิน",
+        "먹다",
+        "기본",
+        "동사",
+        "검색을",
+        "위한",
+        "핵심",
+        "단어",
+        "기본회화",
+        "이동",
+        "먹는다",
+        "먹어요",
+        "먹고싶다"
+      ]
+    },
+    {
+      "id": "supplemental-vocab-600-듬",
+      "kind": "vocab",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "듬",
+      "thaiScript": "ดื่ม",
+      "korean": "마시다",
+      "note": "기본 동사 검색을 위한 핵심 단어",
+      "tags": [
+        "기본회화",
+        "이동"
+      ],
+      "keywords": [
+        "ดื่ม",
+        "마시다",
+        "기본",
+        "동사",
+        "검색을",
+        "위한",
+        "핵심",
+        "단어",
+        "기본회화",
+        "이동",
+        "마신다",
+        "마셔요",
+        "마시고싶다"
+      ]
+    },
+    {
+      "id": "supplemental-vocab-602-풋",
+      "kind": "vocab",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "풋",
+      "thaiScript": "พูด",
+      "korean": "말하다",
+      "note": "기본 동사 검색을 위한 핵심 단어",
+      "tags": [
+        "기본회화",
+        "이동"
+      ],
+      "keywords": [
+        "พูด",
+        "말하다",
+        "기본",
+        "동사",
+        "검색을",
+        "위한",
+        "핵심",
+        "단어",
+        "기본회화",
+        "이동",
+        "말한다",
+        "말해요",
+        "말해줘"
+      ]
+    },
+    {
+      "id": "supplemental-vocab-603-팽",
+      "kind": "vocab",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "팽",
+      "thaiScript": "เขียน",
+      "korean": "쓰다",
+      "note": "기본 동사 검색을 위한 핵심 단어",
+      "tags": [
+        "기본회화",
+        "이동"
+      ],
+      "keywords": [
+        "เขียน",
+        "쓰다",
+        "기본",
+        "동사",
+        "검색을",
+        "위한",
+        "핵심",
+        "단어",
+        "기본회화",
+        "이동",
+        "쓴다",
+        "써요",
+        "적다"
+      ]
+    },
+    {
+      "id": "supplemental-vocab-604-탐",
+      "kind": "vocab",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 단어",
+      "thai": "탐",
+      "thaiScript": "ทำ",
+      "korean": "하다",
+      "note": "기본 동사 검색을 위한 핵심 단어",
+      "tags": [
+        "기본회화",
+        "이동"
+      ],
+      "keywords": [
+        "ทำ",
+        "기본",
+        "동사",
+        "검색을",
+        "위한",
+        "핵심",
+        "단어",
+        "기본회화",
+        "이동",
+        "한다",
+        "해줘요"
+      ]
+    },
+    {
+      "id": "supplemental-vocab-608-슬리퍼",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -18578,7 +18726,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-601-마이-콰엔-쓰아",
+      "id": "supplemental-vocab-609-마이-콰엔-쓰아",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -18606,7 +18754,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-602-끄라닷-참라",
+      "id": "supplemental-vocab-610-끄라닷-참라",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -18635,7 +18783,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-603-사분",
+      "id": "supplemental-vocab-611-사분",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -18661,7 +18809,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-604-샴푸",
+      "id": "supplemental-vocab-612-샴푸",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -18686,7 +18834,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-605-약-시-판",
+      "id": "supplemental-vocab-613-약-시-판",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -18711,7 +18859,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-606-쁘랭-시-판",
+      "id": "supplemental-vocab-614-쁘랭-시-판",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -18737,7 +18885,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-607-남-드음",
+      "id": "supplemental-vocab-615-남-드음",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -18763,7 +18911,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-609-아댑터",
+      "id": "supplemental-vocab-617-아댑터",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -18791,7 +18939,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-612-애-마이-옌",
+      "id": "supplemental-vocab-620-애-마이-옌",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -18822,7 +18970,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-613-남-론-마이-옥",
+      "id": "supplemental-vocab-621-남-론-마이-옥",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -18853,7 +19001,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-614-홍-니-끌린-마이-디",
+      "id": "supplemental-vocab-622-홍-니-끌린-마이-디",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -18885,7 +19033,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-615-쁘라뚜-삐뜨-마이-다이",
+      "id": "supplemental-vocab-623-쁘라뚜-삐뜨-마이-다이",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -18918,7 +19066,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-616-쁘라뚜-록-마이-다이",
+      "id": "supplemental-vocab-624-쁘라뚜-록-마이-다이",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -18950,7 +19098,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-617-홍-니-시앙-당",
+      "id": "supplemental-vocab-625-홍-니-시앙-당",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -18979,7 +19127,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-618-홍-남-르아",
+      "id": "supplemental-vocab-626-홍-남-르아",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19011,7 +19159,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-619-파이-마이-띳",
+      "id": "supplemental-vocab-627-파이-마이-띳",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19042,7 +19190,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-620-티-마이-떵",
+      "id": "supplemental-vocab-628-티-마이-떵",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19073,7 +19221,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-621-뚜-니라파이-쁫-마이-다이",
+      "id": "supplemental-vocab-629-뚜-니라파이-쁫-마이-다이",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19105,7 +19253,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-622-홍-니-쁘록",
+      "id": "supplemental-vocab-630-홍-니-쁘록",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19135,7 +19283,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-623-미-양-융",
+      "id": "supplemental-vocab-631-미-양-융",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19163,7 +19311,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-625-싸타니-롯파이파",
+      "id": "supplemental-vocab-633-싸타니-롯파이파",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19195,7 +19343,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-627-하앙",
+      "id": "supplemental-vocab-635-하앙",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19224,7 +19372,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-630-싸타니-땀롯",
+      "id": "supplemental-vocab-638-싸타니-땀롯",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19253,7 +19401,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-631-싸탄-툿",
+      "id": "supplemental-vocab-639-싸탄-툿",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19281,7 +19429,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-632-왓",
+      "id": "supplemental-vocab-640-왓",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19308,7 +19456,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-633-차이-핫",
+      "id": "supplemental-vocab-641-차이-핫",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19337,7 +19485,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-634-세븐",
+      "id": "supplemental-vocab-642-세븐",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19366,7 +19514,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-635-뚜-atm",
+      "id": "supplemental-vocab-643-뚜-atm",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19394,7 +19542,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-639-까닫-티츄",
+      "id": "supplemental-vocab-647-까닫-티츄",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19422,7 +19570,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-642-프릭",
+      "id": "supplemental-vocab-650-프릭",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19448,7 +19596,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-643-남-플라",
+      "id": "supplemental-vocab-651-남-플라",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19475,7 +19623,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-644-탕-끌라옹",
+      "id": "supplemental-vocab-652-탕-끌라옹",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19502,7 +19650,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-645-짠",
+      "id": "supplemental-vocab-653-짠",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19527,7 +19675,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-646-쓰어",
+      "id": "supplemental-vocab-654-쓰어",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19554,7 +19702,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-647-깡깽",
+      "id": "supplemental-vocab-655-깡깽",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19580,7 +19728,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-648-끄롱타오",
+      "id": "supplemental-vocab-656-끄롱타오",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19606,7 +19754,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-649-그라뻐오-당",
+      "id": "supplemental-vocab-657-그라뻐오-당",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19632,7 +19780,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-650-왠딷",
+      "id": "supplemental-vocab-658-왠딷",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19659,7 +19807,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-651-목",
+      "id": "supplemental-vocab-659-목",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19684,7 +19832,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-652-컹-콴",
+      "id": "supplemental-vocab-660-컹-콴",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19710,7 +19858,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-653-콩-마이",
+      "id": "supplemental-vocab-661-콩-마이",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19737,7 +19885,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-654-콩-디폿",
+      "id": "supplemental-vocab-662-콩-디폿",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19766,7 +19914,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-655-까낫-야이",
+      "id": "supplemental-vocab-663-까낫-야이",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19795,7 +19943,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-656-까낫-렉",
+      "id": "supplemental-vocab-664-까낫-렉",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19824,7 +19972,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-659-쩹-커",
+      "id": "supplemental-vocab-667-쩹-커",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19851,7 +19999,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-663-클른-사이",
+      "id": "supplemental-vocab-671-클른-사이",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19879,7 +20027,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-664-윈-후아",
+      "id": "supplemental-vocab-672-윈-후아",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19906,7 +20054,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-665-패",
+      "id": "supplemental-vocab-673-패",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19931,7 +20079,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-666-미-플래",
+      "id": "supplemental-vocab-674-미-플래",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19957,7 +20105,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-667-쨉-랭",
+      "id": "supplemental-vocab-675-쨉-랭",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -19985,7 +20133,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-668-핫-나이",
+      "id": "supplemental-vocab-676-핫-나이",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -20014,7 +20162,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-670-패키지-넷",
+      "id": "supplemental-vocab-678-패키지-넷",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -20042,7 +20190,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-671-핫스팟",
+      "id": "supplemental-vocab-679-핫스팟",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -20067,7 +20215,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-672-케이블",
+      "id": "supplemental-vocab-680-케이블",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -20094,7 +20242,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-673-빠워뱅크",
+      "id": "supplemental-vocab-681-빠워뱅크",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -20120,7 +20268,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-674-애프",
+      "id": "supplemental-vocab-682-애프",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -20145,7 +20293,7 @@ window.BASE_DATA = {
       ]
     },
     {
-      "id": "supplemental-vocab-675-번-쁠래",
+      "id": "supplemental-vocab-683-번-쁠래",
       "kind": "vocab",
       "source": "supplemental",
       "sourceLabel": "확장",
@@ -31095,6 +31243,103 @@ window.BASE_DATA = {
         "기본회화",
         "맞는방법",
         "올바른방법"
+      ]
+    },
+    {
+      "id": "supplemental-sentence-385-폼-야크-빠이-홍-남-캅",
+      "kind": "sentence",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 문장",
+      "thai": "폼 야크 빠이 홍 남 캅",
+      "thaiScript": "ผมอยากไปห้องน้ำครับ",
+      "korean": "화장실 가고 싶어요",
+      "note": "화장실을 찾거나 가고 싶을 때 쓰는 문장",
+      "tags": [
+        "이동",
+        "기본회화"
+      ],
+      "keywords": [
+        "야크",
+        "빠이",
+        "ผมอยากไปห้องน้ำครับ",
+        "화장실",
+        "가고",
+        "싶어요",
+        "화장실을",
+        "찾거나",
+        "싶을",
+        "쓰는",
+        "문장",
+        "이동",
+        "기본회화",
+        "화장실간다",
+        "화장실가고싶어요",
+        "화장실가고싶어"
+      ]
+    },
+    {
+      "id": "supplemental-sentence-386-폼-짜-빠이-홍-남-캅",
+      "kind": "sentence",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 문장",
+      "thai": "폼 짜 빠이 홍 남 캅",
+      "thaiScript": "ผมจะไปห้องน้ำครับ",
+      "korean": "화장실 가요",
+      "note": "화장실을 찾거나 가고 싶을 때 쓰는 문장",
+      "tags": [
+        "이동",
+        "기본회화"
+      ],
+      "keywords": [
+        "빠이",
+        "ผมจะไปห้องน้ำครับ",
+        "화장실",
+        "가요",
+        "화장실을",
+        "찾거나",
+        "가고",
+        "싶을",
+        "쓰는",
+        "문장",
+        "이동",
+        "기본회화",
+        "화장실가요",
+        "화장실간다",
+        "화장실가"
+      ]
+    },
+    {
+      "id": "supplemental-sentence-388-폼-떵깐-빠이-홍-남-캅",
+      "kind": "sentence",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 문장",
+      "thai": "폼 떵깐 빠이 홍 남 캅",
+      "thaiScript": "ผมต้องการไปห้องน้ำครับ",
+      "korean": "화장실 가야 해요",
+      "note": "화장실을 찾거나 가고 싶을 때 쓰는 문장",
+      "tags": [
+        "이동",
+        "기본회화"
+      ],
+      "keywords": [
+        "떵깐",
+        "빠이",
+        "ผมต้องการไปห้องน้ำครับ",
+        "화장실",
+        "가야",
+        "화장실을",
+        "찾거나",
+        "가고",
+        "싶을",
+        "쓰는",
+        "문장",
+        "이동",
+        "기본회화",
+        "화장실가야해요",
+        "화장실가야해"
       ]
     }
   ]
