@@ -839,15 +839,24 @@ def make_entry(
     sheet: str,
     index: int,
     thai: str,
+    thai_script: str = "",
     korean: str,
     tags: Iterable[str] | None = None,
     note: str = "",
+    extra_keywords: Iterable[str] | None = None,
 ) -> dict:
     clean_thai = clean_text(thai)
+    clean_thai_script = clean_text(thai_script)
     clean_korean = clean_text(korean)
     clean_note = clean_text(note)
     derived_tags = list(tags) if tags else detect_tags(clean_thai, clean_korean, clean_note)
-    keywords = extract_keywords(clean_thai, clean_korean, clean_note, " ".join(derived_tags))
+    keywords = extract_keywords(clean_thai, clean_thai_script, clean_korean, clean_note, " ".join(derived_tags))
+    if extra_keywords:
+        for item in extra_keywords:
+            keyword = clean_text(item).lower()
+            if len(keyword) < 2 or keyword in STOPWORDS or keyword in keywords:
+                continue
+            keywords.append(keyword)
     return {
         "id": f"{source}-{kind}-{index:03d}-{normalize_for_id(clean_thai or clean_korean)}",
         "kind": kind,
@@ -859,6 +868,7 @@ def make_entry(
         }.get(source, source),
         "sheet": sheet,
         "thai": clean_thai,
+        "thaiScript": clean_thai_script,
         "korean": clean_korean,
         "note": clean_note,
         "tags": derived_tags,
@@ -932,9 +942,11 @@ def build_supplemental_entries() -> tuple[list[dict], list[dict]]:
             sheet="확장 단어",
             index=index,
             thai=item["thai"],
+            thai_script=item.get("thaiScript", ""),
             korean=item["korean"],
             tags=item.get("tags"),
             note=item.get("note", ""),
+            extra_keywords=item.get("keywords"),
         )
         for index, item in enumerate(SUPPLEMENTAL_VOCAB, start=1)
     ]
@@ -946,9 +958,11 @@ def build_supplemental_entries() -> tuple[list[dict], list[dict]]:
                 sheet="확장 단어",
                 index=len(vocab_entries) + index,
                 thai=item["thai"],
+                thai_script=item.get("thaiScript", ""),
                 korean=item["korean"],
                 tags=item.get("tags"),
                 note=item.get("note", ""),
+                extra_keywords=item.get("keywords"),
             )
             for index, item in enumerate(EXPANDED_VOCAB, start=1)
         ]
@@ -960,9 +974,11 @@ def build_supplemental_entries() -> tuple[list[dict], list[dict]]:
             sheet="확장 문장",
             index=index,
             thai=item["thai"],
+            thai_script=item.get("thaiScript", ""),
             korean=item["korean"],
             tags=item.get("tags"),
             note=item.get("note", ""),
+            extra_keywords=item.get("keywords"),
         )
         for index, item in enumerate(SUPPLEMENTAL_SENTENCES, start=1)
     ]
@@ -974,9 +990,11 @@ def build_supplemental_entries() -> tuple[list[dict], list[dict]]:
                 sheet="확장 문장",
                 index=len(sentence_entries) + index,
                 thai=item["thai"],
+                thai_script=item.get("thaiScript", ""),
                 korean=item["korean"],
                 tags=item.get("tags"),
                 note=item.get("note", ""),
+                extra_keywords=item.get("keywords"),
             )
             for index, item in enumerate(EXPANDED_SENTENCES, start=1)
         ]

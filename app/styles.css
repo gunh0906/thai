@@ -301,7 +301,14 @@ button {
   flex-wrap: wrap;
   gap: 8px;
   align-items: center;
-  justify-content: space-between;
+}
+
+.entry-footer {
+  justify-content: flex-start;
+}
+
+.badge-row {
+  justify-content: flex-start;
 }
 
 .entry-thai {
@@ -321,6 +328,31 @@ button {
   color: var(--muted);
   line-height: 1.5;
   font-size: 0.94rem;
+}
+
+.thai-script-panel {
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+  border-radius: var(--radius-md);
+  background: var(--accent-soft);
+  border: 1px solid rgba(212, 91, 16, 0.14);
+}
+
+.thai-script-label {
+  color: var(--accent-strong);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.thai-script-text {
+  margin: 0;
+  color: var(--text);
+  font-size: clamp(1.28rem, 5vw, 1.72rem);
+  line-height: 1.5;
+  word-break: break-word;
 }
 
 .tag {
