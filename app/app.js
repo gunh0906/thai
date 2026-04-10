@@ -271,7 +271,7 @@ function normalizeText(text) {
 }
 
 function compactText(text) {
-  return normalizeText(text).replace(/[^\p{L}\p{N}]+/gu, "");
+  return normalizeText(text).replace(/[^0-9a-zA-Z가-힣\u0E00-\u0E7F]+/g, "");
 }
 
 function tokenize(text) {
@@ -656,14 +656,18 @@ function getVocabResults(entries, searchProfile) {
 }
 
 function getSentenceResults(entries, searchProfile, vocabSeeds) {
+  const seedTerms = [];
+  vocabSeeds.slice(0, 4).forEach((entry) => {
+    const index = buildSearchIndex(entry);
+    seedTerms.push(...index.tokens);
+    seedTerms.push(...(entry.keywords || []));
+  });
+
   const seedTokens = unique(
     [
       ...searchProfile.primaryTerms,
       ...searchProfile.relatedTerms.slice(0, 6),
-      ...vocabSeeds
-        .slice(0, 4)
-        .flatMap((entry) => [...buildSearchIndex(entry).tokens, ...(entry.keywords || [])])
-        .map((item) => compactText(item)),
+      ...seedTerms.map((item) => compactText(item)),
     ].filter((item) => item.length >= 1)
   );
 
@@ -1112,9 +1116,25 @@ function clearCustomEntries() {
 }
 
 function registerServiceWorker() {
-  if ("serviceWorker" in navigator && window.location.protocol.startsWith("http")) {
-    navigator.serviceWorker.register("./sw.js").catch((error) => {
-      console.error("서비스워커 등록 실패", error);
+  if (!window.location.protocol.startsWith("http")) return;
+
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      registrations.forEach((registration) => {
+        registration.unregister().catch((error) => {
+          console.error("서비스워커 해제 실패", error);
+        });
+      });
+    });
+  }
+
+  if ("caches" in window) {
+    caches.keys().then((keys) => {
+      keys.forEach((key) => {
+        caches.delete(key).catch((error) => {
+          console.error("캐시 삭제 실패", error);
+        });
+      });
     });
   }
 }
@@ -1165,12 +1185,21 @@ function wireEvents() {
   elements.clearCustomButton.addEventListener("click", clearCustomEntries);
 }
 
-wireEvents();
-{
+function boot() {
+  wireEvents();
   const initial = readStateFromUrl();
   const scenarioIds = new Set(baseData.scenarios.map((item) => item.id));
   state.query = initial.query;
   state.scenario = scenarioIds.has(initial.scenario) ? initial.scenario : "all";
+  render();
+  registerServiceWorker();
 }
-render();
-registerServiceWorker();
+
+try {
+  boot();
+} catch (error) {
+  console.error("앱 초기화 실패", error);
+  if (elements.searchStatus) {
+    elements.searchStatus.textContent = "앱을 다시 불러오는 중 문제가 생겼습니다. 새로고침 후 다시 시도해 주세요.";
+  }
+}
