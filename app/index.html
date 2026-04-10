@@ -2,13 +2,10 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, viewport-fit=cover"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta
       name="description"
-      content="태국어 단어와 문장을 한국어로 검색하고, 상황별로 빠르게 찾을 수 있는 모바일 웹 단어장"
+      content="한국어로 태국어 단어와 회화 예문을 검색하는 모바일 웹 단어장"
     />
     <meta name="theme-color" content="#ff8a3d" />
     <title>태국어 포켓북</title>
@@ -21,22 +18,23 @@
       <header class="hero">
         <div class="eyebrow">Thai Pocketbook</div>
         <h1>태국어 포켓북</h1>
-        <p class="hero-copy">
-          한국어로 찾으면 단어와 예문이 함께 나옵니다.
-        </p>
+        <p class="hero-copy">단어를 먼저 찾고, 그 아래에서 바로 쓸 회화 예문을 이어서 봅니다.</p>
 
-        <label class="search-panel" for="searchInput">
-          <span class="search-label">검색</span>
-          <input
-            id="searchInput"
-            type="search"
-            autocomplete="off"
-            placeholder="예: 물, 계산, 병원, 안녕하세요, 깎아주세요"
-          />
-          <button id="clearSearchButton" class="ghost-button" type="button">
-            지우기
-          </button>
-        </label>
+        <form id="searchForm" class="search-panel">
+          <label class="search-label" for="searchInput">검색</label>
+          <div class="search-row">
+            <input
+              id="searchInput"
+              type="search"
+              autocomplete="off"
+              placeholder="예: 얼마예요, 물, 계산, 화장실, 병원"
+            />
+            <button id="searchButton" class="primary-button search-button" type="submit">검색</button>
+          </div>
+          <div class="search-actions">
+            <button id="clearSearchButton" class="ghost-button" type="button">지우기</button>
+          </div>
+        </form>
 
         <div class="hero-meta">
           <div class="hero-note" id="searchStatus"></div>
@@ -51,33 +49,31 @@
               <p class="section-kicker">빠른 탐색</p>
               <h2>상황별 필터</h2>
             </div>
-            <button id="resetFiltersButton" class="ghost-button" type="button">
-              필터 초기화
-            </button>
+            <button id="resetFiltersButton" class="ghost-button" type="button">필터 초기화</button>
           </div>
           <div id="scenarioChips" class="chip-row"></div>
-          <div id="activeSummary" class="active-summary"></div>
-          <div class="quick-search" id="quickSearchChips"></div>
+          <p id="activeSummary" class="active-summary"></p>
+          <div id="quickSearchChips" class="quick-search"></div>
         </section>
 
         <section class="panel" id="homeGuidePanel">
           <div class="section-top">
             <div>
-              <p class="section-kicker">빠르게 시작</p>
-              <h2>자주 찾는 표현</h2>
+              <p class="section-kicker">자주 찾는 것</p>
+              <h2>바로 가기</h2>
             </div>
           </div>
           <div id="homeGuideGrid" class="guide-grid"></div>
         </section>
 
-        <section class="result-grid" id="resultGrid">
+        <section id="resultStack" class="result-stack">
           <section class="panel">
             <div class="section-top">
               <div>
                 <p class="section-kicker">단어</p>
-                <h2>검색 결과</h2>
+                <h2>비슷한 단어와 짧은 표현</h2>
               </div>
-              <p class="section-description" id="vocabMeta"></p>
+              <p id="vocabMeta" class="section-description"></p>
             </div>
             <div id="vocabResults" class="card-stack"></div>
           </section>
@@ -85,38 +81,22 @@
           <section class="panel">
             <div class="section-top">
               <div>
-                <p class="section-kicker">문장</p>
-                <h2>예문 결과</h2>
+                <p class="section-kicker">회화</p>
+                <h2>바로 쓸 예문</h2>
               </div>
-              <p class="section-description" id="sentenceMeta"></p>
+              <p id="sentenceMeta" class="section-description"></p>
             </div>
             <div id="sentenceResults" class="card-stack"></div>
           </section>
-        </section>
-
-        <section class="panel spotlight-panel" id="relatedPanel">
-          <div class="section-top">
-            <div>
-              <p class="section-kicker">문장 추천</p>
-              <h2>관련 문장</h2>
-            </div>
-            <button id="clearSelectionButton" class="ghost-button" type="button">
-              선택 해제
-            </button>
-          </div>
-          <p class="section-description" id="relatedDescription">
-            검색어 또는 선택한 단어를 기준으로 연결된 문장을 보여줍니다.
-          </p>
-          <div id="relatedSentences" class="card-stack"></div>
         </section>
 
         <section class="panel">
           <div class="section-top">
             <div>
               <p class="section-kicker">내 데이터</p>
-              <h2>단어나 문장 추가</h2>
+              <h2>단어와 문장 추가</h2>
             </div>
-            <p class="section-description">휴대폰에서도 바로 보강할 수 있습니다.</p>
+            <p class="section-description">휴대폰에서도 직접 보강할 수 있습니다.</p>
           </div>
 
           <form id="entryForm" class="entry-form">
@@ -134,7 +114,7 @@
                 <input
                   name="thai"
                   type="text"
-                  placeholder="예: 사왓디 캅, 체크 빈, 홍 남 유 티 나이"
+                  placeholder="예: 타오라이, 체크 빈, 홍 남 유 티 나이"
                   required
                 />
               </label>
@@ -144,18 +124,14 @@
                 <input
                   name="korean"
                   type="text"
-                  placeholder="예: 안녕하세요 / 계산 부탁해요 / 화장실이 어디예요?"
+                  placeholder="예: 얼마예요 / 계산 부탁해요 / 화장실이 어디예요?"
                   required
                 />
               </label>
 
               <label class="wide">
                 <span>상황 태그</span>
-                <input
-                  name="tags"
-                  type="text"
-                  placeholder="예: 인사, 식당, 쇼핑"
-                />
+                <input name="tags" type="text" placeholder="예: 쇼핑, 식당, 건강" />
               </label>
 
               <label class="wide">
@@ -163,7 +139,7 @@
                 <textarea
                   name="note"
                   rows="3"
-                  placeholder="예: 매장에서 자주 씀 / 남성은 캅, 여성은 카"
+                  placeholder="예: 시장에서 자주 씀 / 공장 현장에서 자주 씀"
                 ></textarea>
               </label>
             </div>
@@ -185,15 +161,9 @@
           </div>
 
           <div class="backup-actions">
-            <button id="exportButton" class="ghost-button" type="button">
-              내 데이터 내보내기
-            </button>
-            <button id="importButton" class="ghost-button" type="button">
-              JSON 가져오기
-            </button>
-            <button id="clearCustomButton" class="ghost-button danger" type="button">
-              내가 추가한 항목 비우기
-            </button>
+            <button id="exportButton" class="ghost-button" type="button">내 데이터 내보내기</button>
+            <button id="importButton" class="ghost-button" type="button">JSON 가져오기</button>
+            <button id="clearCustomButton" class="ghost-button danger" type="button">내가 추가한 항목 비우기</button>
             <input id="importInput" type="file" accept="application/json,.json" hidden />
           </div>
 
@@ -204,11 +174,11 @@
         <section class="panel" id="statsPanel">
           <div class="section-top">
             <div>
-              <p class="section-kicker">데이터</p>
-              <h2>단어장 현황</h2>
+              <p class="section-kicker">단어장</p>
+              <h2>현재 현황</h2>
             </div>
           </div>
-          <section class="stats-grid" id="statsGrid"></section>
+          <div id="statsGrid" class="stats-grid"></div>
         </section>
       </main>
     </div>

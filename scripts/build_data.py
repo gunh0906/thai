@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Iterable
 
 import openpyxl
+from expanded_terms import EXPANDED_SENTENCES, EXPANDED_VOCAB
 
 SCENARIOS = [
     {
@@ -937,6 +938,21 @@ def build_supplemental_entries() -> tuple[list[dict], list[dict]]:
         )
         for index, item in enumerate(SUPPLEMENTAL_VOCAB, start=1)
     ]
+    vocab_entries.extend(
+        [
+            make_entry(
+                kind="vocab",
+                source="supplemental",
+                sheet="확장 단어",
+                index=len(vocab_entries) + index,
+                thai=item["thai"],
+                korean=item["korean"],
+                tags=item.get("tags"),
+                note=item.get("note", ""),
+            )
+            for index, item in enumerate(EXPANDED_VOCAB, start=1)
+        ]
+    )
     sentence_entries = [
         make_entry(
             kind="sentence",
@@ -950,14 +966,45 @@ def build_supplemental_entries() -> tuple[list[dict], list[dict]]:
         )
         for index, item in enumerate(SUPPLEMENTAL_SENTENCES, start=1)
     ]
+    sentence_entries.extend(
+        [
+            make_entry(
+                kind="sentence",
+                source="supplemental",
+                sheet="확장 문장",
+                index=len(sentence_entries) + index,
+                thai=item["thai"],
+                korean=item["korean"],
+                tags=item.get("tags"),
+                note=item.get("note", ""),
+            )
+            for index, item in enumerate(EXPANDED_SENTENCES, start=1)
+        ]
+    )
     return vocab_entries, sentence_entries
+
+
+def deduplicate_entries(entries: list[dict]) -> list[dict]:
+    deduped: list[dict] = []
+    seen: set[tuple[str, str, str]] = set()
+    for entry in entries:
+        key = (
+            entry["kind"],
+            normalize_for_id(entry["thai"]),
+            normalize_for_id(entry["korean"]),
+        )
+        if key in seen:
+            continue
+        seen.add(key)
+        deduped.append(entry)
+    return deduped
 
 
 def build_data(workbook_path: Path) -> dict:
     excel_vocab, excel_sentences = parse_workbook(workbook_path)
     extra_vocab, extra_sentences = build_supplemental_entries()
-    vocab_entries = excel_vocab + extra_vocab
-    sentence_entries = excel_sentences + extra_sentences
+    vocab_entries = deduplicate_entries(excel_vocab + extra_vocab)
+    sentence_entries = deduplicate_entries(excel_sentences + extra_sentences)
     return {
         "appTitle": "태국어 포켓북",
         "generatedAt": datetime.now().isoformat(timespec="seconds"),

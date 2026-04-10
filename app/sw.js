@@ -1,4 +1,4 @@
-const CACHE_NAME = "thai-pocketbook-v2";
+const CACHE_NAME = "thai-pocketbook-v3";
 const APP_ASSETS = [
   "./",
   "./index.html",
