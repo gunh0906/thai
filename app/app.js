@@ -11,28 +11,25 @@ const baseData = window.BASE_DATA || {
 };
 
 const QUICK_SEARCHES = [
+  "방바꿔주세요",
   "얼마예요",
   "물",
   "계산",
+  "와이파이",
   "화장실",
   "병원",
-  "안녕하세요",
-  "감사합니다",
   "천천히",
-  "깎아주세요",
-];
-
-const GUIDE_CARDS = [
-  { title: "가격 묻기", description: "얼마예요, 할인, 카드, 영수증", query: "얼마예요", scenario: "쇼핑" },
-  { title: "식당", description: "물, 메뉴, 계산, 포장", query: "계산", scenario: "식당" },
-  { title: "이동", description: "어디, 왼쪽, 오른쪽, 가까워요", query: "어디", scenario: "이동" },
-  { title: "건강", description: "병원, 약, 아파요, 화장실", query: "병원", scenario: "건강" },
-  { title: "기본 회화", description: "천천히, 다시, 도와주세요", query: "천천히", scenario: "기본회화" },
-  { title: "인사", description: "안녕하세요, 감사합니다, 또 봐요", query: "안녕하세요", scenario: "인사" },
+  "택시",
 ];
 
 const STOPWORDS = new Set(["이", "그", "저", "것", "거", "좀", "더", "요", "은", "는", "이거"]);
 const THAI_SCRIPT_REGEX = /[\u0E00-\u0E7F]/;
+
+const RESULT_LIMITS = {
+  vocab: 8,
+  sentences: 10,
+  seedEntries: 6,
+};
 
 const QUERY_BUNDLES = [
   {
@@ -123,15 +120,96 @@ const QUERY_PARTS = [
   { patterns: [/천천히|다시|이해|못 알아|못알아/], primary: ["천천히", "다시"], related: ["이해", "한 번 더"], display: ["다시"], tags: ["기본회화"] },
 ];
 
+const QUERY_ALIASES = [
+  {
+    matches: ["방바꿔주세요", "방좀바꿔주세요", "객실변경", "객실교체", "방교체", "룸체인지", "방바꿔", "방좀바꿔"],
+    primary: ["방", "객실", "바꾸다", "변경"],
+    related: ["다른 방", "빈 방", "방 바꿔주세요", "객실 변경", "조용한 방", "깨끗한 방"],
+    display: ["방", "바꾸다", "다른 방"],
+    tags: ["이동", "기본회화"],
+  },
+  {
+    matches: ["방시끄러워", "소음때문에", "에어컨안돼", "온수안나와", "방냄새", "문안잠겨", "샤워기고장"],
+    primary: ["방", "객실", "문제"],
+    related: ["방 바꿔주세요", "다른 방", "조용한 방", "에어컨", "온수", "욕실"],
+    display: ["방 문제"],
+    tags: ["이동", "건강"],
+  },
+  {
+    matches: ["얼마에요", "얼마예요", "가격", "요금", "비용", "얼마"],
+    primary: ["얼마", "가격"],
+    related: ["비용", "요금", "할인", "깎아주세요"],
+    display: ["가격"],
+    tags: ["쇼핑"],
+  },
+  {
+    matches: ["계산해주세요", "계산", "결제", "카드돼요", "카드되나요", "영수증"],
+    primary: ["계산", "결제"],
+    related: ["카드", "영수증", "체크빌"],
+    display: ["계산"],
+    tags: ["식당", "쇼핑"],
+  },
+  {
+    matches: ["와이파이", "wifi", "비밀번호", "패스워드", "인터넷"],
+    primary: ["와이파이", "인터넷"],
+    related: ["비밀번호", "패스워드"],
+    display: ["와이파이"],
+    tags: ["이동"],
+  },
+  {
+    matches: ["화장실", "욕실", "샤워", "온수"],
+    primary: ["화장실", "욕실"],
+    related: ["샤워기", "온수", "물"],
+    display: ["화장실"],
+    tags: ["이동", "건강"],
+  },
+  {
+    matches: ["병원", "약국", "아파요", "두통", "복통", "응급실", "열나요"],
+    primary: ["병원", "약"],
+    related: ["약국", "응급실", "도와주세요"],
+    display: ["병원"],
+    tags: ["건강"],
+  },
+  {
+    matches: ["택시", "공항", "지하철", "역", "길", "주소", "지도"],
+    primary: ["택시", "가다", "어디"],
+    related: ["공항", "지하철역", "주소", "지도", "길"],
+    display: ["이동"],
+    tags: ["이동"],
+  },
+  {
+    matches: ["안맵게", "덜맵게", "고수빼", "포장", "추천메뉴", "메뉴"],
+    primary: ["메뉴", "음식"],
+    related: ["안 맵게", "덜 맵게", "고수 빼", "포장", "추천"],
+    display: ["식당"],
+    tags: ["식당"],
+  },
+];
+
+const QUERY_ENDINGS = [
+  { suffix: "해주세요", primary: ["하다"], related: ["부탁", "주세요"], display: ["부탁"] },
+  { suffix: "해줘요", primary: ["하다"], related: ["부탁", "주세요"], display: ["부탁"] },
+  { suffix: "주세요", related: ["주다", "부탁"], display: ["주세요"] },
+  { suffix: "있나요", related: ["있다"], display: ["있다"] },
+  { suffix: "있어요", related: ["있다"], display: ["있다"] },
+  { suffix: "돼요", related: ["되다", "가능"], display: ["가능"] },
+  { suffix: "되나요", related: ["되다", "가능"], display: ["가능"] },
+];
+
 const state = {
   query: "",
   scenario: "all",
   selectedVocabId: null,
   revealedThaiIds: new Set(),
+  menuOpen: false,
   custom: loadCustomData(),
 };
 
 const elements = {
+  menuButton: document.querySelector("#menuButton"),
+  menuCloseButton: document.querySelector("#menuCloseButton"),
+  menuOverlay: document.querySelector("#menuOverlay"),
+  menuSheet: document.querySelector("#menuSheet"),
   searchForm: document.querySelector("#searchForm"),
   searchInput: document.querySelector("#searchInput"),
   searchButton: document.querySelector("#searchButton"),
@@ -141,10 +219,10 @@ const elements = {
   quickSearchChips: document.querySelector("#quickSearchChips"),
   activeSummary: document.querySelector("#activeSummary"),
   searchStatus: document.querySelector("#searchStatus"),
-  homeGuidePanel: document.querySelector("#homeGuidePanel"),
-  homeGuideGrid: document.querySelector("#homeGuideGrid"),
+  filterSummary: document.querySelector("#filterSummary"),
+  queryInsightsPanel: document.querySelector("#queryInsightsPanel"),
+  queryInsights: document.querySelector("#queryInsights"),
   resultStack: document.querySelector("#resultStack"),
-  statsPanel: document.querySelector("#statsPanel"),
   statsGrid: document.querySelector("#statsGrid"),
   datasetNote: document.querySelector("#datasetNote"),
   vocabResults: document.querySelector("#vocabResults"),
@@ -333,13 +411,45 @@ function buildSearchIndex(entry) {
   return { korean, thai, thaiScript, note, keywords, tokens };
 }
 
-function buildSearchProfile(query) {
+function collectSeedEntries(entries, compactQuery) {
+  if (!compactQuery) return [];
+
+  return entries
+    .map((entry) => {
+      const index = buildSearchIndex(entry);
+      const fields = [index.korean, index.thai, index.thaiScript, index.note, ...index.keywords, ...index.tokens];
+      let score = 0;
+
+      fields.forEach((field) => {
+        if (!field) return;
+        if (field === compactQuery) {
+          score += 240;
+          return;
+        }
+        if (field.startsWith(compactQuery) || compactQuery.startsWith(field)) {
+          score += 110;
+          return;
+        }
+        if (compactQuery.length >= 2 && field.includes(compactQuery)) {
+          score += 90;
+        }
+      });
+
+      return { entry, score };
+    })
+    .filter((item) => item.score > 0)
+    .sort((left, right) => right.score - left.score)
+    .slice(0, RESULT_LIMITS.seedEntries)
+    .map((item) => item.entry);
+}
+
+function buildSearchProfile(query, entries = []) {
   const trimmedQuery = String(query || "").trim();
   const normalized = normalizeText(trimmedQuery);
   const compact = compactText(trimmedQuery);
   const rawTokens = tokenize(trimmedQuery);
   const patternTexts = [trimmedQuery, normalized, compact];
-  const primaryTerms = rawTokens.length > 1 ? [...rawTokens] : rawTokens.filter((token) => compactText(token).length <= 3);
+  const primaryTerms = [...rawTokens];
   const relatedTerms = [];
   const displayTerms = [];
   const tags = [];
@@ -360,6 +470,32 @@ function buildSearchProfile(query) {
       displayTerms.push(...(rule.display || []));
       tags.push(...(rule.tags || []));
     }
+  });
+
+  QUERY_ALIASES.forEach((rule) => {
+    if (rule.matches.some((item) => compact.includes(compactText(item)))) {
+      primaryTerms.push(...(rule.primary || []));
+      relatedTerms.push(...(rule.related || []));
+      displayTerms.push(...(rule.display || []));
+      tags.push(...(rule.tags || []));
+    }
+  });
+
+  QUERY_ENDINGS.forEach((rule) => {
+    if (compact.endsWith(compactText(rule.suffix))) {
+      primaryTerms.push(...(rule.primary || []));
+      relatedTerms.push(...(rule.related || []));
+      displayTerms.push(...(rule.display || []));
+    }
+  });
+
+  collectSeedEntries(entries, compact).forEach((entry) => {
+    const index = buildSearchIndex(entry);
+    primaryTerms.push(...tokenize(entry.korean));
+    relatedTerms.push(...(entry.keywords || []).slice(0, 8));
+    relatedTerms.push(...index.tokens.slice(0, 6));
+    displayTerms.push(entry.korean);
+    tags.push(...(entry.tags || []));
   });
 
   const primaryCompacts = unique(
@@ -466,11 +602,12 @@ function scoreEntry(entry, searchProfile, kind) {
   const matched =
     directMatch ||
     (kind === "vocab" && hasPrimaryPlan && primaryHits.size >= vocabPrimaryThreshold && score >= 170) ||
+    (kind === "vocab" && !hasPrimaryPlan && score >= 280) ||
     (kind === "sentence" &&
       hasPrimaryPlan &&
       (primaryHits.size >= searchProfile.minimumPrimaryHits || (primaryHits.size >= 1 && relatedHits.size >= 1)) &&
       score >= 220) ||
-    score >= (kind === "sentence" ? 340 : 280);
+    (kind === "sentence" && !hasPrimaryPlan && score >= 340);
 
   return { matched, score, directMatch, primaryHits: primaryHits.size, relatedHits: relatedHits.size };
 }
@@ -562,7 +699,7 @@ function getSentenceResults(entries, searchProfile, vocabSeeds) {
   return uniqueById([
     ...direct.map(({ entry }) => entry),
     ...related.map(({ entry }) => entry),
-  ]).slice(0, 8);
+  ]).slice(0, RESULT_LIMITS.sentences + 4);
 }
 
 function uniqueById(entries) {
@@ -585,6 +722,9 @@ function renderScenarioChips() {
     button.addEventListener("click", () => {
       state.scenario = scenario.id;
       render();
+      if (state.menuOpen && window.innerWidth <= 900) {
+        closeMenu();
+      }
     });
     elements.scenarioChips.appendChild(button);
   });
@@ -593,14 +733,14 @@ function renderScenarioChips() {
 function performSearch(nextQuery = elements.searchInput.value.trim(), options = {}) {
   state.query = nextQuery;
   state.selectedVocabId = null;
+  state.revealedThaiIds = new Set();
   render();
   if (options.scrollResults && !isBrowsingState()) {
     elements.resultStack.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 }
 
-function applyQuickSearch(query, scenario = state.scenario) {
-  state.scenario = scenario;
+function applyQuickSearch(query) {
   elements.searchInput.value = query;
   performSearch(query, { scrollResults: true });
 }
@@ -618,21 +758,7 @@ function renderQuickSearches() {
 }
 
 function renderGuideCards() {
-  elements.homeGuideGrid.innerHTML = "";
-  GUIDE_CARDS.forEach((cardInfo) => {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "guide-card";
-    button.addEventListener("click", () => applyQuickSearch(cardInfo.query, cardInfo.scenario));
-
-    const title = document.createElement("h3");
-    title.textContent = cardInfo.title;
-    const description = document.createElement("p");
-    description.textContent = cardInfo.description;
-
-    button.append(title, description);
-    elements.homeGuideGrid.appendChild(button);
-  });
+  return;
 }
 
 function createTag(tag) {
@@ -655,20 +781,47 @@ function getThaiScriptText(entry) {
   return THAI_SCRIPT_REGEX.test(String(entry.thai || "")) ? String(entry.thai || "").trim() : "";
 }
 
-function createEntryCard(entry, options = {}) {
-  const { selectable = false } = options;
+function openMenu() {
+  state.menuOpen = true;
+  document.body.classList.add("menu-open");
+  elements.menuSheet.hidden = false;
+  elements.menuOverlay.hidden = false;
+  elements.menuButton.setAttribute("aria-expanded", "true");
+}
+
+function closeMenu() {
+  state.menuOpen = false;
+  document.body.classList.remove("menu-open");
+  elements.menuSheet.hidden = true;
+  elements.menuOverlay.hidden = true;
+  elements.menuButton.setAttribute("aria-expanded", "false");
+}
+
+function renderQueryInsights(searchProfile) {
+  const insights = unique(searchProfile.displayTerms).slice(0, 6);
+  elements.queryInsights.innerHTML = "";
+  insights.forEach((item) => {
+    const chip = document.createElement("span");
+    chip.className = "chip insight-chip";
+    chip.textContent = item;
+    elements.queryInsights.appendChild(chip);
+  });
+  elements.queryInsightsPanel.hidden = !searchProfile.query || !insights.length;
+}
+
+function createEntryCard(entry) {
   const card = document.createElement("article");
-  card.className = `entry-card${entry.id === state.selectedVocabId ? " selected" : ""}`;
+  card.className = "entry-card";
+
+  const korean = document.createElement("p");
+  korean.className = "entry-korean entry-korean-main";
+  korean.textContent = entry.korean;
 
   const thai = document.createElement("p");
   thai.className = "entry-thai";
   thai.textContent = entry.thai;
 
-  const korean = document.createElement("p");
-  korean.className = "entry-korean";
-  korean.textContent = entry.korean;
-
-  card.append(thai, korean);
+  card.append(korean, thai);
 
   if (entry.note) {
     const note = document.createElement("p");
@@ -677,30 +830,9 @@ function createEntryCard(entry, options = {}) {
     card.appendChild(note);
   }
 
-  if (entry.tags.length) {
-    const tags = document.createElement("div");
-    tags.className = "badge-row";
-    entry.tags.slice(0, 3).forEach((tag) => tags.appendChild(createTag(tag)));
-    card.appendChild(tags);
-  }
-
   const footer = document.createElement("div");
   footer.className = "entry-footer";
   let hasFooterAction = false;
-
-  if (selectable) {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = `mini-button${entry.id === state.selectedVocabId ? " active" : ""}`;
-    button.textContent = entry.id === state.selectedVocabId ? "선택됨" : "이 단어로 회화 보기";
-    button.addEventListener("click", () => {
-      state.selectedVocabId = entry.id === state.selectedVocabId ? null : entry.id;
-      render();
-    });
-
-    footer.appendChild(button);
-    hasFooterAction = true;
-  }
 
   const thaiScriptText = getThaiScriptText(entry);
   if (thaiScriptText && compactText(thaiScriptText) !== compactText(entry.thai)) {
@@ -746,25 +878,25 @@ function createEntryCard(entry, options = {}) {
   return card;
 }
 
-function renderEntryStack(container, entries, emptyMessage, options = {}) {
+function renderEntryStack(container, entries, emptyMessage) {
   container.innerHTML = "";
   if (!entries.length) {
     container.appendChild(createEmptyState(emptyMessage));
     return;
   }
   entries.forEach((entry) => {
-    container.appendChild(createEntryCard(entry, options));
+    container.appendChild(createEntryCard(entry));
   });
 }
 
 function renderStats(merged) {
   const totalCustom = state.custom.vocab.length + state.custom.sentences.length;
+  const activeScenario = baseData.scenarios.find((item) => item.id === state.scenario);
   const items = [
     { label: "전체 단어", value: merged.vocab.length },
     { label: "전체 문장", value: merged.sentences.length },
-    { label: "엑셀 단어", value: baseData.stats.excelVocab || 0 },
-    { label: "확장 단어", value: baseData.stats.supplementalVocab || 0 },
     { label: "내가 추가", value: totalCustom },
+    { label: "현재 필터", value: activeScenario ? activeScenario.label : "전체" },
   ];
 
   elements.statsGrid.innerHTML = "";
@@ -802,10 +934,10 @@ function renderCustomEntries() {
 
     const info = document.createElement("div");
     const title = document.createElement("strong");
-    title.textContent = `${entry.kind === "vocab" ? "단어" : "문장"} · ${entry.thai}`;
+    title.textContent = `${entry.kind === "vocab" ? "단어" : "문장"} · ${entry.korean}`;
     const description = document.createElement("p");
-    description.className = "entry-korean";
-    description.textContent = entry.korean;
+    description.className = "entry-note";
+    description.textContent = entry.thai;
     info.append(title, description);
 
     const button = document.createElement("button");
@@ -836,56 +968,54 @@ function isBrowsingState() {
 
 function render() {
   const merged = getMergedData();
-  const searchProfile = buildSearchProfile(state.query);
+  const searchProfile = buildSearchProfile(state.query, [...merged.vocab, ...merged.sentences]);
   const allVocabResults = getVocabResults(merged.vocab, searchProfile);
-  const selectedVocab =
-    allVocabResults.find((entry) => entry.id === state.selectedVocabId) ||
-    merged.vocab.find((entry) => entry.id === state.selectedVocabId) ||
-    null;
-
-  const vocabSeeds = selectedVocab ? [selectedVocab, ...allVocabResults] : allVocabResults;
-  const vocabResults = (state.query ? allVocabResults : allVocabResults.filter(matchesScenario)).slice(0, state.query ? 6 : 8);
-  const sentenceResults = getSentenceResults(merged.sentences, searchProfile, vocabSeeds);
+  const vocabSeeds = allVocabResults;
+  const vocabResults = state.query ? allVocabResults.slice(0, RESULT_LIMITS.vocab) : [];
+  const sentenceResults = state.query
+    ? getSentenceResults(merged.sentences, searchProfile, vocabSeeds).slice(0, RESULT_LIMITS.sentences)
+    : [];
   const browsing = isBrowsingState();
   const expandedHint = searchProfile.displayTerms.length ? ` · 함께 찾은 핵심어: ${searchProfile.displayTerms.join(" / ")}` : "";
+  const activeScenario = baseData.scenarios.find((item) => item.id === state.scenario);
 
   elements.searchInput.value = state.query;
   elements.datasetNote.textContent = baseData.note || "";
-  elements.homeGuidePanel.hidden = !browsing;
   elements.resultStack.hidden = browsing;
-  elements.statsPanel.hidden = browsing;
 
   elements.searchStatus.textContent = browsing
-    ? "검색어를 넣고 검색 버튼을 누르면 단어가 먼저, 그 아래 회화 예문이 나옵니다."
+    ? "한국어로 검색하면 단어를 먼저, 바로 쓸 회화를 그 아래에 보여줍니다."
     : `검색됨: 단어 ${vocabResults.length}개 · 회화 ${sentenceResults.length}개${expandedHint}`;
 
+  elements.filterSummary.textContent =
+    state.scenario === "all"
+      ? "필터: 전체 검색"
+      : `필터 적용 중: ${activeScenario ? activeScenario.label : state.scenario}만 보기`;
+
   elements.activeSummary.textContent = browsing
-    ? "가격, 식당, 병원처럼 찾고 싶은 한국어 표현으로 검색해 보세요."
-    : state.scenario === "all"
-      ? `검색어 "${state.query}" 기준으로 단어를 먼저 모으고, 그 아래 바로 쓸 회화를 보여줍니다.`
-      : `검색어 "${state.query}" · ${state.scenario} 상황에 맞춘 결과입니다.`;
+    ? ""
+    : `검색어 "${state.query}"를 핵심 단어와 회화로 나눠서 찾고 있습니다.`;
 
   elements.vocabMeta.textContent = state.query
-    ? "문장을 잘게 풀어서 핵심 단어부터 보여줍니다."
-    : "상황에 맞는 단어를 보여줍니다.";
+    ? "문장을 잘게 풀어서 먼저 잡아둘 단어부터 보여줍니다."
+    : "검색어를 넣으면 관련 단어가 나옵니다.";
   elements.sentenceMeta.textContent = state.query
-    ? "위 단어를 바탕으로 바로 써먹을 회화만 추렸습니다."
-    : "상황에 맞는 회화 예문입니다.";
+    ? "위 단어를 바탕으로 바로 보여주기 좋은 회화만 추렸습니다."
+    : "검색어를 넣으면 관련 회화가 나옵니다.";
 
   renderScenarioChips();
   renderQuickSearches();
-  renderGuideCards();
+  renderQueryInsights(searchProfile);
   renderStats(merged);
   renderEntryStack(
     elements.vocabResults,
     vocabResults,
-    "맞는 단어가 없습니다. 더 짧게 검색하거나 다른 표현으로 바꿔 보세요.",
-    { selectable: true }
+    "맞는 단어가 아직 없습니다. 더 짧은 핵심어로 검색해 보세요."
   );
   renderEntryStack(
     elements.sentenceResults,
     sentenceResults,
-    "회화 예문은 아직 없습니다. 직접 문장을 추가해도 됩니다."
+    "맞는 회화가 아직 없습니다. 다른 표현으로 검색하거나 단어를 먼저 검색해 보세요."
   );
   renderCustomEntries();
   syncUrl();
@@ -1006,14 +1136,26 @@ function wireEvents() {
     elements.searchInput.value = "";
     state.query = "";
     state.selectedVocabId = null;
+    state.revealedThaiIds = new Set();
     render();
   });
 
   elements.resetFiltersButton.addEventListener("click", () => {
     state.scenario = "all";
-    state.selectedVocabId = null;
-    if (!state.query) render();
-    else render();
+    render();
+  });
+
+  elements.menuButton.addEventListener("click", () => {
+    if (state.menuOpen) closeMenu();
+    else openMenu();
+  });
+
+  elements.menuCloseButton.addEventListener("click", closeMenu);
+  elements.menuOverlay.addEventListener("click", closeMenu);
+  window.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && state.menuOpen) {
+      closeMenu();
+    }
   });
 
   elements.entryForm.addEventListener("submit", submitEntryForm);

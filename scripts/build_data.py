@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Iterable
 
 import openpyxl
+from expanded_more import MORE_SENTENCES, MORE_VOCAB
 from expanded_terms import EXPANDED_SENTENCES, EXPANDED_VOCAB
 
 SCENARIOS = [
@@ -967,6 +968,23 @@ def build_supplemental_entries() -> tuple[list[dict], list[dict]]:
             for index, item in enumerate(EXPANDED_VOCAB, start=1)
         ]
     )
+    vocab_entries.extend(
+        [
+            make_entry(
+                kind="vocab",
+                source="supplemental",
+                sheet="확장 단어",
+                index=len(vocab_entries) + index,
+                thai=item["thai"],
+                thai_script=item.get("thaiScript", ""),
+                korean=item["korean"],
+                tags=item.get("tags"),
+                note=item.get("note", ""),
+                extra_keywords=item.get("keywords"),
+            )
+            for index, item in enumerate(MORE_VOCAB, start=1)
+        ]
+    )
     sentence_entries = [
         make_entry(
             kind="sentence",
@@ -997,6 +1015,23 @@ def build_supplemental_entries() -> tuple[list[dict], list[dict]]:
                 extra_keywords=item.get("keywords"),
             )
             for index, item in enumerate(EXPANDED_SENTENCES, start=1)
+        ]
+    )
+    sentence_entries.extend(
+        [
+            make_entry(
+                kind="sentence",
+                source="supplemental",
+                sheet="확장 문장",
+                index=len(sentence_entries) + index,
+                thai=item["thai"],
+                thai_script=item.get("thaiScript", ""),
+                korean=item["korean"],
+                tags=item.get("tags"),
+                note=item.get("note", ""),
+                extra_keywords=item.get("keywords"),
+            )
+            for index, item in enumerate(MORE_SENTENCES, start=1)
         ]
     )
     return vocab_entries, sentence_entries
