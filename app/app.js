@@ -1,6 +1,6 @@
 const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
-const APP_VERSION = "20260410r";
+const APP_VERSION = "20260410t";
 
 const baseData = window.BASE_DATA || {
   appTitle: "태국어 포켓북",
@@ -27,6 +27,7 @@ const STOPWORDS = new Set(["이", "그", "저", "것", "거", "좀", "더", "요
 const THAI_SCRIPT_REGEX = /[\u0E00-\u0E7F]/;
 const NUMBER_QUERY_REGEX = /^[+-]?(?:(?:\d+(?:\.\d+)?)|(?:\.\d+))$/;
 const TIME_QUERY_REGEX = /^(?:(오전|오후)\s*)?\d{1,2}\s*시(?:\s*\d{1,2}\s*분)?$|^(?:(오전|오후)\s*)?\d{1,2}:\d{2}$/;
+const TIME_EXTRACT_REGEX = /(?:(오전|오후)\s*)?\d{1,2}\s*시(?:\s*\d{1,2}\s*분)?|(?:(오전|오후)\s*)?\d{1,2}:\d{2}/;
 
 const RESULT_LIMITS = {
   vocab: 8,
@@ -52,6 +53,15 @@ const NUMBER_UNITS = [
   { script: "สิบ", latin: "sip", ko: "씹" },
   { script: "", latin: "", ko: "" },
 ];
+const TIME_WORDS = {
+  clock: { script: "นาฬิกา", latin: "nalika", ko: "나리까" },
+  minute: { script: "นาที", latin: "nathi", ko: "나티" },
+  now: { script: "ตอนนี้เวลา", latin: "ton ni wela", ko: "똔니 웨라" },
+  meet: { script: "เจอกันตอน", latin: "joe kan ton", ko: "저 깐 똔" },
+  go: { script: "ไปตอน", latin: "pai ton", ko: "빠이 똔" },
+  am: { script: "เช้า", latin: "chao", ko: "차오", korean: "오전" },
+  pm: { script: "บ่าย", latin: "bai", ko: "바이", korean: "오후" },
+};
 
 const QUERY_BUNDLES = [
   {
@@ -837,6 +847,221 @@ function buildGeneratedNumberEntries(query) {
   };
 }
 
+function extractStandaloneTimeQuery(query) {
+  const normalized = normalizeText(query);
+  const matched = normalized.match(TIME_EXTRACT_REGEX);
+  if (!matched) return "";
+  const extracted = matched[0].trim();
+  const remainder = normalized
+    .replace(extracted, " ")
+    .replace(/(인데|인대|예요|이에요|입니다|이야|야|쯤|정도|쯔음|쯤에|때|때요|네요)/g, " ")
+    .replace(/[은는이가을를요.!?,]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  return remainder ? "" : extracted;
+}
+
+function convertSmallNumberBundle(value) {
+  const converted = convertIntegerToThaiTokens(String(value));
+  return {
+    script: converted.script.join(""),
+    latin: converted.latin.join(" "),
+    ko: converted.ko.join(" "),
+  };
+}
+
+function parseTimeQuery(query) {
+  const extracted = extractStandaloneTimeQuery(query);
+  if (!extracted) return null;
+
+  const normalized = normalizeText(extracted);
+  let meridiem = "";
+  let body = normalized;
+  if (body.startsWith("오전")) {
+    meridiem = "am";
+    body = body.replace(/^오전\s*/, "");
+  } else if (body.startsWith("오후")) {
+    meridiem = "pm";
+    body = body.replace(/^오후\s*/, "");
+  }
+
+  let hour = null;
+  let minute = 0;
+  let matched = body.match(/^(\d{1,2}):(\d{2})$/);
+  if (matched) {
+    hour = Number(matched[1]);
+    minute = Number(matched[2]);
+  } else {
+    matched = body.match(/^(\d{1,2})\s*시(?:\s*(\d{1,2})\s*분)?$/);
+    if (!matched) return null;
+    hour = Number(matched[1]);
+    minute = matched[2] ? Number(matched[2]) : 0;
+  }
+
+  if (!Number.isInteger(hour) || !Number.isInteger(minute) || minute < 0 || minute > 59) return null;
+
+  let hour24 = hour;
+  if (meridiem === "am") {
+    if (hour < 1 || hour > 12) return null;
+    hour24 = hour === 12 ? 0 : hour;
+  } else if (meridiem === "pm") {
+    if (hour < 1 || hour > 12) return null;
+    hour24 = hour === 12 ? 12 : hour + 12;
+  } else if (hour < 0 || hour > 23) {
+    return null;
+  }
+
+  const displayHour = meridiem ? hour : hour24;
+  const hourBundle = convertSmallNumberBundle(displayHour);
+  const minuteBundle = convertSmallNumberBundle(minute);
+  const meridiemWord = meridiem ? TIME_WORDS[meridiem] : null;
+  const phraseScript = `${meridiemWord ? `${meridiemWord.script}` : ""}${hourBundle.script}${TIME_WORDS.clock.script}${minute ? `${minuteBundle.script}${TIME_WORDS.minute.script}` : ""}`;
+  const phraseLatin = `${meridiemWord ? `${meridiemWord.latin} ` : ""}${hourBundle.latin} ${TIME_WORDS.clock.latin}${minute ? ` ${minuteBundle.latin} ${TIME_WORDS.minute.latin}` : ""}`.trim();
+  const phraseKo = `${meridiemWord ? `${meridiemWord.ko} ` : ""}${hourBundle.ko} ${TIME_WORDS.clock.ko}${minute ? ` ${minuteBundle.ko} ${TIME_WORDS.minute.ko}` : ""}`.trim();
+  const digital = `${String(hour24).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
+  const thaiDigital = toThaiNumeralDigits(digital);
+  const canonicalKorean = `${meridiemWord ? `${meridiemWord.korean} ` : ""}${displayHour}시${minute ? ` ${minute}분` : ""}`;
+  const extraKeywords = unique([
+    query,
+    extracted,
+    canonicalKorean,
+    canonicalKorean.replace(/\s+/g, ""),
+    digital,
+    thaiDigital,
+    `${displayHour}시`,
+    minute ? `${minute}분` : "",
+    "시간",
+  ]);
+
+  return {
+    extracted,
+    canonicalKorean,
+    digital,
+    thaiDigital,
+    phraseScript,
+    phraseLatin,
+    phraseKo,
+    minute,
+    keywords: extraKeywords,
+  };
+}
+
+function buildGeneratedTimeEntries(query) {
+  const parsed = parseTimeQuery(query);
+  if (!parsed) return { vocab: [], sentences: [] };
+
+  const ambiguityNote = !normalizeText(parsed.extracted).startsWith("오전") && !normalizeText(parsed.extracted).startsWith("오후")
+    ? "오전/오후 없이 검색해서 문맥에 따라 달라질 수 있습니다"
+    : "";
+  const noteSuffix = ambiguityNote ? ` · ${ambiguityNote}` : "";
+
+  const vocabEntries = [
+    hydrateEntry(
+      {
+        id: `generated-time-read-${parsed.digital}`,
+        kind: "vocab",
+        source: "generated",
+        sheet: "시간 변환",
+        thai: parsed.phraseKo,
+        thaiScript: parsed.phraseScript,
+        korean: parsed.canonicalKorean,
+        note: `시간을 문장형으로 풀어쓴 표현 · 영문 표기: ${parsed.phraseLatin}${noteSuffix}`,
+        tags: ["숫자·시간"],
+        keywords: parsed.keywords,
+      },
+      "vocab"
+    ),
+    hydrateEntry(
+      {
+        id: `generated-time-digital-${parsed.digital}`,
+        kind: "vocab",
+        source: "generated",
+        sheet: "시간 변환",
+        thai: `${parsed.digital} 너`,
+        thaiScript: `${parsed.thaiDigital} น.`,
+        korean: `${parsed.canonicalKorean} 숫자 표기`,
+        note: `시간을 숫자로 바로 보여주기${noteSuffix}`,
+        tags: ["숫자·시간"],
+        keywords: [...parsed.keywords, "숫자 시간", "시간 표기"],
+      },
+      "vocab"
+    ),
+  ];
+
+  const sentenceEntries = [
+    hydrateEntry(
+      {
+        id: `generated-time-now-${parsed.digital}`,
+        kind: "sentence",
+        source: "generated",
+        sheet: "시간 변환",
+        thai: `${TIME_WORDS.now.ko} ${parsed.digital} 너`,
+        thaiScript: `${TIME_WORDS.now.script} ${parsed.thaiDigital} น.`,
+        korean: `지금은 ${parsed.canonicalKorean}예요`,
+        note: `검색한 시간을 그대로 넣은 시간 문장${noteSuffix}`,
+        tags: ["숫자·시간"],
+        keywords: parsed.keywords,
+      },
+      "sentence"
+    ),
+    hydrateEntry(
+      {
+        id: `generated-time-meet-${parsed.digital}`,
+        kind: "sentence",
+        source: "generated",
+        sheet: "시간 변환",
+        thai: `${TIME_WORDS.meet.ko} ${parsed.digital} 너`,
+        thaiScript: `${TIME_WORDS.meet.script} ${parsed.thaiDigital} น.`,
+        korean: `${parsed.canonicalKorean}에 만나요`,
+        note: "약속 시간을 말할 때",
+        tags: ["숫자·시간", "기본회화"],
+        keywords: parsed.keywords,
+      },
+      "sentence"
+    ),
+    hydrateEntry(
+      {
+        id: `generated-time-go-${parsed.digital}`,
+        kind: "sentence",
+        source: "generated",
+        sheet: "시간 변환",
+        thai: `${TIME_WORDS.go.ko} ${parsed.digital} 너`,
+        thaiScript: `${TIME_WORDS.go.script} ${parsed.thaiDigital} น.`,
+        korean: `${parsed.canonicalKorean}에 가요`,
+        note: "출발 시간을 말할 때",
+        tags: ["숫자·시간", "이동"],
+        keywords: parsed.keywords,
+      },
+      "sentence"
+    ),
+  ];
+
+  if (parsed.minute === 30) {
+    sentenceEntries.push(
+      hydrateEntry(
+        {
+          id: `generated-time-half-${parsed.digital}`,
+          kind: "sentence",
+          source: "generated",
+          sheet: "시간 변환",
+          thai: `${parsed.phraseKo} (반)`,
+          thaiScript: `${parsed.phraseScript}`,
+          korean: `${parsed.canonicalKorean} 반`,
+          note: "반 시각으로 기억하기 쉽게 한 번 더 보여줍니다",
+          tags: ["숫자·시간"],
+          keywords: [...parsed.keywords, "반"],
+        },
+        "sentence"
+      )
+    );
+  }
+
+  return {
+    vocab: vocabEntries,
+    sentences: sentenceEntries,
+  };
+}
+
 function collectSeedEntries(entries, compactQuery) {
   if (!compactQuery) return [];
 
@@ -1288,7 +1513,7 @@ function hasNegativeMeaning(text) {
 }
 
 function isTimeLikeQuery(query) {
-  return TIME_QUERY_REGEX.test(normalizeText(query));
+  return Boolean(extractStandaloneTimeQuery(query) || TIME_QUERY_REGEX.test(normalizeText(query)));
 }
 
 function isTimeFocusedEntry(entry) {
@@ -1490,15 +1715,18 @@ function render() {
   const merged = getMergedData();
   const generated = buildGeneratedNumberEntries(state.query);
   const numberMode = generated.vocab.length > 0;
-  const timeMode = !numberMode && isTimeLikeQuery(state.query);
+  const generatedTime = !numberMode ? buildGeneratedTimeEntries(state.query) : { vocab: [], sentences: [] };
+  const timeMode = !numberMode && generatedTime.vocab.length > 0;
   const searchProfile = buildSearchProfile(state.query, [...merged.vocab, ...merged.sentences]);
   const exactSentenceMatch = numberMode ? null : findExactEntry(merged.sentences, searchProfile);
   const actionPhraseMode = !numberMode && isActionPhraseQuery(searchProfile);
-  const vocabSource = timeMode ? merged.vocab.filter((entry) => isTimeFocusedEntry(entry)) : merged.vocab;
-  const sentenceSource = timeMode ? merged.sentences.filter((entry) => isTimeFocusedEntry(entry)) : merged.sentences;
+  const vocabSource = merged.vocab;
+  const sentenceSource = merged.sentences;
   const allVocabResults = numberMode
     ? generated.vocab
-    : uniqueById([...generated.vocab, ...getVocabResults(vocabSource, searchProfile)]);
+    : timeMode
+      ? generatedTime.vocab
+      : uniqueById([...generated.vocab, ...getVocabResults(vocabSource, searchProfile)]);
   const vocabSeeds = allVocabResults;
   const vocabResults = state.query
     ? allVocabResults.slice(0, RESULT_LIMITS.vocab)
@@ -1506,6 +1734,8 @@ function render() {
   const sentenceResults = state.query
     ? (numberMode
         ? generated.sentences
+        : timeMode
+          ? generatedTime.sentences
         : uniqueById([
             ...(exactSentenceMatch ? [exactSentenceMatch] : []),
             ...generated.sentences,
@@ -1541,7 +1771,7 @@ function render() {
     ? numberMode
       ? "숫자는 태국어 읽기와 태국 숫자 표기를 함께 보여줍니다."
       : timeMode
-        ? "시간 검색이라서 시간 표현 위주로 먼저 보여줍니다."
+        ? "검색한 시간을 그대로 변형해서 읽기와 시간 표현을 먼저 보여줍니다."
       : exactSentenceMatch
         ? "핵심 단어를 먼저 보여주고, 아래에 정확히 맞는 회화를 맨 위에 올렸습니다."
       : actionPhraseMode
@@ -1552,7 +1782,7 @@ function render() {
     ? numberMode
       ? "가격이나 수량으로 바로 보여줄 수 있게 같이 만들었습니다."
       : timeMode
-        ? "시간을 묻거나 말할 때 바로 쓸 회화만 추렸습니다."
+        ? "검색한 시간 그대로 문장에 넣어서 바로 보여줄 수 있게 만들었습니다."
       : "위 단어를 바탕으로 바로 보여주기 좋은 회화만 추렸습니다."
     : "검색어를 넣으면 관련 회화가 나옵니다.";
 
