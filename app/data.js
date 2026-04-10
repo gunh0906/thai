@@ -1,6 +1,6 @@
 window.BASE_DATA = {
   "appTitle": "태국어 포켓북",
-  "generatedAt": "2026-04-10T14:32:26",
+  "generatedAt": "2026-04-10T14:44:50",
   "transliterationStyle": "practical-ko",
   "note": "보강 표현의 발음 표기는 한국어 사용자 기준의 실전용 표기이며, 앱 안에서 직접 수정·추가할 수 있습니다.",
   "scenarios": [
@@ -54,9 +54,9 @@ window.BASE_DATA = {
     "excelVocab": 328,
     "excelSentences": 32,
     "supplementalVocab": 676,
-    "supplementalSentences": 381,
+    "supplementalSentences": 384,
     "totalVocab": 919,
-    "totalSentences": 406
+    "totalSentences": 409
   },
   "vocab": [
     {
@@ -31008,6 +31008,93 @@ window.BASE_DATA = {
         "이동",
         "기본회화",
         "빨리 방 바꿔주세요"
+      ]
+    },
+    {
+      "id": "supplemental-sentence-382-난-펜-위티-티-핏",
+      "kind": "sentence",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 문장",
+      "thai": "난 펜 위티 티 핏",
+      "thaiScript": "นั่นเป็นวิธีที่ผิด",
+      "korean": "그건 잘못된 방법이야",
+      "note": "방법이나 절차를 바로잡을 때 쓰는 문장",
+      "tags": [
+        "기본회화"
+      ],
+      "keywords": [
+        "위티",
+        "นั่นเป็นวิธีที่ผิด",
+        "그건",
+        "잘못된",
+        "방법이야",
+        "방법이나",
+        "절차를",
+        "바로잡을",
+        "쓰는",
+        "문장",
+        "기본회화",
+        "잘못된방법",
+        "틀린방법",
+        "그건잘못된방법이야"
+      ]
+    },
+    {
+      "id": "supplemental-sentence-383-떵-탐-이익-얍-니",
+      "kind": "sentence",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 문장",
+      "thai": "떵 탐 이익 얍 니",
+      "thaiScript": "ต้องทำอีกแบบนี้",
+      "korean": "다르게 해야 해요",
+      "note": "방법이나 절차를 바로잡을 때 쓰는 문장",
+      "tags": [
+        "기본회화"
+      ],
+      "keywords": [
+        "이익",
+        "ต้องทำอีกแบบนี้",
+        "다르게",
+        "해야",
+        "방법이나",
+        "절차를",
+        "바로잡을",
+        "쓰는",
+        "문장",
+        "기본회화",
+        "다르게해야해요",
+        "다른방법"
+      ]
+    },
+    {
+      "id": "supplemental-sentence-384-안-니-큐-위티-티-툭",
+      "kind": "sentence",
+      "source": "supplemental",
+      "sourceLabel": "확장",
+      "sheet": "확장 문장",
+      "thai": "안 니 큐 위티 티 툭",
+      "thaiScript": "อันนี้คือวิธีที่ถูก",
+      "korean": "이건 맞는 방법이에요",
+      "note": "방법이나 절차를 바로잡을 때 쓰는 문장",
+      "tags": [
+        "기본회화"
+      ],
+      "keywords": [
+        "위티",
+        "อันนี้คือวิธีที่ถูก",
+        "이건",
+        "맞는",
+        "방법이에요",
+        "방법이나",
+        "절차를",
+        "바로잡을",
+        "쓰는",
+        "문장",
+        "기본회화",
+        "맞는방법",
+        "올바른방법"
       ]
     }
   ]

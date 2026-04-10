@@ -1,6 +1,6 @@
 const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
-const APP_VERSION = "20260410c";
+const APP_VERSION = "20260410d";
 
 const baseData = window.BASE_DATA || {
   appTitle: "태국어 포켓북",
@@ -36,17 +36,20 @@ const RESULT_LIMITS = {
 const THAI_NUMERAL_DIGITS = ["๐", "๑", "๒", "๓", "๔", "๕", "๖", "๗", "๘", "๙"];
 const NUMBER_WORDS_SCRIPT = ["ศูนย์", "หนึ่ง", "สอง", "สาม", "สี่", "ห้า", "หก", "เจ็ด", "แปด", "เก้า"];
 const NUMBER_WORDS_LATIN = ["sun", "nueng", "song", "sam", "si", "ha", "hok", "chet", "paet", "kao"];
+const NUMBER_WORDS_KO = ["쑨", "능", "썽", "쌈", "씨", "하", "혹", "쩻", "뺏", "까오"];
 const NUMBER_ET_SCRIPT = "เอ็ด";
 const NUMBER_ET_LATIN = "et";
+const NUMBER_ET_KO = "엣";
 const NUMBER_YI_SCRIPT = "ยี่";
 const NUMBER_YI_LATIN = "yi";
+const NUMBER_YI_KO = "이";
 const NUMBER_UNITS = [
-  { script: "แสน", latin: "saen" },
-  { script: "หมื่น", latin: "muen" },
-  { script: "พัน", latin: "phan" },
-  { script: "ร้อย", latin: "roi" },
-  { script: "สิบ", latin: "sip" },
-  { script: "", latin: "" },
+  { script: "แสน", latin: "saen", ko: "쌘" },
+  { script: "หมื่น", latin: "muen", ko: "믄" },
+  { script: "พัน", latin: "phan", ko: "판" },
+  { script: "ร้อย", latin: "roi", ko: "로이" },
+  { script: "สิบ", latin: "sip", ko: "씹" },
+  { script: "", latin: "", ko: "" },
 ];
 
 const QUERY_BUNDLES = [
@@ -202,6 +205,13 @@ const QUERY_ALIASES = [
     display: ["식당"],
     tags: ["식당"],
   },
+  {
+    matches: ["잘못된방법", "그건잘못된방법이야", "틀린방법", "그방법틀렸어"],
+    primary: ["잘못", "틀리다", "방법"],
+    related: ["그건 잘못된 방법이야", "다르게 해야 해요", "이건 맞는 방법이에요"],
+    display: ["잘못된 방법"],
+    tags: ["기본회화"],
+  },
 ];
 
 const QUERY_ENDINGS = [
@@ -231,7 +241,8 @@ const elements = {
   searchForm: document.querySelector("#searchForm"),
   searchInput: document.querySelector("#searchInput"),
   searchButton: document.querySelector("#searchButton"),
-  clearSearchButton: document.querySelector("#clearSearchButton"),
+  jumpVocabButton: document.querySelector("#jumpVocabButton"),
+  jumpSentenceButton: document.querySelector("#jumpSentenceButton"),
   resetFiltersButton: document.querySelector("#resetFiltersButton"),
   scenarioChips: document.querySelector("#scenarioChips"),
   quickSearchChips: document.querySelector("#quickSearchChips"),
@@ -241,6 +252,8 @@ const elements = {
   queryInsightsPanel: document.querySelector("#queryInsightsPanel"),
   queryInsights: document.querySelector("#queryInsights"),
   resultStack: document.querySelector("#resultStack"),
+  vocabSection: document.querySelector("#vocabSection"),
+  sentenceSection: document.querySelector("#sentenceSection"),
   statsGrid: document.querySelector("#statsGrid"),
   datasetNote: document.querySelector("#datasetNote"),
   vocabResults: document.querySelector("#vocabResults"),
@@ -279,6 +292,7 @@ function normalizeText(text) {
     .trim()
     .toLowerCase()
     .normalize("NFKC")
+    .replace(/잘돗/g, "잘못")
     .replace(/이에요/g, "예요")
     .replace(/에요/g, "예요")
     .replace(/예여/g, "예요")
@@ -453,12 +467,14 @@ function convertUnderMillionToThaiTokens(numberText) {
     return {
       script: [NUMBER_WORDS_SCRIPT[0]],
       latin: [NUMBER_WORDS_LATIN[0]],
+      ko: [NUMBER_WORDS_KO[0]],
     };
   }
 
   const padded = normalized.padStart(6, "0").split("").map(Number);
   const script = [];
   const latin = [];
+  const ko = [];
 
   padded.forEach((digit, index) => {
     if (!digit) return;
@@ -472,15 +488,18 @@ function convertUnderMillionToThaiTokens(numberText) {
       if (digit === 1) {
         script.push(unit.script);
         latin.push(unit.latin);
+        ko.push(unit.ko);
         return;
       }
       if (digit === 2) {
         script.push(`${NUMBER_YI_SCRIPT}${unit.script}`);
         latin.push(`${NUMBER_YI_LATIN} ${unit.latin}`);
+        ko.push(`${NUMBER_YI_KO}${unit.ko ? ` ${unit.ko}` : ""}`.trim());
         return;
       }
       script.push(`${NUMBER_WORDS_SCRIPT[digit]}${unit.script}`);
       latin.push(`${NUMBER_WORDS_LATIN[digit]} ${unit.latin}`);
+      ko.push(`${NUMBER_WORDS_KO[digit]}${unit.ko ? ` ${unit.ko}` : ""}`.trim());
       return;
     }
 
@@ -488,18 +507,21 @@ function convertUnderMillionToThaiTokens(numberText) {
       if (digit === 1 && hasHigherInGroup) {
         script.push(NUMBER_ET_SCRIPT);
         latin.push(NUMBER_ET_LATIN);
+        ko.push(NUMBER_ET_KO);
         return;
       }
       script.push(NUMBER_WORDS_SCRIPT[digit]);
       latin.push(NUMBER_WORDS_LATIN[digit]);
+      ko.push(NUMBER_WORDS_KO[digit]);
       return;
     }
 
     script.push(`${NUMBER_WORDS_SCRIPT[digit]}${unit.script}`);
     latin.push(`${NUMBER_WORDS_LATIN[digit]} ${unit.latin}`);
+    ko.push(`${NUMBER_WORDS_KO[digit]}${unit.ko ? ` ${unit.ko}` : ""}`.trim());
   });
 
-  return { script, latin };
+  return { script, latin, ko };
 }
 
 function convertIntegerToThaiTokens(numberText) {
@@ -508,6 +530,7 @@ function convertIntegerToThaiTokens(numberText) {
     return {
       script: [NUMBER_WORDS_SCRIPT[0]],
       latin: [NUMBER_WORDS_LATIN[0]],
+      ko: [NUMBER_WORDS_KO[0]],
     };
   }
 
@@ -518,6 +541,7 @@ function convertIntegerToThaiTokens(numberText) {
 
   const script = [];
   const latin = [];
+  const ko = [];
 
   groups.forEach((group, index) => {
     const isZeroGroup = /^0+$/.test(group);
@@ -526,17 +550,20 @@ function convertIntegerToThaiTokens(numberText) {
       const converted = convertUnderMillionToThaiTokens(group);
       script.push(...converted.script);
       latin.push(...converted.latin);
+      ko.push(...converted.ko);
     }
 
     if (repeatMillions > 0 && (!isZeroGroup || script.length)) {
       const millionScript = "ล้าน".repeat(repeatMillions);
       const millionLatin = Array(repeatMillions).fill("lan").join(" ");
+      const millionKo = Array(repeatMillions).fill("란").join(" ");
       script.push(millionScript);
       latin.push(millionLatin);
+      ko.push(millionKo);
     }
   });
 
-  return { script, latin };
+  return { script, latin, ko };
 }
 
 function convertNumberToThai(query) {
@@ -552,21 +579,26 @@ function convertNumberToThai(query) {
 
   const scriptTokens = [];
   const latinTokens = [];
+  const koTokens = [];
 
   if (negative) {
     scriptTokens.push("ลบ");
     latinTokens.push("lop");
+    koTokens.push("롭");
   }
 
   scriptTokens.push(...integerTokens.script);
   latinTokens.push(...integerTokens.latin);
+  koTokens.push(...integerTokens.ko);
 
   if (fractionPart) {
     scriptTokens.push("จุด");
     latinTokens.push("chut");
+    koTokens.push("쭛");
     fractionPart.split("").forEach((digit) => {
       scriptTokens.push(NUMBER_WORDS_SCRIPT[Number(digit)]);
       latinTokens.push(NUMBER_WORDS_LATIN[Number(digit)]);
+      koTokens.push(NUMBER_WORDS_KO[Number(digit)]);
     });
   }
 
@@ -577,6 +609,7 @@ function convertNumberToThai(query) {
     thaiDigits,
     thaiScript: scriptTokens.join(""),
     thaiLatin: latinTokens.join(" "),
+    thaiKo: koTokens.join(" "),
     isDecimal: Boolean(fractionPart),
     isNegative: negative,
     integerPart,
@@ -600,12 +633,12 @@ function buildGeneratedNumberEntries(query) {
       kind: "vocab",
       source: "generated",
       sheet: "숫자 변환",
-      thai: converted.thaiLatin,
+      thai: converted.thaiKo,
       thaiScript: converted.thaiScript,
       korean: query,
-      note: notePieces.join(" · "),
+      note: `${notePieces.join(" · ")} · 영문 표기: ${converted.thaiLatin}`,
       tags: ["숫자·시간", "쇼핑"],
-      keywords: [query, converted.normalized, converted.thaiDigits, "숫자", "가격", "수량"],
+      keywords: [query, converted.normalized, converted.thaiDigits, converted.thaiKo, "숫자", "가격", "수량"],
     },
     "vocab"
   );
@@ -633,12 +666,12 @@ function buildGeneratedNumberEntries(query) {
         kind: "sentence",
         source: "generated",
         sheet: "숫자 변환",
-        thai: converted.thaiLatin,
+        thai: converted.thaiKo,
         thaiScript: converted.thaiScript,
         korean: `${query} 읽기`,
-        note: "숫자를 그대로 읽을 때",
+        note: `숫자를 그대로 읽을 때 · 영문 표기: ${converted.thaiLatin}`,
         tags: ["숫자·시간"],
-        keywords: [query, converted.normalized, converted.thaiDigits, "숫자 읽기"],
+        keywords: [query, converted.normalized, converted.thaiDigits, converted.thaiKo, "숫자 읽기"],
       },
       "sentence"
     ),
@@ -648,12 +681,12 @@ function buildGeneratedNumberEntries(query) {
         kind: "sentence",
         source: "generated",
         sheet: "숫자 변환",
-        thai: `${converted.thaiLatin} baht`,
+        thai: `${converted.thaiKo} 밧`,
         thaiScript: `${converted.thaiScript}บาท`,
         korean: `${query} 바트`,
-        note: "가격으로 바로 보여주기",
+        note: `가격으로 바로 보여주기 · 영문 표기: ${converted.thaiLatin} baht`,
         tags: ["쇼핑", "숫자·시간"],
-        keywords: [query, converted.normalized, converted.thaiDigits, "바트", "가격", "금액"],
+        keywords: [query, converted.normalized, converted.thaiDigits, converted.thaiKo, "바트", "가격", "금액"],
       },
       "sentence"
     ),
@@ -969,6 +1002,16 @@ function uniqueById(entries) {
   });
 }
 
+function findExactEntry(entries, searchProfile) {
+  if (!searchProfile.query) return null;
+  return entries.find((entry) => {
+    const index = buildSearchIndex(entry);
+    return [index.korean, index.thai, index.thaiScript, ...index.keywords].some(
+      (field) => field && field === searchProfile.compact
+    );
+  }) || null;
+}
+
 function renderScenarioChips() {
   elements.scenarioChips.innerHTML = "";
   baseData.scenarios.forEach((scenario) => {
@@ -1001,6 +1044,17 @@ function performSearch(nextQuery = elements.searchInput.value.trim(), options = 
 function applyQuickSearch(query) {
   elements.searchInput.value = query;
   performSearch(query, { scrollResults: true });
+}
+
+function jumpToSection(section) {
+  if (!state.query) {
+    performSearch(elements.searchInput.value.trim(), { scrollResults: true });
+  }
+
+  window.setTimeout(() => {
+    if (!section) return;
+    section.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, 40);
 }
 
 function renderQuickSearches() {
@@ -1229,11 +1283,16 @@ function render() {
   const generated = buildGeneratedNumberEntries(state.query);
   const numberMode = generated.vocab.length > 0;
   const searchProfile = buildSearchProfile(state.query, [...merged.vocab, ...merged.sentences]);
+  const exactSentenceMatch = numberMode ? null : findExactEntry(merged.sentences, searchProfile);
   const allVocabResults = numberMode
     ? generated.vocab
     : uniqueById([...generated.vocab, ...getVocabResults(merged.vocab, searchProfile)]);
   const vocabSeeds = allVocabResults;
-  const vocabResults = state.query ? allVocabResults.slice(0, RESULT_LIMITS.vocab) : [];
+  const vocabResults = state.query
+    ? exactSentenceMatch
+      ? []
+      : allVocabResults.slice(0, RESULT_LIMITS.vocab)
+    : [];
   const sentenceResults = state.query
     ? (numberMode
         ? generated.sentences
@@ -1268,6 +1327,8 @@ function render() {
   elements.vocabMeta.textContent = state.query
     ? numberMode
       ? "숫자는 태국어 읽기와 태국 숫자 표기를 함께 보여줍니다."
+      : exactSentenceMatch
+        ? "이 검색어는 정확히 맞는 회화가 있어서 아래 문장을 먼저 보여줍니다."
       : "문장을 잘게 풀어서 먼저 잡아둘 단어부터 보여줍니다."
     : "검색어를 넣으면 관련 단어가 나옵니다.";
   elements.sentenceMeta.textContent = state.query
@@ -1283,7 +1344,9 @@ function render() {
   renderEntryStack(
     elements.vocabResults,
     vocabResults,
-    "맞는 단어가 아직 없습니다. 더 짧은 핵심어로 검색해 보세요."
+    exactSentenceMatch
+      ? "정확히 맞는 회화를 아래에서 먼저 확인해 보세요."
+      : "맞는 단어가 아직 없습니다. 더 짧은 핵심어로 검색해 보세요."
   );
   renderEntryStack(
     elements.sentenceResults,
@@ -1421,13 +1484,8 @@ function wireEvents() {
     }
   });
 
-  elements.clearSearchButton.addEventListener("click", () => {
-    elements.searchInput.value = "";
-    state.query = "";
-    state.selectedVocabId = null;
-    state.revealedThaiIds = new Set();
-    render();
-  });
+  elements.jumpVocabButton.addEventListener("click", () => jumpToSection(elements.vocabSection));
+  elements.jumpSentenceButton.addEventListener("click", () => jumpToSection(elements.sentenceSection));
 
   elements.resetFiltersButton.addEventListener("click", () => {
     state.scenario = "all";
