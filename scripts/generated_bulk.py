@@ -21,6 +21,14 @@ SKIP_EXACT = {
     "오후",
     "가능",
     "불가능",
+    "분실",
+    "예약",
+    "수리",
+    "청소",
+    "도착",
+    "출발",
+    "체크인",
+    "체크아웃",
 }
 SKIP_CONTAINS = (
     "안녕",
@@ -48,6 +56,24 @@ SKIP_CONTAINS = (
     "느리다",
     "조심",
     "응급",
+)
+NOUN_DA_EXCEPTIONS = {
+    "바다",
+    "소다",
+    "사이다",
+}
+PROCESS_ENDINGS = (
+    "분실",
+    "예약",
+    "수리",
+    "청소",
+    "도착",
+    "출발",
+    "결제",
+    "할인",
+    "환불",
+    "교환",
+    "보증금",
 )
 POLITE_ENDINGS = (
     "요",
@@ -246,7 +272,18 @@ def looks_polite_phrase(text: str) -> bool:
 
 def looks_verbish(text: str) -> bool:
     value = clean_text(text)
-    return any(value.endswith(ending) for ending in VERB_ENDINGS)
+    if any(value.endswith(ending) for ending in VERB_ENDINGS):
+        return True
+    if re.fullmatch(r"[가-힣 ]+", value) and value.endswith("다") and value not in NOUN_DA_EXCEPTIONS:
+        return True
+    return False
+
+
+def looks_process_like(text: str) -> bool:
+    value = clean_text(text)
+    if not value:
+        return True
+    return any(value.endswith(ending) for ending in PROCESS_ENDINGS)
 
 
 def has_domain_value(tags: list[str], text: str) -> bool:
@@ -263,7 +300,7 @@ def is_seed_candidate(variant: str, tags: list[str]) -> bool:
         return False
     if len(value) > 18:
         return False
-    if looks_polite_phrase(value) or looks_verbish(value):
+    if looks_polite_phrase(value) or looks_verbish(value) or looks_process_like(value):
         return False
     if any(piece in value for piece in SKIP_CONTAINS):
         return False
