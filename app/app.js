@@ -1,6 +1,6 @@
 const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
-const APP_VERSION = "20260410i";
+const APP_VERSION = "20260410j";
 
 const baseData = window.BASE_DATA || {
   appTitle: "태국어 포켓북",
@@ -140,9 +140,12 @@ const QUERY_PARTS = [
   { patterns: [/오다|온다|와요|옵니다|올게|오고|왔다/], primary: ["오다"], related: ["여기로 오세요"], display: ["오다"], tags: ["이동", "기본회화"] },
   { patterns: [/먹다|먹어요|먹는다|먹고/], primary: ["먹다"], related: ["메뉴", "음식"], display: ["먹다"], tags: ["식당", "기본회화"] },
   { patterns: [/마시다|마셔|마신다/], primary: ["마시다"], related: ["물", "음료"], display: ["마시다"], tags: ["식당", "기본회화"] },
+  { patterns: [/주스|쥬스|음료/], primary: ["주스", "음료"], related: ["과일", "수박", "오렌지"], display: ["주스"], tags: ["식당", "쇼핑"] },
   { patterns: [/보다|봐요|본다/], primary: ["보다"], related: ["여기", "보여주세요"], display: ["보다"], tags: ["기본회화"] },
   { patterns: [/말하다|말해|말해요|말한다/], primary: ["말하다"], related: ["천천히", "다시"], display: ["말하다"], tags: ["기본회화"] },
   { patterns: [/이해|알겠|알겠습니다|알겠어/], primary: ["이해"], related: ["이해해요", "이해하나요", "이해합니다", "알겠습니다"], display: ["이해"], tags: ["기본회화"] },
+  { patterns: [/급해|급하다|서둘러|급합니다|빨리좀|빨리 해/], primary: ["급하다", "빨리"], related: ["서둘러", "지금", "바로"], display: ["급하다"], tags: ["기본회화"] },
+  { patterns: [/빨래|세탁|세탁기|세탁실|건조기|세제/], primary: ["빨래", "세탁"], related: ["세탁기", "세탁실", "건조기", "세제"], display: ["빨래"], tags: ["기본회화", "이동"] },
   { patterns: [/병원|약국|약|아파|두통|열/], primary: ["병원", "약"], related: ["아프다", "두통", "열"], display: ["병원"], tags: ["건강"] },
   { patterns: [/와이파이|wifi|인터넷|비밀번호/i], primary: ["와이파이"], related: ["비밀번호", "인터넷"], display: ["와이파이"], tags: ["이동"] },
   { patterns: [/천천히|다시|이해|못 알아|못알아/], primary: ["천천히", "다시"], related: ["이해", "한 번 더"], display: ["다시"], tags: ["기본회화"] },
@@ -218,6 +221,27 @@ const QUERY_ALIASES = [
     related: ["안 맵게", "덜 맵게", "고수 빼", "포장", "추천", "채식", "얼음 빼"],
     display: ["식당"],
     tags: ["식당"],
+  },
+  {
+    matches: ["주스", "쥬스", "수박주스", "수박쥬스", "오렌지주스", "망고주스", "음료", "차가운음료"],
+    primary: ["주스", "음료"],
+    related: ["수박 주스", "오렌지 주스", "망고 주스", "과일", "물"],
+    display: ["주스"],
+    tags: ["식당", "쇼핑"],
+  },
+  {
+    matches: ["빨래", "세탁", "세탁기", "세탁실", "건조기", "세제", "빨래해주세요", "세탁해주세요", "빨래맡기고싶어요"],
+    primary: ["빨래", "세탁"],
+    related: ["세탁기", "세탁실", "건조기", "세제", "옷", "수건"],
+    display: ["빨래"],
+    tags: ["기본회화", "이동"],
+  },
+  {
+    matches: ["급해", "급해요", "급합니다", "급하다", "빨리", "서둘러", "지금바로", "급한데"],
+    primary: ["급하다", "빨리"],
+    related: ["서둘러", "지금", "바로", "빨리 해주세요"],
+    display: ["급하다"],
+    tags: ["기본회화"],
   },
   {
     matches: ["잘못된방법", "그건잘못된방법이야", "틀린방법", "그방법틀렸어"],
@@ -314,6 +338,7 @@ function normalizeText(text) {
     .toLowerCase()
     .normalize("NFKC")
     .replace(/잘돗/g, "잘못")
+    .replace(/쥬스/g, "주스")
     .replace(/이에요/g, "예요")
     .replace(/에요/g, "예요")
     .replace(/예여/g, "예요")
@@ -333,6 +358,44 @@ function tokenize(text) {
     .map((token) => token.trim())
     .filter(Boolean)
     .filter((token) => token.length > 1 || !STOPWORDS.has(token));
+}
+
+function expandQueryVariants(query, rawTokens = []) {
+  const variants = [];
+  const candidates = [query, ...rawTokens].map((item) => normalizeText(item)).filter(Boolean);
+  const verbLikePatterns = [
+    /^(.*)해$/,
+    /^(.*)해요$/,
+    /^(.*)해줘$/,
+    /^(.*)해줘요$/,
+    /^(.*)해주세요$/,
+    /^(.*)합니다$/,
+    /^(.*)했어요$/,
+    /^(.*)했어$/,
+  ];
+
+  candidates.forEach((item) => {
+    variants.push(item);
+    if (item.includes("세탁")) variants.push(item.replace(/세탁/g, "빨래"));
+    if (item.includes("빨래")) variants.push(item.replace(/빨래/g, "세탁"));
+    if (item.includes("주스")) variants.push(item.replace(/주스/g, "쥬스"));
+    if (/급해|급해요|급합니다|급한데|급하니까/.test(item)) {
+      variants.push("급하다", "급해요", "빨리", "서둘러");
+    }
+    if (/빨래|세탁/.test(item)) {
+      variants.push("세탁기", "세탁실", "건조기", "세제");
+    }
+    if (/주스|쥬스/.test(item)) {
+      variants.push("음료", "과일", "물");
+    }
+    verbLikePatterns.forEach((pattern) => {
+      const matched = item.match(pattern);
+      if (!matched || !matched[1]) return;
+      variants.push(`${matched[1]}하다`);
+    });
+  });
+
+  return unique(variants.map((item) => normalizeText(item)).filter(Boolean));
 }
 
 function unique(items) {
@@ -756,8 +819,11 @@ function buildSearchProfile(query, entries = []) {
   const normalized = normalizeText(trimmedQuery);
   const compact = compactText(trimmedQuery);
   const rawTokens = tokenize(trimmedQuery);
-  const patternTexts = [trimmedQuery, normalized, compact];
-  const primaryTerms = [...rawTokens];
+  const expandedVariants = expandQueryVariants(trimmedQuery, rawTokens);
+  const expandedCompacts = expandedVariants.map((item) => compactText(item)).filter(Boolean);
+  const patternTexts = unique([trimmedQuery, normalized, compact, ...expandedVariants, ...expandedCompacts]);
+  const aliasTexts = unique([compact, ...expandedCompacts]);
+  const primaryTerms = [...rawTokens, ...expandedVariants];
   const relatedTerms = [];
   const displayTerms = [];
   const tags = [];
@@ -781,7 +847,7 @@ function buildSearchProfile(query, entries = []) {
   });
 
   QUERY_ALIASES.forEach((rule) => {
-    if (rule.matches.some((item) => compact.includes(compactText(item)))) {
+    if (rule.matches.some((item) => aliasTexts.some((text) => text.includes(compactText(item))))) {
       primaryTerms.push(...(rule.primary || []));
       relatedTerms.push(...(rule.related || []));
       displayTerms.push(...(rule.display || []));
@@ -790,7 +856,7 @@ function buildSearchProfile(query, entries = []) {
   });
 
   QUERY_ENDINGS.forEach((rule) => {
-    if (compact.endsWith(compactText(rule.suffix))) {
+    if (aliasTexts.some((text) => text.endsWith(compactText(rule.suffix)))) {
       primaryTerms.push(...(rule.primary || []));
       relatedTerms.push(...(rule.related || []));
       displayTerms.push(...(rule.display || []));
@@ -824,7 +890,7 @@ function buildSearchProfile(query, entries = []) {
     query: trimmedQuery,
     normalized,
     compact,
-    directTerms: unique([compact, ...rawTokens.map((item) => compactText(item))].filter(Boolean)),
+    directTerms: unique([compact, ...rawTokens.map((item) => compactText(item)), ...expandedCompacts].filter(Boolean)),
     primaryTerms: primaryCompacts,
     relatedTerms: relatedCompacts,
     displayTerms: unique(displayTerms.length ? displayTerms : rawTokens).slice(0, 4),
