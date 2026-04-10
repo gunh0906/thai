@@ -1,6 +1,6 @@
 const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
-const APP_VERSION = "20260410m";
+const APP_VERSION = "20260410p";
 
 const baseData = window.BASE_DATA || {
   appTitle: "태국어 포켓북",
@@ -150,6 +150,10 @@ const QUERY_PARTS = [
   { patterns: [/병원|약국|약|아파|두통|열/], primary: ["병원", "약"], related: ["아프다", "두통", "열"], display: ["병원"], tags: ["건강"] },
   { patterns: [/머리|배|복통|두통|기침|콧물|어지러|멀미|설사|구토|토할|상처|허리|다리|무릎|숨쉬기/], primary: ["아프다", "병원"], related: ["약국", "의사", "약", "도와주세요"], display: ["건강"], tags: ["건강"] },
   { patterns: [/티셔츠|셔츠|바지|치마|원피스|드레스|자켓|재킷|점퍼|속옷|양말|신발|모자|우산|수영복/], primary: ["옷"], related: ["사이즈", "색", "보여주세요"], display: ["옷"], tags: ["쇼핑"] },
+  { patterns: [/잃어버|분실|못찾|못 찾|두고왔|놓고왔/], primary: ["분실"], related: ["여권", "지갑", "휴대폰", "도와주세요", "경찰"], display: ["분실"], tags: ["이동", "기본회화"] },
+  { patterns: [/체크인|체크아웃|게이트|탑승권|보딩패스|예약/], primary: ["예약", "체크인"], related: ["체크아웃", "게이트", "탑승권"], display: ["예약"], tags: ["이동"] },
+  { patterns: [/비|우산|날씨|더워|추워|에어컨/], primary: ["날씨"], related: ["비", "우산", "에어컨", "더운 날씨", "추운 날씨"], display: ["날씨"], tags: ["기본회화", "이동"] },
+  { patterns: [/냄새|소음|시끄러|얼룩|누수|물새|막혔|수리|청소/], primary: ["문제"], related: ["수리", "청소", "냄새", "소음", "누수"], display: ["문제"], tags: ["이동", "건강"] },
   { patterns: [/와이파이|wifi|인터넷|비밀번호/i], primary: ["와이파이"], related: ["비밀번호", "인터넷"], display: ["와이파이"], tags: ["이동"] },
   { patterns: [/천천히|다시|이해|못 알아|못알아/], primary: ["천천히", "다시"], related: ["이해", "한 번 더"], display: ["다시"], tags: ["기본회화"] },
 ];
@@ -918,7 +922,7 @@ function matchesIndexTerm(index, term) {
 }
 
 function scoreEntry(entry, searchProfile, kind) {
-  if (!searchProfile.query) return { matched: true, score: 0, directMatch: false, primaryHits: 0, relatedHits: 0 };
+  if (!searchProfile.query) return { matched: true, score: 0, directMatch: false, directHits: 0, primaryHits: 0, relatedHits: 0 };
 
   const index = buildSearchIndex(entry);
   const searchableFields = [index.korean, index.thai, index.thaiScript, index.note, ...index.keywords];
@@ -927,33 +931,52 @@ function scoreEntry(entry, searchProfile, kind) {
   const entryNegative = hasNegativeMeaning(entry.korean) || hasNegativeMeaning(entry.note);
   let score = 0;
   let directMatch = false;
+  const directHits = new Set();
   const primaryHits = new Set();
   const relatedHits = new Set();
 
   searchProfile.directTerms.forEach((term) => {
+    let bestMatchLevel = 0;
     searchableFields.forEach((field) => {
       if (!field || !term) return;
       if (field === term) {
-        score = Math.max(score, 1000);
-        directMatch = true;
+        bestMatchLevel = Math.max(bestMatchLevel, 4);
         return;
       }
       if (term.length === 1 && field.includes(term)) {
-        score = Math.max(score, 360);
-        directMatch = true;
+        bestMatchLevel = Math.max(bestMatchLevel, 1);
         return;
       }
       if (term.length >= 2 && field.startsWith(term)) {
-        score = Math.max(score, 820);
-        directMatch = true;
+        bestMatchLevel = Math.max(bestMatchLevel, 3);
         return;
       }
       if (term.length >= 2 && field.includes(term)) {
-        score = Math.max(score, 700);
-        directMatch = true;
+        bestMatchLevel = Math.max(bestMatchLevel, 2);
       }
     });
+
+    if (!bestMatchLevel) return;
+    directMatch = true;
+    directHits.add(term);
+    if (bestMatchLevel === 4) {
+      score += term.length === 1 ? 120 : 430;
+      return;
+    }
+    if (bestMatchLevel === 3) {
+      score += term.length === 1 ? 95 : 320;
+      return;
+    }
+    if (bestMatchLevel === 2) {
+      score += term.length === 1 ? 70 : 240;
+      return;
+    }
+    score += 110;
   });
+
+  if (directHits.size >= 2) {
+    score += 180 + directHits.size * 40;
+  }
 
   searchProfile.primaryTerms.forEach((term) => {
     if (!matchesIndexTerm(index, term)) return;
@@ -999,7 +1022,7 @@ function scoreEntry(entry, searchProfile, kind) {
       score >= 220) ||
     (kind === "sentence" && !hasPrimaryPlan && score >= 340);
 
-  return { matched, score, directMatch, primaryHits: primaryHits.size, relatedHits: relatedHits.size };
+  return { matched, score, directMatch, directHits: directHits.size, primaryHits: primaryHits.size, relatedHits: relatedHits.size };
 }
 
 function getVocabResults(entries, searchProfile) {
@@ -1016,6 +1039,7 @@ function getVocabResults(entries, searchProfile) {
     .filter(({ match }) => match.matched)
     .sort((left, right) => {
       if (right.match.score !== left.match.score) return right.match.score - left.match.score;
+      if (right.match.directHits !== left.match.directHits) return right.match.directHits - left.match.directHits;
       if (right.match.primaryHits !== left.match.primaryHits) return right.match.primaryHits - left.match.primaryHits;
       const leftThai = Boolean(getThaiScriptText(left.entry));
       const rightThai = Boolean(getThaiScriptText(right.entry));
@@ -1070,6 +1094,7 @@ function getSentenceResults(entries, searchProfile, vocabSeeds) {
     .filter(({ match }) => match.matched)
     .sort((left, right) => {
       if (right.match.score !== left.match.score) return right.match.score - left.match.score;
+      if (right.match.directHits !== left.match.directHits) return right.match.directHits - left.match.directHits;
       const leftThai = Boolean(getThaiScriptText(left.entry));
       const rightThai = Boolean(getThaiScriptText(right.entry));
       if (leftThai !== rightThai) return Number(rightThai) - Number(leftThai);
@@ -1428,14 +1453,13 @@ function render() {
     : uniqueById([...generated.vocab, ...getVocabResults(vocabSource, searchProfile)]);
   const vocabSeeds = allVocabResults;
   const vocabResults = state.query
-    ? exactSentenceMatch || actionPhraseMode
-      ? []
-      : allVocabResults.slice(0, RESULT_LIMITS.vocab)
+    ? allVocabResults.slice(0, RESULT_LIMITS.vocab)
     : [];
   const sentenceResults = state.query
     ? (numberMode
         ? generated.sentences
         : uniqueById([
+            ...(exactSentenceMatch ? [exactSentenceMatch] : []),
             ...generated.sentences,
             ...getSentenceResults(sentenceSource, searchProfile, vocabSeeds),
           ]).slice(0, RESULT_LIMITS.sentences))
@@ -1471,9 +1495,9 @@ function render() {
       : timeMode
         ? "시간 검색이라서 시간 표현 위주로 먼저 보여줍니다."
       : exactSentenceMatch
-        ? "이 검색어는 정확히 맞는 회화가 있어서 아래 문장을 먼저 보여줍니다."
+        ? "핵심 단어를 먼저 보여주고, 아래에 정확히 맞는 회화를 맨 위에 올렸습니다."
       : actionPhraseMode
-        ? "문장형 검색이라서 회화를 먼저 보여줍니다."
+        ? "문장형 검색이라도 먼저 잡아둘 단어를 위에 보여줍니다."
       : "문장을 잘게 풀어서 먼저 잡아둘 단어부터 보여줍니다."
     : "검색어를 넣으면 관련 단어가 나옵니다.";
   elements.sentenceMeta.textContent = state.query
@@ -1491,9 +1515,7 @@ function render() {
   renderEntryStack(
     elements.vocabResults,
     vocabResults,
-    exactSentenceMatch || actionPhraseMode
-      ? "정확히 맞는 회화를 아래에서 먼저 확인해 보세요."
-      : "맞는 단어가 아직 없습니다. 더 짧은 핵심어로 검색해 보세요."
+    "맞는 단어가 아직 없습니다. 더 짧은 핵심어로 검색해 보세요."
   );
   renderEntryStack(
     elements.sentenceResults,
