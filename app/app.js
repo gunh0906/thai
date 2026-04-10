@@ -1,6 +1,6 @@
 const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
-const APP_VERSION = "20260410j";
+const APP_VERSION = "20260410k";
 
 const baseData = window.BASE_DATA || {
   appTitle: "태국어 포켓북",
@@ -26,6 +26,7 @@ const QUICK_SEARCHES = [
 const STOPWORDS = new Set(["이", "그", "저", "것", "거", "좀", "더", "요", "은", "는", "이거"]);
 const THAI_SCRIPT_REGEX = /[\u0E00-\u0E7F]/;
 const NUMBER_QUERY_REGEX = /^[+-]?(?:(?:\d+(?:\.\d+)?)|(?:\.\d+))$/;
+const TIME_QUERY_REGEX = /^(?:(오전|오후)\s*)?\d{1,2}\s*시(?:\s*\d{1,2}\s*분)?$|^(?:(오전|오후)\s*)?\d{1,2}:\d{2}$/;
 
 const RESULT_LIMITS = {
   vocab: 8,
@@ -1211,6 +1212,15 @@ function hasNegativeMeaning(text) {
   return /(안|못|없|말고|잘못|틀리|아니)/.test(normalizeText(text));
 }
 
+function isTimeLikeQuery(query) {
+  return TIME_QUERY_REGEX.test(normalizeText(query));
+}
+
+function isTimeFocusedEntry(entry) {
+  const text = normalizeText(`${entry.korean || ""} ${(entry.keywords || []).join(" ")} ${entry.note || ""}`);
+  return /(?:오전|오후)?\s*\d{1,2}\s*시(?:\s*\d{1,2}\s*분)?|\d{1,2}:\d{2}|몇\s*시|시간|시예요|시에|분/.test(text);
+}
+
 function openMenu() {
   state.menuOpen = true;
   document.body.classList.add("menu-open");
@@ -1405,12 +1415,15 @@ function render() {
   const merged = getMergedData();
   const generated = buildGeneratedNumberEntries(state.query);
   const numberMode = generated.vocab.length > 0;
+  const timeMode = !numberMode && isTimeLikeQuery(state.query);
   const searchProfile = buildSearchProfile(state.query, [...merged.vocab, ...merged.sentences]);
   const exactSentenceMatch = numberMode ? null : findExactEntry(merged.sentences, searchProfile);
   const actionPhraseMode = !numberMode && isActionPhraseQuery(searchProfile);
+  const vocabSource = timeMode ? merged.vocab.filter((entry) => isTimeFocusedEntry(entry)) : merged.vocab;
+  const sentenceSource = timeMode ? merged.sentences.filter((entry) => isTimeFocusedEntry(entry)) : merged.sentences;
   const allVocabResults = numberMode
     ? generated.vocab
-    : uniqueById([...generated.vocab, ...getVocabResults(merged.vocab, searchProfile)]);
+    : uniqueById([...generated.vocab, ...getVocabResults(vocabSource, searchProfile)]);
   const vocabSeeds = allVocabResults;
   const vocabResults = state.query
     ? exactSentenceMatch || actionPhraseMode
@@ -1422,7 +1435,7 @@ function render() {
         ? generated.sentences
         : uniqueById([
             ...generated.sentences,
-            ...getSentenceResults(merged.sentences, searchProfile, vocabSeeds),
+            ...getSentenceResults(sentenceSource, searchProfile, vocabSeeds),
           ]).slice(0, RESULT_LIMITS.sentences))
     : [];
   const browsing = isBrowsingState();
@@ -1437,6 +1450,8 @@ function render() {
     ? "한국어로 검색하면 단어를 먼저, 바로 쓸 회화를 그 아래에 보여줍니다."
     : numberMode
       ? `숫자 변환: 읽기 ${vocabResults.length}개 · 활용 ${sentenceResults.length}개${expandedHint}`
+      : timeMode
+        ? `시간 검색: 단어 ${vocabResults.length}개 · 회화 ${sentenceResults.length}개${expandedHint}`
       : `검색됨: 단어 ${vocabResults.length}개 · 회화 ${sentenceResults.length}개${expandedHint}`;
 
   elements.filterSummary.textContent =
@@ -1451,6 +1466,8 @@ function render() {
   elements.vocabMeta.textContent = state.query
     ? numberMode
       ? "숫자는 태국어 읽기와 태국 숫자 표기를 함께 보여줍니다."
+      : timeMode
+        ? "시간 검색이라서 시간 표현 위주로 먼저 보여줍니다."
       : exactSentenceMatch
         ? "이 검색어는 정확히 맞는 회화가 있어서 아래 문장을 먼저 보여줍니다."
       : actionPhraseMode
@@ -1460,6 +1477,8 @@ function render() {
   elements.sentenceMeta.textContent = state.query
     ? numberMode
       ? "가격이나 수량으로 바로 보여줄 수 있게 같이 만들었습니다."
+      : timeMode
+        ? "시간을 묻거나 말할 때 바로 쓸 회화만 추렸습니다."
       : "위 단어를 바탕으로 바로 보여주기 좋은 회화만 추렸습니다."
     : "검색어를 넣으면 관련 회화가 나옵니다.";
 
