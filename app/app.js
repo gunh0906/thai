@@ -1,6 +1,6 @@
 const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
-const APP_VERSION = "20260410q";
+const APP_VERSION = "20260410r";
 
 const baseData = window.BASE_DATA || {
   appTitle: "태국어 포켓북",
@@ -150,6 +150,10 @@ const QUERY_PARTS = [
   { patterns: [/병원|약국|약|아파|두통|열/], primary: ["병원", "약"], related: ["아프다", "두통", "열"], display: ["병원"], tags: ["건강"] },
   { patterns: [/머리|배|복통|두통|기침|콧물|어지러|멀미|설사|구토|토할|상처|허리|다리|무릎|숨쉬기/], primary: ["아프다", "병원"], related: ["약국", "의사", "약", "도와주세요"], display: ["건강"], tags: ["건강"] },
   { patterns: [/티셔츠|셔츠|바지|치마|원피스|드레스|자켓|재킷|점퍼|속옷|양말|신발|모자|우산|수영복/], primary: ["옷"], related: ["사이즈", "색", "보여주세요"], display: ["옷"], tags: ["쇼핑"] },
+  { patterns: [/기계|장비|라인|공장|작업|현장/], primary: ["기계", "작업"], related: ["가동", "작동", "시작하다", "멈추다", "공장"], display: ["기계"], tags: ["일터"] },
+  { patterns: [/가동|작동|켜|끄|멈춰|멈추|정지|중지|시작/], primary: ["작동", "시작하다"], related: ["기계", "가동", "멈추다", "켜다", "끄다"], display: ["작동"], tags: ["일터"] },
+  { patterns: [/점심|아침|저녁|밥|식사/], primary: ["점심식사", "먹다"], related: ["아침식사", "저녁식사", "가다", "같이"], display: ["식사"], tags: ["식당", "기본회화"] },
+  { patterns: [/가자|먹자|하자|갈래/], primary: ["가다"], related: ["같이", "먹다", "하다", "점심 먹으러 가자"], display: ["같이"], tags: ["기본회화"] },
   { patterns: [/잃어버|분실|못찾|못 찾|두고왔|놓고왔/], primary: ["분실"], related: ["여권", "지갑", "휴대폰", "도와주세요", "경찰"], display: ["분실"], tags: ["이동", "기본회화"] },
   { patterns: [/체크인|체크아웃|게이트|탑승권|보딩패스|예약/], primary: ["예약", "체크인"], related: ["체크아웃", "게이트", "탑승권"], display: ["예약"], tags: ["이동"] },
   { patterns: [/비|우산|날씨|더워|추워|에어컨/], primary: ["날씨"], related: ["비", "우산", "에어컨", "더운 날씨", "추운 날씨"], display: ["날씨"], tags: ["기본회화", "이동"] },
@@ -264,11 +268,29 @@ const QUERY_ALIASES = [
     display: ["이해"],
     tags: ["기본회화"],
   },
+  {
+    matches: ["기계가동해라", "기계가동하세요", "기계가동해주세요", "기계를가동하세요", "기계를켜라", "기계켜", "기계멈춰", "기계멈춰라", "기계꺼", "기계를꺼주세요"],
+    primary: ["기계", "가동", "작동"],
+    related: ["기계를 가동하세요", "기계를 켜 주세요", "기계를 멈춰 주세요", "작업 시작합시다"],
+    display: ["기계", "가동"],
+    tags: ["일터"],
+  },
+  {
+    matches: ["점심먹으러가자", "점심먹으로가자", "점심먹자", "밥먹으러가자", "밥먹으로가자", "밥먹자", "점심먹으러갈래", "점심먹을래", "저녁먹으러가자", "아침먹으러가자", "같이가자"],
+    primary: ["점심식사", "먹다", "가다"],
+    related: ["점심 먹으러 가자", "밥 먹으러 가자", "같이 가자", "점심시간이에요"],
+    display: ["점심", "같이"],
+    tags: ["식당", "기본회화"],
+  },
 ];
 
 const QUERY_ENDINGS = [
   { suffix: "해주세요", primary: ["하다"], related: ["부탁", "주세요"], display: ["부탁"] },
   { suffix: "해줘요", primary: ["하다"], related: ["부탁", "주세요"], display: ["부탁"] },
+  { suffix: "해라", primary: ["하다"], related: ["시작하다", "부탁"], display: ["하다"] },
+  { suffix: "하자", primary: ["하다"], related: ["같이"], display: ["같이"] },
+  { suffix: "가자", primary: ["가다"], related: ["같이"], display: ["같이"] },
+  { suffix: "먹자", primary: ["먹다"], related: ["같이"], display: ["같이"] },
   { suffix: "주세요", related: ["주다", "부탁"], display: ["주세요"] },
   { suffix: "있나요", related: ["있다"], display: ["있다"] },
   { suffix: "있어요", related: ["있다"], display: ["있다"] },
@@ -350,6 +372,8 @@ function normalizeText(text) {
     .replace(/에요/g, "예요")
     .replace(/예여/g, "예요")
     .replace(/해주세여/g, "해주세요")
+    .replace(/먹으로/g, "먹으러")
+    .replace(/밥먹으로/g, "밥먹으러")
     .replace(/뭐에요/g, "뭐예요")
     .replace(/[“”"'`’]/g, "")
     .replace(/\s+/g, " ");
@@ -376,7 +400,11 @@ function expandQueryVariants(query, rawTokens = []) {
     /^(.*)해줘$/,
     /^(.*)해줘요$/,
     /^(.*)해주세요$/,
+    /^(.*)해라$/,
     /^(.*)합니다$/,
+    /^(.*)하자$/,
+    /^(.*)가자$/,
+    /^(.*)먹자$/,
     /^(.*)했어요$/,
     /^(.*)했어$/,
   ];
@@ -386,6 +414,7 @@ function expandQueryVariants(query, rawTokens = []) {
     if (item.includes("세탁")) variants.push(item.replace(/세탁/g, "빨래"));
     if (item.includes("빨래")) variants.push(item.replace(/빨래/g, "세탁"));
     if (item.includes("주스")) variants.push(item.replace(/주스/g, "쥬스"));
+    if (item.includes("먹으로")) variants.push(item.replace(/먹으로/g, "먹으러"));
     if (/급해|급해요|급합니다|급한데|급하니까/.test(item)) {
       variants.push("급하다", "급해요", "빨리", "서둘러");
     }
@@ -394,6 +423,25 @@ function expandQueryVariants(query, rawTokens = []) {
     }
     if (/주스|쥬스/.test(item)) {
       variants.push("음료", "과일", "물");
+    }
+    if (/기계|장비|라인|공장|작업/.test(item)) {
+      variants.push("기계", "작동", "가동", "시작하다", "멈추다");
+    }
+    if (/가동|작동|켜|시작/.test(item)) {
+      variants.push("기계", "작동", "가동", "시작하다", "켜다");
+    }
+    if (/멈춰|멈추|정지|중지|꺼/.test(item)) {
+      variants.push("멈추다", "정지하다", "끄다", "기계");
+    }
+    if (/점심|아침|저녁|밥|식사/.test(item)) {
+      variants.push("먹다", "가다", "같이");
+      if (item.includes("점심")) variants.push("점심식사", "점심 먹으러 가자");
+      if (item.includes("아침")) variants.push("아침식사", "아침 먹으러 가자");
+      if (item.includes("저녁")) variants.push("저녁식사", "저녁 먹으러 가자");
+      if (item.includes("밥")) variants.push("밥 먹으러 가자");
+    }
+    if (/가자|먹자|하자|갈래/.test(item)) {
+      variants.push("같이", "가다", "먹다", "하다");
     }
     verbLikePatterns.forEach((pattern) => {
       const matched = item.match(pattern);
