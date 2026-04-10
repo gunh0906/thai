@@ -10,6 +10,7 @@ from typing import Iterable
 import openpyxl
 from expanded_more import MORE_SENTENCES, MORE_VOCAB
 from expanded_terms import EXPANDED_SENTENCES, EXPANDED_VOCAB
+from generated_bulk import generate_bulk_entries
 
 SCENARIOS = [
     {
@@ -1103,37 +1104,89 @@ def merge_entries(base: dict, incoming: dict) -> dict:
 
 def deduplicate_entries(entries: list[dict]) -> list[dict]:
     deduped: list[dict] = []
+    thai_index: dict[tuple[str, str], int] = {}
+    korean_index: dict[tuple[str, str], int] = {}
+
+    def register(index: int, entry: dict) -> None:
+        thai_key = normalize_compact(entry.get("thaiScript") or entry.get("thai", ""))
+        korean_key = normalize_compact(entry.get("korean", ""))
+        kind_key = entry["kind"]
+        if thai_key:
+            thai_index[(kind_key, thai_key)] = index
+        if korean_key:
+            korean_index[(kind_key, korean_key)] = index
+
     for entry in entries:
-        merged = False
-        for index, existing in enumerate(deduped):
-            if existing["kind"] != entry["kind"]:
-                continue
-            if not entries_overlap(existing, entry):
-                continue
-            deduped[index] = merge_entries(existing, entry)
-            merged = True
-            break
-        if not merged:
+        kind_key = entry["kind"]
+        thai_key = normalize_compact(entry.get("thaiScript") or entry.get("thai", ""))
+        korean_key = normalize_compact(entry.get("korean", ""))
+        match_index = None
+
+        if thai_key:
+            match_index = thai_index.get((kind_key, thai_key))
+        if match_index is None and korean_key:
+            match_index = korean_index.get((kind_key, korean_key))
+
+        if match_index is None:
             deduped.append(entry)
+            register(len(deduped) - 1, entry)
+            continue
+
+        deduped[match_index] = merge_entries(deduped[match_index], entry)
+        register(match_index, deduped[match_index])
+
     return deduped
 
 
 def build_data(workbook_path: Path) -> dict:
     excel_vocab, excel_sentences = parse_workbook(workbook_path)
     extra_vocab, extra_sentences = build_supplemental_entries()
-    vocab_entries = deduplicate_entries(excel_vocab + extra_vocab)
-    sentence_entries = deduplicate_entries(excel_sentences + extra_sentences)
+    bulk_vocab_raw, bulk_sentences_raw = generate_bulk_entries(deduplicate_entries(excel_vocab + extra_vocab))
+    bulk_vocab = [
+        make_entry(
+            kind="vocab",
+            source="generated-bulk",
+            sheet="대량 생성 단어",
+            index=index,
+            thai=item["thai"],
+            thai_script=item.get("thaiScript", ""),
+            korean=item["korean"],
+            tags=item.get("tags"),
+            note=item.get("note", ""),
+            extra_keywords=item.get("keywords"),
+        )
+        for index, item in enumerate(bulk_vocab_raw, start=1)
+    ]
+    bulk_sentences = [
+        make_entry(
+            kind="sentence",
+            source="generated-bulk",
+            sheet="대량 생성 문장",
+            index=index,
+            thai=item["thai"],
+            thai_script=item.get("thaiScript", ""),
+            korean=item["korean"],
+            tags=item.get("tags"),
+            note=item.get("note", ""),
+            extra_keywords=item.get("keywords"),
+        )
+        for index, item in enumerate(bulk_sentences_raw, start=1)
+    ]
+    vocab_entries = deduplicate_entries(excel_vocab + extra_vocab + bulk_vocab)
+    sentence_entries = deduplicate_entries(excel_sentences + extra_sentences + bulk_sentences)
     return {
         "appTitle": "태국어 포켓북",
         "generatedAt": datetime.now().isoformat(timespec="seconds"),
         "transliterationStyle": "practical-ko",
-        "note": "보강 표현의 발음 표기는 한국어 사용자 기준의 실전용 표기이며, 앱 안에서 직접 수정·추가할 수 있습니다.",
+        "note": "보강 표현의 발음 표기는 한국어 사용자 기준의 실전용 표기이며, 기존 단어를 씨앗으로 만든 대량 조합형 데이터까지 함께 검색합니다.",
         "scenarios": SCENARIOS,
         "stats": {
             "excelVocab": len(excel_vocab),
             "excelSentences": len(excel_sentences),
             "supplementalVocab": len(extra_vocab),
             "supplementalSentences": len(extra_sentences),
+            "generatedBulkVocab": len(bulk_vocab),
+            "generatedBulkSentences": len(bulk_sentences),
             "totalVocab": len(vocab_entries),
             "totalSentences": len(sentence_entries),
         },

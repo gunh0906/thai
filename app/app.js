@@ -1,6 +1,6 @@
 const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
-const APP_VERSION = "20260410f";
+const APP_VERSION = "20260410g";
 
 const baseData = window.BASE_DATA || {
   appTitle: "태국어 포켓북",
