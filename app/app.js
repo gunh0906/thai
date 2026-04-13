@@ -1,6 +1,6 @@
 const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
-const APP_VERSION = "20260413e";
+const APP_VERSION = "20260414a";
 
 const baseData = window.BASE_DATA || {
   appTitle: "태국어 포켓북",
@@ -83,6 +83,9 @@ const GENERATED_BULK_PREFIX_REGEX =
   /^(?:이|저|그|새|다른|좋은|큰|작은|깨끗한|조용한|차가운|뜨거운|빠른|느린|비싼|싼)\s+/u;
 const GENERATED_BULK_ENDING_REGEX =
   /(?:주세요|있어요\?|필요해요|확인해주세요|다시 주세요|준비해주세요|가져다 주세요|얼마예요\?|보여주세요|바꿔주세요|안 보여요|잃어버렸어요)$/u;
+const VOCAB_SENTENCE_LIKE_REGEX =
+  /(?:\?|있어요|있다|없어요|없다|해주세요|해 주세요|주실 수 있나요|가고 싶어요|가야 해요|가요|해요|됩니다|돼요|나와요|잠겨요|더러워요|시끄러워요|문제가 있어요|필요해요)$/u;
+const VOCAB_GENERIC_LABEL_REGEX = /(?:문제|필요|있음|확인)$/u;
 const SEARCH_OBJECT_RULES = [
   {
     id: "room",
@@ -424,14 +427,10 @@ const QUERY_BUNDLES = [
     primary: ["방", "객실", "바꾸다", "변경"],
     related: [
       "방 바꿔주세요",
-      "방을 좀 바꿔주실 수 있나요",
+      "다른 방으로 바꿔 주세요",
+      "방을 좀 바꿔주실 수 있나요?",
       "다른 방",
       "다른 방 있나요",
-      "이 방은 너무 시끄러워요",
-      "에어컨이 안 시원해요",
-      "화장실에 문제가 있어요",
-      "온수가 안 나와요",
-      "오늘 밤 빈 방 있나요",
     ],
     display: ["방", "바꾸다", "다른 방"],
     tags: ["이동", "건강"],
@@ -534,7 +533,7 @@ const QUERY_ALIASES = [
   {
     matches: ["방바꿔주세요", "방좀바꿔주세요", "객실변경", "객실교체", "방교체", "룸체인지", "방바꿔", "방좀바꿔"],
     primary: ["방", "객실", "바꾸다", "변경"],
-    related: ["다른 방", "빈 방", "방 바꿔주세요", "객실 변경", "조용한 방", "깨끗한 방"],
+    related: ["다른 방", "방 바꿔주세요", "다른 방으로 바꿔 주세요", "방을 좀 바꿔주실 수 있나요?"],
     display: ["방", "바꾸다", "다른 방"],
     tags: ["이동", "기본회화"],
   },
@@ -833,6 +832,65 @@ function isGeneratedBulkTemplateEntry(entry) {
   if (entry.source !== "generated-bulk") return false;
   const korean = normalizeText(entry.korean);
   return GENERATED_BULK_PREFIX_REGEX.test(korean) || GENERATED_BULK_ENDING_REGEX.test(korean);
+}
+
+function isSentenceLikeVocabEntry(entry) {
+  if (entry.kind !== "vocab") return false;
+  const korean = normalizeText(entry.korean);
+  if (!korean) return false;
+  if (VOCAB_SENTENCE_LIKE_REGEX.test(korean)) return true;
+  const tokenCount = tokenize(korean).length;
+  return tokenCount >= 3 && /\s/.test(korean) && /(?:있|없|해|가|돼|나와|잠겨|문제)/u.test(korean);
+}
+
+function isUtilityLabelVocabEntry(entry) {
+  if (entry.kind !== "vocab") return false;
+  const korean = normalizeText(entry.korean);
+  if (!korean) return false;
+  return VOCAB_GENERIC_LABEL_REGEX.test(korean);
+}
+
+function getStructuredFieldMatchStrength(index, term, options = {}) {
+  const allowSupportContains = options.allowSupportContains ?? false;
+  const strongFields = [index.korean, index.thai, index.thaiScript];
+  const supportFields = [index.note, ...index.keywords];
+  let best = 0;
+
+  strongFields.forEach((field) => {
+    if (!field || !term) return;
+    if (field === term) {
+      best = Math.max(best, 6);
+      return;
+    }
+    if (term.length === 1 && field.startsWith(term)) {
+      best = Math.max(best, 3);
+      return;
+    }
+    if (term.length >= 2 && field.startsWith(term)) {
+      best = Math.max(best, 5);
+      return;
+    }
+    if (term.length >= 2 && field.includes(term)) {
+      best = Math.max(best, 4);
+    }
+  });
+
+  supportFields.forEach((field) => {
+    if (!field || !term) return;
+    if (field === term) {
+      best = Math.max(best, 3);
+      return;
+    }
+    if (term.length >= 2 && field.startsWith(term)) {
+      best = Math.max(best, 2);
+      return;
+    }
+    if (allowSupportContains && term.length >= 3 && field.includes(term)) {
+      best = Math.max(best, 1);
+    }
+  });
+
+  return best;
 }
 
 function buildIntentHints(query, patternTexts) {
@@ -1797,6 +1855,11 @@ function buildSearchProfile(query, entries = []) {
   const expandedCompacts = expandedVariants.map((item) => compactText(item)).filter(Boolean);
   const patternTexts = unique([trimmedQuery, normalized, compact, ...expandedVariants, ...expandedCompacts]);
   const intentHints = buildIntentHints(trimmedQuery, patternTexts);
+  const hasStrongIntent = Boolean(
+    (intentHints.objectTerms && intentHints.objectTerms.length) ||
+      (intentHints.actionTerms && intentHints.actionTerms.length) ||
+      (intentHints.templateTerms && intentHints.templateTerms.length)
+  );
   const aliasTexts = unique([compact, ...expandedCompacts]);
   const primaryTerms = [...rawTokens, ...expandedVariants];
   const relatedTerms = [];
@@ -1843,14 +1906,16 @@ function buildSearchProfile(query, entries = []) {
     }
   });
 
-  collectSeedEntries(entries, compact, intentHints).forEach((entry) => {
-    const index = buildSearchIndex(entry);
-    primaryTerms.push(...tokenize(entry.korean));
-    relatedTerms.push(...(entry.keywords || []).slice(0, 8));
-    relatedTerms.push(...index.tokens.slice(0, 6));
-    displayTerms.push(entry.korean);
-    tags.push(...(entry.tags || []));
-  });
+  if (!hasStrongIntent && !isTimeQuestionQuery(trimmedQuery)) {
+    collectSeedEntries(entries, compact, intentHints).forEach((entry) => {
+      const index = buildSearchIndex(entry);
+      primaryTerms.push(...tokenize(entry.korean));
+      relatedTerms.push(...(entry.keywords || []).slice(0, 8));
+      relatedTerms.push(...index.tokens.slice(0, 6));
+      displayTerms.push(entry.korean);
+      tags.push(...(entry.tags || []));
+    });
+  }
 
   const intentBlockedTerms = unique((intentHints.blockedTerms || []).map((item) => compactText(item)).filter(Boolean));
   const primaryCompacts = unique(
@@ -1950,15 +2015,7 @@ function matchesIndexTerm(index, term) {
 
 function matchesTemplateTerm(index, term) {
   if (!term) return false;
-  const fields = [index.korean, index.thai, index.thaiScript, index.note, ...index.keywords];
-  if (
-    fields.some(
-      (field) => field && (field === term || field.startsWith(term) || (term.length >= 4 && field.includes(term)))
-    )
-  ) {
-    return true;
-  }
-  return index.tokens.some((token) => token === term || token.startsWith(term));
+  return getStructuredFieldMatchStrength(index, term) >= 4;
 }
 
 function scoreEntry(entry, searchProfile, kind) {
@@ -1992,31 +2049,21 @@ function scoreEntry(entry, searchProfile, kind) {
   const templateHits = new Set();
 
   searchProfile.directTerms.forEach((term) => {
-    let bestMatchLevel = 0;
-    searchableFields.forEach((field) => {
-      if (!field || !term) return;
-      if (field === term) {
-        bestMatchLevel = Math.max(bestMatchLevel, 4);
-        return;
-      }
-      if (term.length === 1 && field.includes(term)) {
-        bestMatchLevel = Math.max(bestMatchLevel, 1);
-        return;
-      }
-      if (term.length >= 2 && field.startsWith(term)) {
-        bestMatchLevel = Math.max(bestMatchLevel, 3);
-        return;
-      }
-      if (term.length >= 2 && field.includes(term)) {
-        bestMatchLevel = Math.max(bestMatchLevel, 2);
-      }
-    });
+    const bestMatchLevel = getStructuredFieldMatchStrength(index, term, { allowSupportContains: true });
 
     if (!bestMatchLevel) return;
     directMatch = true;
     directHits.add(term);
+    if (bestMatchLevel >= 6) {
+      score += term.length === 1 ? 150 : 540;
+      return;
+    }
+    if (bestMatchLevel === 5) {
+      score += term.length === 1 ? 110 : 380;
+      return;
+    }
     if (bestMatchLevel === 4) {
-      score += term.length === 1 ? 120 : 430;
+      score += term.length === 1 ? 90 : 280;
       return;
     }
     if (bestMatchLevel === 3) {
@@ -2024,10 +2071,10 @@ function scoreEntry(entry, searchProfile, kind) {
       return;
     }
     if (bestMatchLevel === 2) {
-      score += term.length === 1 ? 70 : 240;
+      score += term.length === 1 ? 60 : 160;
       return;
     }
-    score += 110;
+    score += 85;
   });
 
   if (directHits.size >= 2) {
@@ -2103,6 +2150,12 @@ function scoreEntry(entry, searchProfile, kind) {
     }
     const lengthDelta = Math.max(0, index.korean.length - searchProfile.compact.length);
     score -= Math.min(lengthDelta * 18, 220);
+    if (isSentenceLikeVocabEntry(entry)) {
+      score -= 240;
+    }
+    if (isUtilityLabelVocabEntry(entry)) {
+      score -= 170;
+    }
   }
   if (hasThaiScript) {
     score += 35;
