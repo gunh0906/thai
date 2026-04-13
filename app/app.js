@@ -1,6 +1,6 @@
 const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
-const APP_VERSION = "20260410u";
+const APP_VERSION = "20260413b";
 
 const baseData = window.BASE_DATA || {
   appTitle: "태국어 포켓북",
@@ -24,10 +24,12 @@ const QUICK_SEARCHES = [
 ];
 
 const STOPWORDS = new Set(["이", "그", "저", "것", "거", "좀", "더", "요", "은", "는", "이거"]);
+const GENERIC_ANCHOR_TERMS = new Set(["주세요", "주세여", "부탁", "좀", "지금", "현재", "시간", "몇시", "공구", "기계", "문제"]);
 const THAI_SCRIPT_REGEX = /[\u0E00-\u0E7F]/;
 const NUMBER_QUERY_REGEX = /^[+-]?(?:(?:\d+(?:\.\d+)?)|(?:\.\d+))$/;
 const TIME_QUERY_REGEX = /^(?:(오전|오후)\s*)?\d{1,2}\s*시(?:\s*\d{1,2}\s*분)?$|^(?:(오전|오후)\s*)?\d{1,2}:\d{2}$/;
 const TIME_EXTRACT_REGEX = /(?:(오전|오후)\s*)?\d{1,2}\s*시(?:\s*\d{1,2}\s*분)?|(?:(오전|오후)\s*)?\d{1,2}:\d{2}/;
+const TIME_QUESTION_REGEX = /^(?:(?:지금|현재)?(?:시간)?몇시(?:야|예요|에요|인가요|니|냐)?)$|^(?:지금시간|현재시간|지금몇시|현재몇시)$/;
 
 const RESULT_LIMITS = {
   vocab: 8,
@@ -57,10 +59,12 @@ const TIME_WORDS = {
   clock: { script: "นาฬิกา", latin: "nalika", ko: "나리까" },
   minute: { script: "นาที", latin: "nathi", ko: "나티" },
   now: { script: "ตอนนี้เวลา", latin: "ton ni wela", ko: "똔니 웨라" },
+  nowQuestion: { script: "ตอนนี้กี่โมงครับ", latin: "ton ni ki mong khrap", ko: "똔니 끼 몽 캅" },
   meet: { script: "เจอกันตอน", latin: "joe kan ton", ko: "저 깐 똔" },
   go: { script: "ไปตอน", latin: "pai ton", ko: "빠이 똔" },
   am: { script: "เช้า", latin: "chao", ko: "차오", korean: "오전" },
   pm: { script: "บ่าย", latin: "bai", ko: "바이", korean: "오후" },
+  whatTime: { script: "กี่โมง", latin: "ki mong", ko: "끼 몽" },
 };
 
 const QUERY_BUNDLES = [
@@ -160,8 +164,10 @@ const QUERY_PARTS = [
   { patterns: [/병원|약국|약|아파|두통|열/], primary: ["병원", "약"], related: ["아프다", "두통", "열"], display: ["병원"], tags: ["건강"] },
   { patterns: [/머리|배|복통|두통|기침|콧물|어지러|멀미|설사|구토|토할|상처|허리|다리|무릎|숨쉬기/], primary: ["아프다", "병원"], related: ["약국", "의사", "약", "도와주세요"], display: ["건강"], tags: ["건강"] },
   { patterns: [/티셔츠|셔츠|바지|치마|원피스|드레스|자켓|재킷|점퍼|속옷|양말|신발|모자|우산|수영복/], primary: ["옷"], related: ["사이즈", "색", "보여주세요"], display: ["옷"], tags: ["쇼핑"] },
+  { patterns: [/엔드밀|드릴|커터|공구|공구함|비트|홀더/], primary: ["엔드밀", "공구"], related: ["드릴", "커터", "홀더", "가져와 주세요"], display: ["공구"], tags: ["일터"] },
   { patterns: [/기계|장비|라인|공장|작업|현장/], primary: ["기계", "작업"], related: ["가동", "작동", "시작하다", "멈추다", "공장"], display: ["기계"], tags: ["일터"] },
   { patterns: [/가동|작동|켜|끄|멈춰|멈추|정지|중지|시작/], primary: ["작동", "시작하다"], related: ["기계", "가동", "멈추다", "켜다", "끄다"], display: ["작동"], tags: ["일터"] },
+  { patterns: [/몇\s*시|몇시|현재시간|지금시간/], primary: ["시간", "몇 시"], related: ["지금 몇 시예요", "현재 시간", "오전", "오후"], display: ["시간"], tags: ["숫자·시간"] },
   { patterns: [/점심|아침|저녁|밥|식사/], primary: ["점심식사", "먹다"], related: ["아침식사", "저녁식사", "가다", "같이"], display: ["식사"], tags: ["식당", "기본회화"] },
   { patterns: [/가자|먹자|하자|갈래/], primary: ["가다"], related: ["같이", "먹다", "하다", "점심 먹으러 가자"], display: ["같이"], tags: ["기본회화"] },
   { patterns: [/잃어버|분실|못찾|못 찾|두고왔|놓고왔/], primary: ["분실"], related: ["여권", "지갑", "휴대폰", "도와주세요", "경찰"], display: ["분실"], tags: ["이동", "기본회화"] },
@@ -286,6 +292,20 @@ const QUERY_ALIASES = [
     tags: ["일터"],
   },
   {
+    matches: ["엔드밀", "엔드밀가져와줘", "엔드밀가져와주세요", "엔드밀주세요", "엔드밀있어요", "앤드밀", "앤드밀가져와줘"],
+    primary: ["엔드밀", "공구"],
+    related: ["엔드밀 가져와 주세요", "엔드밀 있어요", "드릴", "커터", "공구 가져와 주세요"],
+    display: ["엔드밀", "공구"],
+    tags: ["일터"],
+  },
+  {
+    matches: ["몇시야", "몇시에요", "몇시예요", "지금몇시야", "지금몇시에요", "지금몇시예요", "현재몇시", "현재시간", "지금시간"],
+    primary: ["시간", "몇 시"],
+    related: ["지금 몇 시예요", "현재 시간", "오전", "오후"],
+    display: ["시간", "몇 시"],
+    tags: ["숫자·시간"],
+  },
+  {
     matches: ["점심먹으러가자", "점심먹으로가자", "점심먹자", "밥먹으러가자", "밥먹으로가자", "밥먹자", "점심먹으러갈래", "점심먹을래", "저녁먹으러가자", "아침먹으러가자", "같이가자"],
     primary: ["점심식사", "먹다", "가다"],
     related: ["점심 먹으러 가자", "밥 먹으러 가자", "같이 가자", "점심시간이에요"],
@@ -378,6 +398,7 @@ function normalizeText(text) {
     .normalize("NFKC")
     .replace(/잘돗/g, "잘못")
     .replace(/쥬스/g, "주스")
+    .replace(/앤드밀/g, "엔드밀")
     .replace(/이에요/g, "예요")
     .replace(/에요/g, "예요")
     .replace(/예여/g, "예요")
@@ -399,6 +420,15 @@ function tokenize(text) {
     .map((token) => token.trim())
     .filter(Boolean)
     .filter((token) => token.length > 1 || !STOPWORDS.has(token));
+}
+
+function isStrongAnchorTerm(term) {
+  const compact = compactText(term);
+  if (!compact || compact.length < 2) return false;
+  if (GENERIC_ANCHOR_TERMS.has(compact)) return false;
+  return !/(?:해주세요|해주세여|해줘요|해줘|해요|했어요|했어|하자|가자|먹자|갈래|볼래|주세요|주세여|줘요|줘|있어요|있나요|없어요|없나요|어디예요|어디에요|어디야|몇시예요|몇시에요|몇시야|예요|에요|인가요|나요|니|냐|하다)$/u.test(
+    compact
+  );
 }
 
 function expandQueryVariants(query, rawTokens = []) {
@@ -1062,6 +1092,113 @@ function buildGeneratedTimeEntries(query) {
   };
 }
 
+function isTimeQuestionQuery(query) {
+  return TIME_QUESTION_REGEX.test(compactText(query));
+}
+
+function buildGeneratedTimeQuestionEntries(query) {
+  if (!isTimeQuestionQuery(query)) return { vocab: [], sentences: [] };
+
+  const now = new Date();
+  const hour = now.getHours();
+  const minute = now.getMinutes();
+  const nowTime = parseTimeQuery(`${hour}:${String(minute).padStart(2, "0")}`);
+  if (!nowTime) return { vocab: [], sentences: [] };
+
+  const keywords = unique([
+    query,
+    "몇 시",
+    "몇시",
+    "지금 몇 시예요",
+    "현재 시간",
+    nowTime.canonicalKorean,
+    nowTime.digital,
+    "시간",
+  ]);
+
+  return {
+    vocab: [
+      hydrateEntry(
+        {
+          id: `generated-time-question-word-${nowTime.digital}`,
+          kind: "vocab",
+          source: "generated",
+          sheet: "시간 질문",
+          thai: TIME_WORDS.whatTime.ko,
+          thaiScript: TIME_WORDS.whatTime.script,
+          korean: "몇 시",
+          note: `시간을 물을 때 쓰는 핵심 표현 · 현재 기기 시간: ${nowTime.canonicalKorean}`,
+          tags: ["숫자·시간"],
+          keywords,
+        },
+        "vocab"
+      ),
+      hydrateEntry(
+        {
+          id: `generated-time-question-now-${nowTime.digital}`,
+          kind: "vocab",
+          source: "generated",
+          sheet: "시간 질문",
+          thai: nowTime.phraseKo,
+          thaiScript: nowTime.phraseScript,
+          korean: `현재 시간 ${nowTime.canonicalKorean}`,
+          note: `현재 기기 시간을 태국어로 바로 보여줍니다 · 영문 표기: ${nowTime.phraseLatin}`,
+          tags: ["숫자·시간"],
+          keywords,
+        },
+        "vocab"
+      ),
+    ],
+    sentences: [
+      hydrateEntry(
+        {
+          id: `generated-time-question-ask-${nowTime.digital}`,
+          kind: "sentence",
+          source: "generated",
+          sheet: "시간 질문",
+          thai: TIME_WORDS.nowQuestion.ko,
+          thaiScript: TIME_WORDS.nowQuestion.script,
+          korean: "지금 몇 시예요?",
+          note: "현재 시간을 물을 때 바로 보여주기",
+          tags: ["숫자·시간", "기본회화"],
+          keywords,
+        },
+        "sentence"
+      ),
+      hydrateEntry(
+        {
+          id: `generated-time-question-answer-${nowTime.digital}`,
+          kind: "sentence",
+          source: "generated",
+          sheet: "시간 질문",
+          thai: `${TIME_WORDS.now.ko} ${nowTime.digital} 너`,
+          thaiScript: `${TIME_WORDS.now.script} ${nowTime.thaiDigital} น.`,
+          korean: `지금은 ${nowTime.canonicalKorean}예요`,
+          note: "현재 기기 시간을 그대로 답변형으로 보여줍니다",
+          tags: ["숫자·시간"],
+          keywords,
+        },
+        "sentence"
+      ),
+      hydrateEntry(
+        {
+          id: `generated-time-question-meet-${nowTime.digital}`,
+          kind: "sentence",
+          source: "generated",
+          sheet: "시간 질문",
+          thai: "너 약 쩌 깐 끼 몽 캅",
+          thaiScript: "นัดเจอกันกี่โมงครับ",
+          korean: "몇 시에 만나요?",
+          note: "약속 시간을 물을 때",
+          tags: ["숫자·시간", "기본회화"],
+          keywords,
+        },
+        "sentence"
+      ),
+    ],
+  };
+}
+
 function collectSeedEntries(entries, compactQuery) {
   if (!compactQuery) return [];
 
@@ -1165,6 +1302,14 @@ function buildSearchProfile(query, entries = []) {
       .filter((item) => item.length > 1 || !STOPWORDS.has(item))
       .filter((item) => !primaryCompacts.includes(item))
   );
+  const rawAnchorTerms = unique(rawTokens.map((item) => compactText(item)).filter(isStrongAnchorTerm));
+  const fallbackAnchorTerms = rawAnchorTerms.length
+    ? []
+    : unique(
+        displayTerms
+          .map((item) => compactText(item))
+          .filter((item) => isStrongAnchorTerm(item) && compact.includes(item))
+      );
 
   return {
     query: trimmedQuery,
@@ -1173,6 +1318,7 @@ function buildSearchProfile(query, entries = []) {
     directTerms: unique([compact, ...rawTokens.map((item) => compactText(item)), ...expandedCompacts].filter(Boolean)),
     primaryTerms: primaryCompacts,
     relatedTerms: relatedCompacts,
+    anchorTerms: unique([...rawAnchorTerms, ...fallbackAnchorTerms]).slice(0, 3),
     displayTerms: unique(displayTerms.length ? displayTerms : rawTokens).slice(0, 4),
     tags: sortTags(unique(tags)),
     minimumPrimaryHits: primaryCompacts.length >= 3 ? 2 : primaryCompacts.length ? 1 : 0,
@@ -1191,7 +1337,9 @@ function matchesIndexTerm(index, term) {
   if ([index.korean, index.thai, index.thaiScript, index.note, ...index.keywords].some((field) => matchesCompactField(field, term))) {
     return true;
   }
-  return index.tokens.some((token) => token === term || token.includes(term) || (term.length >= 3 && term.includes(token)));
+  return index.tokens.some(
+    (token) => token === term || token.includes(term) || (token.length >= 2 && term.length >= 3 && term.includes(token))
+  );
 }
 
 function scoreEntry(entry, searchProfile, kind) {
@@ -1207,6 +1355,7 @@ function scoreEntry(entry, searchProfile, kind) {
   const directHits = new Set();
   const primaryHits = new Set();
   const relatedHits = new Set();
+  const anchorHits = new Set();
 
   searchProfile.directTerms.forEach((term) => {
     let bestMatchLevel = 0;
@@ -1262,6 +1411,11 @@ function scoreEntry(entry, searchProfile, kind) {
     relatedHits.add(term);
     score += term.length <= 2 ? 70 : 95;
   });
+  searchProfile.anchorTerms.forEach((term) => {
+    if (!matchesIndexTerm(index, term)) return;
+    anchorHits.add(term);
+    score += 260;
+  });
 
   if (state.scenario === "all" && searchProfile.tags.some((tag) => entry.tags.includes(tag))) {
     score += 60;
@@ -1277,6 +1431,9 @@ function scoreEntry(entry, searchProfile, kind) {
   } else {
     score -= 90;
   }
+  if (searchProfile.anchorTerms.length && !anchorHits.size) {
+    score -= kind === "vocab" ? 120 : 90;
+  }
   if (!queryNegative && entryNegative) {
     score -= 180;
   } else if (queryNegative && !entryNegative) {
@@ -1287,6 +1444,8 @@ function scoreEntry(entry, searchProfile, kind) {
   const vocabPrimaryThreshold = searchProfile.minimumPrimaryHits > 1 ? 1 : searchProfile.minimumPrimaryHits;
   const matched =
     directMatch ||
+    (kind === "vocab" && anchorHits.size >= 1 && score >= 120) ||
+    (kind === "sentence" && anchorHits.size >= 1 && score >= 180) ||
     (kind === "vocab" && hasPrimaryPlan && primaryHits.size >= vocabPrimaryThreshold && score >= 170) ||
     (kind === "vocab" && !hasPrimaryPlan && score >= 280) ||
     (kind === "sentence" &&
@@ -1307,10 +1466,12 @@ function getVocabResults(entries, searchProfile) {
         entry,
         match: scoreEntry(entry, searchProfile, "vocab"),
         termHits: searchProfile.primaryTerms.filter((term) => matchesIndexTerm(index, term)),
+        anchorHits: searchProfile.anchorTerms.filter((term) => matchesIndexTerm(index, term)),
       };
     })
     .filter(({ match }) => match.matched)
     .sort((left, right) => {
+      if (right.anchorHits.length !== left.anchorHits.length) return right.anchorHits.length - left.anchorHits.length;
       if (right.match.score !== left.match.score) return right.match.score - left.match.score;
       if (right.match.directHits !== left.match.directHits) return right.match.directHits - left.match.directHits;
       if (right.match.primaryHits !== left.match.primaryHits) return right.match.primaryHits - left.match.primaryHits;
@@ -1322,21 +1483,23 @@ function getVocabResults(entries, searchProfile) {
       }
       return left.entry.korean.localeCompare(right.entry.korean, "ko");
     });
+  const anchorFocused = searchProfile.anchorTerms.length ? ranked.filter((item) => item.anchorHits.length) : [];
+  const preferredRanked = anchorFocused.length >= 3 ? anchorFocused : ranked;
 
   if (!searchProfile.query || searchProfile.primaryTerms.length < 2) {
-    return ranked.map(({ entry }) => entry);
+    return preferredRanked.map(({ entry }) => entry);
   }
 
   const diversified = [];
   const seen = new Set();
   searchProfile.primaryTerms.forEach((term) => {
-    const candidate = ranked.find((item) => !seen.has(item.entry.id) && item.termHits.includes(term));
+    const candidate = preferredRanked.find((item) => !seen.has(item.entry.id) && item.termHits.includes(term));
     if (!candidate) return;
     seen.add(candidate.entry.id);
     diversified.push(candidate.entry);
   });
 
-  ranked.forEach(({ entry }) => {
+  preferredRanked.forEach(({ entry }) => {
     if (seen.has(entry.id)) return;
     seen.add(entry.id);
     diversified.push(entry);
@@ -1363,9 +1526,17 @@ function getSentenceResults(entries, searchProfile, vocabSeeds) {
 
   const direct = entries
     .filter(matchesScenario)
-    .map((entry) => ({ entry, match: scoreEntry(entry, searchProfile, "sentence") }))
+    .map((entry) => {
+      const index = buildSearchIndex(entry);
+      return {
+        entry,
+        match: scoreEntry(entry, searchProfile, "sentence"),
+        anchorHits: searchProfile.anchorTerms.filter((term) => matchesIndexTerm(index, term)),
+      };
+    })
     .filter(({ match }) => match.matched)
     .sort((left, right) => {
+      if (right.anchorHits.length !== left.anchorHits.length) return right.anchorHits.length - left.anchorHits.length;
       if (right.match.score !== left.match.score) return right.match.score - left.match.score;
       if (right.match.directHits !== left.match.directHits) return right.match.directHits - left.match.directHits;
       const leftThai = Boolean(getThaiScriptText(left.entry));
@@ -1513,7 +1684,7 @@ function hasNegativeMeaning(text) {
 }
 
 function isTimeLikeQuery(query) {
-  return Boolean(extractStandaloneTimeQuery(query) || TIME_QUERY_REGEX.test(normalizeText(query)));
+  return Boolean(isTimeQuestionQuery(query) || extractStandaloneTimeQuery(query) || TIME_QUERY_REGEX.test(normalizeText(query)));
 }
 
 function isTimeFocusedEntry(entry) {
@@ -1715,8 +1886,10 @@ function render() {
   const merged = getMergedData();
   const generated = buildGeneratedNumberEntries(state.query);
   const numberMode = generated.vocab.length > 0;
-  const generatedTime = !numberMode ? buildGeneratedTimeEntries(state.query) : { vocab: [], sentences: [] };
-  const timeMode = !numberMode && generatedTime.vocab.length > 0;
+  const generatedTimeQuestion = !numberMode ? buildGeneratedTimeQuestionEntries(state.query) : { vocab: [], sentences: [] };
+  const timeQuestionMode = !numberMode && generatedTimeQuestion.vocab.length > 0;
+  const generatedTime = !numberMode && !timeQuestionMode ? buildGeneratedTimeEntries(state.query) : { vocab: [], sentences: [] };
+  const timeMode = !numberMode && !timeQuestionMode && generatedTime.vocab.length > 0;
   const searchProfile = buildSearchProfile(state.query, [...merged.vocab, ...merged.sentences]);
   const exactSentenceMatch = numberMode ? null : findExactEntry(merged.sentences, searchProfile);
   const actionPhraseMode = !numberMode && isActionPhraseQuery(searchProfile);
@@ -1724,6 +1897,8 @@ function render() {
   const sentenceSource = merged.sentences;
   const allVocabResults = numberMode
     ? generated.vocab
+    : timeQuestionMode
+      ? generatedTimeQuestion.vocab
     : timeMode
       ? generatedTime.vocab
       : uniqueById([...generated.vocab, ...getVocabResults(vocabSource, searchProfile)]);
@@ -1734,6 +1909,8 @@ function render() {
   const sentenceResults = state.query
     ? (numberMode
         ? generated.sentences
+        : timeQuestionMode
+          ? generatedTimeQuestion.sentences
         : timeMode
           ? generatedTime.sentences
         : uniqueById([
@@ -1743,7 +1920,10 @@ function render() {
           ]).slice(0, RESULT_LIMITS.sentences))
     : [];
   const browsing = isBrowsingState();
-  const expandedHint = searchProfile.displayTerms.length ? ` · 함께 찾은 핵심어: ${searchProfile.displayTerms.join(" / ")}` : "";
+  const expandedHint =
+    !timeQuestionMode && searchProfile.displayTerms.length
+      ? ` · 함께 찾은 핵심어: ${searchProfile.displayTerms.join(" / ")}`
+      : "";
   const activeScenario = baseData.scenarios.find((item) => item.id === state.scenario);
 
   elements.searchInput.value = state.query;
@@ -1754,6 +1934,8 @@ function render() {
     ? "한국어로 검색하면 단어를 먼저, 바로 쓸 회화를 그 아래에 보여줍니다."
     : numberMode
       ? `숫자 변환: 읽기 ${vocabResults.length}개 · 활용 ${sentenceResults.length}개${expandedHint}`
+      : timeQuestionMode
+        ? `시간 질문: 단어 ${vocabResults.length}개 · 회화 ${sentenceResults.length}개${expandedHint}`
       : timeMode
         ? `시간 검색: 단어 ${vocabResults.length}개 · 회화 ${sentenceResults.length}개${expandedHint}`
       : `검색됨: 단어 ${vocabResults.length}개 · 회화 ${sentenceResults.length}개${expandedHint}`;
@@ -1770,6 +1952,8 @@ function render() {
   elements.vocabMeta.textContent = state.query
     ? numberMode
       ? "숫자는 태국어 읽기와 태국 숫자 표기를 함께 보여줍니다."
+      : timeQuestionMode
+        ? "현재 시간을 묻는 표현과 기기 기준 현재 시각을 먼저 보여줍니다."
       : timeMode
         ? "검색한 시간을 그대로 변형해서 읽기와 시간 표현을 먼저 보여줍니다."
       : exactSentenceMatch
@@ -1781,6 +1965,8 @@ function render() {
   elements.sentenceMeta.textContent = state.query
     ? numberMode
       ? "가격이나 수량으로 바로 보여줄 수 있게 같이 만들었습니다."
+      : timeQuestionMode
+        ? "지금 몇 시인지 묻거나 답할 때 바로 보여줄 수 있게 만들었습니다."
       : timeMode
         ? "검색한 시간 그대로 문장에 넣어서 바로 보여줄 수 있게 만들었습니다."
       : "위 단어를 바탕으로 바로 보여주기 좋은 회화만 추렸습니다."
