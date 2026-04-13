@@ -1,6 +1,6 @@
 const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
-const APP_VERSION = "20260414a";
+const APP_VERSION = "20260414b";
 
 const baseData = window.BASE_DATA || {
   appTitle: "태국어 포켓북",
@@ -58,6 +58,121 @@ const THAI_SCRIPT_OVERRIDE_PAIRS = [
   ["사다", "ซื้อ"],
 ];
 
+const SUPPLEMENTAL_DATA = {
+  vocab: [
+    {
+      id: "supp-vocab-noise",
+      kind: "vocab",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "씨앙 롭꾼",
+      thaiScript: "เสียงรบกวน",
+      korean: "소음",
+      note: "시끄러운 소리 / 소음",
+      tags: ["기본회화", "이동"],
+      keywords: ["시끄럽다", "시끄러워요", "소리", "소음", "조용하다"],
+    },
+    {
+      id: "supp-vocab-machine-noise",
+      kind: "vocab",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "씨앙 크르엉",
+      thaiScript: "เสียงเครื่อง",
+      korean: "기계 소음",
+      note: "기계에서 나는 큰 소리",
+      tags: ["일터"],
+      keywords: ["기계", "장비", "설비", "소음", "시끄럽다"],
+    },
+    {
+      id: "supp-vocab-internet",
+      kind: "vocab",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "인터넷",
+      thaiScript: "อินเทอร์เน็ต",
+      korean: "인터넷",
+      note: "인터넷 / 온라인 연결",
+      tags: ["기본회화", "이동"],
+      keywords: ["와이파이", "wifi", "인터넷", "연결"],
+    },
+  ],
+  sentences: [
+    {
+      id: "supp-sentence-room-noisy",
+      kind: "sentence",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "홍 니 씨앙 당",
+      thaiScript: "ห้องนี้เสียงดัง",
+      korean: "방이 시끄러워요",
+      note: "방 안 소음이 클 때",
+      tags: ["기본회화", "이동"],
+      keywords: ["시끄럽다", "소음", "조용한 방", "방 문제"],
+    },
+    {
+      id: "supp-sentence-machine-noisy",
+      kind: "sentence",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "크르엉 당 막",
+      thaiScript: "เครื่องดังมาก",
+      korean: "기계가 너무 시끄러워요",
+      note: "기계 소리가 너무 클 때",
+      tags: ["일터"],
+      keywords: ["기계", "장비", "설비", "시끄럽다", "소음"],
+    },
+    {
+      id: "supp-sentence-machine-noise-heavy",
+      kind: "sentence",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "씨앙 크르엉 당 막",
+      thaiScript: "เสียงเครื่องดังมาก",
+      korean: "기계 소음이 심해요",
+      note: "기계 소음이 심해서 확인이 필요할 때",
+      tags: ["일터"],
+      keywords: ["기계", "소음", "시끄럽다", "확인", "수리"],
+    },
+    {
+      id: "supp-sentence-wifi-down",
+      kind: "sentence",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "와이파이 차이 마이 다이",
+      thaiScript: "ไวไฟใช้ไม่ได้",
+      korean: "와이파이가 안 돼요",
+      note: "와이파이 연결이 안 될 때",
+      tags: ["기본회화", "이동"],
+      keywords: ["와이파이", "wifi", "인터넷", "안 돼요", "연결"],
+    },
+    {
+      id: "supp-sentence-internet-down",
+      kind: "sentence",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "인터넷 차이 마이 다이",
+      thaiScript: "อินเทอร์เน็ตใช้ไม่ได้",
+      korean: "인터넷이 안 돼요",
+      note: "인터넷이 안 될 때",
+      tags: ["기본회화", "이동"],
+      keywords: ["인터넷", "와이파이", "안 돼요", "연결 문제"],
+    },
+    {
+      id: "supp-sentence-internet-slow",
+      kind: "sentence",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "인터넷 차 막",
+      thaiScript: "อินเทอร์เน็ตช้ามาก",
+      korean: "인터넷이 너무 느려요",
+      note: "인터넷 속도가 너무 느릴 때",
+      tags: ["기본회화", "이동"],
+      keywords: ["인터넷", "와이파이", "느리다", "속도"],
+    },
+  ],
+};
+
 const QUICK_SEARCHES = [
   "방바꿔주세요",
   "얼마예요",
@@ -71,7 +186,7 @@ const QUICK_SEARCHES = [
 ];
 
 const STOPWORDS = new Set(["이", "그", "저", "것", "거", "좀", "더", "요", "은", "는", "이거"]);
-const GENERIC_ANCHOR_TERMS = new Set(["주세요", "주세여", "부탁", "좀", "지금", "현재", "시간", "몇시", "공구", "기계", "문제"]);
+const GENERIC_ANCHOR_TERMS = new Set(["주세요", "주세여", "부탁", "좀", "지금", "현재", "시간", "몇시", "공구", "문제"]);
 const SINGLE_SYLLABLE_ANCHORS = new Set(["방", "물", "밥", "약"]);
 const ENTRY_SOURCE_SCORES = {
   custom: 170,
@@ -94,7 +209,78 @@ const SEARCH_OBJECT_RULES = [
     related: ["다른 방", "빈 방", "조용한 방"],
     display: ["방"],
     tags: ["이동"],
+    avoidTags: ["일터"],
     phrases: ["방 바꿔 주세요", "다른 방 있나요?"],
+  },
+  {
+    id: "noise",
+    patterns: [/시끄럽|시끄러|소음|조용하|조용해|조용한/],
+    terms: ["소음", "시끄럽다", "조용하다", "조용한 방"],
+    related: ["방이 시끄러워요", "조용한 방 있나요?", "조용한 방으로 부탁해요", "소음 없는 방"],
+    display: ["소음", "조용한 방"],
+    tags: ["이동", "기본회화"],
+    avoidTags: ["일터"],
+    phrases: ["방이 시끄러워요", "조용한 방 있나요?", "조용한 방으로 부탁해요"],
+  },
+  {
+    id: "machineNoise",
+    patterns: [/(?:기계|장비|설비).*(?:시끄럽|소음)|(?:시끄럽|소음).*(?:기계|장비|설비)/],
+    terms: ["기계", "소음", "문제"],
+    related: ["기계가 너무 시끄러워요", "기계 소음이 심해요", "기계를 확인해 주세요"],
+    display: ["기계", "소음"],
+    tags: ["일터"],
+    preferTags: ["일터"],
+    phrases: ["기계가 너무 시끄러워요", "기계 소음이 심해요", "기계를 확인해 주세요"],
+  },
+  {
+    id: "internetIssue",
+    patterns: [/(?:와이파이|wifi|인터넷).*(?:안돼|안 돼|느리|연결|끊|비번|비밀번호)|(?:안돼|안 돼|느리|연결|끊).*(?:와이파이|wifi|인터넷)/i],
+    terms: ["와이파이", "인터넷", "문제"],
+    related: ["와이파이가 안 돼요", "인터넷이 안 돼요", "와이파이가 너무 느려요", "와이파이 비밀번호가 뭐예요?"],
+    display: ["와이파이", "인터넷"],
+    tags: ["이동", "기본회화"],
+    avoidTags: ["일터"],
+    phrases: ["와이파이가 안 돼요", "인터넷이 안 돼요", "와이파이가 너무 느려요", "와이파이 비밀번호가 뭐예요?"],
+  },
+  {
+    id: "cleanliness",
+    patterns: [/냄새|냄새나|더럽|더러워|지저분|청소/],
+    terms: ["냄새", "더럽다", "청소", "문제"],
+    related: ["방에서 냄새가 나요", "이 방에 냄새가 나요", "청소해 주세요"],
+    display: ["냄새", "청소"],
+    tags: ["이동", "기본회화"],
+    avoidTags: ["일터"],
+    phrases: ["방에서 냄새가 나요", "청소해 주세요"],
+  },
+  {
+    id: "aircon",
+    patterns: [/에어컨|냉방|안시원|안 시원|너무추워|너무더워/],
+    terms: ["에어컨", "시원하다", "춥다", "덥다"],
+    related: ["에어컨이 안 시원해요", "에어컨이 너무 추워요", "에어컨이 너무 더워요"],
+    display: ["에어컨"],
+    tags: ["이동", "기본회화"],
+    avoidTags: ["일터"],
+    phrases: ["에어컨이 안 시원해요", "에어컨이 너무 추워요", "에어컨이 너무 더워요"],
+  },
+  {
+    id: "hotwater",
+    patterns: [/온수|뜨거운물|뜨거운 물|물이안나와|물이 안 나와/],
+    terms: ["온수", "뜨거운 물", "문제"],
+    related: ["온수가 안 나와요", "뜨거운 물", "온수"],
+    display: ["온수"],
+    tags: ["이동", "기본회화"],
+    avoidTags: ["일터"],
+    phrases: ["온수가 안 나와요"],
+  },
+  {
+    id: "doorlock",
+    patterns: [/문안잠|문 안 잠|잠기지|잠겨|도어락/],
+    terms: ["문", "잠기다", "문제"],
+    related: ["문이 안 잠겨요", "문제가 있어요"],
+    display: ["문"],
+    tags: ["이동", "기본회화"],
+    avoidTags: ["일터"],
+    phrases: ["문이 안 잠겨요"],
   },
   {
     id: "toilet",
@@ -103,6 +289,7 @@ const SEARCH_OBJECT_RULES = [
     related: ["화장실 가고 싶어요", "화장실이 어디예요?"],
     display: ["화장실"],
     tags: ["이동", "건강"],
+    avoidTags: ["일터"],
     phrases: ["화장실 가고 싶어요", "화장실이 어디예요?"],
   },
   {
@@ -121,6 +308,7 @@ const SEARCH_OBJECT_RULES = [
     related: ["수박 주스 주세요", "수박 주스 있어요?"],
     display: ["수박 주스"],
     tags: ["식당", "쇼핑"],
+    avoidTags: ["일터"],
     phrases: ["수박 주스 주세요", "수박 주스 있어요?"],
   },
   {
@@ -130,6 +318,7 @@ const SEARCH_OBJECT_RULES = [
     related: ["수박 주세요", "수박 있어요?"],
     display: ["수박"],
     tags: ["식당", "쇼핑"],
+    avoidTags: ["일터"],
     phrases: ["수박 주세요", "수박 있어요?"],
   },
   {
@@ -139,6 +328,7 @@ const SEARCH_OBJECT_RULES = [
     related: ["수박", "망고", "바나나", "과일 주스"],
     display: ["과일"],
     tags: ["식당", "쇼핑"],
+    avoidTags: ["일터"],
     phrases: ["과일 있어요?", "과일 주스 있어요?"],
   },
   {
@@ -148,6 +338,7 @@ const SEARCH_OBJECT_RULES = [
     related: ["수박 주스", "오렌지 주스", "망고 주스"],
     display: ["주스"],
     tags: ["식당", "쇼핑"],
+    avoidTags: ["일터"],
     phrases: ["주스 주세요", "주스 있어요?"],
   },
   {
@@ -157,16 +348,48 @@ const SEARCH_OBJECT_RULES = [
     related: ["차가운 물", "따뜻한 물"],
     display: ["물"],
     tags: ["식당", "건강"],
+    avoidTags: ["일터"],
     phrases: ["물 주세요", "차가운 물 주세요"],
+  },
+  {
+    id: "towel",
+    patterns: [/수건|목욕수건|타월/],
+    terms: ["수건"],
+    related: ["수건 두 장 더 주세요", "수건"],
+    display: ["수건"],
+    tags: ["이동", "기본회화"],
+    avoidTags: ["일터"],
+    phrases: ["수건 두 장 더 주세요"],
+  },
+  {
+    id: "tissue",
+    patterns: [/휴지|화장지|티슈|냅킨/],
+    terms: ["휴지", "화장지"],
+    related: ["휴지 더 주세요", "화장지", "화장지 / 휴지"],
+    display: ["휴지"],
+    tags: ["이동", "기본회화"],
+    avoidTags: ["일터"],
+    phrases: ["휴지 더 주세요"],
+  },
+  {
+    id: "charger",
+    patterns: [/충전기|차저|charger|어댑터|돼지코|콘센트/],
+    terms: ["충전기", "어댑터", "콘센트"],
+    related: ["충전기 있어요?", "충전기", "콘센트"],
+    display: ["충전기"],
+    tags: ["이동", "쇼핑", "기본회화"],
+    avoidTags: ["일터"],
+    phrases: ["충전기 있어요?"],
   },
   {
     id: "wifi",
     patterns: [/와이파이|wifi|인터넷|비밀번호/i],
     terms: ["와이파이", "인터넷", "비밀번호"],
-    related: ["와이파이 비밀번호", "인터넷 안 돼요"],
+    related: ["와이파이 비밀번호", "인터넷 안 돼요", "와이파이가 너무 느려요"],
     display: ["와이파이"],
     tags: ["이동"],
-    phrases: ["와이파이 비밀번호가 뭐예요?"],
+    avoidTags: ["일터"],
+    phrases: ["와이파이 비밀번호가 뭐예요?", "와이파이가 너무 느려요", "인터넷 안 돼요"],
   },
   {
     id: "time",
@@ -184,6 +407,7 @@ const SEARCH_OBJECT_RULES = [
     related: ["얼마예요", "깎아주세요", "할인"],
     display: ["가격"],
     tags: ["쇼핑"],
+    avoidTags: ["일터"],
     phrases: ["얼마예요?", "좀 깎아주세요"],
   },
   {
@@ -193,6 +417,7 @@ const SEARCH_OBJECT_RULES = [
     related: ["병원 어디예요?", "병원 가고 싶어요"],
     display: ["병원"],
     tags: ["건강"],
+    avoidTags: ["일터"],
     phrases: ["병원 어디예요?", "병원 가고 싶어요"],
   },
   {
@@ -202,6 +427,7 @@ const SEARCH_OBJECT_RULES = [
     related: ["약국이 어디예요?", "약 주세요"],
     display: ["약국"],
     tags: ["건강"],
+    avoidTags: ["일터"],
     phrases: ["약국이 어디예요?", "약 주세요"],
   },
   {
@@ -229,6 +455,7 @@ const SEARCH_OBJECT_RULES = [
     related: ["기계를 가동하세요", "기계를 멈춰 주세요"],
     display: ["기계"],
     tags: ["일터"],
+    preferTags: ["일터"],
     phrases: ["기계를 가동하세요", "기계를 멈춰 주세요", "기계를 켜 주세요"],
   },
   {
@@ -238,6 +465,7 @@ const SEARCH_OBJECT_RULES = [
     related: ["점심 먹으러 가자", "밥 먹으러 가자", "점심시간이에요"],
     display: ["식사"],
     tags: ["식당", "기본회화"],
+    avoidTags: ["일터"],
     phrases: ["점심 먹으러 가자", "점심 먹으러 갈래요?", "밥 먹으러 가자"],
   },
   {
@@ -247,6 +475,7 @@ const SEARCH_OBJECT_RULES = [
     related: ["이해하나요?", "이해했어요", "이해 못했어요"],
     display: ["이해"],
     tags: ["기본회화"],
+    avoidTags: ["일터"],
     phrases: ["이해해요", "이해하나요?", "이해합니다", "이해 못해요"],
   },
   {
@@ -256,16 +485,18 @@ const SEARCH_OBJECT_RULES = [
     related: ["밥 먹고 싶어요", "먹을 거 있어요?"],
     display: ["배고프다"],
     tags: ["식당", "기본회화", "건강"],
+    avoidTags: ["일터"],
     phrases: ["배고파요", "배고프세요?", "밥 먹고 싶어요", "먹을 거 있어요?"],
     blockedTerms: ["배", "보트", "복부", "아프다", "병원", "약"],
   },
   {
     id: "problem",
-    patterns: [/문제|고장|안돼|안 돼|수리|냄새|소음|막혔|누수|물새/],
+    patterns: [/문제|고장|안돼|안 돼|수리|막혔|누수|물새/],
     terms: ["문제", "고장", "안 돼요"],
     related: ["문제가 있어요", "고장났어요", "수리해주세요"],
     display: ["문제"],
     tags: ["이동", "건강", "일터"],
+    avoidTags: ["일터"],
     phrases: ["문제가 있어요", "수리해주세요"],
   },
 ];
@@ -353,7 +584,7 @@ const SEARCH_ACTION_RULES = [
   },
   {
     id: "operate",
-    patterns: [/가동|작동|켜|끄|멈춰|멈추|정지|중지|시작/],
+    patterns: [/(?:가동|작동|멈춰|멈추|정지|중지|시작|켜(?:라|요|줘|주세요|다)?|꺼(?:라|요|줘|주세요)?|끄(?:다|고|는))/],
     terms: ["가동", "작동", "시작", "멈춰", "멈추다", "켜 주세요", "꺼 주세요"],
     related: ["기계를 가동하세요", "기계를 멈춰 주세요"],
     display: ["가동"],
@@ -506,6 +737,15 @@ const QUERY_PARTS = [
   { patterns: [/먹다|먹어요|먹는다|먹고/], primary: ["먹다"], related: ["메뉴", "음식"], display: ["먹다"], tags: ["식당", "기본회화"] },
   { patterns: [/마시다|마셔|마신다/], primary: ["마시다"], related: ["물", "음료"], display: ["마시다"], tags: ["식당", "기본회화"] },
   { patterns: [/주스|쥬스|음료/], primary: ["주스", "음료"], related: ["과일", "수박", "오렌지"], display: ["주스"], tags: ["식당", "쇼핑"] },
+  { patterns: [/시끄럽|소음/], primary: ["소음", "시끄럽다"], related: ["방이 시끄러워요", "조용한 방"], display: ["소음"], tags: ["이동", "기본회화"] },
+  { patterns: [/조용하|조용해|조용한/], primary: ["조용하다", "조용한 방"], related: ["조용한 방 있나요?", "소음 없는 방"], display: ["조용한 방"], tags: ["이동", "기본회화"] },
+  { patterns: [/냄새|더럽|지저분|청소/], primary: ["냄새", "청소"], related: ["방에서 냄새가 나요", "청소해 주세요"], display: ["청소"], tags: ["이동", "기본회화"] },
+  { patterns: [/에어컨|냉방|안시원|안 시원/], primary: ["에어컨"], related: ["에어컨이 안 시원해요", "에어컨이 너무 추워요", "에어컨이 너무 더워요"], display: ["에어컨"], tags: ["이동", "기본회화"] },
+  { patterns: [/온수|뜨거운물|뜨거운 물/], primary: ["온수"], related: ["온수가 안 나와요", "뜨거운 물"], display: ["온수"], tags: ["이동", "기본회화"] },
+  { patterns: [/문안잠|문 안 잠|잠기|도어락/], primary: ["문", "문제"], related: ["문이 안 잠겨요"], display: ["문"], tags: ["이동", "기본회화"] },
+  { patterns: [/수건/], primary: ["수건"], related: ["수건 두 장 더 주세요"], display: ["수건"], tags: ["이동", "기본회화"] },
+  { patterns: [/휴지|화장지|티슈/], primary: ["휴지", "화장지"], related: ["휴지 더 주세요"], display: ["휴지"], tags: ["이동", "기본회화"] },
+  { patterns: [/충전기|차저|charger|어댑터|콘센트/], primary: ["충전기", "어댑터"], related: ["충전기 있어요?", "콘센트"], display: ["충전기"], tags: ["이동", "쇼핑"] },
   { patterns: [/보다|봐요|본다/], primary: ["보다"], related: ["여기", "보여주세요"], display: ["보다"], tags: ["기본회화"] },
   { patterns: [/말하다|말해|말해요|말한다/], primary: ["말하다"], related: ["천천히", "다시"], display: ["말하다"], tags: ["기본회화"] },
   { patterns: [/이해|알겠|알겠습니다|알겠어/], primary: ["이해"], related: ["이해해요", "이해하나요", "이해합니다", "알겠습니다"], display: ["이해"], tags: ["기본회화"] },
@@ -517,7 +757,7 @@ const QUERY_PARTS = [
   { patterns: [/티셔츠|셔츠|바지|치마|원피스|드레스|자켓|재킷|점퍼|속옷|양말|신발|모자|우산|수영복/], primary: ["옷"], related: ["사이즈", "색", "보여주세요"], display: ["옷"], tags: ["쇼핑"] },
   { patterns: [/엔드밀|드릴|커터|공구|공구함|비트|홀더/], primary: ["엔드밀", "공구"], related: ["드릴", "커터", "홀더", "가져와 주세요"], display: ["공구"], tags: ["일터"] },
   { patterns: [/기계|장비|라인|공장|작업|현장/], primary: ["기계", "작업"], related: ["가동", "작동", "시작하다", "멈추다", "공장"], display: ["기계"], tags: ["일터"] },
-  { patterns: [/가동|작동|켜|끄|멈춰|멈추|정지|중지|시작/], primary: ["작동", "시작하다"], related: ["기계", "가동", "멈추다", "켜다", "끄다"], display: ["작동"], tags: ["일터"] },
+  { patterns: [/(?:가동|작동|멈춰|멈추|정지|중지|시작|켜(?:라|요|줘|주세요|다)?|꺼(?:라|요|줘|주세요)?|끄(?:다|고|는))/], primary: ["작동", "시작하다"], related: ["기계", "가동", "멈추다", "켜다", "끄다"], display: ["작동"], tags: ["일터"] },
   { patterns: [/몇\s*시|몇시|현재시간|지금시간/], primary: ["시간", "몇 시"], related: ["지금 몇 시예요", "현재 시간", "오전", "오후"], display: ["시간"], tags: ["숫자·시간"] },
   { patterns: [/점심|아침|저녁|밥|식사/], primary: ["점심식사", "먹다"], related: ["아침식사", "저녁식사", "가다", "같이"], display: ["식사"], tags: ["식당", "기본회화"] },
   { patterns: [/가자|먹자|하자|갈래/], primary: ["가다"], related: ["같이", "먹다", "하다", "점심 먹으러 가자"], display: ["같이"], tags: ["기본회화"] },
@@ -543,6 +783,51 @@ const QUERY_ALIASES = [
     related: ["방 바꿔주세요", "다른 방", "조용한 방", "에어컨", "온수", "욕실"],
     display: ["방 문제"],
     tags: ["이동", "건강"],
+  },
+  {
+    matches: ["시끄럽다", "시끄러워", "시끄러워요", "소음", "너무시끄러워", "너무시끄러워요", "조용한방", "조용하다", "조용해", "조용해요"],
+    primary: ["소음", "시끄럽다", "조용한 방"],
+    related: ["방이 시끄러워요", "조용한 방 있나요?", "조용한 방으로 부탁해요", "소음 없는 방"],
+    display: ["소음", "조용한 방"],
+    tags: ["이동", "기본회화"],
+  },
+  {
+    matches: ["냄새나요", "냄새나", "방냄새", "더럽다", "더러워", "더러워요", "지저분해", "청소해주세요"],
+    primary: ["냄새", "청소", "문제"],
+    related: ["방에서 냄새가 나요", "이 방에 냄새가 나요", "청소해 주세요"],
+    display: ["냄새", "청소"],
+    tags: ["이동", "기본회화"],
+  },
+  {
+    matches: ["에어컨안시원해", "에어컨안시원해요", "에어컨너무추워", "에어컨너무더워", "온수안나와", "온수가안나와요", "문안잠겨", "문이안잠겨요"],
+    primary: ["에어컨", "온수", "문제"],
+    related: ["에어컨이 안 시원해요", "온수가 안 나와요", "문이 안 잠겨요"],
+    display: ["에어컨", "온수", "문"],
+    tags: ["이동", "기본회화"],
+  },
+  {
+    matches: [
+      "와이파이느려",
+      "와이파이느려요",
+      "와이파이안돼",
+      "와이파이안돼요",
+      "인터넷안돼",
+      "인터넷안돼요",
+      "인터넷이안돼요",
+      "와이파이비밀번호",
+      "비밀번호뭐예요",
+    ],
+    primary: ["와이파이", "인터넷", "비밀번호"],
+    related: ["와이파이가 안 돼요", "인터넷이 안 돼요", "와이파이가 너무 느려요", "와이파이 비밀번호가 뭐예요?"],
+    display: ["와이파이"],
+    tags: ["이동", "기본회화"],
+  },
+  {
+    matches: ["수건", "수건더주세요", "휴지", "휴지더주세요", "화장지", "충전기", "충전기있어요", "어댑터", "콘센트"],
+    primary: ["수건", "휴지", "충전기"],
+    related: ["수건 두 장 더 주세요", "휴지 더 주세요", "충전기 있어요?"],
+    display: ["수건", "휴지", "충전기"],
+    tags: ["이동", "기본회화", "쇼핑"],
   },
   {
     matches: ["얼마에요", "얼마예요", "가격", "요금", "비용", "얼마", "깎아주세요", "할인", "비싸요", "싸요"],
@@ -647,6 +932,13 @@ const QUERY_ALIASES = [
     primary: ["기계", "가동", "작동"],
     related: ["기계를 가동하세요", "기계를 켜 주세요", "기계를 멈춰 주세요", "작업 시작합시다"],
     display: ["기계", "가동"],
+    tags: ["일터"],
+  },
+  {
+    matches: ["기계시끄러워", "기계시끄러워요", "기계소음", "장비시끄러워", "장비소음"],
+    primary: ["기계", "소음"],
+    related: ["기계가 너무 시끄러워요", "기계 소음이 심해요", "기계를 확인해 주세요"],
+    display: ["기계", "소음"],
     tags: ["일터"],
   },
   {
@@ -773,6 +1065,14 @@ function normalizeText(text) {
     .replace(/배고파/g, "배고프다")
     .replace(/시장해요/g, "배고프다")
     .replace(/시장해/g, "배고프다")
+    .replace(/시끄러워요/g, "시끄럽다")
+    .replace(/시끄러워/g, "시끄럽다")
+    .replace(/조용해요/g, "조용하다")
+    .replace(/조용해/g, "조용하다")
+    .replace(/더러워요/g, "더럽다")
+    .replace(/더러워/g, "더럽다")
+    .replace(/냄새나요/g, "냄새")
+    .replace(/냄새나/g, "냄새")
     .replace(/뭐에요/g, "뭐예요")
     .replace(/[“”"'`’]/g, "")
     .replace(/\s+/g, " ");
@@ -894,7 +1194,13 @@ function getStructuredFieldMatchStrength(index, term, options = {}) {
 }
 
 function buildIntentHints(query, patternTexts) {
-  const objectRules = SEARCH_OBJECT_RULES.filter((rule) => matchesSearchRule(rule, patternTexts));
+  let objectRules = SEARCH_OBJECT_RULES.filter((rule) => matchesSearchRule(rule, patternTexts));
+  if (objectRules.some((rule) => rule.id === "machineNoise")) {
+    objectRules = objectRules.filter((rule) => !["noise", "problem"].includes(rule.id));
+  }
+  if (objectRules.some((rule) => rule.id === "internetIssue")) {
+    objectRules = objectRules.filter((rule) => rule.id !== "problem");
+  }
   const actionRules = SEARCH_ACTION_RULES.filter((rule) => matchesSearchRule(rule, patternTexts));
   const nonGenericActionRules = actionRules.filter((rule) => !["request", "exist"].includes(rule.id));
   const actionTermRules = actionRules.filter((rule) => {
@@ -993,6 +1299,14 @@ function buildIntentHints(query, patternTexts) {
       ...objectRules.flatMap((rule) => rule.tags || []),
       ...actionRules.flatMap((rule) => rule.tags || []),
     ]),
+    preferredTags: unique([
+      ...objectRules.flatMap((rule) => rule.preferTags || []),
+      ...actionRules.flatMap((rule) => rule.preferTags || []),
+    ]),
+    avoidTags: unique([
+      ...objectRules.flatMap((rule) => rule.avoidTags || []),
+      ...actionRules.flatMap((rule) => rule.avoidTags || []),
+    ]),
     blockedTerms: unique([
       ...objectRules.flatMap((rule) => rule.blockedTerms || []),
       ...actionRules.flatMap((rule) => rule.blockedTerms || []),
@@ -1003,6 +1317,9 @@ function buildIntentHints(query, patternTexts) {
 function expandQueryVariants(query, rawTokens = []) {
   const variants = [];
   const candidates = [query, ...rawTokens].map((item) => normalizeText(item)).filter(Boolean);
+  const normalizedQuery = normalizeText(query);
+  const machineNoiseQuery =
+    /(기계|장비|설비|라인|공장|작업)/.test(normalizedQuery) && /시끄럽|소음/.test(normalizedQuery);
   const verbLikePatterns = [
     /^(.*)해$/,
     /^(.*)해요$/,
@@ -1032,6 +1349,46 @@ function expandQueryVariants(query, rawTokens = []) {
     }
     if (/주스|쥬스/.test(item)) {
       variants.push("음료", "과일", "물");
+    }
+    if (machineNoiseQuery && /시끄럽|소음/.test(item)) {
+      variants.push("기계", "기계 소음", "기계가 너무 시끄러워요", "기계 소음이 심해요", "기계를 확인해 주세요");
+    } else if (/시끄럽|소음/.test(item)) {
+      variants.push("소음", "방이 시끄러워요", "조용한 방", "조용한 방 있나요");
+    }
+    if (/조용하/.test(item)) {
+      variants.push("조용한 방", "소음 없는 방", "방");
+    }
+    if (/냄새|더럽|지저분|청소/.test(item)) {
+      variants.push("냄새", "방에서 냄새가 나요", "청소", "청소해 주세요");
+    }
+    if (/에어컨|냉방/.test(item)) {
+      variants.push("에어컨", "에어컨이 안 시원해요", "에어컨이 너무 추워요", "에어컨이 너무 더워요");
+    }
+    if (/온수|뜨거운물|뜨거운 물/.test(item)) {
+      variants.push("온수", "뜨거운 물", "온수가 안 나와요");
+    }
+    if (/문안잠|문 안 잠|도어락|잠기/.test(item)) {
+      variants.push("문이 안 잠겨요", "문제", "문");
+    }
+    if (/와이파이|wifi|인터넷/.test(item) && /느리|안돼|안 돼|비번|비밀번호|연결|끊/.test(item)) {
+      variants.push(
+        "와이파이",
+        "인터넷",
+        "와이파이 비밀번호",
+        "와이파이가 안 돼요",
+        "인터넷이 안 돼요",
+        "와이파이가 너무 느려요",
+        "인터넷이 너무 느려요"
+      );
+    }
+    if (/수건/.test(item)) {
+      variants.push("수건", "수건 두 장 더 주세요");
+    }
+    if (/휴지|화장지|티슈/.test(item)) {
+      variants.push("휴지", "화장지", "휴지 더 주세요");
+    }
+    if (/충전기|차저|charger|어댑터|콘센트/.test(item)) {
+      variants.push("충전기", "어댑터", "콘센트", "충전기 있어요?");
     }
     if (/배고프|허기|시장해/.test(item)) {
       variants.push("배고프다", "배고파요", "밥", "먹다", "식당");
@@ -1165,8 +1522,12 @@ function saveCustomData() {
 
 function createHydratedBaseData() {
   return {
-    vocab: (baseData.vocab || []).map((entry) => hydrateEntry(entry, "vocab")),
-    sentences: (baseData.sentences || []).map((entry) => hydrateEntry(entry, "sentence")),
+    vocab: [...(baseData.vocab || []), ...(SUPPLEMENTAL_DATA.vocab || [])].map((entry) =>
+      hydrateEntry(entry, "vocab")
+    ),
+    sentences: [...(baseData.sentences || []), ...(SUPPLEMENTAL_DATA.sentences || [])].map((entry) =>
+      hydrateEntry(entry, "sentence")
+    ),
   };
 }
 
@@ -1860,6 +2221,10 @@ function buildSearchProfile(query, entries = []) {
       (intentHints.actionTerms && intentHints.actionTerms.length) ||
       (intentHints.templateTerms && intentHints.templateTerms.length)
   );
+  const preferredTags = unique((intentHints.preferredTags || []).filter(Boolean));
+  const avoidTags = unique(
+    (intentHints.avoidTags || []).filter((tag) => tag && !preferredTags.includes(tag))
+  );
   const aliasTexts = unique([compact, ...expandedCompacts]);
   const primaryTerms = [...rawTokens, ...expandedVariants];
   const relatedTerms = [];
@@ -1986,6 +2351,8 @@ function buildSearchProfile(query, entries = []) {
       .filter((item) => !blockedTerms.has(compactText(item)))
       .slice(0, 6),
     tags: sortTags(unique(tags)),
+    preferredTags,
+    avoidTags,
     minimumPrimaryHits: filteredPrimaryCompacts.length >= 3 ? 2 : filteredPrimaryCompacts.length ? 1 : 0,
   };
 }
@@ -2013,8 +2380,16 @@ function matchesIndexTerm(index, term) {
   });
 }
 
+const GENERIC_TEMPLATE_TERMS = new Set(["문제가있어요", "고장났어요", "수리해주세요"]);
+
 function matchesTemplateTerm(index, term) {
   if (!term) return false;
+  if ([index.korean, index.thai, index.thaiScript].some((field) => field && (field === term || field.startsWith(term)))) {
+    return true;
+  }
+  if (GENERIC_TEMPLATE_TERMS.has(term)) {
+    return false;
+  }
   return getStructuredFieldMatchStrength(index, term) >= 4;
 }
 
@@ -2116,6 +2491,12 @@ function scoreEntry(entry, searchProfile, kind) {
   if (state.scenario === "all" && searchProfile.tags.some((tag) => entry.tags.includes(tag))) {
     score += 60;
   }
+  if (searchProfile.preferredTags?.length && searchProfile.preferredTags.some((tag) => entry.tags.includes(tag))) {
+    score += 120;
+  }
+  if (searchProfile.avoidTags?.length && searchProfile.avoidTags.some((tag) => entry.tags.includes(tag))) {
+    score -= kind === "sentence" ? 320 : 260;
+  }
   if (primaryHits.size >= searchProfile.minimumPrimaryHits && searchProfile.minimumPrimaryHits > 0) {
     score += 110;
   }
@@ -2162,8 +2543,12 @@ function scoreEntry(entry, searchProfile, kind) {
   } else {
     score -= 90;
   }
+  const hasSpecificObjectIntent = searchProfile.objectTerms.some((term) => term.length >= 2);
   if (searchProfile.anchorTerms.length && !anchorHits.size) {
     score -= kind === "vocab" ? 120 : 90;
+  }
+  if (hasSpecificObjectIntent && !objectHits.size && !anchorHits.size && !templateHits.size) {
+    score -= kind === "sentence" ? 260 : 220;
   }
   if (!queryNegative && entryNegative) {
     score -= 180;

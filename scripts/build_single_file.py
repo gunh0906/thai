@@ -8,22 +8,22 @@ from pathlib import Path
 def inline_assets(index_html: str, css: str, data_js: str, app_js: str) -> str:
     html = index_html
     html = re.sub(
-        r'<link rel="manifest" href="\.\/manifest\.webmanifest" />\s*',
+        r'<link rel="manifest" href="\.\/manifest\.webmanifest(?:\?v=[^"]+)?" />\s*',
         "",
         html,
     )
     html = re.sub(
-        r'<link rel="icon" href="\.\/icon\.svg" type="image/svg\+xml" />\s*',
+        r'<link rel="icon" href="\.\/icon\.svg(?:\?v=[^"]+)?" type="image/svg\+xml" />\s*',
         "",
         html,
     )
     html = re.sub(
-        r'<link rel="stylesheet" href="\.\/styles\.css" />',
+        r'<link rel="stylesheet" href="\.\/styles\.css(?:\?v=[^"]+)?" />',
         lambda _: "<style>\n" + css + "\n</style>",
         html,
     )
     html = re.sub(
-        r'<script src="\.\/data\.js"></script>\s*<script src="\.\/app\.js"></script>',
+        r'<script src="\.\/data\.js(?:\?v=[^"]+)?"></script>\s*<script src="\.\/app\.js(?:\?v=[^"]+)?"></script>',
         lambda _: "<script>\n"
         + data_js
         + "\n</script>\n<script>\n"
