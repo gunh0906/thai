@@ -1,6 +1,6 @@
 const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
-const APP_VERSION = "20260413b";
+const APP_VERSION = "20260413c";
 
 const baseData = window.BASE_DATA || {
   appTitle: "태국어 포켓북",
@@ -328,12 +328,16 @@ const QUERY_ENDINGS = [
   { suffix: "되나요", related: ["되다", "가능"], display: ["가능"] },
 ];
 
+const searchIndexCache = new WeakMap();
+const hydratedBaseData = createHydratedBaseData();
+
 const state = {
   query: "",
   scenario: "all",
   selectedVocabId: null,
   revealedThaiIds: new Set(),
   menuOpen: false,
+  searchFrame: 0,
   custom: loadCustomData(),
 };
 
@@ -591,12 +595,21 @@ function saveCustomData() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state.custom));
 }
 
-function getMergedData() {
+function createHydratedBaseData() {
   return {
-    vocab: [...baseData.vocab, ...state.custom.vocab].map((entry) => hydrateEntry(entry, "vocab")),
-    sentences: [...baseData.sentences, ...state.custom.sentences].map((entry) =>
-      hydrateEntry(entry, "sentence")
-    ),
+    vocab: (baseData.vocab || []).map((entry) => hydrateEntry(entry, "vocab")),
+    sentences: (baseData.sentences || []).map((entry) => hydrateEntry(entry, "sentence")),
+  };
+}
+
+function getMergedData() {
+  if (!state.custom.vocab.length && !state.custom.sentences.length) {
+    return hydratedBaseData;
+  }
+
+  return {
+    vocab: [...hydratedBaseData.vocab, ...state.custom.vocab],
+    sentences: [...hydratedBaseData.sentences, ...state.custom.sentences],
   };
 }
 
@@ -605,6 +618,9 @@ function matchesScenario(entry) {
 }
 
 function buildSearchIndex(entry) {
+  const cached = searchIndexCache.get(entry);
+  if (cached) return cached;
+
   const korean = compactText(entry.korean);
   const thai = compactText(entry.thai);
   const thaiScript = compactText(entry.thaiScript);
@@ -619,7 +635,9 @@ function buildSearchIndex(entry) {
       ...(entry.keywords || []),
     ].map((item) => compactText(item))
   );
-  return { korean, thai, thaiScript, note, keywords, tokens };
+  const index = { korean, thai, thaiScript, note, keywords, tokens };
+  searchIndexCache.set(entry, index);
+  return index;
 }
 
 function normalizeNumberQuery(query) {
@@ -1606,6 +1624,7 @@ function renderScenarioChips() {
     button.className = `chip${state.scenario === scenario.id ? " active" : ""}`;
     button.textContent = scenario.label;
     button.title = scenario.description;
+    wirePressFeedback(button);
     button.addEventListener("click", () => {
       state.scenario = scenario.id;
       render();
@@ -1615,6 +1634,48 @@ function renderScenarioChips() {
     });
     elements.scenarioChips.appendChild(button);
   });
+}
+
+function requestNextFrame(callback) {
+  if (typeof window.requestAnimationFrame === "function") {
+    return window.requestAnimationFrame(callback);
+  }
+  return window.setTimeout(callback, 16);
+}
+
+function cancelNextFrame(handle) {
+  if (!handle) return;
+  if (typeof window.cancelAnimationFrame === "function") {
+    window.cancelAnimationFrame(handle);
+    return;
+  }
+  window.clearTimeout(handle);
+}
+
+function setSearchButtonBusy(isBusy) {
+  const button = elements.searchButton;
+  if (!button) return;
+
+  const idleLabel = button.dataset.idleLabel || button.textContent || "검색";
+  button.dataset.idleLabel = idleLabel;
+  button.classList.toggle("busy", isBusy);
+  button.setAttribute("aria-busy", isBusy ? "true" : "false");
+  button.textContent = isBusy ? "검색 중..." : idleLabel;
+}
+
+function wirePressFeedback(button) {
+  if (!button || button.dataset.pressFeedback === "true") return;
+  button.dataset.pressFeedback = "true";
+
+  const release = () => button.classList.remove("is-pressed");
+  button.addEventListener("pointerdown", (event) => {
+    if (event.pointerType === "mouse" && event.button !== 0) return;
+    button.classList.add("is-pressed");
+  });
+  button.addEventListener("pointerup", release);
+  button.addEventListener("pointercancel", release);
+  button.addEventListener("pointerleave", release);
+  button.addEventListener("blur", release);
 }
 
 function performSearch(nextQuery = elements.searchInput.value.trim(), options = {}) {
@@ -1627,9 +1688,28 @@ function performSearch(nextQuery = elements.searchInput.value.trim(), options = 
   }
 }
 
+function queueSearch(nextQuery = elements.searchInput.value.trim(), options = {}) {
+  const query = String(nextQuery || "").trim();
+  elements.searchInput.value = query;
+
+  if (state.searchFrame) {
+    cancelNextFrame(state.searchFrame);
+  }
+
+  setSearchButtonBusy(true);
+  state.searchFrame = requestNextFrame(() => {
+    state.searchFrame = 0;
+    try {
+      performSearch(query, options);
+    } finally {
+      setSearchButtonBusy(false);
+    }
+  });
+}
+
 function applyQuickSearch(query) {
   elements.searchInput.value = query;
-  performSearch(query, { scrollResults: true });
+  queueSearch(query, { scrollResults: true });
 }
 
 function jumpToSection(section) {
@@ -1650,6 +1730,7 @@ function renderQuickSearches() {
     button.type = "button";
     button.className = "chip";
     button.textContent = query;
+    wirePressFeedback(button);
     button.addEventListener("click", () => applyQuickSearch(query));
     elements.quickSearchChips.appendChild(button);
   });
@@ -1751,6 +1832,7 @@ function createEntryCard(entry) {
     button.type = "button";
     button.className = `mini-button${state.revealedThaiIds.has(entry.id) ? " active" : ""}`;
     button.textContent = state.revealedThaiIds.has(entry.id) ? "태국어 숨기기" : "태국어 보기";
+    wirePressFeedback(button);
 
     const panel = document.createElement("div");
     panel.className = "thai-script-panel";
@@ -1860,6 +1942,7 @@ function renderCustomEntries() {
     button.type = "button";
     button.className = "mini-button";
     button.textContent = "삭제";
+    wirePressFeedback(button);
     button.addEventListener("click", () => removeCustomEntry(entry.id, entry.kind));
 
     wrap.append(info, button);
@@ -1884,13 +1967,17 @@ function isBrowsingState() {
 
 function render() {
   const merged = getMergedData();
+  const mergedEntries = !state.query ? [] : [...merged.vocab, ...merged.sentences];
   const generated = buildGeneratedNumberEntries(state.query);
   const numberMode = generated.vocab.length > 0;
   const generatedTimeQuestion = !numberMode ? buildGeneratedTimeQuestionEntries(state.query) : { vocab: [], sentences: [] };
   const timeQuestionMode = !numberMode && generatedTimeQuestion.vocab.length > 0;
   const generatedTime = !numberMode && !timeQuestionMode ? buildGeneratedTimeEntries(state.query) : { vocab: [], sentences: [] };
   const timeMode = !numberMode && !timeQuestionMode && generatedTime.vocab.length > 0;
-  const searchProfile = buildSearchProfile(state.query, [...merged.vocab, ...merged.sentences]);
+  const searchProfile = buildSearchProfile(
+    state.query,
+    numberMode || timeQuestionMode || timeMode ? [] : mergedEntries
+  );
   const exactSentenceMatch = numberMode ? null : findExactEntry(merged.sentences, searchProfile);
   const actionPhraseMode = !numberMode && isActionPhraseQuery(searchProfile);
   const vocabSource = merged.vocab;
@@ -2107,15 +2194,27 @@ function registerServiceWorker() {
 function wireEvents() {
   elements.searchForm.addEventListener("submit", (event) => {
     event.preventDefault();
-    performSearch(elements.searchInput.value.trim(), { scrollResults: true });
+    queueSearch(elements.searchInput.value.trim(), { scrollResults: true });
   });
 
   elements.searchInput.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
-      performSearch(elements.searchInput.value.trim(), { scrollResults: true });
+      queueSearch(elements.searchInput.value.trim(), { scrollResults: true });
     }
   });
+
+  [
+    elements.searchButton,
+    elements.jumpVocabButton,
+    elements.jumpSentenceButton,
+    elements.resetFiltersButton,
+    elements.menuButton,
+    elements.menuCloseButton,
+    elements.exportButton,
+    elements.importButton,
+    elements.clearCustomButton,
+  ].forEach(wirePressFeedback);
 
   elements.jumpVocabButton.addEventListener("click", () => jumpToSection(elements.vocabSection));
   elements.jumpSentenceButton.addEventListener("click", () => jumpToSection(elements.sentenceSection));
@@ -2147,6 +2246,7 @@ function wireEvents() {
 
 function boot() {
   wireEvents();
+  setSearchButtonBusy(false);
   const initial = readStateFromUrl();
   const scenarioIds = new Set(baseData.scenarios.map((item) => item.id));
   state.query = initial.query;
