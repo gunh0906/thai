@@ -1,6 +1,6 @@
 const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
-const APP_VERSION = "20260413c";
+const APP_VERSION = "20260413d";
 
 const baseData = window.BASE_DATA || {
   appTitle: "태국어 포켓북",
@@ -10,6 +10,53 @@ const baseData = window.BASE_DATA || {
   sentences: [],
   stats: {},
 };
+
+const THAI_SCRIPT_OVERRIDE_PAIRS = [
+  ["저는", "ผม"],
+  ["입니다.", "เป็น"],
+  ["입니다", "เป็น"],
+  ["사람", "คน"],
+  ["한국", "เกาหลี"],
+  ["태국", "ไทย"],
+  ["주세요", "ขอ"],
+  ["어떻게", "อย่างไร"],
+  ["어때요", "เป็นอย่างไร"],
+  ["뭐예요?", "อะไร"],
+  ["맞다", "ใช่"],
+  ["뭐라고?", "ว่าอะไรนะ"],
+  ["아니다", "ไม่"],
+  ["이것", "อันนี้"],
+  ["아니에요", "ไม่ใช่"],
+  ["중요하다", "สำคัญ"],
+  ["중요하지 않아", "ไม่สำคัญ"],
+  ["가능한", "เป็นไปได้"],
+  ["몰라요", "ไม่รู้"],
+  ["불가능", "เป็นไปไม่ได้"],
+  ["고장", "เสีย"],
+  ["죄송합니다.", "ขอโทษ"],
+  ["배고프다", "หิว"],
+  ["침착해", "ใจเย็นๆ"],
+  ["급하다.", "รีบ"],
+  ["못해요", "ทำไม่ได้"],
+  ["화장실", "ห้องน้ำ"],
+  ["따뜻하다", "อุ่น"],
+  ["어렵다", "ยาก"],
+  ["춥다", "หนาว"],
+  ["좋아", "ดี"],
+  ["안좋아", "ไม่ดี"],
+  ["싫어", "ไม่ชอบ"],
+  ["왜?", "ทำไม"],
+  ["덥다", "ร้อน"],
+  ["좋아한다", "ชอบ"],
+  ["누구", "ใคร"],
+  ["언제", "เมื่อไร"],
+  ["늦다", "ช้า"],
+  ["늦어요", "สาย"],
+  ["어느", "ไหน"],
+  ["시간", "เวลา"],
+  ["밥", "ข้าว"],
+  ["사다", "ซื้อ"],
+];
 
 const QUICK_SEARCHES = [
   "방바꿔주세요",
@@ -160,9 +207,10 @@ const QUERY_PARTS = [
   { patterns: [/말하다|말해|말해요|말한다/], primary: ["말하다"], related: ["천천히", "다시"], display: ["말하다"], tags: ["기본회화"] },
   { patterns: [/이해|알겠|알겠습니다|알겠어/], primary: ["이해"], related: ["이해해요", "이해하나요", "이해합니다", "알겠습니다"], display: ["이해"], tags: ["기본회화"] },
   { patterns: [/급해|급하다|서둘러|급합니다|빨리좀|빨리 해/], primary: ["급하다", "빨리"], related: ["서둘러", "지금", "바로"], display: ["급하다"], tags: ["기본회화"] },
+  { patterns: [/배고프|허기|시장해/], primary: ["배고프다"], related: ["배고파요", "배고프세요?", "밥 먹고 싶어요", "먹을 거 있어요?"], display: ["배고프다"], tags: ["식당", "기본회화", "건강"] },
   { patterns: [/빨래|세탁|세탁기|세탁실|건조기|세제/], primary: ["빨래", "세탁"], related: ["세탁기", "세탁실", "건조기", "세제"], display: ["빨래"], tags: ["기본회화", "이동"] },
   { patterns: [/병원|약국|약|아파|두통|열/], primary: ["병원", "약"], related: ["아프다", "두통", "열"], display: ["병원"], tags: ["건강"] },
-  { patterns: [/머리|배|복통|두통|기침|콧물|어지러|멀미|설사|구토|토할|상처|허리|다리|무릎|숨쉬기/], primary: ["아프다", "병원"], related: ["약국", "의사", "약", "도와주세요"], display: ["건강"], tags: ["건강"] },
+  { patterns: [/머리|배탈|배아파|배가아파|복통|두통|기침|콧물|어지러|멀미|설사|구토|토할|상처|허리|다리|무릎|숨쉬기/], primary: ["아프다", "병원"], related: ["약국", "의사", "약", "도와주세요"], display: ["건강"], tags: ["건강"] },
   { patterns: [/티셔츠|셔츠|바지|치마|원피스|드레스|자켓|재킷|점퍼|속옷|양말|신발|모자|우산|수영복/], primary: ["옷"], related: ["사이즈", "색", "보여주세요"], display: ["옷"], tags: ["쇼핑"] },
   { patterns: [/엔드밀|드릴|커터|공구|공구함|비트|홀더/], primary: ["엔드밀", "공구"], related: ["드릴", "커터", "홀더", "가져와 주세요"], display: ["공구"], tags: ["일터"] },
   { patterns: [/기계|장비|라인|공장|작업|현장/], primary: ["기계", "작업"], related: ["가동", "작동", "시작하다", "멈추다", "공장"], display: ["기계"], tags: ["일터"] },
@@ -269,6 +317,13 @@ const QUERY_ALIASES = [
     related: ["서둘러", "지금", "바로", "빨리 해주세요"],
     display: ["급하다"],
     tags: ["기본회화"],
+  },
+  {
+    matches: ["배고프다", "배고파", "배고파요", "배가고파", "배가고파요", "시장해", "시장해요", "허기져", "허기지다"],
+    primary: ["배고프다", "배고파요"],
+    related: ["배고프세요?", "밥 먹고 싶어요", "먹을 거 있어요?", "식당"],
+    display: ["배고프다", "식사"],
+    tags: ["식당", "기본회화", "건강"],
   },
   {
     matches: ["잘못된방법", "그건잘못된방법이야", "틀린방법", "그방법틀렸어"],
@@ -409,6 +464,12 @@ function normalizeText(text) {
     .replace(/해주세여/g, "해주세요")
     .replace(/먹으로/g, "먹으러")
     .replace(/밥먹으로/g, "밥먹으러")
+    .replace(/배가\s*고파요/g, "배고프다")
+    .replace(/배가\s*고파/g, "배고프다")
+    .replace(/배고파요/g, "배고프다")
+    .replace(/배고파/g, "배고프다")
+    .replace(/시장해요/g, "배고프다")
+    .replace(/시장해/g, "배고프다")
     .replace(/뭐에요/g, "뭐예요")
     .replace(/[“”"'`’]/g, "")
     .replace(/\s+/g, " ");
@@ -424,6 +485,14 @@ function tokenize(text) {
     .map((token) => token.trim())
     .filter(Boolean)
     .filter((token) => token.length > 1 || !STOPWORDS.has(token));
+}
+
+const thaiScriptOverrideMap = new Map(
+  THAI_SCRIPT_OVERRIDE_PAIRS.map(([key, value]) => [compactText(key), value])
+);
+
+function getThaiScriptOverride(entry) {
+  return thaiScriptOverrideMap.get(compactText(entry.korean)) || "";
 }
 
 function isStrongAnchorTerm(term) {
@@ -467,6 +536,9 @@ function expandQueryVariants(query, rawTokens = []) {
     }
     if (/주스|쥬스/.test(item)) {
       variants.push("음료", "과일", "물");
+    }
+    if (/배고프|허기|시장해/.test(item)) {
+      variants.push("배고프다", "배고파요", "밥", "먹다", "식당");
     }
     if (/기계|장비|라인|공장|작업/.test(item)) {
       variants.push("기계", "작동", "가동", "시작하다", "멈추다");
@@ -623,7 +695,7 @@ function buildSearchIndex(entry) {
 
   const korean = compactText(entry.korean);
   const thai = compactText(entry.thai);
-  const thaiScript = compactText(entry.thaiScript);
+  const thaiScript = compactText(getThaiScriptText(entry));
   const note = compactText(entry.note);
   const keywords = unique((entry.keywords || []).map((item) => compactText(item)));
   const tokens = unique(
@@ -1320,6 +1392,10 @@ function buildSearchProfile(query, entries = []) {
       .filter((item) => item.length > 1 || !STOPWORDS.has(item))
       .filter((item) => !primaryCompacts.includes(item))
   );
+  const hungerQuery = /배고프|허기|시장해/.test(compact);
+  const hungerBlockedTerms = new Set(["배", "보트", "복부", "아프다", "병원", "약"]);
+  const filteredPrimaryCompacts = hungerQuery ? primaryCompacts.filter((item) => !hungerBlockedTerms.has(item)) : primaryCompacts;
+  const filteredRelatedCompacts = hungerQuery ? relatedCompacts.filter((item) => !hungerBlockedTerms.has(item)) : relatedCompacts;
   const rawAnchorTerms = unique(rawTokens.map((item) => compactText(item)).filter(isStrongAnchorTerm));
   const fallbackAnchorTerms = rawAnchorTerms.length
     ? []
@@ -1334,12 +1410,14 @@ function buildSearchProfile(query, entries = []) {
     normalized,
     compact,
     directTerms: unique([compact, ...rawTokens.map((item) => compactText(item)), ...expandedCompacts].filter(Boolean)),
-    primaryTerms: primaryCompacts,
-    relatedTerms: relatedCompacts,
+    primaryTerms: filteredPrimaryCompacts,
+    relatedTerms: filteredRelatedCompacts,
     anchorTerms: unique([...rawAnchorTerms, ...fallbackAnchorTerms]).slice(0, 3),
-    displayTerms: unique(displayTerms.length ? displayTerms : rawTokens).slice(0, 4),
+    displayTerms: unique(displayTerms.length ? displayTerms : rawTokens)
+      .filter((item) => !(hungerQuery && hungerBlockedTerms.has(compactText(item))))
+      .slice(0, 4),
     tags: sortTags(unique(tags)),
-    minimumPrimaryHits: primaryCompacts.length >= 3 ? 2 : primaryCompacts.length ? 1 : 0,
+    minimumPrimaryHits: filteredPrimaryCompacts.length >= 3 ? 2 : filteredPrimaryCompacts.length ? 1 : 0,
   };
 }
 
@@ -1757,6 +1835,8 @@ function createEmptyState(message) {
 function getThaiScriptText(entry) {
   const explicit = String(entry.thaiScript || "").trim();
   if (explicit) return explicit;
+  const override = getThaiScriptOverride(entry);
+  if (override) return override;
   return THAI_SCRIPT_REGEX.test(String(entry.thai || "")) ? String(entry.thai || "").trim() : "";
 }
 
@@ -1865,7 +1945,7 @@ function createEntryCard(entry) {
   } else if (!thaiScriptText) {
     const missingNote = document.createElement("p");
     missingNote.className = "entry-note";
-    missingNote.textContent = "태국 문자 보강중";
+    missingNote.textContent = "태국 문자 미보강 · 위 발음 표기만 있어요";
     card.appendChild(missingNote);
   }
 
