@@ -1,6 +1,6 @@
 const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
-const APP_VERSION = "20260414d";
+const APP_VERSION = "20260414e";
 
 const baseData = window.BASE_DATA || {
   appTitle: "태국어 포켓북",
@@ -186,6 +186,25 @@ const QUICK_SEARCHES = [
 ];
 
 const STOPWORDS = new Set(["이", "그", "저", "것", "거", "좀", "더", "요", "은", "는", "이거"]);
+const GENERIC_SEARCH_TERMS = new Set([
+  "하다",
+  "있다",
+  "없다",
+  "되다",
+  "주다",
+  "주세요",
+  "문제",
+  "필요",
+  "확인",
+  "가다",
+  "오다",
+  "먹다",
+  "보다",
+  "지금",
+  "현재",
+  "어디",
+  "시간",
+]);
 const GENERIC_ANCHOR_TERMS = new Set(["주세요", "주세여", "부탁", "좀", "지금", "현재", "시간", "몇시", "공구", "문제"]);
 const SINGLE_SYLLABLE_ANCHORS = new Set(["방", "물", "밥", "약"]);
 const ENTRY_SOURCE_SCORES = {
@@ -382,6 +401,30 @@ const SEARCH_OBJECT_RULES = [
     phrases: ["충전기 있어요?"],
   },
   {
+    id: "phone",
+    patterns: [/휴대폰|핸드폰|스마트폰|사진|동영상|메시지|문자|전화/],
+    terms: ["휴대폰", "사진", "메시지", "전화"],
+    related: [
+      "휴대폰 충전할 수 있어요?",
+      "휴대폰 충전이 안 돼요",
+      "휴대폰을 잃어버렸어요",
+      "사진 찍어 주세요",
+      "메시지로 보내 주세요",
+      "전화해 주세요",
+    ],
+    display: ["휴대폰"],
+    tags: ["기본회화", "이동"],
+    avoidTags: ["일터"],
+    phrases: [
+      "휴대폰 충전할 수 있어요?",
+      "휴대폰 충전이 안 돼요",
+      "휴대폰을 잃어버렸어요",
+      "사진 찍어 주세요",
+      "메시지로 보내 주세요",
+      "전화해 주세요",
+    ],
+  },
+  {
     id: "wifi",
     patterns: [/와이파이|wifi|인터넷|비밀번호/i],
     terms: ["와이파이", "인터넷", "비밀번호"],
@@ -393,7 +436,7 @@ const SEARCH_OBJECT_RULES = [
   },
   {
     id: "computer",
-    patterns: [/컴퓨터|노트북|랩탑|pc|피시|화면|마우스|키보드|프린터|배터리|전원|충전/],
+    patterns: [/컴퓨터|노트북|랩탑|pc|피시|화면|마우스|키보드|프린터|배터리|전원/],
     terms: ["컴퓨터", "노트북", "화면", "마우스", "키보드", "프린터", "문제"],
     related: [
       "컴퓨터가 안 돼요",
@@ -1185,6 +1228,9 @@ const QUERY_ENDINGS = [
 ];
 
 const searchIndexCache = new WeakMap();
+const searchRuntimeCache = new WeakMap();
+let searchRuntimeWarmupQueued = false;
+let searchRuntimeWarmupDone = false;
 const hydratedBaseData = createHydratedBaseData();
 
 const state = {
@@ -1574,6 +1620,8 @@ function expandQueryVariants(query, rawTokens = []) {
   const normalizedQuery = normalizeText(query);
   const machineNoiseQuery =
     /(기계|장비|설비|라인|공장|작업)/.test(normalizedQuery) && /시끄럽|소음/.test(normalizedQuery);
+  const phoneChargeQuery =
+    /(휴대폰|핸드폰|스마트폰|폰)/.test(normalizedQuery) && /충전|배터리/.test(normalizedQuery);
   const verbLikePatterns = [
     /^(.*)해$/,
     /^(.*)해요$/,
@@ -1647,7 +1695,17 @@ function expandQueryVariants(query, rawTokens = []) {
     if (/컴퓨터|노트북|랩탑|pc|피시/.test(item)) {
       variants.push("컴퓨터", "노트북", "컴퓨터가 안 돼요", "노트북이 안 켜져요", "컴퓨터를 확인해 주세요");
     }
-    if (/컴퓨터|노트북|랩탑|pc|피시|화면|마우스|키보드|프린터|배터리|전원|충전/.test(item)) {
+    if (phoneChargeQuery || (/(휴대폰|핸드폰|스마트폰|폰)/.test(item) && /충전|배터리/.test(item))) {
+      variants.push(
+        "휴대폰",
+        "충전기",
+        "보조배터리",
+        "휴대폰 충전할 수 있어요?",
+        "휴대폰 충전이 안 돼요",
+        "배터리가 없어요"
+      );
+    }
+    if (/컴퓨터|노트북|랩탑|pc|피시|화면|마우스|키보드|프린터|배터리|전원/.test(item)) {
       variants.push(
         "화면이 안 나와요",
         "마우스가 안 돼요",
@@ -1724,6 +1782,13 @@ function expandQueryVariants(query, rawTokens = []) {
 
 function unique(items) {
   return [...new Set(items.filter(Boolean))];
+}
+
+function dropGenericTermsWhenSpecific(terms) {
+  const normalized = unique(terms.map((item) => compactText(item)).filter(Boolean));
+  const hasSpecific = normalized.some((term) => term.length >= 3 && !GENERIC_SEARCH_TERMS.has(term));
+  if (!hasSpecific) return normalized;
+  return normalized.filter((term) => !GENERIC_SEARCH_TERMS.has(term));
 }
 
 function sortTags(tags) {
@@ -1867,6 +1932,91 @@ function buildSearchIndex(entry) {
   const index = { korean, thai, thaiScript, note, keywords, tokens };
   searchIndexCache.set(entry, index);
   return index;
+}
+
+function addRuntimeEntry(map, key, entry) {
+  if (!key) return;
+  const bucket = map.get(key);
+  if (bucket) {
+    bucket.push(entry);
+    return;
+  }
+  map.set(key, [entry]);
+}
+
+function getRuntimeTerms(index) {
+  return unique([index.korean, index.thai, index.thaiScript, index.note, ...index.tokens, ...index.keywords]);
+}
+
+function buildSearchRuntime(entries) {
+  const exactMap = new Map();
+  const prefix2Map = new Map();
+  const prefix3Map = new Map();
+
+  entries.forEach((entry) => {
+    const index = buildSearchIndex(entry);
+    getRuntimeTerms(index).forEach((term) => {
+      addRuntimeEntry(exactMap, term, entry);
+      if (term.length >= 2) addRuntimeEntry(prefix2Map, term.slice(0, 2), entry);
+      if (term.length >= 3) addRuntimeEntry(prefix3Map, term.slice(0, 3), entry);
+    });
+  });
+
+  return { exactMap, prefix2Map, prefix3Map };
+}
+
+function getSearchRuntime(entries) {
+  const cached = searchRuntimeCache.get(entries);
+  if (cached) return cached;
+  const runtime = buildSearchRuntime(entries);
+  searchRuntimeCache.set(entries, runtime);
+  return runtime;
+}
+
+function getCandidateSearchTerms(searchProfile) {
+  if (!searchProfile?.query) return [];
+  return dropGenericTermsWhenSpecific([
+    searchProfile.compact,
+    ...(searchProfile.directTerms || []),
+    ...(searchProfile.primaryTerms || []).slice(0, 12),
+    ...(searchProfile.objectTerms || []),
+    ...(searchProfile.actionTerms || []),
+    ...(searchProfile.anchorTerms || []),
+    ...(searchProfile.templateTerms || []).slice(0, 8),
+    ...(searchProfile.relatedTerms || []).slice(0, 6),
+  ]).slice(0, 24);
+}
+
+function collectCandidateEntries(entries, searchProfile) {
+  if (!searchProfile?.query) return entries;
+
+  const runtime = getSearchRuntime(entries);
+  const candidateTerms = getCandidateSearchTerms(searchProfile);
+  if (!candidateTerms.length) return entries;
+
+  const results = [];
+  const seen = new Set();
+  const pushEntries = (bucket) => {
+    if (!bucket) return;
+    bucket.forEach((entry) => {
+      if (seen.has(entry.id)) return;
+      seen.add(entry.id);
+      results.push(entry);
+    });
+  };
+
+  candidateTerms.forEach((term) => {
+    pushEntries(runtime.exactMap.get(term));
+    if (term.length >= 3) {
+      pushEntries(runtime.prefix3Map.get(term.slice(0, 3)));
+    } else if (term.length >= 2) {
+      pushEntries(runtime.prefix2Map.get(term.slice(0, 2)));
+    }
+  });
+
+  if (!results.length) return entries;
+  if (results.length >= Math.floor(entries.length * 0.85)) return entries;
+  return results;
 }
 
 function normalizeNumberQuery(query) {
@@ -2452,8 +2602,20 @@ function collectSeedEntries(entries, compactQuery, intentHints = null) {
   const objectTerms = unique((intentHints?.objectTerms || []).map((item) => compactText(item)).filter(Boolean));
   const actionTerms = unique((intentHints?.actionTerms || []).map((item) => compactText(item)).filter(Boolean));
   const templateTerms = unique((intentHints?.templateTerms || []).map((item) => compactText(item)).filter(Boolean));
+  const seedProfile = {
+    query: compactQuery,
+    compact: compactQuery,
+    directTerms: [compactQuery],
+    primaryTerms: unique([compactQuery, ...objectTerms, ...actionTerms, ...templateTerms]),
+    relatedTerms: [],
+    objectTerms,
+    actionTerms,
+    templateTerms,
+    anchorTerms: [compactQuery],
+  };
+  const candidateEntries = collectCandidateEntries(entries, seedProfile);
 
-  return entries
+  return candidateEntries
     .filter((entry) => entry.source !== "generated-bulk")
     .map((entry) => {
       const index = buildSearchIndex(entry);
@@ -2584,13 +2746,13 @@ function buildSearchProfile(query, entries = []) {
   }
 
   const intentBlockedTerms = unique((intentHints.blockedTerms || []).map((item) => compactText(item)).filter(Boolean));
-  const primaryCompacts = unique(
+  const primaryCompacts = dropGenericTermsWhenSpecific(
     primaryTerms
       .map((item) => compactText(item))
       .filter(Boolean)
       .filter((item) => item.length > 1 || !STOPWORDS.has(item))
   );
-  const relatedCompacts = unique(
+  const relatedCompacts = dropGenericTermsWhenSpecific(
     relatedTerms
       .map((item) => compactText(item))
       .filter(Boolean)
@@ -2636,6 +2798,18 @@ function buildSearchProfile(query, entries = []) {
           .map((item) => compactText(item))
           .filter((item) => isStrongAnchorTerm(item) && compact.includes(item))
       );
+  const highlightTerms = dropGenericTermsWhenSpecific([
+    compact,
+    ...rawTokens,
+    ...displayTerms,
+    ...filteredPrimaryCompacts,
+    ...objectTerms,
+    ...actionTerms,
+    ...templateTerms,
+  ])
+    .filter((item) => item.length >= 2)
+    .sort((left, right) => right.length - left.length)
+    .slice(0, 14);
 
   return {
     query: trimmedQuery,
@@ -2655,6 +2829,7 @@ function buildSearchProfile(query, entries = []) {
     preferredTags,
     avoidTags,
     minimumPrimaryHits: filteredPrimaryCompacts.length >= 3 ? 2 : filteredPrimaryCompacts.length ? 1 : 0,
+    highlightTerms,
   };
 }
 
@@ -2910,7 +3085,8 @@ function scoreEntry(entry, searchProfile, kind) {
 }
 
 function getVocabResults(entries, searchProfile) {
-  const ranked = entries
+  const candidateEntries = collectCandidateEntries(entries, searchProfile);
+  const ranked = candidateEntries
     .filter(matchesScenario)
     .map((entry) => {
       const index = buildSearchIndex(entry);
@@ -2994,6 +3170,7 @@ function getVocabResults(entries, searchProfile) {
 }
 
 function getSentenceResults(entries, searchProfile, vocabSeeds) {
+  const candidateEntries = collectCandidateEntries(entries, searchProfile);
   const seedTerms = [];
   vocabSeeds.slice(0, 4).forEach((entry) => {
     const index = buildSearchIndex(entry);
@@ -3009,7 +3186,7 @@ function getSentenceResults(entries, searchProfile, vocabSeeds) {
     ].filter((item) => item.length >= 1)
   );
 
-  const direct = entries
+  const direct = candidateEntries
     .filter(matchesScenario)
     .map((entry) => {
       const index = buildSearchIndex(entry);
@@ -3068,7 +3245,7 @@ function getSentenceResults(entries, searchProfile, vocabSeeds) {
   }
 
   const directIds = new Set(prioritizedDirect.map(({ entry }) => entry.id));
-  const related = entries
+  const related = candidateEntries
     .filter(matchesScenario)
     .filter((entry) => !directIds.has(entry.id))
     .map((entry) => {
@@ -3340,13 +3517,85 @@ function renderQueryInsights(searchProfile) {
   elements.queryInsightsPanel.hidden = !searchProfile.query || !insights.length;
 }
 
-function createEntryCard(entry) {
+function escapeHtml(text) {
+  return String(text || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+function buildCompactPositionMap(text) {
+  const chars = Array.from(String(text || ""));
+  const positions = [];
+  let compact = "";
+
+  chars.forEach((char, index) => {
+    if (/[0-9a-zA-Z가-힣\u0E00-\u0E7F]/u.test(char)) {
+      compact += char.toLowerCase();
+      positions.push(index);
+    }
+  });
+
+  return { chars, compact, positions };
+}
+
+function getHighlightRanges(text, searchProfile) {
+  const terms = (searchProfile?.highlightTerms || []).filter(Boolean);
+  if (!terms.length) return [];
+
+  const mapped = buildCompactPositionMap(text);
+  if (!mapped.compact) return [];
+
+  const ranges = [];
+  terms.forEach((term) => {
+    const compactTerm = compactText(term);
+    if (!compactTerm || compactTerm.length < 2) return;
+
+    let startIndex = mapped.compact.indexOf(compactTerm);
+    while (startIndex !== -1) {
+      const start = mapped.positions[startIndex];
+      const end = mapped.positions[startIndex + compactTerm.length - 1] + 1;
+      const overlaps = ranges.some((range) => start < range.end && end > range.start);
+      if (!overlaps) {
+        ranges.push({ start, end });
+        break;
+      }
+      startIndex = mapped.compact.indexOf(compactTerm, startIndex + 1);
+    }
+  });
+
+  return ranges.sort((left, right) => left.start - right.start);
+}
+
+function renderHighlightedText(element, text, searchProfile) {
+  const content = String(text || "");
+  const ranges = getHighlightRanges(content, searchProfile);
+  if (!ranges.length) {
+    element.textContent = content;
+    return;
+  }
+
+  const chars = Array.from(content);
+  let cursor = 0;
+  let html = "";
+  ranges.forEach((range) => {
+    html += escapeHtml(chars.slice(cursor, range.start).join(""));
+    html += `<mark class="match-mark">${escapeHtml(chars.slice(range.start, range.end).join(""))}</mark>`;
+    cursor = range.end;
+  });
+  html += escapeHtml(chars.slice(cursor).join(""));
+  element.innerHTML = html;
+}
+
+function createEntryCard(entry, searchProfile = null) {
   const card = document.createElement("article");
   card.className = "entry-card";
 
   const korean = document.createElement("p");
   korean.className = "entry-korean entry-korean-main";
-  korean.textContent = entry.korean;
+  renderHighlightedText(korean, entry.korean, searchProfile);
 
   const thai = document.createElement("p");
   thai.className = "entry-thai";
@@ -3357,7 +3606,7 @@ function createEntryCard(entry) {
   if (entry.note) {
     const note = document.createElement("p");
     note.className = "entry-note";
-    note.textContent = entry.note;
+    renderHighlightedText(note, entry.note, searchProfile);
     card.appendChild(note);
   }
 
@@ -3415,14 +3664,14 @@ function createEntryCard(entry) {
   return card;
 }
 
-function renderEntryStack(container, entries, emptyMessage) {
+function renderEntryStack(container, entries, emptyMessage, searchProfile = null) {
   container.innerHTML = "";
   if (!entries.length) {
     container.appendChild(createEmptyState(emptyMessage));
     return;
   }
   entries.forEach((entry) => {
-    container.appendChild(createEntryCard(entry));
+    container.appendChild(createEntryCard(entry, searchProfile));
   });
 }
 
@@ -3605,12 +3854,14 @@ function render() {
   renderEntryStack(
     elements.vocabResults,
     vocabResults,
-    "맞는 단어가 아직 없습니다. 더 짧은 핵심어로 검색해 보세요."
+    "맞는 단어가 아직 없습니다. 더 짧은 핵심어로 검색해 보세요.",
+    searchProfile
   );
   renderEntryStack(
     elements.sentenceResults,
     sentenceResults,
-    "맞는 회화가 아직 없습니다. 다른 표현으로 검색하거나 단어를 먼저 검색해 보세요."
+    "맞는 회화가 아직 없습니다. 다른 표현으로 검색하거나 단어를 먼저 검색해 보세요.",
+    searchProfile
   );
   renderCustomEntries();
   syncUrl();
@@ -3730,6 +3981,27 @@ function registerServiceWorker() {
   }
 }
 
+function scheduleSearchRuntimeWarmup() {
+  if (searchRuntimeWarmupQueued || searchRuntimeWarmupDone) return;
+  searchRuntimeWarmupQueued = true;
+
+  const warmup = () => {
+    if (searchRuntimeWarmupDone) return;
+    searchRuntimeWarmupDone = true;
+    try {
+      getSearchRuntime(hydratedBaseData.vocab);
+      getSearchRuntime(hydratedBaseData.sentences);
+    } catch (error) {
+      console.error("검색 런타임 준비 실패", error);
+    }
+  };
+
+  window.setTimeout(warmup, 40);
+  if (typeof window.requestIdleCallback === "function") {
+    window.requestIdleCallback(warmup, { timeout: 300 });
+  }
+}
+
 function wireEvents() {
   elements.searchForm.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -3791,6 +4063,7 @@ function boot() {
   state.query = initial.query;
   state.scenario = scenarioIds.has(initial.scenario) ? initial.scenario : "all";
   render();
+  scheduleSearchRuntimeWarmup();
   registerServiceWorker();
 }
 

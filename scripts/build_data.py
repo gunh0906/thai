@@ -13,6 +13,7 @@ from expanded_terms import EXPANDED_SENTENCES, EXPANDED_VOCAB
 from generated_bulk import generate_bulk_entries
 from more_stage2 import STAGE2_SENTENCES, STAGE2_VOCAB
 from more_stage3 import STAGE3_SENTENCES, STAGE3_VOCAB
+from more_stage4 import STAGE4_SENTENCES, STAGE4_VOCAB
 
 SCENARIOS = [
     {
@@ -1040,6 +1041,23 @@ def build_supplemental_entries() -> tuple[list[dict], list[dict]]:
             for index, item in enumerate(STAGE3_VOCAB, start=1)
         ]
     )
+    vocab_entries.extend(
+        [
+            make_entry(
+                kind="vocab",
+                source="supplemental",
+                sheet="확장 단어",
+                index=len(vocab_entries) + index,
+                thai=item["thai"],
+                thai_script=item.get("thaiScript", ""),
+                korean=item["korean"],
+                tags=item.get("tags"),
+                note=item.get("note", ""),
+                extra_keywords=item.get("keywords"),
+            )
+            for index, item in enumerate(STAGE4_VOCAB, start=1)
+        ]
+    )
     sentence_entries = [
         make_entry(
             kind="sentence",
@@ -1121,6 +1139,23 @@ def build_supplemental_entries() -> tuple[list[dict], list[dict]]:
                 extra_keywords=item.get("keywords"),
             )
             for index, item in enumerate(STAGE3_SENTENCES, start=1)
+        ]
+    )
+    sentence_entries.extend(
+        [
+            make_entry(
+                kind="sentence",
+                source="supplemental",
+                sheet="확장 문장",
+                index=len(sentence_entries) + index,
+                thai=item["thai"],
+                thai_script=item.get("thaiScript", ""),
+                korean=item["korean"],
+                tags=item.get("tags"),
+                note=item.get("note", ""),
+                extra_keywords=item.get("keywords"),
+            )
+            for index, item in enumerate(STAGE4_SENTENCES, start=1)
         ]
     )
     return vocab_entries, sentence_entries
