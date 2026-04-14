@@ -186,7 +186,7 @@ VOCAB_PREFIX_TEMPLATES = (
     ("{base} 문제", "{thai} 미 빤하", "{script}มีปัญหา"),
 )
 
-ITEM_SENTENCE_TEMPLATES = (
+SHOPPING_ITEM_SENTENCE_TEMPLATES = (
     ("이 {base} 주세요", "커 {thai} 니 너이 캅", "ขอ{script}นี้หน่อยครับ"),
     ("{base} 있어요?", "미 {thai} 마이 캅", "มี{script}ไหมครับ"),
     ("{base} 더 주세요", "커 {thai} 퍼엠 너이 캅", "ขอ{script}เพิ่มหน่อยครับ"),
@@ -197,6 +197,44 @@ ITEM_SENTENCE_TEMPLATES = (
     ("{base} 급하게 필요해요", "폼 똥깐 {thai} 두언 캅", "ผมต้องการ{script}ด่วนครับ"),
     ("{base} 보여주세요", "커 두 {thai} 너이 캅", "ขอดู{script}หน่อยครับ"),
     ("{base} 어디서 사요?", "{thai} 쓰으 티 나이 캅", "{script}ซื้อที่ไหนครับ"),
+    ("{base} 바꿔주세요", "츄어이 쁠리안 {thai} 하이 너이 캅", "ช่วยเปลี่ยน{script}ให้หน่อยครับ"),
+    ("{base} 다시 주세요", "커 {thai} 이끈 크랑 너이 캅", "ขอ{script}อีกครั้งหน่อยครับ"),
+    ("{base} 얼마예요?", "{thai} 타오라이 캅", "{script}เท่าไรครับ"),
+)
+
+SUPPLY_ITEM_SENTENCE_TEMPLATES = (
+    ("이 {base} 주세요", "커 {thai} 니 너이 캅", "ขอ{script}นี้หน่อยครับ"),
+    ("{base} 있어요?", "미 {thai} 마이 캅", "มี{script}ไหมครับ"),
+    ("{base} 더 주세요", "커 {thai} 퍼엠 너이 캅", "ขอ{script}เพิ่มหน่อยครับ"),
+    ("다른 {base} 있어요?", "미 {thai} 은 마이 캅", "มี{script}อื่นไหมครับ"),
+    ("새 {base} 주세요", "커 {thai} 마이 너이 캅", "ขอ{script}ใหม่หน่อยครับ"),
+    ("{base} 하나만 주세요", "커 {thai} 능 안 너이 캅", "ขอ{script}หนึ่งอันหน่อยครับ"),
+    ("{base} 필요해요", "폼 똥깐 {thai} 캅", "ผมต้องการ{script}ครับ"),
+    ("{base} 급하게 필요해요", "폼 똥깐 {thai} 두언 캅", "ผมต้องการ{script}ด่วนครับ"),
+    ("{base} 보여주세요", "커 두 {thai} 너이 캅", "ขอดู{script}หน่อยครับ"),
+    ("{base} 확인해주세요", "츄어이 트루앗 {thai} 너이 캅", "ช่วยตรวจ{script}หน่อยครับ"),
+    ("{base} 바꿔주세요", "츄어이 쁠리안 {thai} 하이 너이 캅", "ช่วยเปลี่ยน{script}ให้หน่อยครับ"),
+    ("{base} 다시 주세요", "커 {thai} 이끈 크랑 너이 캅", "ขอ{script}อีกครั้งหน่อยครับ"),
+    ("{base} 준비해주세요", "츄어이 뜨리얌 {thai} 너이 캅", "ช่วยเตรียม{script}หน่อยครับ"),
+    ("{base} 가져다 주세요", "츄어이 아오 {thai} 마 하이 너이 캅", "ช่วยเอา{script}มาให้หน่อยครับ"),
+)
+
+FOOD_ITEM_SENTENCE_TEMPLATES = (
+    ("이 {base} 주세요", "커 {thai} 니 너이 캅", "ขอ{script}นี้หน่อยครับ"),
+    ("{base} 있어요?", "미 {thai} 마이 캅", "มี{script}ไหมครับ"),
+    ("{base} 더 주세요", "커 {thai} 퍼엠 너이 캅", "ขอ{script}เพิ่มหน่อยครับ"),
+    ("다른 {base} 있어요?", "미 {thai} 은 마이 캅", "มี{script}อื่นไหมครับ"),
+    ("{base} 하나만 주세요", "커 {thai} 능 안 너이 캅", "ขอ{script}หนึ่งอันหน่อยครับ"),
+    ("{base} 보여주세요", "커 두 {thai} 너이 캅", "ขอดู{script}หน่อยครับ"),
+    ("{base} 얼마예요?", "{thai} 타오라이 캅", "{script}เท่าไรครับ"),
+)
+
+TOOL_ITEM_SENTENCE_TEMPLATES = (
+    ("{base} 있어요?", "미 {thai} 마이 캅", "มี{script}ไหมครับ"),
+    ("{base} 더 주세요", "커 {thai} 퍼엠 너이 캅", "ขอ{script}เพิ่มหน่อยครับ"),
+    ("{base} 필요해요", "폼 똥깐 {thai} 캅", "ผมต้องการ{script}ครับ"),
+    ("{base} 급하게 필요해요", "폼 똥깐 {thai} 두언 캅", "ผมต้องการ{script}ด่วนครับ"),
+    ("{base} 보여주세요", "커 두 {thai} 너이 캅", "ขอดู{script}หน่อยครับ"),
     ("{base} 잠시 빌릴 수 있어요?", "커 여음 {thai} 다이 마이 캅", "ขอยืม{script}ได้ไหมครับ"),
     ("{base} 확인해주세요", "츄어이 트루앗 {thai} 너이 캅", "ช่วยตรวจ{script}หน่อยครับ"),
     ("{base} 바꿔주세요", "츄어이 쁠리안 {thai} 하이 너이 캅", "ช่วยเปลี่ยน{script}ให้หน่อยครับ"),
@@ -205,7 +243,6 @@ ITEM_SENTENCE_TEMPLATES = (
     ("{base} 안 보여요", "{thai} 마이 헨 캅", "{script}ไม่เห็นครับ"),
     ("{base} 잃어버렸어요", "폼 탐 {thai} 하이 캅", "ผมทำ{script}หายครับ"),
     ("{base} 가져다 주세요", "츄어이 아오 {thai} 마 하이 너이 캅", "ช่วยเอา{script}มาให้หน่อยครับ"),
-    ("{base} 얼마예요?", "{thai} 타오라이 캅", "{script}เท่าไรครับ"),
 )
 
 PLACE_SENTENCE_TEMPLATES = (
@@ -226,6 +263,103 @@ PLACE_SENTENCE_TEMPLATES = (
     ("{base} 여기가 맞아요?", "{thai} 티니 차이 마이 캅", "{script}ที่นี่ใช่ไหมครับ"),
     ("{base} 몇 층이에요?", "{thai} 유 찬 아라이 캅", "{script}อยู่ชั้นอะไรครับ"),
     ("{base} 언제 열어요?", "{thai} 쁘읻 끼 몽 캅", "{script}เปิดกี่โมงครับ"),
+)
+
+FOOD_HINTS = (
+    "과일",
+    "수박",
+    "주스",
+    "음료",
+    "생수",
+    "물",
+    "커피",
+    "차",
+    "밥",
+    "볶음밥",
+    "국수",
+    "음식",
+    "망고",
+    "바나나",
+    "오렌지",
+    "맥주",
+    "와인",
+    "고기",
+    "새우",
+    "생선",
+    "닭",
+    "돼지",
+    "소고기",
+    "고수",
+)
+
+SUPPLY_HINTS = (
+    "수건",
+    "휴지",
+    "화장지",
+    "티슈",
+    "냅킨",
+    "충전기",
+    "차저",
+    "어댑터",
+    "키카드",
+    "담요",
+    "베개",
+    "드라이기",
+    "비누",
+    "샴푸",
+    "칫솔",
+    "치약",
+    "옷걸이",
+    "생수",
+    "물",
+)
+
+TOOL_HINTS = (
+    "드라이버",
+    "커터",
+    "칼",
+    "가위",
+    "망치",
+    "펜치",
+    "렌치",
+    "스패너",
+    "드릴",
+    "비트",
+    "엔드밀",
+    "공구",
+    "테이프",
+    "줄자",
+    "사다리",
+)
+
+SKIP_ITEM_SENTENCE_HINTS = (
+    "빨래",
+    "세탁",
+    "세탁기",
+    "세탁실",
+    "세탁소",
+    "컴퓨터",
+    "노트북",
+    "인터넷",
+    "와이파이",
+    "에어컨",
+    "온수",
+    "도어락",
+    "동전",
+    "잔돈",
+    "거스름돈",
+    "지폐",
+    "현금",
+    "주식",
+    "주가",
+    "투자",
+    "가격",
+    "할인",
+    "담배",
+    "흡연",
+    "금연",
+    "흡연실",
+    "금연실",
 )
 
 
@@ -315,6 +449,24 @@ def is_place_like(seed: dict) -> bool:
         return True
     tags = set(seed.get("tags") or [])
     return "이동" in tags and any(token in text for token in ("실", "장", "역", "항", "로비", "카운터"))
+
+
+def matches_hint(text: str, hints: tuple[str, ...]) -> bool:
+    return any(hint in text for hint in hints)
+
+
+def get_item_sentence_templates(seed: dict) -> tuple[tuple[str, str, str], ...]:
+    text = clean_text(seed["korean"])
+    tags = set(seed.get("tags") or [])
+    if matches_hint(text, SKIP_ITEM_SENTENCE_HINTS):
+        return ()
+    if matches_hint(text, SUPPLY_HINTS):
+        return SUPPLY_ITEM_SENTENCE_TEMPLATES
+    if "식당" in tags or matches_hint(text, FOOD_HINTS):
+        return FOOD_ITEM_SENTENCE_TEMPLATES
+    if "일터" in tags or matches_hint(text, TOOL_HINTS):
+        return TOOL_ITEM_SENTENCE_TEMPLATES
+    return SHOPPING_ITEM_SENTENCE_TEMPLATES
 
 
 def add_generated_entry(
@@ -413,7 +565,7 @@ def generate_bulk_entries(seed_entries: list[dict]) -> tuple[list[dict], list[di
                 keywords=[base, *seed_keywords],
             )
 
-        sentence_templates = PLACE_SENTENCE_TEMPLATES if is_place_like(seed) else ITEM_SENTENCE_TEMPLATES
+        sentence_templates = PLACE_SENTENCE_TEMPLATES if is_place_like(seed) else get_item_sentence_templates(seed)
         for korean_template, thai_template, script_template in sentence_templates:
             add_generated_entry(
                 sentence_entries,

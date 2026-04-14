@@ -1,6 +1,6 @@
 const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
-const APP_VERSION = "20260414c";
+const APP_VERSION = "20260414d";
 
 const baseData = window.BASE_DATA || {
   appTitle: "태국어 포켓북",
@@ -393,123 +393,145 @@ const SEARCH_OBJECT_RULES = [
   },
   {
     id: "computer",
-    patterns: [/컴퓨터|노트북|랩탑|pc|피시/],
-    terms: ["컴퓨터", "노트북", "문제"],
-    related: ["컴퓨터가 안 돼요", "노트북이 안 켜져요", "컴퓨터를 확인해 주세요"],
+    patterns: [/컴퓨터|노트북|랩탑|pc|피시|화면|마우스|키보드|프린터|배터리|전원|충전/],
+    terms: ["컴퓨터", "노트북", "화면", "마우스", "키보드", "프린터", "문제"],
+    related: [
+      "컴퓨터가 안 돼요",
+      "노트북이 안 켜져요",
+      "화면이 안 나와요",
+      "마우스가 안 돼요",
+      "키보드가 안 돼요",
+      "프린터가 안 돼요",
+      "충전이 안 돼요",
+      "전원이 안 들어와요",
+      "컴퓨터를 확인해 주세요",
+    ],
     display: ["컴퓨터"],
     tags: ["기본회화"],
     avoidTags: ["일터"],
-    phrases: ["컴퓨터가 안 돼요", "노트북이 안 켜져요", "컴퓨터를 확인해 주세요"],
+    blockedTerms: ["기계", "가동", "작동", "라인", "공장"],
+    phrases: [
+      "컴퓨터가 안 돼요",
+      "노트북이 안 켜져요",
+      "화면이 안 나와요",
+      "마우스가 안 돼요",
+      "키보드가 안 돼요",
+      "프린터가 안 돼요",
+      "충전이 안 돼요",
+      "전원이 안 들어와요",
+      "컴퓨터를 확인해 주세요",
+    ],
   },
   {
     id: "smoking",
-    patterns: [/담배|흡연|금연|흡연실|담배피우/],
-    terms: ["담배", "담배 피우다", "흡연실"],
-    related: ["담배 피워도 돼요?", "흡연실이 어디예요?", "금연 구역이에요"],
+    patterns: [/담배|흡연|금연|흡연실|담배피우|라이터|재떨이|전자담배/],
+    terms: ["담배", "담배 피우다", "흡연실", "라이터", "재떨이"],
+    related: ["담배 피워도 돼요?", "흡연실이 어디예요?", "금연 구역이에요", "라이터 있어요?", "재떨이 있어요?"],
     display: ["담배", "흡연실"],
     tags: ["기본회화", "이동"],
     avoidTags: ["일터"],
-    phrases: ["담배 피워도 돼요?", "흡연실이 어디예요?", "금연 구역이에요"],
+    phrases: ["담배 피워도 돼요?", "흡연실이 어디예요?", "금연 구역이에요", "라이터 있어요?", "재떨이 있어요?"],
   },
   {
     id: "beauty",
-    patterns: [/예쁘|이쁘|예뻐|이뻐/],
-    terms: ["예쁘다", "예뻐요"],
-    related: ["예뻐요", "정말 예뻐요"],
+    patterns: [/예쁘|이쁘|예뻐|이뻐|귀엽|멋있|잘생겼/],
+    terms: ["예쁘다", "예뻐요", "귀엽다", "멋있다", "잘생겼다"],
+    related: ["예뻐요", "정말 예뻐요", "귀여워요", "멋있어요", "잘생겼어요"],
     display: ["예쁘다"],
     tags: ["기본회화", "쇼핑"],
     avoidTags: ["일터"],
-    phrases: ["예뻐요", "정말 예뻐요"],
+    phrases: ["예뻐요", "정말 예뻐요", "귀여워요", "멋있어요", "잘생겼어요"],
   },
   {
     id: "praise",
-    patterns: [/잘하|잘했/],
-    terms: ["잘하다", "잘했어요"],
-    related: ["잘하고 있어요", "잘했어요"],
+    patterns: [/잘하|잘했|대단|훌륭|고생/],
+    terms: ["잘하다", "잘했어요", "대단하다", "훌륭하다"],
+    related: ["잘하고 있어요", "잘했어요", "대단해요", "고생 많았어요"],
     display: ["잘하다"],
     tags: ["기본회화"],
     avoidTags: ["일터"],
-    phrases: ["잘하고 있어요", "잘했어요"],
+    phrases: ["잘하고 있어요", "잘했어요", "대단해요", "고생 많았어요"],
   },
   {
     id: "coin",
-    patterns: [/동전|잔돈|거스름돈/],
-    terms: ["동전", "잔돈"],
-    related: ["동전 있어요?", "잔돈 있어요?"],
+    patterns: [/동전|잔돈|거스름돈|지폐|현금|지갑/],
+    terms: ["동전", "잔돈", "현금", "지폐"],
+    related: ["동전 있어요?", "잔돈 있어요?", "거스름돈 주세요", "현금 돼요?", "지폐 있어요?"],
     display: ["동전"],
     tags: ["쇼핑", "기본회화"],
     avoidTags: ["일터"],
-    phrases: ["동전 있어요?", "잔돈 있어요?"],
+    phrases: ["동전 있어요?", "잔돈 있어요?", "거스름돈 주세요", "현금 돼요?", "지폐 있어요?"],
   },
   {
     id: "stock",
-    patterns: [/주식|주가|주식시장|stock/i],
-    terms: ["주식", "주식 투자"],
-    related: ["주식", "주식 투자", "주식을 사다"],
+    patterns: [/주식|주가|주식시장|stock|투자|은행|계좌/i],
+    terms: ["주식", "주식 투자", "주가", "은행", "계좌"],
+    related: ["주식", "주식 투자", "주식을 사다", "저는 주식에 투자해요", "은행이 어디예요?"],
     display: ["주식"],
     tags: ["기본회화"],
     avoidTags: ["일터"],
-    phrases: ["주식을 사요", "주식 투자해요"],
+    blockedTerms: ["가격", "할인", "쇼핑"],
+    phrases: ["주식을 사요", "주식 투자해요", "저는 주식에 투자해요", "은행이 어디예요?"],
   },
   {
     id: "clothesShrink",
-    patterns: [/옷.*줄|옷줄|작아졌|줄어들/],
-    terms: ["옷", "줄다", "문제"],
-    related: ["옷이 줄었어요", "이 옷이 작아졌어요"],
+    patterns: [/옷.*줄|옷줄|작아졌|줄어들|꽉끼|꽉 끼|사이즈|짧아|길어/],
+    terms: ["옷", "줄다", "작아지다", "사이즈", "문제"],
+    related: ["옷이 줄었어요", "이 옷이 작아졌어요", "너무 꽉 껴요", "더 큰 사이즈 있어요?", "더 작은 사이즈 있어요?"],
     display: ["옷"],
     tags: ["쇼핑", "기본회화"],
     avoidTags: ["일터"],
-    phrases: ["옷이 줄었어요", "이 옷이 작아졌어요"],
+    phrases: ["옷이 줄었어요", "이 옷이 작아졌어요", "너무 꽉 껴요", "더 큰 사이즈 있어요?", "더 작은 사이즈 있어요?"],
   },
   {
     id: "heat",
-    patterns: [/덥|더워|더운/],
-    terms: ["덥다", "더워요"],
-    related: ["너무 더워요", "오늘 너무 더워요", "이 방은 너무 더워요"],
+    patterns: [/덥|더워|더운|시원|선풍기|후덥/],
+    terms: ["덥다", "더워요", "시원하다", "선풍기"],
+    related: ["너무 더워요", "오늘 너무 더워요", "이 방은 너무 더워요", "선풍기 켜 주세요", "시원한 방 있나요?"],
     display: ["덥다"],
     tags: ["기본회화", "이동"],
     avoidTags: ["일터"],
-    phrases: ["너무 더워요", "오늘 너무 더워요", "이 방은 너무 더워요"],
+    phrases: ["너무 더워요", "오늘 너무 더워요", "이 방은 너무 더워요", "선풍기 켜 주세요", "시원한 방 있나요?"],
   },
   {
     id: "discount",
-    patterns: [/깎|깍|할인/],
-    terms: ["깎다", "할인"],
-    related: ["깎아주세요", "조금만 더 깎아주세요"],
+    patterns: [/깎|깍|할인|비싸|싸게|흥정/],
+    terms: ["깎다", "할인", "비싸다"],
+    related: ["깎아주세요", "조금만 더 깎아주세요", "너무 비싸요", "더 싸게 해 주세요", "할인돼요?"],
     display: ["깎다"],
     tags: ["쇼핑"],
     avoidTags: ["일터"],
-    phrases: ["깎아주세요", "조금만 더 깎아주세요"],
+    phrases: ["깎아주세요", "조금만 더 깎아주세요", "너무 비싸요", "더 싸게 해 주세요", "할인돼요?"],
   },
   {
     id: "completion",
-    patterns: [/완성|완료|끝났|다끝|다 끝|마무리/],
-    terms: ["완성", "완료", "끝나다"],
-    related: ["완성됐어요", "다 끝났어요", "아직 안 끝났어요"],
+    patterns: [/완성|완료|끝났|다끝|다 끝|마무리|거의다|거의 다|곧끝|금방끝/],
+    terms: ["완성", "완료", "끝나다", "거의"],
+    related: ["완성됐어요", "다 끝났어요", "아직 안 끝났어요", "거의 다 됐어요", "곧 끝나요"],
     display: ["완성"],
     tags: ["기본회화", "일터"],
     avoidTags: ["쇼핑"],
-    phrases: ["완성됐어요", "다 끝났어요", "아직 안 끝났어요"],
+    phrases: ["완성됐어요", "다 끝났어요", "아직 안 끝났어요", "거의 다 됐어요", "곧 끝나요"],
   },
   {
     id: "freeTime",
-    patterns: [/한가|안바빠|안 바빠|시간있|시간 있어/],
-    terms: ["한가하다", "안 바쁘다"],
-    related: ["지금 한가해요?", "지금 안 바빠요"],
+    patterns: [/한가|안바빠|안 바빠|시간있|시간 있어|바빠/],
+    terms: ["한가하다", "안 바쁘다", "바쁘다"],
+    related: ["지금 한가해요?", "지금 안 바빠요", "지금 바빠요"],
     display: ["한가하다"],
     tags: ["기본회화"],
     avoidTags: ["일터"],
-    phrases: ["지금 한가해요?", "지금 안 바빠요"],
+    phrases: ["지금 한가해요?", "지금 안 바빠요", "지금 바빠요"],
   },
   {
     id: "trouble",
-    patterns: [/큰일|심각|난감|문제커/],
-    terms: ["큰일", "문제"],
-    related: ["큰일 났어요", "이거 큰일이에요"],
+    patterns: [/큰일|심각|난감|문제커|곤란|망했/],
+    terms: ["큰일", "문제", "심각하다"],
+    related: ["큰일 났어요", "이거 큰일이에요", "문제가 커요", "생각보다 심각해요"],
     display: ["큰일"],
     tags: ["기본회화"],
     avoidTags: ["쇼핑"],
-    phrases: ["큰일 났어요", "이거 큰일이에요"],
+    phrases: ["큰일 났어요", "이거 큰일이에요", "문제가 커요", "생각보다 심각해요"],
   },
   {
     id: "time",
@@ -1260,17 +1282,40 @@ function normalizeText(text) {
     .replace(/한가해/g, "한가하다")
     .replace(/잘하고있어요/g, "잘하다")
     .replace(/잘하고있어/g, "잘하다")
+    .replace(/잘하고있네/g, "잘하다")
     .replace(/잘 하고 있어요/g, "잘하다")
     .replace(/잘 하고 있어/g, "잘하다")
+    .replace(/귀여워요/g, "귀엽다")
+    .replace(/귀여워/g, "귀엽다")
+    .replace(/멋있어요/g, "멋있다")
+    .replace(/멋있어/g, "멋있다")
+    .replace(/잘생겼어요/g, "잘생겼다")
+    .replace(/잘생겼어/g, "잘생겼다")
+    .replace(/깎아줘요/g, "깎다")
+    .replace(/깎아줘/g, "깎다")
+    .replace(/깍아줘요/g, "깎다")
+    .replace(/깍아줘/g, "깎다")
     .replace(/완성됐어요/g, "완성")
     .replace(/완성됐어/g, "완성")
+    .replace(/완성됐네/g, "완성")
     .replace(/완료됐어요/g, "완성")
     .replace(/완료됐어/g, "완성")
+    .replace(/거의 다 됐어요/g, "완성")
+    .replace(/거의 다 됐어/g, "완성")
+    .replace(/거의다됐어요/g, "완성")
+    .replace(/거의다됐어/g, "완성")
     .replace(/큰일났어요/g, "큰일이다")
     .replace(/큰일났어/g, "큰일이다")
+    .replace(/큰일났네/g, "큰일이다")
     .replace(/큰일난다/g, "큰일이다")
     .replace(/줄었어요/g, "줄다")
     .replace(/줄었다/g, "줄다")
+    .replace(/바빠요/g, "바쁘다")
+    .replace(/바빠/g, "바쁘다")
+    .replace(/시원해요/g, "시원하다")
+    .replace(/시원해/g, "시원하다")
+    .replace(/심각해요/g, "심각하다")
+    .replace(/심각해/g, "심각하다")
     .replace(/시끄러워요/g, "시끄럽다")
     .replace(/시끄러워/g, "시끄럽다")
     .replace(/조용해요/g, "조용하다")
@@ -1602,38 +1647,48 @@ function expandQueryVariants(query, rawTokens = []) {
     if (/컴퓨터|노트북|랩탑|pc|피시/.test(item)) {
       variants.push("컴퓨터", "노트북", "컴퓨터가 안 돼요", "노트북이 안 켜져요", "컴퓨터를 확인해 주세요");
     }
-    if (/잘하|잘했/.test(item)) {
-      variants.push("잘하다", "잘하고 있어요", "잘했어요");
+    if (/컴퓨터|노트북|랩탑|pc|피시|화면|마우스|키보드|프린터|배터리|전원|충전/.test(item)) {
+      variants.push(
+        "화면이 안 나와요",
+        "마우스가 안 돼요",
+        "키보드가 안 돼요",
+        "프린터가 안 돼요",
+        "충전이 안 돼요",
+        "전원이 안 들어와요"
+      );
     }
-    if (/담배|흡연|금연/.test(item)) {
-      variants.push("담배", "담배 피우다", "담배 피워도 돼요?", "흡연실", "금연 구역");
+    if (/잘하|잘했|대단|훌륭|고생/.test(item)) {
+      variants.push("잘하다", "잘하고 있어요", "잘했어요", "대단해요", "고생 많았어요");
     }
-    if (/예쁘|이쁘|예뻐|이뻐/.test(item)) {
-      variants.push("예쁘다", "예뻐요", "정말 예뻐요");
+    if (/담배|흡연|금연|라이터|재떨이|전자담배/.test(item)) {
+      variants.push("담배", "담배 피우다", "담배 피워도 돼요?", "흡연실", "금연 구역", "라이터 있어요?", "재떨이 있어요?");
     }
-    if (/동전|잔돈|거스름/.test(item)) {
-      variants.push("동전", "잔돈", "동전 있어요?", "잔돈 있어요?");
+    if (/예쁘|이쁘|예뻐|이뻐|귀엽|멋있|잘생겼/.test(item)) {
+      variants.push("예쁘다", "예뻐요", "정말 예뻐요", "귀여워요", "멋있어요", "잘생겼어요");
     }
-    if (/주식|주가|주식시장|stock/.test(item)) {
-      variants.push("주식", "주식 투자", "주식을 사요");
+    if (/동전|잔돈|거스름|지폐|현금|지갑/.test(item)) {
+      variants.push("동전", "잔돈", "현금", "지폐", "동전 있어요?", "잔돈 있어요?", "거스름돈 주세요", "현금 돼요?");
     }
-    if (/옷.*줄|옷줄|작아졌|줄어들/.test(item)) {
-      variants.push("옷", "줄다", "옷이 줄었어요", "이 옷이 작아졌어요");
+    if (/주식|주가|주식시장|stock|투자|은행|계좌/.test(item)) {
+      variants.push("주식", "주식 투자", "주식을 사요", "저는 주식에 투자해요", "은행이 어디예요?");
     }
-    if (/덥|더워|더운/.test(item)) {
-      variants.push("덥다", "더워요", "오늘 너무 더워요", "이 방은 너무 더워요");
+    if (/옷.*줄|옷줄|작아졌|줄어들|꽉끼|꽉 끼|사이즈|짧아|길어/.test(item)) {
+      variants.push("옷", "줄다", "옷이 줄었어요", "이 옷이 작아졌어요", "너무 꽉 껴요", "더 큰 사이즈 있어요?", "더 작은 사이즈 있어요?");
     }
-    if (/깎|깍|할인/.test(item)) {
-      variants.push("깎다", "깎아주세요", "조금만 더 깎아주세요");
+    if (/덥|더워|더운|시원|선풍기/.test(item)) {
+      variants.push("덥다", "더워요", "오늘 너무 더워요", "이 방은 너무 더워요", "선풍기 켜 주세요", "시원한 방 있나요?");
     }
-    if (/완성|완료|끝났|다끝|다 끝|마무리/.test(item)) {
-      variants.push("완성", "완성됐어요", "다 끝났어요", "아직 안 끝났어요");
+    if (/깎|깍|할인|비싸|싸게|흥정/.test(item)) {
+      variants.push("깎다", "깎아주세요", "조금만 더 깎아주세요", "너무 비싸요", "더 싸게 해 주세요", "할인돼요?");
     }
-    if (/한가|안바빠|안 바빠|시간있|시간 있어/.test(item)) {
-      variants.push("한가하다", "지금 한가해요?", "지금 안 바빠요");
+    if (/완성|완료|끝났|다끝|다 끝|마무리|거의다|거의 다|곧끝|금방끝/.test(item)) {
+      variants.push("완성", "완성됐어요", "다 끝났어요", "아직 안 끝났어요", "거의 다 됐어요", "곧 끝나요");
     }
-    if (/큰일|심각|난감/.test(item)) {
-      variants.push("큰일", "큰일 났어요", "이거 큰일이에요");
+    if (/한가|안바빠|안 바빠|시간있|시간 있어|바빠/.test(item)) {
+      variants.push("한가하다", "바쁘다", "지금 한가해요?", "지금 안 바빠요", "지금 바빠요");
+    }
+    if (/큰일|심각|난감|곤란|망했/.test(item)) {
+      variants.push("큰일", "큰일 났어요", "이거 큰일이에요", "문제가 커요", "생각보다 심각해요");
     }
     if (/배고프|허기|시장해/.test(item)) {
       variants.push("배고프다", "배고파요", "밥", "먹다", "식당");
@@ -2399,6 +2454,7 @@ function collectSeedEntries(entries, compactQuery, intentHints = null) {
   const templateTerms = unique((intentHints?.templateTerms || []).map((item) => compactText(item)).filter(Boolean));
 
   return entries
+    .filter((entry) => entry.source !== "generated-bulk")
     .map((entry) => {
       const index = buildSearchIndex(entry);
       const fields = [index.korean, index.thai, index.thaiScript, index.note, ...index.keywords, ...index.tokens];
@@ -2809,6 +2865,17 @@ function scoreEntry(entry, searchProfile, kind) {
   if (isGeneratedBulkTemplateEntry(entry) && !templateHits.size) {
     score -= kind === "sentence" ? 140 : 90;
   }
+  const strongIntentQuery =
+    searchProfile.objectTerms.length ||
+    searchProfile.actionTerms.length ||
+    searchProfile.templateTerms.length ||
+    searchProfile.anchorTerms.length;
+  if (entry.source === "generated-bulk" && strongIntentQuery) {
+    score -= kind === "sentence" ? 180 : 120;
+    if (!objectHits.size && !templateHits.size && directHits.size < 2) {
+      score -= kind === "sentence" ? 220 : 160;
+    }
+  }
 
   const hasPrimaryPlan = searchProfile.minimumPrimaryHits > 0;
   const vocabPrimaryThreshold = searchProfile.minimumPrimaryHits > 1 ? 1 : searchProfile.minimumPrimaryHits;
@@ -2874,12 +2941,30 @@ function getVocabResults(entries, searchProfile) {
       }
       return left.entry.korean.localeCompare(right.entry.korean, "ko");
     });
+  const curatedFocused = ranked.filter(
+    (item) =>
+      item.entry.source !== "generated-bulk" &&
+      (item.objectHits.length || item.templateHits.length || item.match.directHits >= 1)
+  );
+  const sourceFiltered =
+    curatedFocused.length && (searchProfile.objectTerms.length || searchProfile.anchorTerms.length)
+      ? ranked.filter((item) => item.entry.source !== "generated-bulk")
+      : curatedFocused.length
+        ? ranked.filter(
+            (item) =>
+              item.entry.source !== "generated-bulk" ||
+              item.templateHits.length ||
+              item.objectHits.length >= 2 ||
+              item.match.directHits >= 2
+          )
+    : ranked;
   const intentFocused =
     searchProfile.objectTerms.length || searchProfile.templateTerms.length
-      ? ranked.filter((item) => item.objectHits.length || item.templateHits.length)
+      ? sourceFiltered.filter((item) => item.objectHits.length || item.templateHits.length)
       : [];
-  const anchorFocused = searchProfile.anchorTerms.length ? ranked.filter((item) => item.anchorHits.length) : [];
-  const preferredRanked = intentFocused.length ? intentFocused : anchorFocused.length >= 2 ? anchorFocused : ranked;
+  const anchorFocused = searchProfile.anchorTerms.length ? sourceFiltered.filter((item) => item.anchorHits.length) : [];
+  const preferredRanked =
+    intentFocused.length ? intentFocused : anchorFocused.length >= 2 ? anchorFocused : sourceFiltered;
 
   if (
     !searchProfile.query ||
@@ -2951,7 +3036,38 @@ function getSentenceResults(entries, searchProfile, vocabSeeds) {
       return right.match.primaryHits - left.match.primaryHits;
     });
 
-  const directIds = new Set(direct.map(({ entry }) => entry.id));
+  const curatedDirect = direct.filter(
+    (item) =>
+      item.entry.source !== "generated-bulk" &&
+      (item.objectHits.length || item.templateHits.length || item.match.directHits >= 1)
+  );
+  const visibleDirect = curatedDirect.length
+    ? direct.filter(
+        (item) =>
+          item.entry.source !== "generated-bulk" ||
+          item.templateHits.length ||
+          item.objectHits.length >= 2 ||
+          item.match.directHits >= 2
+      )
+    : direct;
+  const intentFilteredDirect =
+    searchProfile.objectTerms.length || searchProfile.templateTerms.length
+      ? visibleDirect.filter(
+          (item) =>
+            item.objectHits.length ||
+            item.templateHits.length ||
+            item.actionHits.length ||
+            item.match.directHits >= 2 ||
+            item.match.primaryHits >= 1
+        )
+      : visibleDirect;
+  const prioritizedDirect = intentFilteredDirect.length >= 3 ? intentFilteredDirect : visibleDirect;
+
+  if (prioritizedDirect.length >= 3) {
+    return prioritizedDirect.map(({ entry }) => entry).slice(0, RESULT_LIMITS.sentences + 4);
+  }
+
+  const directIds = new Set(prioritizedDirect.map(({ entry }) => entry.id));
   const related = entries
     .filter(matchesScenario)
     .filter((entry) => !directIds.has(entry.id))
@@ -3008,7 +3124,7 @@ function getSentenceResults(entries, searchProfile, vocabSeeds) {
     });
 
   return uniqueById([
-    ...direct.map(({ entry }) => entry),
+    ...prioritizedDirect.map(({ entry }) => entry),
     ...related.map(({ entry }) => entry),
   ]).slice(0, RESULT_LIMITS.sentences + 4);
 }
