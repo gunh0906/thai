@@ -1,6 +1,6 @@
 const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
-const APP_VERSION = "20260414b";
+const APP_VERSION = "20260414c";
 
 const baseData = window.BASE_DATA || {
   appTitle: "태국어 포켓북",
@@ -392,6 +392,126 @@ const SEARCH_OBJECT_RULES = [
     phrases: ["와이파이 비밀번호가 뭐예요?", "와이파이가 너무 느려요", "인터넷 안 돼요"],
   },
   {
+    id: "computer",
+    patterns: [/컴퓨터|노트북|랩탑|pc|피시/],
+    terms: ["컴퓨터", "노트북", "문제"],
+    related: ["컴퓨터가 안 돼요", "노트북이 안 켜져요", "컴퓨터를 확인해 주세요"],
+    display: ["컴퓨터"],
+    tags: ["기본회화"],
+    avoidTags: ["일터"],
+    phrases: ["컴퓨터가 안 돼요", "노트북이 안 켜져요", "컴퓨터를 확인해 주세요"],
+  },
+  {
+    id: "smoking",
+    patterns: [/담배|흡연|금연|흡연실|담배피우/],
+    terms: ["담배", "담배 피우다", "흡연실"],
+    related: ["담배 피워도 돼요?", "흡연실이 어디예요?", "금연 구역이에요"],
+    display: ["담배", "흡연실"],
+    tags: ["기본회화", "이동"],
+    avoidTags: ["일터"],
+    phrases: ["담배 피워도 돼요?", "흡연실이 어디예요?", "금연 구역이에요"],
+  },
+  {
+    id: "beauty",
+    patterns: [/예쁘|이쁘|예뻐|이뻐/],
+    terms: ["예쁘다", "예뻐요"],
+    related: ["예뻐요", "정말 예뻐요"],
+    display: ["예쁘다"],
+    tags: ["기본회화", "쇼핑"],
+    avoidTags: ["일터"],
+    phrases: ["예뻐요", "정말 예뻐요"],
+  },
+  {
+    id: "praise",
+    patterns: [/잘하|잘했/],
+    terms: ["잘하다", "잘했어요"],
+    related: ["잘하고 있어요", "잘했어요"],
+    display: ["잘하다"],
+    tags: ["기본회화"],
+    avoidTags: ["일터"],
+    phrases: ["잘하고 있어요", "잘했어요"],
+  },
+  {
+    id: "coin",
+    patterns: [/동전|잔돈|거스름돈/],
+    terms: ["동전", "잔돈"],
+    related: ["동전 있어요?", "잔돈 있어요?"],
+    display: ["동전"],
+    tags: ["쇼핑", "기본회화"],
+    avoidTags: ["일터"],
+    phrases: ["동전 있어요?", "잔돈 있어요?"],
+  },
+  {
+    id: "stock",
+    patterns: [/주식|주가|주식시장|stock/i],
+    terms: ["주식", "주식 투자"],
+    related: ["주식", "주식 투자", "주식을 사다"],
+    display: ["주식"],
+    tags: ["기본회화"],
+    avoidTags: ["일터"],
+    phrases: ["주식을 사요", "주식 투자해요"],
+  },
+  {
+    id: "clothesShrink",
+    patterns: [/옷.*줄|옷줄|작아졌|줄어들/],
+    terms: ["옷", "줄다", "문제"],
+    related: ["옷이 줄었어요", "이 옷이 작아졌어요"],
+    display: ["옷"],
+    tags: ["쇼핑", "기본회화"],
+    avoidTags: ["일터"],
+    phrases: ["옷이 줄었어요", "이 옷이 작아졌어요"],
+  },
+  {
+    id: "heat",
+    patterns: [/덥|더워|더운/],
+    terms: ["덥다", "더워요"],
+    related: ["너무 더워요", "오늘 너무 더워요", "이 방은 너무 더워요"],
+    display: ["덥다"],
+    tags: ["기본회화", "이동"],
+    avoidTags: ["일터"],
+    phrases: ["너무 더워요", "오늘 너무 더워요", "이 방은 너무 더워요"],
+  },
+  {
+    id: "discount",
+    patterns: [/깎|깍|할인/],
+    terms: ["깎다", "할인"],
+    related: ["깎아주세요", "조금만 더 깎아주세요"],
+    display: ["깎다"],
+    tags: ["쇼핑"],
+    avoidTags: ["일터"],
+    phrases: ["깎아주세요", "조금만 더 깎아주세요"],
+  },
+  {
+    id: "completion",
+    patterns: [/완성|완료|끝났|다끝|다 끝|마무리/],
+    terms: ["완성", "완료", "끝나다"],
+    related: ["완성됐어요", "다 끝났어요", "아직 안 끝났어요"],
+    display: ["완성"],
+    tags: ["기본회화", "일터"],
+    avoidTags: ["쇼핑"],
+    phrases: ["완성됐어요", "다 끝났어요", "아직 안 끝났어요"],
+  },
+  {
+    id: "freeTime",
+    patterns: [/한가|안바빠|안 바빠|시간있|시간 있어/],
+    terms: ["한가하다", "안 바쁘다"],
+    related: ["지금 한가해요?", "지금 안 바빠요"],
+    display: ["한가하다"],
+    tags: ["기본회화"],
+    avoidTags: ["일터"],
+    phrases: ["지금 한가해요?", "지금 안 바빠요"],
+  },
+  {
+    id: "trouble",
+    patterns: [/큰일|심각|난감|문제커/],
+    terms: ["큰일", "문제"],
+    related: ["큰일 났어요", "이거 큰일이에요"],
+    display: ["큰일"],
+    tags: ["기본회화"],
+    avoidTags: ["쇼핑"],
+    phrases: ["큰일 났어요", "이거 큰일이에요"],
+  },
+  {
     id: "time",
     patterns: [/몇\s*시|몇시|시간|시각/],
     terms: ["시간", "몇 시", "몇시", "몇 시예요"],
@@ -746,6 +866,18 @@ const QUERY_PARTS = [
   { patterns: [/수건/], primary: ["수건"], related: ["수건 두 장 더 주세요"], display: ["수건"], tags: ["이동", "기본회화"] },
   { patterns: [/휴지|화장지|티슈/], primary: ["휴지", "화장지"], related: ["휴지 더 주세요"], display: ["휴지"], tags: ["이동", "기본회화"] },
   { patterns: [/충전기|차저|charger|어댑터|콘센트/], primary: ["충전기", "어댑터"], related: ["충전기 있어요?", "콘센트"], display: ["충전기"], tags: ["이동", "쇼핑"] },
+  { patterns: [/컴퓨터|노트북|랩탑|pc|피시/], primary: ["컴퓨터"], related: ["노트북", "컴퓨터가 안 돼요", "노트북이 안 켜져요"], display: ["컴퓨터"], tags: ["기본회화", "일터"] },
+  { patterns: [/담배|흡연|금연|흡연실|담배피우/], primary: ["담배", "담배 피우다"], related: ["흡연실", "담배 피워도 돼요?", "금연 구역"], display: ["담배"], tags: ["기본회화", "이동"] },
+  { patterns: [/예쁘|이쁘|예뻐|이뻐/], primary: ["예쁘다"], related: ["예뻐요", "정말 예뻐요"], display: ["예쁘다"], tags: ["기본회화", "쇼핑"] },
+  { patterns: [/잘하|잘했/], primary: ["잘하다"], related: ["잘하고 있어요", "잘했어요"], display: ["잘하다"], tags: ["기본회화"] },
+  { patterns: [/동전|잔돈|거스름돈/], primary: ["동전", "잔돈"], related: ["동전 있어요?", "잔돈 있어요?"], display: ["동전"], tags: ["쇼핑", "기본회화"] },
+  { patterns: [/주식|주가|주식시장|stock/i], primary: ["주식"], related: ["주식 투자", "주식을 사요"], display: ["주식"], tags: ["기본회화"] },
+  { patterns: [/옷.*줄|옷줄|작아졌|줄어들/], primary: ["옷", "줄다"], related: ["옷이 줄었어요", "이 옷이 작아졌어요"], display: ["옷"], tags: ["쇼핑", "기본회화"] },
+  { patterns: [/덥|더워|더운/], primary: ["덥다"], related: ["더워요", "오늘 너무 더워요", "이 방은 너무 더워요"], display: ["덥다"], tags: ["기본회화", "이동"] },
+  { patterns: [/깎|깍|할인/], primary: ["깎다"], related: ["깎아주세요", "조금만 더 깎아주세요"], display: ["깎다"], tags: ["쇼핑"] },
+  { patterns: [/완성|완료|끝났|다끝|다 끝|마무리/], primary: ["완성", "끝나다"], related: ["완성됐어요", "다 끝났어요", "아직 안 끝났어요"], display: ["완성"], tags: ["기본회화", "일터"] },
+  { patterns: [/한가|안바빠|안 바빠|시간있|시간 있어/], primary: ["한가하다"], related: ["지금 한가해요?", "지금 안 바빠요"], display: ["한가하다"], tags: ["기본회화"] },
+  { patterns: [/큰일|심각|난감/], primary: ["큰일"], related: ["큰일 났어요", "이거 큰일이에요"], display: ["큰일"], tags: ["기본회화"] },
   { patterns: [/보다|봐요|본다/], primary: ["보다"], related: ["여기", "보여주세요"], display: ["보다"], tags: ["기본회화"] },
   { patterns: [/말하다|말해|말해요|말한다/], primary: ["말하다"], related: ["천천히", "다시"], display: ["말하다"], tags: ["기본회화"] },
   { patterns: [/이해|알겠|알겠습니다|알겠어/], primary: ["이해"], related: ["이해해요", "이해하나요", "이해합니다", "알겠습니다"], display: ["이해"], tags: ["기본회화"] },
@@ -828,6 +960,58 @@ const QUERY_ALIASES = [
     related: ["수건 두 장 더 주세요", "휴지 더 주세요", "충전기 있어요?"],
     display: ["수건", "휴지", "충전기"],
     tags: ["이동", "기본회화", "쇼핑"],
+  },
+  {
+    matches: [
+      "컴퓨터",
+      "컴퓨터가안돼요",
+      "컴퓨터안돼",
+      "노트북",
+      "노트북이안켜져요",
+      "잘하고있어",
+      "잘하고있어요",
+      "담배피우다",
+      "담배피워도돼요",
+      "흡연실",
+      "이쁘다",
+      "예쁘다",
+      "예뻐요",
+      "동전",
+      "잔돈",
+      "거스름돈",
+      "주식",
+      "주식시장",
+      "옷이줄었다",
+      "옷줄었다",
+      "더워",
+      "더워요",
+      "깍다",
+      "깎다",
+      "완성",
+      "완료",
+      "한가하다",
+      "한가해요",
+      "큰일난다",
+      "큰일났어요",
+      "큰일",
+    ],
+    primary: ["컴퓨터", "담배", "예쁘다", "동전", "주식", "옷", "덥다", "깎다", "완성", "한가하다", "큰일"],
+    related: [
+      "컴퓨터가 안 돼요",
+      "잘하고 있어요",
+      "담배 피워도 돼요?",
+      "예뻐요",
+      "동전 있어요?",
+      "주식을 사요",
+      "옷이 줄었어요",
+      "오늘 너무 더워요",
+      "깎아주세요",
+      "완성됐어요",
+      "지금 한가해요?",
+      "큰일 났어요",
+    ],
+    display: ["컴퓨터", "담배", "예쁘다", "동전", "주식", "완성", "큰일"],
+    tags: ["기본회화", "쇼핑", "이동", "일터"],
   },
   {
     matches: ["얼마에요", "얼마예요", "가격", "요금", "비용", "얼마", "깎아주세요", "할인", "비싸요", "싸요"],
@@ -1065,6 +1249,28 @@ function normalizeText(text) {
     .replace(/배고파/g, "배고프다")
     .replace(/시장해요/g, "배고프다")
     .replace(/시장해/g, "배고프다")
+    .replace(/안되요/g, "안 돼요")
+    .replace(/안되냐/g, "안 되냐")
+    .replace(/안되네/g, "안 되네")
+    .replace(/이쁘/g, "예쁘")
+    .replace(/깍/g, "깎")
+    .replace(/더워요/g, "덥다")
+    .replace(/더워/g, "덥다")
+    .replace(/한가해요/g, "한가하다")
+    .replace(/한가해/g, "한가하다")
+    .replace(/잘하고있어요/g, "잘하다")
+    .replace(/잘하고있어/g, "잘하다")
+    .replace(/잘 하고 있어요/g, "잘하다")
+    .replace(/잘 하고 있어/g, "잘하다")
+    .replace(/완성됐어요/g, "완성")
+    .replace(/완성됐어/g, "완성")
+    .replace(/완료됐어요/g, "완성")
+    .replace(/완료됐어/g, "완성")
+    .replace(/큰일났어요/g, "큰일이다")
+    .replace(/큰일났어/g, "큰일이다")
+    .replace(/큰일난다/g, "큰일이다")
+    .replace(/줄었어요/g, "줄다")
+    .replace(/줄었다/g, "줄다")
     .replace(/시끄러워요/g, "시끄럽다")
     .replace(/시끄러워/g, "시끄럽다")
     .replace(/조용해요/g, "조용하다")
@@ -1197,6 +1403,9 @@ function buildIntentHints(query, patternTexts) {
   let objectRules = SEARCH_OBJECT_RULES.filter((rule) => matchesSearchRule(rule, patternTexts));
   if (objectRules.some((rule) => rule.id === "machineNoise")) {
     objectRules = objectRules.filter((rule) => !["noise", "problem"].includes(rule.id));
+  }
+  if (objectRules.some((rule) => rule.id === "computer")) {
+    objectRules = objectRules.filter((rule) => !["machine", "problem"].includes(rule.id));
   }
   if (objectRules.some((rule) => rule.id === "internetIssue")) {
     objectRules = objectRules.filter((rule) => rule.id !== "problem");
@@ -1389,6 +1598,42 @@ function expandQueryVariants(query, rawTokens = []) {
     }
     if (/충전기|차저|charger|어댑터|콘센트/.test(item)) {
       variants.push("충전기", "어댑터", "콘센트", "충전기 있어요?");
+    }
+    if (/컴퓨터|노트북|랩탑|pc|피시/.test(item)) {
+      variants.push("컴퓨터", "노트북", "컴퓨터가 안 돼요", "노트북이 안 켜져요", "컴퓨터를 확인해 주세요");
+    }
+    if (/잘하|잘했/.test(item)) {
+      variants.push("잘하다", "잘하고 있어요", "잘했어요");
+    }
+    if (/담배|흡연|금연/.test(item)) {
+      variants.push("담배", "담배 피우다", "담배 피워도 돼요?", "흡연실", "금연 구역");
+    }
+    if (/예쁘|이쁘|예뻐|이뻐/.test(item)) {
+      variants.push("예쁘다", "예뻐요", "정말 예뻐요");
+    }
+    if (/동전|잔돈|거스름/.test(item)) {
+      variants.push("동전", "잔돈", "동전 있어요?", "잔돈 있어요?");
+    }
+    if (/주식|주가|주식시장|stock/.test(item)) {
+      variants.push("주식", "주식 투자", "주식을 사요");
+    }
+    if (/옷.*줄|옷줄|작아졌|줄어들/.test(item)) {
+      variants.push("옷", "줄다", "옷이 줄었어요", "이 옷이 작아졌어요");
+    }
+    if (/덥|더워|더운/.test(item)) {
+      variants.push("덥다", "더워요", "오늘 너무 더워요", "이 방은 너무 더워요");
+    }
+    if (/깎|깍|할인/.test(item)) {
+      variants.push("깎다", "깎아주세요", "조금만 더 깎아주세요");
+    }
+    if (/완성|완료|끝났|다끝|다 끝|마무리/.test(item)) {
+      variants.push("완성", "완성됐어요", "다 끝났어요", "아직 안 끝났어요");
+    }
+    if (/한가|안바빠|안 바빠|시간있|시간 있어/.test(item)) {
+      variants.push("한가하다", "지금 한가해요?", "지금 안 바빠요");
+    }
+    if (/큰일|심각|난감/.test(item)) {
+      variants.push("큰일", "큰일 났어요", "이거 큰일이에요");
     }
     if (/배고프|허기|시장해/.test(item)) {
       variants.push("배고프다", "배고파요", "밥", "먹다", "식당");
