@@ -1,6 +1,6 @@
 const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
-const APP_VERSION = "20260415e";
+const APP_VERSION = "20260415g";
 
 const baseData = window.BASE_DATA || {
   appTitle: "태국어 포켓북",
@@ -371,6 +371,18 @@ const SEARCH_OBJECT_RULES = [
     phrases: ["물 주세요", "차가운 물 주세요"],
   },
   {
+    id: "wetTissue",
+    patterns: [/물티슈|물\s*티슈|물수건/],
+    focusTerms: ["물티슈"],
+    terms: ["물티슈"],
+    related: ["물티슈 주세요", "물티슈 있어요?", "물티슈 더 주세요"],
+    display: ["물티슈"],
+    tags: ["이동", "건강", "기본회화"],
+    avoidTags: ["일터"],
+    blockedTerms: ["물", "휴지", "티슈", "냅킨"],
+    phrases: ["물티슈 주세요", "물티슈 있어요?", "물티슈 더 주세요"],
+  },
+  {
     id: "towel",
     patterns: [/수건|목욕수건|타월/],
     terms: ["수건"],
@@ -411,16 +423,164 @@ const SEARCH_OBJECT_RULES = [
     phrases: ["매표소가 어디예요?", "표 파는 곳이 어디예요?", "여기서 표를 사요?"],
   },
   {
+    id: "atm",
+    patterns: [/atm|현금인출기|현금\s*뽑는\s*기계/i],
+    focusTerms: ["ATM"],
+    terms: ["ATM", "현금인출기"],
+    related: ["ATM이 어디예요?", "현금 뽑고 싶어요", "ATM으로 가 주세요"],
+    display: ["ATM"],
+    tags: ["이동", "쇼핑"],
+    avoidTags: ["일터"],
+    blockedTerms: ["현금", "동전"],
+    phrases: ["ATM이 어디예요?", "현금 뽑고 싶어요", "ATM으로 가 주세요"],
+  },
+  {
+    id: "platform",
+    patterns: [/승강장|플랫폼/],
+    focusTerms: ["플랫폼"],
+    terms: ["플랫폼", "승강장"],
+    related: ["승강장이 어디예요?", "플랫폼이 어디예요?", "이 승강장 맞아요?"],
+    display: ["승강장"],
+    tags: ["이동"],
+    avoidTags: ["일터"],
+    phrases: ["승강장이 어디예요?", "플랫폼이 어디예요?", "이 승강장 맞아요?"],
+  },
+  {
+    id: "bikeTaxi",
+    patterns: [/오토바이택시|오토바이\s*택시|바이크택시/],
+    focusTerms: ["오토바이택시"],
+    terms: ["오토바이택시", "택시"],
+    related: ["오토바이 택시 불러 주세요", "오토바이 택시 타고 싶어요", "오토바이 택시가 어디예요?"],
+    display: ["오토바이택시"],
+    tags: ["이동"],
+    avoidTags: ["일터"],
+    phrases: ["오토바이 택시 불러 주세요", "오토바이 택시 타고 싶어요", "오토바이 택시가 어디예요?"],
+  },
+  {
+    id: "trashCan",
+    patterns: [/휴지통|쓰레기통/],
+    focusTerms: ["휴지통"],
+    terms: ["휴지통", "쓰레기통"],
+    related: ["휴지통이 어디예요?", "쓰레기통이 어디예요?"],
+    display: ["휴지통"],
+    tags: ["이동", "기본회화"],
+    avoidTags: ["일터"],
+    blockedTerms: ["휴지", "티슈", "냅킨"],
+    phrases: ["휴지통이 어디예요?", "쓰레기통이 어디예요?"],
+  },
+  {
+    id: "laundryMachine",
+    patterns: [/세탁기|건조기/],
+    focusTerms: ["세탁기", "건조기"],
+    terms: ["세탁기", "건조기"],
+    related: ["세탁기 어디에요?", "건조기 있어요?", "세탁기 쓰고 싶어요"],
+    display: ["세탁기", "건조기"],
+    tags: ["이동", "기본회화"],
+    avoidTags: ["일터"],
+    blockedTerms: ["빨래", "세탁", "세제", "세탁소", "빨래방", "세탁실"],
+    phrases: ["세탁기 어디에요?", "건조기 있어요?", "세탁기 쓰고 싶어요"],
+  },
+  {
+    id: "laundryShop",
+    patterns: [/세탁소|빨래방|코인세탁/],
+    focusTerms: ["세탁소", "빨래방"],
+    terms: ["세탁소", "빨래방"],
+    related: ["세탁소가 어디예요?", "빨래방이 어디예요?", "빨래 맡기고 싶어요"],
+    display: ["세탁소", "빨래방"],
+    tags: ["이동", "기본회화"],
+    avoidTags: ["일터"],
+    blockedTerms: ["빨래", "세탁", "세제", "세탁기", "건조기", "세탁실"],
+    phrases: ["세탁소가 어디예요?", "빨래방이 어디예요?", "빨래 맡기고 싶어요"],
+  },
+  {
+    id: "refrigerator",
+    patterns: [/냉장고|냉장실/],
+    focusTerms: ["냉장고"],
+    terms: ["냉장고"],
+    related: ["냉장고가 안 돼요", "냉장고가 안 차가워요"],
+    display: ["냉장고"],
+    tags: ["이동", "기본회화"],
+    avoidTags: ["일터"],
+    phrases: ["냉장고가 안 돼요", "냉장고가 안 차가워요"],
+  },
+  {
+    id: "sink",
+    patterns: [/세면대|세면기|sink/i],
+    focusTerms: ["세면대"],
+    terms: ["세면대"],
+    related: ["세면대가 막혔어요", "세면대 물이 안 내려가요"],
+    display: ["세면대"],
+    tags: ["이동", "기본회화"],
+    avoidTags: ["일터"],
+    phrases: ["세면대가 막혔어요", "세면대 물이 안 내려가요"],
+  },
+  {
+    id: "powerBank",
+    patterns: [/보조배터리|파워뱅크|파워뱅/],
+    focusTerms: ["보조배터리"],
+    terms: ["보조배터리", "배터리", "충전기"],
+    related: ["보조배터리 있어요?", "보조배터리 좀 주세요", "휴대폰 충전할 수 있어요?"],
+    display: ["보조배터리"],
+    tags: ["이동", "쇼핑", "기본회화"],
+    avoidTags: ["일터"],
+    phrases: ["보조배터리 있어요?", "보조배터리 좀 주세요", "휴대폰 충전할 수 있어요?"],
+  },
+  {
+    id: "wallet",
+    patterns: [/지갑/],
+    focusTerms: ["지갑"],
+    terms: ["지갑", "현금", "카드"],
+    related: ["지갑을 잃어버렸어요", "지갑 있어요?", "지갑 어디에요?"],
+    display: ["지갑"],
+    tags: ["쇼핑", "이동", "기본회화"],
+    avoidTags: ["일터"],
+    phrases: ["지갑을 잃어버렸어요", "지갑 어디에요?"],
+  },
+  {
+    id: "sunglasses",
+    patterns: [/선글라스|썬글라스/],
+    focusTerms: ["선글라스"],
+    terms: ["선글라스"],
+    related: ["선글라스 있어요?", "이 선글라스 주세요", "선글라스 어디서 사요?"],
+    display: ["선글라스"],
+    tags: ["쇼핑"],
+    avoidTags: ["일터"],
+    blockedTerms: ["안경"],
+    phrases: ["선글라스 있어요?", "이 선글라스 주세요", "선글라스 어디서 사요?"],
+  },
+  {
+    id: "message",
+    patterns: [/메시지|문자/],
+    focusTerms: ["메시지"],
+    terms: ["메시지", "문자"],
+    related: ["메시지로 보내 주세요", "문자로 보내도 돼요?", "메시지 다시 보내 주세요"],
+    display: ["메시지"],
+    tags: ["기본회화", "이동"],
+    avoidTags: ["일터"],
+    blockedTerms: ["휴대폰"],
+    phrases: ["메시지로 보내 주세요", "문자로 보내도 돼요?", "메시지 다시 보내 주세요"],
+  },
+  {
+    id: "phoneCall",
+    patterns: [/전화|통화|콜/],
+    focusTerms: ["전화"],
+    terms: ["전화", "통화"],
+    related: ["전화해 주세요", "지금 전화 가능해요?", "전화 좀 빌려 주세요"],
+    display: ["전화"],
+    tags: ["기본회화", "이동"],
+    avoidTags: ["일터"],
+    blockedTerms: ["휴대폰"],
+    phrases: ["전화해 주세요", "지금 전화 가능해요?", "전화 좀 빌려 주세요"],
+  },
+  {
     id: "phone",
-    patterns: [/휴대폰|핸드폰|스마트폰|사진|동영상|메시지|문자|전화/],
-    terms: ["휴대폰", "사진", "메시지", "전화"],
+    patterns: [/휴대폰|핸드폰|스마트폰|사진|동영상/],
+    terms: ["휴대폰", "사진", "동영상"],
     related: [
       "휴대폰 충전할 수 있어요?",
       "휴대폰 충전이 안 돼요",
       "휴대폰을 잃어버렸어요",
       "사진 찍어 주세요",
-      "메시지로 보내 주세요",
-      "전화해 주세요",
     ],
     display: ["휴대폰"],
     tags: ["기본회화", "이동"],
@@ -430,8 +590,6 @@ const SEARCH_OBJECT_RULES = [
       "휴대폰 충전이 안 돼요",
       "휴대폰을 잃어버렸어요",
       "사진 찍어 주세요",
-      "메시지로 보내 주세요",
-      "전화해 주세요",
     ],
   },
   {
@@ -1052,6 +1210,104 @@ const QUERY_ALIASES = [
     tags: ["이동", "쇼핑"],
   },
   {
+    matches: ["현금인출기", "atm", "atm기", "현금뽑는기계"],
+    primary: ["ATM", "현금인출기"],
+    related: ["ATM이 어디예요?", "현금 뽑고 싶어요", "ATM으로 가 주세요"],
+    display: ["ATM"],
+    tags: ["이동", "쇼핑"],
+  },
+  {
+    matches: ["승강장", "플랫폼"],
+    primary: ["플랫폼", "승강장"],
+    related: ["승강장이 어디예요?", "플랫폼이 어디예요?", "이 승강장 맞아요?"],
+    display: ["승강장"],
+    tags: ["이동"],
+  },
+  {
+    matches: ["오토바이택시", "오토바이 택시", "바이크택시"],
+    primary: ["오토바이택시", "택시"],
+    related: ["오토바이 택시 불러 주세요", "오토바이 택시 타고 싶어요", "오토바이 택시가 어디예요?"],
+    display: ["오토바이택시"],
+    tags: ["이동"],
+  },
+  {
+    matches: ["휴지통", "쓰레기통"],
+    primary: ["휴지통", "쓰레기통"],
+    related: ["휴지통이 어디예요?", "쓰레기통이 어디예요?"],
+    display: ["휴지통"],
+    tags: ["이동", "기본회화"],
+  },
+  {
+    matches: ["물티슈"],
+    primary: ["물티슈"],
+    related: ["물티슈 주세요", "물티슈 있어요?", "물티슈 더 주세요"],
+    display: ["물티슈"],
+    tags: ["건강", "이동", "기본회화"],
+  },
+  {
+    matches: ["세탁기", "건조기", "세탁기사용하고싶어요", "세탁기쓰고싶어요"],
+    primary: ["세탁기", "건조기"],
+    related: ["세탁기 어디에요?", "건조기 있어요?", "세탁기 쓰고 싶어요"],
+    display: ["세탁기", "건조기"],
+    tags: ["이동", "기본회화"],
+  },
+  {
+    matches: ["세탁소", "빨래방", "코인세탁", "세탁소가어디예요", "빨래방이어디예요"],
+    primary: ["세탁소", "빨래방"],
+    related: ["세탁소가 어디예요?", "빨래방이 어디예요?", "빨래 맡기고 싶어요"],
+    display: ["세탁소", "빨래방"],
+    tags: ["이동", "기본회화"],
+  },
+  {
+    matches: ["냉장고", "냉장고가안돼요", "냉장고가안차가워요"],
+    primary: ["냉장고"],
+    related: ["냉장고가 안 돼요", "냉장고가 안 차가워요"],
+    display: ["냉장고"],
+    tags: ["이동", "기본회화"],
+  },
+  {
+    matches: ["세면대", "세면대가막혔어요", "세면대물이안내려가요"],
+    primary: ["세면대"],
+    related: ["세면대가 막혔어요", "세면대 물이 안 내려가요"],
+    display: ["세면대"],
+    tags: ["이동", "기본회화"],
+  },
+  {
+    matches: ["보조배터리", "파워뱅크", "파워뱅"],
+    primary: ["보조배터리", "충전기"],
+    related: ["보조배터리 있어요?", "보조배터리 좀 주세요", "휴대폰 충전할 수 있어요?"],
+    display: ["보조배터리"],
+    tags: ["이동", "쇼핑", "기본회화"],
+  },
+  {
+    matches: ["지갑"],
+    primary: ["지갑"],
+    related: ["지갑을 잃어버렸어요", "지갑 어디에요?"],
+    display: ["지갑"],
+    tags: ["쇼핑", "이동", "기본회화"],
+  },
+  {
+    matches: ["선글라스", "썬글라스"],
+    primary: ["선글라스"],
+    related: ["선글라스 있어요?", "이 선글라스 주세요", "선글라스 어디서 사요?"],
+    display: ["선글라스"],
+    tags: ["쇼핑"],
+  },
+  {
+    matches: ["메시지", "문자", "메시지로보내주세요", "문자로보내주세요", "문자로보내도돼요", "메시지다시보내주세요"],
+    primary: ["메시지", "문자"],
+    related: ["메시지로 보내 주세요", "문자로 보내도 돼요?", "메시지 다시 보내 주세요"],
+    display: ["메시지"],
+    tags: ["기본회화", "이동"],
+  },
+  {
+    matches: ["전화", "통화", "콜", "전화해주세요", "지금전화가능해요", "전화좀빌려주세요"],
+    primary: ["전화", "통화"],
+    related: ["전화해 주세요", "지금 전화 가능해요?", "전화 좀 빌려 주세요"],
+    display: ["전화"],
+    tags: ["기본회화", "이동"],
+  },
+  {
     matches: [
       "컴퓨터",
       "컴퓨터가안돼요",
@@ -1167,7 +1423,7 @@ const QUERY_ALIASES = [
     tags: ["식당", "쇼핑"],
   },
   {
-    matches: ["빨래", "세탁", "세탁기", "세탁실", "건조기", "세제", "빨래해주세요", "세탁해주세요", "빨래맡기고싶어요"],
+    matches: ["빨래", "세탁", "세탁실", "세제", "빨래해주세요", "세탁해주세요", "빨래맡기고싶어요"],
     primary: ["빨래", "세탁"],
     related: ["세탁기", "세탁실", "건조기", "세제", "옷", "수건"],
     display: ["빨래"],
@@ -1542,6 +1798,21 @@ function buildIntentHints(query, patternTexts) {
   }
   if (objectRules.some((rule) => rule.id === "internetIssue")) {
     objectRules = objectRules.filter((rule) => rule.id !== "problem");
+  }
+  if (objectRules.some((rule) => rule.id === "wetTissue")) {
+    objectRules = objectRules.filter((rule) => !["water", "tissue"].includes(rule.id));
+  }
+  if (objectRules.some((rule) => rule.id === "trashCan")) {
+    objectRules = objectRules.filter((rule) => rule.id !== "tissue");
+  }
+  if (objectRules.some((rule) => rule.id === "powerBank")) {
+    objectRules = objectRules.filter((rule) => rule.id !== "computer");
+  }
+  if (objectRules.some((rule) => rule.id === "laundryMachine" || rule.id === "laundryShop")) {
+    objectRules = objectRules.filter((rule) => rule.id !== "laundry");
+  }
+  if (objectRules.some((rule) => rule.id === "message" || rule.id === "phoneCall")) {
+    objectRules = objectRules.filter((rule) => rule.id !== "phone");
   }
   const actionRules = SEARCH_ACTION_RULES.filter((rule) => matchesSearchRule(rule, patternTexts));
   const nonGenericActionRules = actionRules.filter((rule) => !["request", "exist"].includes(rule.id));
@@ -2948,7 +3219,7 @@ function matchesIndexTerm(index, term) {
     return true;
   }
   return index.tokens.some((token) => {
-    return token === term || token.includes(term) || (token.length >= 2 && term.length >= 3 && term.includes(token));
+    return token === term || token.includes(term);
   });
 }
 
@@ -3423,9 +3694,9 @@ function findExactEntry(entries, searchProfile) {
   if (!searchProfile.query) return null;
   return entries.find((entry) => {
     const index = buildSearchIndex(entry);
-    return [index.korean, index.thai, index.thaiScript].some(
+    return [index.korean, index.thai, index.thaiScript, index.note, ...index.keywords].some(
       (field) => field && field === searchProfile.compact
-    );
+    ) || index.tokens.some((token) => token === searchProfile.compact);
   }) || null;
 }
 
@@ -3870,6 +4141,7 @@ function render() {
     state.query,
     numberMode || timeQuestionMode || timeMode ? [] : mergedEntries
   );
+  const exactVocabMatch = numberMode ? null : findExactEntry(merged.vocab, searchProfile);
   const exactSentenceMatch = numberMode ? null : findExactEntry(merged.sentences, searchProfile);
   const actionPhraseMode = !numberMode && isActionPhraseQuery(searchProfile);
   const vocabSource = merged.vocab;
@@ -3880,7 +4152,11 @@ function render() {
       ? generatedTimeQuestion.vocab
     : timeMode
       ? generatedTime.vocab
-      : uniqueById([...generated.vocab, ...getVocabResults(vocabSource, searchProfile)]);
+      : uniqueById([
+          ...(exactVocabMatch ? [exactVocabMatch] : []),
+          ...generated.vocab,
+          ...getVocabResults(vocabSource, searchProfile),
+        ]);
   const vocabSeeds = allVocabResults;
   const vocabResults = state.query
     ? allVocabResults.slice(0, RESULT_LIMITS.vocab)

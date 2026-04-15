@@ -448,7 +448,10 @@ def is_place_like(seed: dict) -> bool:
     if any(hint in text for hint in PLACE_HINTS):
         return True
     tags = set(seed.get("tags") or [])
-    return "이동" in tags and any(token in text for token in ("실", "장", "역", "항", "로비", "카운터"))
+    return "이동" in tags and (
+        text.endswith(("실", "장", "역", "항", "소"))
+        or any(token in text for token in ("로비", "카운터"))
+    )
 
 
 def matches_hint(text: str, hints: tuple[str, ...]) -> bool:
