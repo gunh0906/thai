@@ -1,6 +1,6 @@
 const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
-const APP_VERSION = "20260415b";
+const APP_VERSION = "20260415c";
 
 const baseData = window.BASE_DATA || {
   appTitle: "태국어 포켓북",
@@ -1301,7 +1301,7 @@ const elements = {
 function readStateFromUrl() {
   const params = new URLSearchParams(window.location.search);
   return {
-    query: String(params.get("q") || "").trim(),
+    query: "",
     scenario: String(params.get("scenario") || "all").trim(),
   };
 }
@@ -1309,7 +1309,6 @@ function readStateFromUrl() {
 function syncUrl() {
   if (!window.location.protocol.startsWith("http")) return;
   const params = new URLSearchParams();
-  if (state.query) params.set("q", state.query);
   if (state.scenario !== "all") params.set("scenario", state.scenario);
   const nextUrl = `${window.location.pathname}${params.toString() ? `?${params.toString()}` : ""}`;
   window.history.replaceState({}, "", nextUrl);
