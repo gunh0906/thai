@@ -1,6 +1,6 @@
 const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
-const APP_VERSION = "20260415g";
+const APP_VERSION = "20260415h";
 
 const baseData = window.BASE_DATA || {
   appTitle: "태국어 포켓북",
@@ -1526,6 +1526,42 @@ const COMPACT_QUERY_SUFFIX_RULES = [
   { suffix: "안되요", spaced: (root) => `${root} 안 돼요` },
 ];
 
+const PREDICATE_QUERY_VARIANTS = {
+  "오다": ["와", "와요", "오세요", "왔어요", "언제 와요?"],
+  "오르다": ["올라가요", "올라가", "오르세요", "올랐어요"],
+  "내려가다": ["내려가요", "내려가", "내려가세요"],
+  "맞다": ["맞아요", "맞아", "맞나요"],
+  "아니다": ["아니에요", "아니야", "아닙니다"],
+  "어때요": ["어때요?", "어땠어요?"],
+  "중요하다": ["중요해요", "아주 중요해요"],
+  "중요하지 않아": ["중요하지 않아요", "안 중요해요"],
+  "가능한": ["가능해요", "할 수 있어요", "가능할까요?"],
+  "몰라요": ["모르다", "몰라", "잘 몰라요"],
+  "알겠습니다": ["알겠어요", "알았어요"],
+  "알겠습니다.": ["알겠어요", "알았어요"],
+  "죄송합니다": ["죄송해요", "실례합니다"],
+  "죄송합니다.": ["죄송해요", "실례합니다"],
+  "침착해": ["침착하세요", "진정하세요", "진정해요"],
+  "가끔": ["가끔 와요", "가끔 가요"],
+  "자주": ["자주 와요", "자주 가요", "자주 써요"],
+  "피다": ["피워요", "담배 피워요"],
+  "맵다": ["매워요", "안 맵게 해 주세요", "덜 맵게 해 주세요"],
+  "달다": ["달아요", "이 과일 달아요?"],
+  "따뜻하다": ["따뜻해요", "따뜻한 물"],
+  "어렵다": ["어려워요", "어려워요?"],
+  "춥다": ["추워요", "너무 추워요"],
+  "좋아": ["좋아요", "좋아해요"],
+  "안좋아": ["안 좋아요", "별로예요"],
+  "싫어": ["싫어요", "원하지 않아요"],
+  "축하": ["축하해요", "축하합니다"],
+  "덥다": ["더워요", "너무 더워요"],
+  "좋아한다": ["좋아해요", "마음에 들어요"],
+  "누구": ["누구예요?", "누구세요?"],
+  "어느": ["어느 거예요?", "어느 쪽이에요?"],
+  "늦어요": ["늦었어요", "조금 늦어요"],
+  "쉬다": ["쉬어요", "쉴게요", "쉬고 싶어요"],
+};
+
 const searchIndexCache = new WeakMap();
 const searchRuntimeCache = new WeakMap();
 let searchRuntimeWarmupQueued = false;
@@ -1980,6 +2016,15 @@ function expandQueryVariants(query, rawTokens = []) {
   candidates.forEach((item) => {
     variants.push(item);
     variants.push(...expandCompactPhraseVariants(item));
+    if (PREDICATE_QUERY_VARIANTS[item]) {
+      variants.push(...PREDICATE_QUERY_VARIANTS[item]);
+    }
+    if (/하다$/.test(item)) {
+      const stem = item.slice(0, -2);
+      if (stem) {
+        variants.push(`${stem}해`, `${stem}해요`, `${stem}합니다`, `${stem}했어요`);
+      }
+    }
     if (item.includes("세탁")) variants.push(item.replace(/세탁/g, "빨래"));
     if (item.includes("빨래")) variants.push(item.replace(/빨래/g, "세탁"));
     if (item.includes("주스")) variants.push(item.replace(/주스/g, "쥬스"));
@@ -2261,16 +2306,17 @@ function buildSearchIndex(entry) {
   const thaiScript = compactText(getThaiScriptText(entry));
   const note = compactText(entry.note);
   const keywords = unique((entry.keywords || []).map((item) => compactText(item)));
+  const coreTokens = unique(
+    [...tokenize(entry.korean), ...tokenize(entry.thai), ...tokenize(entry.thaiScript)].map((item) => compactText(item))
+  );
   const tokens = unique(
     [
-      ...tokenize(entry.korean),
-      ...tokenize(entry.thai),
-      ...tokenize(entry.thaiScript),
+      ...coreTokens,
       ...tokenize(entry.note),
       ...(entry.keywords || []),
     ].map((item) => compactText(item))
   );
-  const index = { korean, thai, thaiScript, note, keywords, tokens };
+  const index = { korean, thai, thaiScript, note, keywords, tokens, coreTokens };
   searchIndexCache.set(entry, index);
   return index;
 }
@@ -3156,7 +3202,7 @@ function buildSearchProfile(query, entries = []) {
   const intentAnchorTerms = unique(
     [...(intentHints.displayTerms || []), ...(intentHints.objectTerms || [])]
       .map((item) => compactText(item))
-      .filter((item) => isStrongAnchorTerm(item) && compact.includes(item))
+      .filter((item) => isStrongAnchorTerm(item))
   );
   const fallbackAnchorTerms = rawAnchorTerms.length
     ? []
@@ -3205,6 +3251,22 @@ function matchesCompactField(field, term) {
   if (field === term) return true;
   if (term.length === 1) return field.startsWith(term);
   return field.startsWith(term) || field.includes(term);
+}
+
+function matchesExactCoreField(index, term) {
+  if (!term) return false;
+  if ([index.korean, index.thai, index.thaiScript].some((field) => field && field === term)) {
+    return true;
+  }
+  return index.coreTokens.some((token) => token === term);
+}
+
+function matchesCoreField(index, term) {
+  if (!term) return false;
+  if ([index.korean, index.thai, index.thaiScript].some((field) => matchesCompactField(field, term))) {
+    return true;
+  }
+  return index.coreTokens.some((token) => token === term || token.includes(term));
 }
 
 function matchesIndexTerm(index, term) {
@@ -3256,6 +3318,13 @@ function scoreEntry(entry, searchProfile, kind) {
   const hasThaiScript = Boolean(getThaiScriptText(entry));
   const queryNegative = hasNegativeMeaning(searchProfile.query);
   const entryNegative = hasNegativeMeaning(entry.korean) || hasNegativeMeaning(entry.note);
+  const exactCoreHit = matchesExactCoreField(index, searchProfile.compact);
+  const exactObjectHits = searchProfile.objectTerms.filter((term) => matchesCoreField(index, term));
+  const singleObjectQuery =
+    kind === "sentence" &&
+    searchProfile.objectTerms.length >= 1 &&
+    !searchProfile.actionTerms.length &&
+    tokenize(searchProfile.query).length <= 2;
   let score = 0;
   let directMatch = false;
   const directHits = new Set();
@@ -3346,8 +3415,14 @@ function scoreEntry(entry, searchProfile, kind) {
   if (kind === "sentence" && primaryHits.size) {
     score += 40;
   }
+  if (kind === "sentence" && exactCoreHit) {
+    score += 240;
+  }
   if (objectHits.size) {
     score += 110 + objectHits.size * 35;
+  }
+  if (kind === "sentence" && exactObjectHits.length) {
+    score += 180 + exactObjectHits.length * 35;
   }
   if (actionHits.size) {
     score += 75 + actionHits.size * 20;
@@ -3389,6 +3464,9 @@ function scoreEntry(entry, searchProfile, kind) {
   const hasSpecificObjectIntent = searchProfile.objectTerms.some((term) => term.length >= 2);
   if (searchProfile.anchorTerms.length && !anchorHits.size) {
     score -= kind === "vocab" ? 120 : 90;
+  }
+  if (singleObjectQuery && !exactObjectHits.length && !templateHits.size) {
+    score -= 220;
   }
   if (hasSpecificObjectIntent && !objectHits.size && !anchorHits.size && !templateHits.size) {
     score -= kind === "sentence" ? 260 : 220;
@@ -3473,6 +3551,9 @@ function getVocabResults(entries, searchProfile) {
       if (right.objectHits.length !== left.objectHits.length) return right.objectHits.length - left.objectHits.length;
       if (right.actionHits.length !== left.actionHits.length) return right.actionHits.length - left.actionHits.length;
       if (right.anchorHits.length !== left.anchorHits.length) return right.anchorHits.length - left.anchorHits.length;
+      if ((left.entry.source === "generated-bulk") !== (right.entry.source === "generated-bulk")) {
+        return Number(left.entry.source === "generated-bulk") - Number(right.entry.source === "generated-bulk");
+      }
       if (right.match.score !== left.match.score) return right.match.score - left.match.score;
       if (right.match.directHits !== left.match.directHits) return right.match.directHits - left.match.directHits;
       if (right.match.primaryHits !== left.match.primaryHits) return right.match.primaryHits - left.match.primaryHits;
@@ -3560,6 +3641,8 @@ function getSentenceResults(entries, searchProfile, vocabSeeds) {
       return {
         entry,
         match: scoreEntry(entry, searchProfile, "sentence"),
+        exactCoreHit: matchesExactCoreField(index, searchProfile.compact),
+        exactObjectHits: searchProfile.objectTerms.filter((term) => matchesCoreField(index, term)),
         anchorHits: searchProfile.anchorTerms.filter((term) => matchesIndexTerm(index, term)),
         objectHits: searchProfile.objectTerms.filter((term) => matchesIndexTerm(index, term)),
         actionHits: searchProfile.actionTerms.filter((term) => matchesIndexTerm(index, term)),
@@ -3568,10 +3651,15 @@ function getSentenceResults(entries, searchProfile, vocabSeeds) {
     })
     .filter(({ match }) => match.matched)
     .sort((left, right) => {
+      if (right.exactCoreHit !== left.exactCoreHit) return Number(right.exactCoreHit) - Number(left.exactCoreHit);
+      if (right.exactObjectHits.length !== left.exactObjectHits.length) return right.exactObjectHits.length - left.exactObjectHits.length;
       if (right.templateHits.length !== left.templateHits.length) return right.templateHits.length - left.templateHits.length;
       if (right.objectHits.length !== left.objectHits.length) return right.objectHits.length - left.objectHits.length;
       if (right.actionHits.length !== left.actionHits.length) return right.actionHits.length - left.actionHits.length;
       if (right.anchorHits.length !== left.anchorHits.length) return right.anchorHits.length - left.anchorHits.length;
+      if ((left.entry.source === "generated-bulk") !== (right.entry.source === "generated-bulk")) {
+        return Number(left.entry.source === "generated-bulk") - Number(right.entry.source === "generated-bulk");
+      }
       if (right.match.score !== left.match.score) return right.match.score - left.match.score;
       if (right.match.directHits !== left.match.directHits) return right.match.directHits - left.match.directHits;
       const leftThai = Boolean(getThaiScriptText(left.entry));
@@ -3594,6 +3682,10 @@ function getSentenceResults(entries, searchProfile, vocabSeeds) {
           item.match.directHits >= 2
       )
     : direct;
+  const strictExactDirect =
+    searchProfile.objectTerms.length && !searchProfile.actionTerms.length
+      ? visibleDirect.filter((item) => item.exactCoreHit || item.exactObjectHits.length)
+      : [];
   const intentFilteredDirect =
     searchProfile.objectTerms.length || searchProfile.templateTerms.length
       ? visibleDirect.filter(
@@ -3605,7 +3697,8 @@ function getSentenceResults(entries, searchProfile, vocabSeeds) {
             item.match.primaryHits >= 1
         )
       : visibleDirect;
-  const prioritizedDirect = intentFilteredDirect.length >= 3 ? intentFilteredDirect : visibleDirect;
+  const prioritizedDirect =
+    strictExactDirect.length >= 2 ? strictExactDirect : intentFilteredDirect.length >= 3 ? intentFilteredDirect : visibleDirect;
 
   if (prioritizedDirect.length >= 3) {
     return prioritizedDirect.map(({ entry }) => entry).slice(0, RESULT_LIMITS.sentences + 4);
@@ -3668,6 +3761,9 @@ function getSentenceResults(entries, searchProfile, vocabSeeds) {
       if (right.templateHits !== left.templateHits) return right.templateHits - left.templateHits;
       if (right.objectHits !== left.objectHits) return right.objectHits - left.objectHits;
       if (right.actionHits !== left.actionHits) return right.actionHits - left.actionHits;
+      if ((left.entry.source === "generated-bulk") !== (right.entry.source === "generated-bulk")) {
+        return Number(left.entry.source === "generated-bulk") - Number(right.entry.source === "generated-bulk");
+      }
       if (right.score !== left.score) return right.score - left.score;
       const leftThai = Boolean(getThaiScriptText(left.entry));
       const rightThai = Boolean(getThaiScriptText(right.entry));
@@ -3690,14 +3786,20 @@ function uniqueById(entries) {
   });
 }
 
-function findExactEntry(entries, searchProfile) {
+function findExactEntry(entries, searchProfile, options = {}) {
   if (!searchProfile.query) return null;
-  return entries.find((entry) => {
+  const includeSupport = options.includeSupport ?? false;
+  const exactCore = entries.find((entry) => {
     const index = buildSearchIndex(entry);
-    return [index.korean, index.thai, index.thaiScript, index.note, ...index.keywords].some(
-      (field) => field && field === searchProfile.compact
-    ) || index.tokens.some((token) => token === searchProfile.compact);
-  }) || null;
+    return matchesExactCoreField(index, searchProfile.compact);
+  });
+  if (exactCore || !includeSupport) return exactCore || null;
+  return (
+    entries.find((entry) => {
+      const index = buildSearchIndex(entry);
+      return [index.note, ...index.keywords].some((field) => field && field === searchProfile.compact);
+    }) || null
+  );
 }
 
 function isActionPhraseQuery(searchProfile) {
