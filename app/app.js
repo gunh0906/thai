@@ -1,6 +1,6 @@
 const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
-const APP_VERSION = "20260414e";
+const APP_VERSION = "20260415a";
 
 const baseData = window.BASE_DATA || {
   appTitle: "태국어 포켓북",
@@ -1227,6 +1227,24 @@ const QUERY_ENDINGS = [
   { suffix: "되나요", related: ["되다", "가능"], display: ["가능"] },
 ];
 
+const COMPACT_QUERY_SUFFIX_RULES = [
+  { suffix: "더주세요", spaced: (root) => `${root} 더 주세요` },
+  { suffix: "빼주세요", spaced: (root) => `${root} 빼 주세요` },
+  { suffix: "바꿔주세요", spaced: (root) => `${root} 바꿔 주세요` },
+  { suffix: "보여주세요", spaced: (root) => `${root} 보여 주세요` },
+  { suffix: "가져와주세요", spaced: (root) => `${root} 가져와 주세요` },
+  { suffix: "가져다주세요", spaced: (root) => `${root} 가져다 주세요` },
+  { suffix: "주세요", spaced: (root) => `${root} 주세요` },
+  { suffix: "있어요", spaced: (root) => `${root} 있어요` },
+  { suffix: "있나요", spaced: (root) => `${root} 있나요` },
+  { suffix: "없어요", spaced: (root) => `${root} 없어요` },
+  { suffix: "필요해요", spaced: (root) => `${root} 필요해요` },
+  { suffix: "어디에요", spaced: (root) => `${root} 어디에요` },
+  { suffix: "어디예요", spaced: (root) => `${root} 어디예요` },
+  { suffix: "안돼요", spaced: (root) => `${root} 안 돼요` },
+  { suffix: "안되요", spaced: (root) => `${root} 안 돼요` },
+];
+
 const searchIndexCache = new WeakMap();
 const searchRuntimeCache = new WeakMap();
 let searchRuntimeWarmupQueued = false;
@@ -1614,6 +1632,33 @@ function buildIntentHints(query, patternTexts) {
   };
 }
 
+function extractCompactPhraseRoots(item) {
+  const normalized = normalizeText(item);
+  if (!normalized || /\s/.test(normalized) || normalized.length < 4) return [];
+
+  const roots = [];
+  COMPACT_QUERY_SUFFIX_RULES.forEach((rule) => {
+    if (!normalized.endsWith(rule.suffix)) return;
+    const root = normalized.slice(0, -rule.suffix.length).trim();
+    if (!root || root.length < 1) return;
+    roots.push(root);
+  });
+
+  return unique(roots);
+}
+
+function expandCompactPhraseVariants(item) {
+  const roots = extractCompactPhraseRoots(item);
+  const variants = [];
+  roots.forEach((root) => {
+    COMPACT_QUERY_SUFFIX_RULES.forEach((rule) => {
+      if (!normalizeText(item).endsWith(rule.suffix)) return;
+      variants.push(rule.spaced(root), root);
+    });
+  });
+  return variants;
+}
+
 function expandQueryVariants(query, rawTokens = []) {
   const variants = [];
   const candidates = [query, ...rawTokens].map((item) => normalizeText(item)).filter(Boolean);
@@ -1639,6 +1684,7 @@ function expandQueryVariants(query, rawTokens = []) {
 
   candidates.forEach((item) => {
     variants.push(item);
+    variants.push(...expandCompactPhraseVariants(item));
     if (item.includes("세탁")) variants.push(item.replace(/세탁/g, "빨래"));
     if (item.includes("빨래")) variants.push(item.replace(/빨래/g, "세탁"));
     if (item.includes("주스")) variants.push(item.replace(/주스/g, "쥬스"));
@@ -2675,6 +2721,7 @@ function buildSearchProfile(query, entries = []) {
   const normalized = normalizeText(trimmedQuery);
   const compact = compactText(trimmedQuery);
   const rawTokens = tokenize(trimmedQuery);
+  const compactPhraseRoots = extractCompactPhraseRoots(trimmedQuery);
   const expandedVariants = expandQueryVariants(trimmedQuery, rawTokens);
   const expandedCompacts = expandedVariants.map((item) => compactText(item)).filter(Boolean);
   const patternTexts = unique([trimmedQuery, normalized, compact, ...expandedVariants, ...expandedCompacts]);
@@ -2695,7 +2742,9 @@ function buildSearchProfile(query, entries = []) {
   const tags = [];
 
   primaryTerms.push(...(intentHints.primaryTerms || []));
+  primaryTerms.push(...compactPhraseRoots);
   relatedTerms.push(...(intentHints.relatedTerms || []));
+  displayTerms.push(...compactPhraseRoots);
   displayTerms.push(...(intentHints.displayTerms || []));
   tags.push(...(intentHints.tags || []));
 
@@ -2768,7 +2817,7 @@ function buildSearchProfile(query, entries = []) {
   const filteredPrimaryCompacts = primaryCompacts.filter((item) => !blockedTerms.has(item));
   const filteredRelatedCompacts = relatedCompacts.filter((item) => !blockedTerms.has(item));
   const objectTerms = unique(
-    (intentHints.objectTerms || [])
+    [...(intentHints.objectTerms || []), ...compactPhraseRoots]
       .map((item) => compactText(item))
       .filter(Boolean)
       .filter((item) => !blockedTerms.has(item))
