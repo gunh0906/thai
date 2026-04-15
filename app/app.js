@@ -1,6 +1,6 @@
 const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
-const APP_VERSION = "20260415c";
+const APP_VERSION = "20260415e";
 
 const baseData = window.BASE_DATA || {
   appTitle: "태국어 포켓북",
@@ -399,6 +399,16 @@ const SEARCH_OBJECT_RULES = [
     tags: ["이동", "쇼핑", "기본회화"],
     avoidTags: ["일터"],
     phrases: ["충전기 있어요?"],
+  },
+  {
+    id: "ticketOffice",
+    patterns: [/매표소|발권\s*창구|티켓\s*부스|티켓\s*창구|표\s*(?:사는|파는)\s*곳|ticket\s*office|box\s*office/i],
+    terms: ["매표소", "티켓", "표"],
+    related: ["매표소가 어디예요?", "표 파는 곳이 어디예요?", "여기서 표를 사요?"],
+    display: ["매표소"],
+    tags: ["이동", "쇼핑"],
+    avoidTags: ["일터"],
+    phrases: ["매표소가 어디예요?", "표 파는 곳이 어디예요?", "여기서 표를 사요?"],
   },
   {
     id: "phone",
@@ -887,6 +897,13 @@ const QUERY_BUNDLES = [
     tags: ["이동", "건강"],
   },
   {
+    patterns: [/(매표소|발권\s*창구|티켓\s*부스|티켓\s*창구|표\s*(?:사는|파는)\s*곳)/],
+    primary: ["매표소", "티켓", "표"],
+    related: ["매표소가 어디예요?", "표 파는 곳이 어디예요?", "여기서 표를 사요?"],
+    display: ["매표소"],
+    tags: ["이동", "쇼핑"],
+  },
+  {
     patterns: [/(병원|약국|약|아파|두통|열)/],
     primary: ["병원", "약"],
     related: ["아프다", "두통", "열", "약국"],
@@ -917,6 +934,7 @@ const QUERY_PARTS = [
   { patterns: [/계산|결제|영수증|카드/], primary: ["계산"], related: ["결제", "영수증", "카드"], display: ["계산"], tags: ["식당", "쇼핑"] },
   { patterns: [/물|생수/], primary: ["물", "생수"], related: ["차가운 물", "따뜻한 물"], display: ["물"], tags: ["식당", "건강"] },
   { patterns: [/화장실|욕실|변기/], primary: ["화장실"], related: ["욕실", "어디", "가다"], display: ["화장실"], tags: ["이동", "건강"] },
+  { patterns: [/매표소|발권\s*창구|티켓\s*부스|티켓\s*창구|표\s*(?:사는|파는)\s*곳/], primary: ["매표소", "티켓", "표"], related: ["매표소가 어디예요?", "표 파는 곳이 어디예요?", "여기서 표를 사요?"], display: ["매표소"], tags: ["이동", "쇼핑"] },
   { patterns: [/가다|간다|가요|갑니다|갈게|갈래|가고|갔다/], primary: ["가다"], related: ["어디", "화장실", "공항"], display: ["가다"], tags: ["이동", "기본회화"] },
   { patterns: [/오다|온다|와요|옵니다|올게|오고|왔다/], primary: ["오다"], related: ["여기로 오세요"], display: ["오다"], tags: ["이동", "기본회화"] },
   { patterns: [/먹다|먹어요|먹는다|먹고/], primary: ["먹다"], related: ["메뉴", "음식"], display: ["먹다"], tags: ["식당", "기본회화"] },
@@ -1025,6 +1043,13 @@ const QUERY_ALIASES = [
     related: ["수건 두 장 더 주세요", "휴지 더 주세요", "충전기 있어요?"],
     display: ["수건", "휴지", "충전기"],
     tags: ["이동", "기본회화", "쇼핑"],
+  },
+  {
+    matches: ["매표소", "표사는곳", "표파는곳", "티켓부스", "티켓창구", "발권창구"],
+    primary: ["매표소", "티켓", "표"],
+    related: ["매표소가 어디예요?", "표 파는 곳이 어디예요?", "여기서 표를 사요?", "버스표는 어디서 사요?", "기차표는 어디서 사요?"],
+    display: ["매표소"],
+    tags: ["이동", "쇼핑"],
   },
   {
     matches: [
@@ -2666,18 +2691,22 @@ function collectSeedEntries(entries, compactQuery, intentHints = null) {
       const index = buildSearchIndex(entry);
       const fields = [index.korean, index.thai, index.thaiScript, index.note, ...index.keywords, ...index.tokens];
       let score = getEntrySourceScore(entry, entry.kind);
+      let lexicalHits = 0;
 
       fields.forEach((field) => {
         if (!field) return;
         if (field === compactQuery) {
+          lexicalHits += 3;
           score += 240;
           return;
         }
         if (field.startsWith(compactQuery) || compactQuery.startsWith(field)) {
+          lexicalHits += 2;
           score += 110;
           return;
         }
         if (compactQuery.length >= 2 && field.includes(compactQuery)) {
+          lexicalHits += 1;
           score += 90;
         }
       });
@@ -2701,18 +2730,38 @@ function collectSeedEntries(entries, compactQuery, intentHints = null) {
       const lengthDelta = Math.max(0, index.korean.length - compactQuery.length - 2);
       score -= Math.min(lengthDelta * 9, 135);
 
-      return { entry, score, objectHits, actionHits, templateHits };
+      return { entry, score, lexicalHits, objectHits, actionHits, templateHits };
     })
-    .filter((item) => item.score > 0)
+    .filter(
+      (item) =>
+        item.score > 0 &&
+        (item.lexicalHits > 0 || item.objectHits > 0 || item.actionHits > 0 || item.templateHits > 0)
+    )
     .sort((left, right) => {
       if (right.templateHits !== left.templateHits) return right.templateHits - left.templateHits;
       if (right.objectHits !== left.objectHits) return right.objectHits - left.objectHits;
       if (right.actionHits !== left.actionHits) return right.actionHits - left.actionHits;
+      if (right.lexicalHits !== left.lexicalHits) return right.lexicalHits - left.lexicalHits;
       if (right.score !== left.score) return right.score - left.score;
       return left.entry.korean.length - right.entry.korean.length;
     })
     .slice(0, RESULT_LIMITS.seedEntries)
     .map((item) => item.entry);
+}
+
+function getSeedExpansionTerms(entry, compactQuery) {
+  const index = buildSearchIndex(entry);
+  return unique([entry.korean, ...(entry.keywords || []), ...index.tokens])
+    .map((item) => normalizeText(item))
+    .filter(Boolean)
+    .filter((item) => {
+      const compactItem = compactText(item);
+      if (!compactItem) return false;
+      if ((compactItem.length <= 1 && !SINGLE_SYLLABLE_ANCHORS.has(compactItem)) || GENERIC_SEARCH_TERMS.has(compactItem)) {
+        return false;
+      }
+      return compactItem === compactQuery || compactItem.includes(compactQuery) || compactQuery.includes(compactItem);
+    });
 }
 
 function buildSearchProfile(query, entries = []) {
@@ -2784,10 +2833,9 @@ function buildSearchProfile(query, entries = []) {
 
   if (!hasStrongIntent && !isTimeQuestionQuery(trimmedQuery)) {
     collectSeedEntries(entries, compact, intentHints).forEach((entry) => {
-      const index = buildSearchIndex(entry);
-      primaryTerms.push(...tokenize(entry.korean));
-      relatedTerms.push(...(entry.keywords || []).slice(0, 8));
-      relatedTerms.push(...index.tokens.slice(0, 6));
+      const seedTerms = getSeedExpansionTerms(entry, compact);
+      primaryTerms.push(...seedTerms);
+      relatedTerms.push(...seedTerms);
       displayTerms.push(entry.korean);
       tags.push(...(entry.tags || []));
     });
@@ -3292,6 +3340,13 @@ function getSentenceResults(entries, searchProfile, vocabSeeds) {
     return prioritizedDirect.map(({ entry }) => entry).slice(0, RESULT_LIMITS.sentences + 4);
   }
 
+  if (
+    prioritizedDirect.length >= 2 &&
+    (searchProfile.objectTerms.length || searchProfile.templateTerms.length || searchProfile.actionTerms.length)
+  ) {
+    return prioritizedDirect.map(({ entry }) => entry).slice(0, RESULT_LIMITS.sentences + 2);
+  }
+
   const directIds = new Set(prioritizedDirect.map(({ entry }) => entry.id));
   const related = candidateEntries
     .filter(matchesScenario)
@@ -3324,6 +3379,7 @@ function getSentenceResults(entries, searchProfile, vocabSeeds) {
       return {
         entry,
         score,
+        shared,
         sharedPrimary,
         objectHits,
         actionHits,
@@ -3331,11 +3387,11 @@ function getSentenceResults(entries, searchProfile, vocabSeeds) {
       };
     })
     .filter(
-      ({ score, sharedPrimary, objectHits, templateHits }) =>
+      ({ score, shared, sharedPrimary, objectHits, templateHits }) =>
         templateHits >= 1 ||
         objectHits >= 1 ||
         sharedPrimary >= 1 ||
-        score >= (searchProfile.minimumPrimaryHits > 1 ? 220 : 160)
+        (shared >= 1 && score >= (searchProfile.minimumPrimaryHits > 1 ? 220 : 160))
     )
     .sort((left, right) => {
       if (right.templateHits !== left.templateHits) return right.templateHits - left.templateHits;
