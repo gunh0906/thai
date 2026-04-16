@@ -1,6 +1,6 @@
-const STORAGE_KEY = "thai-pocketbook-custom-v1";
+﻿const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
-const APP_VERSION = "20260416g";
+const APP_VERSION = "20260416k";
 
 const baseData = window.BASE_DATA || {
   appTitle: "태국어 포켓북",
@@ -359,6 +359,62 @@ const SEARCH_OBJECT_RULES = [
     tags: ["식당", "쇼핑"],
     avoidTags: ["일터"],
     phrases: ["주스 주세요", "주스 있어요?"],
+  },
+  {
+    id: "gift",
+    patterns: [
+      /선물|기프트|기념품|기념선물|선물용|선물세트|선물셋트|기프트세트|선물포장|선물\s*포장|기념품가게|기념품\s*가게|선물가게|선물\s*가게|엽서|포스트카드|키링|열쇠고리|자석|냉장고자석|쇼핑백|선물가방|포장지|선물포장지|리본|말린망고|망고선물/,
+    ],
+    focusTerms: ["선물", "기념품"],
+    terms: [
+      "선물",
+      "기념품",
+      "선물용",
+      "선물 포장",
+      "선물세트",
+      "기념품 가게",
+      "쇼핑백",
+      "엽서",
+      "열쇠고리",
+      "자석",
+      "말린 망고",
+    ],
+    related: [
+      "선물 추천해 주세요",
+      "선물 사러 왔어요",
+      "선물로 살 거예요",
+      "선물 포장해 주세요",
+      "기념품 가게가 어디예요?",
+      "선물세트 있어요?",
+      "쇼핑백도 같이 주세요",
+      "말린 망고 선물용으로 좋아요?",
+    ],
+    display: ["선물", "기념품"],
+    tags: ["쇼핑"],
+    preferTags: ["쇼핑"],
+    avoidTags: ["식당", "건강", "일터"],
+    blockedTerms: ["물", "생수", "차가운물", "따뜻한물", "주스", "음료"],
+    phrases: [
+      "선물 추천해 주세요",
+      "선물 사러 왔어요",
+      "선물 포장해 주세요",
+      "기념품 가게가 어디예요?",
+      "선물세트 있어요?",
+      "쇼핑백도 같이 주세요",
+    ],
+  },
+  {
+    id: "giftBag",
+    patterns: [/쇼핑백|선물가방|선물봉투/],
+    focusTerms: ["쇼핑백"],
+    terms: ["쇼핑백", "선물가방", "봉투"],
+    related: ["쇼핑백도 같이 주세요", "쇼핑백 하나 더 주세요"],
+    display: ["쇼핑백"],
+    tags: ["쇼핑"],
+    preferTags: ["쇼핑"],
+    avoidTags: ["식당", "건강", "일터"],
+    blockedTerms: ["선물", "선물 포장", "기념품", "물", "주스"],
+    phrases: ["쇼핑백도 같이 주세요", "쇼핑백 하나 더 주세요"],
   },
   {
     id: "water",
@@ -2073,6 +2129,12 @@ function buildIntentHints(query, patternTexts) {
   if (objectRules.some((rule) => rule.id === "wetTissue")) {
     objectRules = objectRules.filter((rule) => !["water", "tissue"].includes(rule.id));
   }
+  if (objectRules.some((rule) => rule.id === "gift")) {
+    objectRules = objectRules.filter((rule) => !["water", "juice", "fruit"].includes(rule.id));
+  }
+  if (objectRules.some((rule) => rule.id === "giftBag")) {
+    objectRules = objectRules.filter((rule) => rule.id !== "gift");
+  }
   if (objectRules.some((rule) => rule.id === "trashCan")) {
     objectRules = objectRules.filter((rule) => rule.id !== "tissue");
   }
@@ -2264,6 +2326,49 @@ function expandQueryVariants(query, rawTokens = []) {
     variants.push(...expandLaundryVariants(item));
     if (item.includes("주스")) variants.push(item.replace(/주스/g, "쥬스"));
     if (item.includes("먹으로")) variants.push(item.replace(/먹으로/g, "먹으러"));
+    if (/선물포장/.test(item)) {
+      variants.push("선물 포장", "선물 포장해 주세요", "선물 포장 돼요?", "선물용", "포장");
+    }
+    if (/선물세트|선물셋트|기프트세트/.test(item)) {
+      variants.push("선물세트", "선물세트 있어요?", "선물용", "선물", "기념품");
+    }
+    if (/선물용/.test(item)) {
+      variants.push("선물용", "선물", "선물 포장", "선물용으로 괜찮아요");
+    }
+    if (/쇼핑백|선물가방/.test(item)) {
+      variants.push("쇼핑백", "쇼핑백도 같이 주세요", "봉투", "선물");
+    }
+    if (/말린망고|망고선물/.test(item)) {
+      variants.push("말린 망고", "말린 망고 선물용으로 좋아요?", "선물", "기념품");
+    }
+    if (/기념품가게|선물가게/.test(item)) {
+      variants.push("기념품 가게", "기념품", "선물", "기념품 가게가 어디예요?");
+    }
+    if (/선물사러왔|선물사러와/.test(item)) {
+      variants.push("선물 사러 왔어요", "선물", "기념품", "사다");
+    }
+    if (/선물로줄|선물로드릴|선물할거|선물로살/.test(item)) {
+      variants.push("선물로 살 거예요", "선물로 줄 거예요", "선물", "주다", "사다");
+    }
+    if (/선물추천|기념품추천/.test(item)) {
+      variants.push("선물 추천해 주세요", "선물", "기념품");
+    }
+    if (/친구선물|가족선물/.test(item)) {
+      variants.push("친구 줄 선물 있어요?", "가족 줄 선물 있어요?", "선물", "기념품");
+    }
+    if (/선물|기념품/.test(item) && !/쇼핑백|선물가방|선물봉투/.test(item)) {
+      variants.push(
+        "선물",
+        "기념품",
+        "선물용",
+        "선물 포장",
+        "선물 추천해 주세요",
+        "선물 사러 왔어요",
+        "선물로 살 거예요",
+        "이건 선물이에요",
+        "기념품 가게가 어디예요?"
+      );
+    }
     if (/급해|급해요|급합니다|급한데|급하니까/.test(item)) {
       variants.push("급하다", "급해요", "빨리", "서둘러");
     }
