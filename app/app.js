@@ -1,6 +1,6 @@
 ﻿const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
-const APP_VERSION = "20260416q";
+const APP_VERSION = "20260416r";
 
 const baseData = window.BASE_DATA || {
   appTitle: "태국어 포켓북",
@@ -96,6 +96,102 @@ const SUPPLEMENTAL_DATA = {
       tags: ["기본회화", "이동"],
       keywords: ["와이파이", "wifi", "인터넷", "연결"],
     },
+    {
+      id: "supp-vocab-education",
+      kind: "vocab",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "깐 업롬",
+      thaiScript: "การอบรม",
+      korean: "교육",
+      note: "교육 / 트레이닝 / 오리엔테이션",
+      tags: ["기본회화", "일터"],
+      keywords: ["교육", "훈련", "트레이닝", "오리엔테이션", "수업", "안전교육", "입사교육", "교육 시작"],
+    },
+    {
+      id: "supp-vocab-training",
+      kind: "vocab",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "깐 푹 업롬",
+      thaiScript: "การฝึกอบรม",
+      korean: "훈련",
+      note: "훈련 / 실습 교육",
+      tags: ["일터"],
+      keywords: ["훈련", "실습", "교육", "트레이닝", "훈련 시작"],
+    },
+    {
+      id: "supp-vocab-orientation",
+      kind: "vocab",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "빠티닛텟",
+      thaiScript: "ปฐมนิเทศ",
+      korean: "오리엔테이션",
+      note: "입사 안내 / 오리엔테이션",
+      tags: ["일터"],
+      keywords: ["오리엔테이션", "교육", "입사교육", "안내", "오리엔테이션 시작"],
+    },
+    {
+      id: "supp-vocab-duty",
+      kind: "vocab",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "응안",
+      thaiScript: "งาน",
+      korean: "업무",
+      note: "업무 / 일",
+      tags: ["일터"],
+      keywords: ["업무", "일", "작업", "근무", "업무 시작"],
+    },
+    {
+      id: "supp-vocab-task",
+      kind: "vocab",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "간 탐 응안",
+      thaiScript: "การทำงาน",
+      korean: "작업",
+      note: "작업 / 실제 일하는 과정",
+      tags: ["일터"],
+      keywords: ["작업", "업무", "일", "작업 시작", "작업 지시"],
+    },
+    {
+      id: "supp-vocab-meeting",
+      kind: "vocab",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "쁘라춤",
+      thaiScript: "ประชุม",
+      korean: "회의",
+      note: "회의 / 미팅",
+      tags: ["일터"],
+      keywords: ["회의", "미팅", "회의 시작", "회의 시간"],
+    },
+    {
+      id: "supp-vocab-education-start",
+      kind: "vocab",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "뢰엄 깐 업롬",
+      thaiScript: "เริ่มการอบรม",
+      korean: "교육 시작",
+      note: "교육을 시작함",
+      tags: ["일터"],
+      keywords: ["교육 시작", "훈련 시작", "오리엔테이션 시작"],
+    },
+    {
+      id: "supp-vocab-work-start",
+      kind: "vocab",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "뢰엄 응안",
+      thaiScript: "เริ่มงาน",
+      korean: "업무 시작",
+      note: "일을 시작함",
+      tags: ["일터"],
+      keywords: ["업무 시작", "일 시작", "작업 시작", "근무 시작"],
+    },
   ],
   sentences: [
     {
@@ -169,6 +265,66 @@ const SUPPLEMENTAL_DATA = {
       note: "인터넷 속도가 너무 느릴 때",
       tags: ["기본회화", "이동"],
       keywords: ["인터넷", "와이파이", "느리다", "속도"],
+    },
+    {
+      id: "supp-sentence-education-start",
+      kind: "sentence",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "뢰엄 깐 업롬 깐 캅",
+      thaiScript: "เริ่มการอบรมกันครับ",
+      korean: "교육 시작합시다",
+      note: "교육이나 트레이닝을 시작할 때",
+      tags: ["일터"],
+      keywords: ["교육 시작", "훈련 시작", "오리엔테이션 시작", "교육"],
+    },
+    {
+      id: "supp-sentence-education-when-start",
+      kind: "sentence",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "깐 업롬 뢰엄 므아라이 캅",
+      thaiScript: "การอบรมเริ่มเมื่อไรครับ",
+      korean: "교육 언제 시작해요?",
+      note: "교육 시작 시간을 물을 때",
+      tags: ["일터", "숫자·시간"],
+      keywords: ["교육", "훈련", "오리엔테이션", "언제 시작", "교육 시간"],
+    },
+    {
+      id: "supp-sentence-work-start",
+      kind: "sentence",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "뢰엄 응안 깐 캅",
+      thaiScript: "เริ่มงานกันครับ",
+      korean: "업무 시작합시다",
+      note: "업무를 시작할 때",
+      tags: ["일터"],
+      keywords: ["업무 시작", "일 시작", "근무 시작"],
+    },
+    {
+      id: "supp-sentence-task-start",
+      kind: "sentence",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "뢰엄 응안 로이 캅",
+      thaiScript: "เริ่มงานเลยครับ",
+      korean: "작업 시작할게요",
+      note: "작업을 바로 시작한다고 말할 때",
+      tags: ["일터"],
+      keywords: ["작업 시작", "업무 시작", "바로 시작"],
+    },
+    {
+      id: "supp-sentence-meeting-start",
+      kind: "sentence",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "뢰엄 쁘라춤 깐 캅",
+      thaiScript: "เริ่มประชุมกันครับ",
+      korean: "회의 시작합시다",
+      note: "회의를 시작할 때",
+      tags: ["일터"],
+      keywords: ["회의 시작", "미팅 시작", "회의"],
     },
   ],
 };
@@ -884,8 +1040,28 @@ const SEARCH_OBJECT_RULES = [
     phrases: ["자재가 부족해요", "이거 불량품이에요", "작업복이 필요해요", "안전화를 신어야 해요"],
   },
   {
+    id: "education",
+    patterns: [/교육|훈련|트레이닝|오리엔테이션|안전교육|입사교육|수업/],
+    terms: ["교육", "훈련", "오리엔테이션", "수업"],
+    related: ["교육 시작합시다", "교육 언제 시작해요?", "오리엔테이션 시작해요"],
+    display: ["교육", "훈련"],
+    tags: ["기본회화", "일터"],
+    preferTags: ["일터"],
+    phrases: ["교육 시작합시다", "교육 언제 시작해요?", "오리엔테이션 시작해요"],
+  },
+  {
+    id: "workTask",
+    patterns: [/업무|작업|회의|미팅|업무시작|작업시작|회의시작/],
+    terms: ["업무", "작업", "회의", "미팅"],
+    related: ["업무 시작합시다", "작업 시작할게요", "회의 시작합시다"],
+    display: ["업무", "작업"],
+    tags: ["일터"],
+    preferTags: ["일터"],
+    phrases: ["업무 시작합시다", "작업 시작할게요", "회의 시작합시다"],
+  },
+  {
     id: "machine",
-    patterns: [/기계|장비|라인|공장|작업|설비|현장/],
+    patterns: [/기계|장비|라인|공장|설비|현장/],
     terms: ["기계", "작업", "장비"],
     related: ["기계를 가동하세요", "기계를 멈춰 주세요"],
     display: ["기계"],
@@ -1069,9 +1245,19 @@ const SEARCH_ACTION_RULES = [
     phrases: ["{object} 먹고 싶어요", "{object} 마시고 싶어요"],
   },
   {
+    id: "start",
+    patterns: [/시작할게|시작할께|시작합시다|시작합니다|시작해요|시작해|시작하자|시작/],
+    terms: ["시작하다", "시작해요", "시작합니다"],
+    related: ["{object} 시작해요", "{object} 시작합시다"],
+    display: ["시작하다"],
+    tags: ["기본회화", "일터"],
+    preferTags: ["일터"],
+    phrases: ["{object} 시작해요", "{object} 시작합시다"],
+  },
+  {
     id: "operate",
-    patterns: [/(?:가동|작동|멈춰|멈추|정지|중지|시작|켜(?:라|요|줘|주세요|다)?|꺼(?:라|요|줘|주세요)?|끄(?:다|고|는))/],
-    terms: ["가동", "작동", "시작", "멈춰", "멈추다", "켜 주세요", "꺼 주세요"],
+    patterns: [/(?:가동|작동|멈춰|멈추|정지|중지|켜(?:라|요|줘|주세요|다)?|꺼(?:라|요|줘|주세요)?|끄(?:다|고|는))/],
+    terms: ["가동", "작동", "멈춰", "멈추다", "켜 주세요", "꺼 주세요"],
     related: ["기계를 가동하세요", "기계를 멈춰 주세요"],
     display: ["가동"],
     tags: ["일터"],
@@ -1190,6 +1376,13 @@ const ACTION_COMPOSITION_TEMPLATES = {
     thaiScript: (objectThaiScript) => `ช่วยเปลี่ยนเป็น${objectThaiScript}ให้หน่อยครับ`,
     note: "가리킨 쪽으로 바꾸고 싶을 때",
   },
+  start: {
+    label: "시작해요",
+    korean: (objectLabel) => `${objectLabel} 시작해요`,
+    thaiKo: (objectThaiKo) => `뢰엄 ${objectThaiKo} 캅`,
+    thaiScript: (objectThaiScript) => `เริ่ม${objectThaiScript}ครับ`,
+    note: "교육이나 업무, 회의를 시작할 때",
+  },
 };
 const ACTION_COMPOSITION_SUFFIXES = {
   request: ["부탁해요", "주세요", "주세여", "줘요", "줘", "부탁"],
@@ -1212,6 +1405,7 @@ const ACTION_COMPOSITION_SUFFIXES = {
   ],
   show: ["보여주세요", "보여주세여", "보여줘요", "보여줘", "보여"],
   change: ["바꿔주세요", "바꿔줘요", "바꿔줘", "변경해주세요", "변경해줘", "바꾸다", "바꿔", "변경"],
+  start: ["시작할게요", "시작할께요", "시작합니다", "시작합시다", "시작해요", "시작해", "시작하자", "시작"],
 };
 const ACTION_COMPOSITION_PARTICLE_SUFFIXES = ["으로", "로", "을", "를", "은", "는", "이", "가"];
 const ACTION_COMPOSITION_FILLER_SUFFIXES = ["조금만", "좀만", "쫌", "좀"];
@@ -1419,8 +1613,10 @@ const QUERY_PARTS = [
   { patterns: [/머리|배탈|배아파|배가아파|복통|두통|기침|콧물|어지러|멀미|설사|구토|토할|상처|허리|다리|무릎|숨쉬기/], primary: ["아프다", "병원"], related: ["약국", "의사", "약", "도와주세요"], display: ["건강"], tags: ["건강"] },
   { patterns: [/티셔츠|셔츠|바지|치마|원피스|드레스|자켓|재킷|점퍼|속옷|양말|신발|모자|우산|수영복/], primary: ["옷"], related: ["사이즈", "색", "보여주세요"], display: ["옷"], tags: ["쇼핑"] },
   { patterns: [/엔드밀|드릴|커터|공구|공구함|비트|홀더/], primary: ["엔드밀", "공구"], related: ["드릴", "커터", "홀더", "가져와 주세요"], display: ["공구"], tags: ["일터"] },
-  { patterns: [/기계|장비|라인|공장|작업|현장/], primary: ["기계", "작업"], related: ["가동", "작동", "시작하다", "멈추다", "공장"], display: ["기계"], tags: ["일터"] },
-  { patterns: [/(?:가동|작동|멈춰|멈추|정지|중지|시작|켜(?:라|요|줘|주세요|다)?|꺼(?:라|요|줘|주세요)?|끄(?:다|고|는))/], primary: ["작동", "시작하다"], related: ["기계", "가동", "멈추다", "켜다", "끄다"], display: ["작동"], tags: ["일터"] },
+  { patterns: [/기계|장비|라인|공장|현장/], primary: ["기계", "작업"], related: ["가동", "작동", "시작하다", "멈추다", "공장"], display: ["기계"], tags: ["일터"] },
+  { patterns: [/(?:가동|작동|멈춰|멈추|정지|중지|켜(?:라|요|줘|주세요|다)?|꺼(?:라|요|줘|주세요)?|끄(?:다|고|는))/], primary: ["작동", "시작하다"], related: ["기계", "가동", "멈추다", "켜다", "끄다"], display: ["작동"], tags: ["일터"] },
+  { patterns: [/교육|훈련|트레이닝|오리엔테이션|안전교육|입사교육|수업/], primary: ["교육", "훈련"], related: ["교육 시작", "교육 시작합시다", "교육 언제 시작해요?"], display: ["교육"], tags: ["일터", "기본회화"] },
+  { patterns: [/업무|작업|회의|미팅/], primary: ["업무", "작업", "회의"], related: ["업무 시작", "업무 시작합시다", "작업 시작할게요", "회의 시작합시다"], display: ["업무"], tags: ["일터"] },
   { patterns: [/몇\s*시|몇시|현재시간|지금시간/], primary: ["시간", "몇 시"], related: ["지금 몇 시예요", "현재 시간", "오전", "오후"], display: ["시간"], tags: ["숫자·시간"] },
   { patterns: [/점심|아침|저녁|밥|식사/], primary: ["점심식사", "먹다"], related: ["아침식사", "저녁식사", "가다", "같이"], display: ["식사"], tags: ["식당", "기본회화"] },
   { patterns: [/가자|먹자|하자|갈래/], primary: ["가다"], related: ["같이", "먹다", "하다", "점심 먹으러 가자"], display: ["같이"], tags: ["기본회화"] },
@@ -1498,6 +1694,20 @@ const QUERY_ALIASES = [
     related: ["매표소가 어디예요?", "표 파는 곳이 어디예요?", "여기서 표를 사요?", "버스표는 어디서 사요?", "기차표는 어디서 사요?"],
     display: ["매표소"],
     tags: ["이동", "쇼핑"],
+  },
+  {
+    matches: ["교육시작", "교육 시작", "교육을시작해", "교육을 시작해", "훈련시작", "훈련 시작", "오리엔테이션시작", "오리엔테이션 시작"],
+    primary: ["교육", "훈련", "오리엔테이션", "시작하다"],
+    related: ["교육 시작합시다", "교육 언제 시작해요?", "오리엔테이션 시작해요"],
+    display: ["교육 시작"],
+    tags: ["일터"],
+  },
+  {
+    matches: ["업무시작", "업무 시작", "업무를시작해", "업무를 시작해", "작업시작", "작업 시작", "작업을시작해", "작업을 시작해", "회의시작", "회의 시작"],
+    primary: ["업무", "작업", "회의", "시작하다"],
+    related: ["업무 시작합시다", "작업 시작할게요", "회의 시작합시다"],
+    display: ["업무 시작"],
+    tags: ["일터"],
   },
   {
     matches: ["현금인출기", "atm", "atm기", "현금뽑는기계"],
@@ -1881,6 +2091,12 @@ const COMPACT_QUERY_SUFFIX_RULES = [
   { suffix: "어디예요", spaced: (root) => `${root} 어디예요` },
   { suffix: "안돼요", spaced: (root) => `${root} 안 돼요` },
   { suffix: "안되요", spaced: (root) => `${root} 안 돼요` },
+  { suffix: "시작할게요", spaced: (root) => `${root} 시작할게요` },
+  { suffix: "시작합니다", spaced: (root) => `${root} 시작합니다` },
+  { suffix: "시작합시다", spaced: (root) => `${root} 시작합시다` },
+  { suffix: "시작해요", spaced: (root) => `${root} 시작해요` },
+  { suffix: "시작해", spaced: (root) => `${root} 시작해` },
+  { suffix: "시작", spaced: (root) => `${root} 시작` },
 ];
 
 const PREDICATE_QUERY_VARIANTS = {
@@ -2770,8 +2986,14 @@ function expandQueryVariants(query, rawTokens = []) {
     if (/배고프|허기|시장해/.test(item)) {
       variants.push("배고프다", "배고파요", "밥", "먹다", "식당");
     }
-    if (/기계|장비|라인|공장|작업/.test(item)) {
+    if (/기계|장비|라인|공장|설비|현장/.test(item)) {
       variants.push("기계", "작동", "가동", "시작하다", "멈추다");
+    }
+    if (/교육|훈련|트레이닝|오리엔테이션|안전교육|입사교육|수업/.test(item)) {
+      variants.push("교육", "훈련", "오리엔테이션", "교육 시작", "교육 시작합시다", "교육 언제 시작해요?");
+    }
+    if (/업무|작업|회의|미팅|업무시작|작업시작|회의시작/.test(item)) {
+      variants.push("업무", "작업", "회의", "업무 시작", "업무 시작합시다", "작업 시작할게요", "회의 시작합시다");
     }
     if (/공장|생산라인|자재|불량품|작업복|안전화/.test(item)) {
       variants.push("공장", "생산라인", "자재", "불량품", "작업복", "안전화", "자재가 부족해요", "이거 불량품이에요", "안전화를 신어야 해요");
@@ -2812,7 +3034,7 @@ function expandQueryVariants(query, rawTokens = []) {
     if (/근무시간|출근시간|퇴근시간|출근|퇴근|초과근무|연장근무|야근|조퇴|휴게시간|쉬는날|쉬는 날|휴무|교대근무|주간근무|야간근무/.test(item)) {
       variants.push("근무시간", "출근", "퇴근", "초과근무", "휴게시간", "쉬는 날", "몇 시 출근이에요?", "몇 시 퇴근이에요?", "오늘 초과근무 있어요?");
     }
-    if (/가동|작동|켜|시작/.test(item)) {
+    if (/가동|작동|켜/.test(item)) {
       variants.push("기계", "작동", "가동", "시작하다", "켜다");
     }
     if (/멈춰|멈추|정지|중지|꺼/.test(item)) {
@@ -3582,6 +3804,21 @@ function createGeneratedDemonstrativeVocab(query, demonstrative) {
   );
 }
 
+function isStartComposableObjectEntry(entry) {
+  const label = getEntryPrimaryKoreanText(entry) || normalizeText(entry?.korean || "");
+  if (!label) return false;
+
+  if (/(?:교육|훈련|오리엔테이션|수업|업무|작업|근무|회의|미팅|청소|검사|포장|조립|생산|점검)/u.test(label)) {
+    return true;
+  }
+
+  return (entry?.keywords || []).some((keyword) =>
+    /(?:교육|훈련|오리엔테이션|수업|업무|작업|근무|회의|미팅|청소|검사|포장|조립|생산|점검)/u.test(
+      normalizeText(keyword)
+    )
+  );
+}
+
 function extractWhatQuestionObjectCompacts(query) {
   const compact = compactText(query);
   const suffix = getWhatQuestionSuffix(compact);
@@ -3701,6 +3938,14 @@ function buildGeneratedComposedEntries(query, searchProfile, vocabEntries) {
     if (demoVocab) vocab.push(demoVocab);
   }
 
+  if (actionId === "start" && demonstrative) {
+    return {
+      vocab: uniqueById(vocab),
+      sentences: [],
+      suppressFallbackSentences: false,
+    };
+  }
+
   if (!actionId) {
     if (!demonstrative) return { vocab: [], sentences: [] };
 
@@ -3740,6 +3985,14 @@ function buildGeneratedComposedEntries(query, searchProfile, vocabEntries) {
     const objectCompacts = extractComposableObjectCompacts(trimmedQuery, actionId);
     const objectEntry = findComposableObjectEntry(vocabEntries, objectCompacts);
     if (!objectEntry) {
+      return {
+        vocab: uniqueById(vocab),
+        sentences: [],
+        suppressFallbackSentences: false,
+      };
+    }
+
+    if (actionId === "start" && !isStartComposableObjectEntry(objectEntry)) {
       return {
         vocab: uniqueById(vocab),
         sentences: [],
@@ -6088,13 +6341,18 @@ function render() {
       : { vocab: [], sentences: [], suppressFallbackSentences: false };
   const generatedAssist = mergeGeneratedEntrySets(generatedComposed, generatedWhatQuestion, generatedThaiMeaning);
   const composedMode = Boolean(generatedAssist.vocab.length || generatedAssist.sentences.length);
+  const strictPhraseMode = Boolean(
+    searchProfile.templateTerms.length || (searchProfile.objectTerms.length && searchProfile.actionTerms.length)
+  );
+  const safeExactSentenceMatch =
+    strictPhraseMode && exactSentenceMatch?.source === "generated-bulk" ? null : exactSentenceMatch;
   const refinedVocabResults = composedMode
     ? preliminaryVocabResults.filter((entry) => entry.source !== "generated-bulk")
     : preliminaryVocabResults;
   const refinedSentenceCandidates =
     generatedAssist.suppressFallbackSentences
       ? []
-      : composedMode && !numberMode && !timeQuestionMode && !timeMode
+      : (composedMode || strictPhraseMode) && !numberMode && !timeQuestionMode && !timeMode
       ? getSentenceResults(sentenceSource, searchProfile, uniqueByMeaning([...generatedAssist.vocab, ...refinedVocabResults])).filter(
           (entry) => entry.source !== "generated-bulk"
         )
@@ -6119,14 +6377,14 @@ function render() {
     ? (numberMode
         ? generated.sentences
         : timeQuestionMode
-          ? uniqueById([...(exactSentenceMatch ? [exactSentenceMatch] : []), ...generatedTimeQuestion.sentences]).slice(
+          ? uniqueById([...(safeExactSentenceMatch ? [safeExactSentenceMatch] : []), ...generatedTimeQuestion.sentences]).slice(
               0,
               RESULT_LIMITS.sentences
             )
         : timeMode
           ? generatedTime.sentences
         : uniqueByMeaning(uniqueById([
-            ...(exactSentenceMatch ? [exactSentenceMatch] : []),
+            ...(safeExactSentenceMatch ? [safeExactSentenceMatch] : []),
             ...generated.sentences,
             ...generatedAssist.sentences,
             ...refinedSentenceCandidates,

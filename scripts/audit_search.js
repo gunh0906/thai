@@ -164,6 +164,10 @@ function createSearchRunner(context) {
         ? api.buildGeneratedThaiMeaningEntries(query, profile, merged.vocab)
         : { vocab: [], sentences: [], suppressFallbackSentences: false };
     const generatedAssist = api.mergeGeneratedEntrySets(generatedComposed, generatedWhatQuestion, generatedThaiMeaning);
+    const exactSentence = numberMode ? null : api.findExactEntry(merged.sentences, profile, { includeTemplates: true });
+    const strictPhraseMode = Boolean(profile.templateTerms.length || (profile.objectTerms.length && profile.actionTerms.length));
+    const safeExactSentence =
+      strictPhraseMode && exactSentence?.source === "generated-bulk" ? null : exactSentence;
     const refinedVocab =
       generatedAssist.vocab.length || generatedAssist.sentences.length
         ? preliminaryVocab.filter((entry) => entry.source !== "generated-bulk")
@@ -177,13 +181,12 @@ function createSearchRunner(context) {
           : api.uniqueByMeaning(api.uniqueById([...generatedAssist.vocab, ...refinedVocab]));
     const vocab = allVocab.slice(0, 5);
 
-    const exactSentence = numberMode ? null : api.findExactEntry(merged.sentences, profile, { includeTemplates: true });
     const refinedSentenceCandidates =
       numberMode || timeQuestionMode || timeMode
         ? []
         : generatedAssist.suppressFallbackSentences
           ? []
-          : (generatedAssist.vocab.length || generatedAssist.sentences.length
+          : ((generatedAssist.vocab.length || generatedAssist.sentences.length || strictPhraseMode)
               ? api.getSentenceResults(
                   merged.sentences,
                   profile,
@@ -199,13 +202,13 @@ function createSearchRunner(context) {
         ? generated.sentences
         : timeQuestionMode
           ? api.uniqueById([
-              ...(exactSentence ? [exactSentence] : []),
+              ...(safeExactSentence ? [safeExactSentence] : []),
               ...generatedTimeQuestion.sentences,
             ])
           : timeMode
           ? generatedTime.sentences
             : api.uniqueByMeaning(api.uniqueById([
-                ...(exactSentence ? [exactSentence] : []),
+                ...(safeExactSentence ? [safeExactSentence] : []),
                 ...generatedAssist.sentences,
                 ...refinedSentenceCandidates,
               ]))
