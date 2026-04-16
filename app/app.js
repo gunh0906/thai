@@ -1,6 +1,6 @@
 ﻿const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
-const APP_VERSION = "20260416u";
+const APP_VERSION = "20260416v";
 
 const baseData = window.BASE_DATA || {
   appTitle: "태국어 포켓북",
@@ -401,7 +401,7 @@ const QUICK_SEARCHES = [
   "택시",
 ];
 
-const STOPWORDS = new Set(["이", "그", "저", "것", "거", "좀", "더", "요", "은", "는", "이거"]);
+const STOPWORDS = new Set(["이", "그", "저", "것", "거", "좀", "더", "요", "은", "는", "이거", "내", "제", "나"]);
 const GENERIC_SEARCH_TERMS = new Set([
   "하다",
   "있다",
@@ -1487,21 +1487,28 @@ const WHAT_QUESTION_SUFFIXES = [
 const PREDICATE_QUERY_FAMILIES = [
   {
     id: "wrong",
-    patterns: [/잘못|틀리/],
-    primary: ["잘못", "틀리다"],
-    display: ["잘못", "틀리다"],
+    patterns: [/잘못|틀리|실수|오류|오타/],
+    primary: ["잘못", "틀리다", "실수"],
+    display: ["잘못", "틀리다", "실수"],
     tags: ["기본회화"],
     vocab: [
       { korean: "잘못", thaiKo: "핏", thaiScript: "ผิด", note: "틀리거나 잘못된 상태" },
       { korean: "틀리다", thaiKo: "마이 툭", thaiScript: "ไม่ถูก", note: "맞지 않다" },
+      { korean: "실수", thaiKo: "쿠암 핏팟", thaiScript: "ความผิดพลาด", note: "실수 / 잘못" },
     ],
     genericSentences: [
       { korean: "잘못됐어요", thaiKo: "핏 캅", thaiScript: "ผิดครับ" },
       { korean: "틀렸어요", thaiKo: "마이 툭 캅", thaiScript: "ไม่ถูกครับ" },
+      { korean: "실수했어요", thaiKo: "탐 핏팟 캅", thaiScript: "ทำผิดพลาดครับ" },
+      { korean: "실수예요", thaiKo: "펜 쿠암 핏팟 캅", thaiScript: "เป็นความผิดพลาดครับ" },
     ],
     demonstrativeSentences: [
       { korean: (label) => `${label} 잘못됐어요`, thaiKo: (demo) => `${demo.thaiKo} 핏 캅`, thaiScript: (demo) => `${demo.thaiScript}ผิดครับ` },
       { korean: (label) => `${label} 틀렸어요`, thaiKo: (demo) => `${demo.thaiKo} 마이 툭 캅`, thaiScript: (demo) => `${demo.thaiScript}ไม่ถูกครับ` },
+    ],
+    selfSentences: [
+      { korean: "제 실수예요", thaiKo: "펜 쿠암 핏팟 콩 폼 캅", thaiScript: "เป็นความผิดพลาดของผมครับ" },
+      { korean: "제가 잘못했어요", thaiKo: "폼 탐 핏 캅", thaiScript: "ผมทำผิดครับ" },
     ],
   },
   {
@@ -3998,6 +4005,10 @@ function getMatchedPredicateFamilies(text) {
   );
 }
 
+function hasSelfReferentQuery(text) {
+  return /(?:^|\s)(?:내|제|나의|저의)(?:\s|$)|내가|제가/.test(normalizeText(text));
+}
+
 function getDemonstrativeSubjectLabel(demonstrative) {
   if (!demonstrative?.label) return "";
   if (demonstrative.label === "이거") return "이건";
@@ -4026,11 +4037,40 @@ function createGeneratedPredicateEntry(query, korean, thaiKo, thaiScript, kind, 
   );
 }
 
+function getPredicateEntryPriority(entry, query, options = {}) {
+  const normalizedQuery = normalizeText(query);
+  const compactQuery = compactText(query);
+  const korean = normalizeText(entry?.korean || "");
+  const compactKorean = compactText(entry?.korean || "");
+  const selfReferent = options.selfReferent ?? hasSelfReferentQuery(query);
+  const demonstrative = options.demonstrative || findDemonstrativeDefinition(query);
+  const subjectLabel = demonstrative ? normalizeText(getDemonstrativeSubjectLabel(demonstrative)) : "";
+  let score = 0;
+
+  if (compactQuery && compactKorean === compactQuery) score += 500;
+  if (compactQuery && compactKorean && compactQuery.includes(compactKorean)) score += 260;
+  if (compactQuery && compactKorean && compactKorean.includes(compactQuery)) score += 180;
+
+  if (/실수|오류|오타/.test(normalizedQuery) && /실수/.test(korean)) score += 220;
+  if (/잘못/.test(normalizedQuery) && /잘못/.test(korean)) score += 220;
+  if (/틀리/.test(normalizedQuery) && /틀리|틀렸/.test(korean)) score += 220;
+  if (/맞아|맞다|정답|옳/.test(normalizedQuery) && /맞아|맞다|맞아요/.test(korean)) score += 220;
+  if (/괜찮|문제없|이상없|쓸만/.test(normalizedQuery) && /괜찮/.test(korean)) score += 220;
+  if (/문제|이상해|이상하다|고장났/.test(normalizedQuery) && /문제|이상/.test(korean)) score += 220;
+
+  if (selfReferent && /^(제|제가)/.test(korean)) score += 260;
+  if (subjectLabel && korean.startsWith(subjectLabel)) score += 240;
+  if (entry?.kind === "sentence") score += 20;
+
+  return score;
+}
+
 function buildPredicateIntentHints(query) {
   const families = getMatchedPredicateFamilies(query);
   if (!families.length) return null;
 
   const demonstrative = findDemonstrativeDefinition(query);
+  const selfReferent = hasSelfReferentQuery(query);
   const subjectLabel = getDemonstrativeSubjectLabel(demonstrative);
   const primaryTerms = [];
   const relatedTerms = [];
@@ -4045,6 +4085,12 @@ function buildPredicateIntentHints(query) {
     (family.genericSentences || []).forEach((item) => {
       relatedTerms.push(item.korean);
     });
+
+    if (selfReferent) {
+      (family.selfSentences || []).forEach((item) => {
+        relatedTerms.push(item.korean);
+      });
+    }
 
     if (demonstrative) {
       relatedTerms.push(demonstrative.label);
@@ -4070,6 +4116,7 @@ function buildGeneratedPredicateEntries(query) {
   if (!families.length) return { vocab: [], sentences: [], suppressFallbackSentences: false };
 
   const demonstrative = findDemonstrativeDefinition(trimmedQuery);
+  const selfReferent = hasSelfReferentQuery(trimmedQuery);
   const subjectLabel = getDemonstrativeSubjectLabel(demonstrative);
   const vocab = [];
   const sentences = [];
@@ -4094,13 +4141,20 @@ function buildGeneratedPredicateEntries(query) {
       if (vocabEntry) vocab.push(vocabEntry);
     });
 
-    const sentenceDefs = demonstrative && family.demonstrativeSentences?.length
-      ? family.demonstrativeSentences.map((item) => ({
+    let sentenceDefs = [];
+    if (selfReferent && family.selfSentences?.length) {
+      sentenceDefs.push(...family.selfSentences);
+    }
+    if (demonstrative && family.demonstrativeSentences?.length) {
+      sentenceDefs.push(
+        ...family.demonstrativeSentences.map((item) => ({
           korean: typeof item.korean === "function" ? item.korean(subjectLabel) : item.korean,
           thaiKo: typeof item.thaiKo === "function" ? item.thaiKo(demonstrative) : item.thaiKo,
           thaiScript: typeof item.thaiScript === "function" ? item.thaiScript(demonstrative) : item.thaiScript,
         }))
-      : family.genericSentences || [];
+      );
+    }
+    sentenceDefs.push(...(family.genericSentences || []));
 
     sentenceDefs.forEach((item) => {
       const sentenceEntry = createGeneratedPredicateEntry(
@@ -4116,9 +4170,20 @@ function buildGeneratedPredicateEntries(query) {
     });
   });
 
+  const rankedVocab = uniqueByMeaning(uniqueById(vocab)).sort(
+    (left, right) =>
+      getPredicateEntryPriority(right, trimmedQuery, { selfReferent, demonstrative }) -
+      getPredicateEntryPriority(left, trimmedQuery, { selfReferent, demonstrative })
+  );
+  const rankedSentences = uniqueByMeaning(uniqueById(sentences)).sort(
+    (left, right) =>
+      getPredicateEntryPriority(right, trimmedQuery, { selfReferent, demonstrative }) -
+      getPredicateEntryPriority(left, trimmedQuery, { selfReferent, demonstrative })
+  );
+
   return {
-    vocab: uniqueByMeaning(uniqueById(vocab)),
-    sentences: uniqueByMeaning(uniqueById(sentences)),
+    vocab: rankedVocab,
+    sentences: rankedSentences,
     suppressFallbackSentences: true,
   };
 }
@@ -6354,7 +6419,7 @@ function getThaiScriptText(entry) {
 }
 
 function hasNegativeMeaning(text) {
-  return /(안|못|없|말고|잘못|틀리|아니)/.test(normalizeText(text));
+  return /(안|못|없|말고|잘못|틀리|실수|오류|오타|아니)/.test(normalizeText(text));
 }
 
 function isTimeLikeQuery(query) {
