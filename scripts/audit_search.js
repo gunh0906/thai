@@ -110,6 +110,9 @@ function buildAppContext(rootDir) {
         normalizeText,
         getMergedData,
         buildSearchProfile,
+        buildGeneratedNumberEntries,
+        buildGeneratedTimeQuestionEntries,
+        buildGeneratedTimeEntries,
         findExactEntry,
         getVocabResults,
         getSentenceResults,
@@ -130,21 +133,44 @@ function createSearchRunner(context) {
   function search(query) {
     const merged = api.getMergedData();
     const mergedEntries = [...merged.vocab, ...merged.sentences];
-    const profile = api.buildSearchProfile(query, mergedEntries);
-    const exactVocab = api.findExactEntry(merged.vocab, profile);
-    const vocab = api
-      .uniqueById([
-        ...(exactVocab ? [exactVocab] : []),
-        ...api.getVocabResults(merged.vocab, profile),
-      ])
-      .slice(0, 5);
-    const exactSentence = api.findExactEntry(merged.sentences, profile);
-    const sentences = api
-      .uniqueById([
-        ...(exactSentence ? [exactSentence] : []),
-        ...api.getSentenceResults(merged.sentences, profile, vocab),
-      ])
-      .slice(0, 5);
+    const generated = api.buildGeneratedNumberEntries(query);
+    const numberMode = generated.vocab.length > 0;
+    const generatedTimeQuestion = !numberMode ? api.buildGeneratedTimeQuestionEntries(query) : { vocab: [], sentences: [] };
+    const timeQuestionMode = !numberMode && generatedTimeQuestion.vocab.length > 0;
+    const generatedTime = !numberMode && !timeQuestionMode ? api.buildGeneratedTimeEntries(query) : { vocab: [], sentences: [] };
+    const timeMode = !numberMode && !timeQuestionMode && generatedTime.vocab.length > 0;
+    const profile = api.buildSearchProfile(query, numberMode || timeQuestionMode || timeMode ? [] : mergedEntries);
+
+    const exactVocab = numberMode ? null : api.findExactEntry(merged.vocab, profile);
+    const allVocab = numberMode
+      ? generated.vocab
+      : timeQuestionMode
+        ? generatedTimeQuestion.vocab
+        : timeMode
+          ? generatedTime.vocab
+          : api
+              .uniqueById([
+                ...(exactVocab ? [exactVocab] : []),
+                ...api.getVocabResults(merged.vocab, profile),
+              ]);
+    const vocab = allVocab.slice(0, 5);
+
+    const exactSentence = numberMode ? null : api.findExactEntry(merged.sentences, profile, { includeTemplates: true });
+    const sentences = (
+      numberMode
+        ? generated.sentences
+        : timeQuestionMode
+          ? api.uniqueById([
+              ...(exactSentence ? [exactSentence] : []),
+              ...generatedTimeQuestion.sentences,
+            ])
+          : timeMode
+            ? generatedTime.sentences
+            : api.uniqueById([
+                ...(exactSentence ? [exactSentence] : []),
+                ...api.getSentenceResults(merged.sentences, profile, allVocab),
+              ])
+    ).slice(0, 5);
 
     return { profile, vocab, sentences };
   }

@@ -1,6 +1,6 @@
 const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
-const APP_VERSION = "20260415h";
+const APP_VERSION = "20260416b";
 
 const baseData = window.BASE_DATA || {
   appTitle: "태국어 포켓북",
@@ -223,7 +223,7 @@ const VOCAB_GENERIC_LABEL_REGEX = /(?:문제|필요|있음|확인)$/u;
 const SEARCH_OBJECT_RULES = [
   {
     id: "room",
-    patterns: [/방|객실|룸/],
+    patterns: [/^방$|객실|룸|방바꿔|방좀바꿔|다른방|빈방|조용한방|깨끗한방|더러운방|시원한방|고장난방|방이|방안/],
     terms: ["방", "객실", "룸"],
     related: ["다른 방", "빈 방", "조용한 방"],
     display: ["방"],
@@ -234,12 +234,12 @@ const SEARCH_OBJECT_RULES = [
   {
     id: "noise",
     patterns: [/시끄럽|시끄러|소음|조용하|조용해|조용한/],
-    terms: ["소음", "시끄럽다", "조용하다", "조용한 방"],
-    related: ["방이 시끄러워요", "조용한 방 있나요?", "조용한 방으로 부탁해요", "소음 없는 방"],
-    display: ["소음", "조용한 방"],
+    terms: ["시끄럽다", "소음", "시끄러워요"],
+    related: ["시끄러워요", "방이 시끄러워요", "이 방은 너무 시끄러워요", "조용한 방 있나요?"],
+    display: ["시끄럽다", "소음"],
     tags: ["이동", "기본회화"],
     avoidTags: ["일터"],
-    phrases: ["방이 시끄러워요", "조용한 방 있나요?", "조용한 방으로 부탁해요"],
+    phrases: ["시끄러워요", "방이 시끄러워요", "이 방은 너무 시끄러워요", "조용한 방 있나요?"],
   },
   {
     id: "machineNoise",
@@ -313,8 +313,8 @@ const SEARCH_OBJECT_RULES = [
   },
   {
     id: "laundry",
-    patterns: [/빨래|세탁|세탁실|세탁기|세탁소|세제|건조기|빨래방/],
-    terms: ["빨래", "세탁", "세탁실", "세탁기", "세탁소", "세제"],
+    patterns: [/^빨래$/, /^세탁$/, /빨래해|세탁해|빨래맡기|세탁맡기/, /세탁실|세제/],
+    terms: ["빨래", "세탁", "세탁실", "세제"],
     related: ["빨래 좀 해주세요", "세탁실이 어디예요?", "세제 있어요?"],
     display: ["빨래"],
     tags: ["기본회화", "이동"],
@@ -427,12 +427,12 @@ const SEARCH_OBJECT_RULES = [
     patterns: [/atm|현금인출기|현금\s*뽑는\s*기계/i],
     focusTerms: ["ATM"],
     terms: ["ATM", "현금인출기"],
-    related: ["ATM이 어디예요?", "현금 뽑고 싶어요", "ATM으로 가 주세요"],
+    related: ["ATM이 어디예요?", "현금 뽑고 싶어요", "여기서 ATM까지 멀어요?"],
     display: ["ATM"],
     tags: ["이동", "쇼핑"],
     avoidTags: ["일터"],
-    blockedTerms: ["현금", "동전"],
-    phrases: ["ATM이 어디예요?", "현금 뽑고 싶어요", "ATM으로 가 주세요"],
+    blockedTerms: ["현금", "동전", "사다", "사요", "어디서사요"],
+    phrases: ["ATM이 어디예요?", "현금 뽑고 싶어요"],
   },
   {
     id: "platform",
@@ -489,7 +489,23 @@ const SEARCH_OBJECT_RULES = [
     display: ["세탁소", "빨래방"],
     tags: ["이동", "기본회화"],
     avoidTags: ["일터"],
-    blockedTerms: ["빨래", "세탁", "세제", "세탁기", "건조기", "세탁실"],
+    blockedTerms: [
+      "빨래",
+      "세탁",
+      "세제",
+      "세탁기",
+      "건조기",
+      "세탁실",
+      "방",
+      "객실",
+      "룸",
+      "다른방",
+      "빈방",
+      "조용한방",
+      "방바꿔주세요",
+      "다른방있나요",
+      "방어디예요",
+    ],
     phrases: ["세탁소가 어디예요?", "빨래방이 어디예요?", "빨래 맡기고 싶어요"],
   },
   {
@@ -965,8 +981,10 @@ const SEARCH_ACTION_RULES = [
 ];
 const THAI_SCRIPT_REGEX = /[\u0E00-\u0E7F]/;
 const NUMBER_QUERY_REGEX = /^[+-]?(?:(?:\d+(?:\.\d+)?)|(?:\.\d+))$/;
-const TIME_QUERY_REGEX = /^(?:(오전|오후)\s*)?\d{1,2}\s*시(?:\s*\d{1,2}\s*분)?$|^(?:(오전|오후)\s*)?\d{1,2}:\d{2}$/;
-const TIME_EXTRACT_REGEX = /(?:(오전|오후)\s*)?\d{1,2}\s*시(?:\s*\d{1,2}\s*분)?|(?:(오전|오후)\s*)?\d{1,2}:\d{2}/;
+const TIME_QUERY_REGEX =
+  /^(?:(오전|오후)\s*)?\d{1,2}\s*시(?:\s*(?:\d{1,2}\s*분|반))?$|^(?:(오전|오후)\s*)?\d{1,2}:\d{2}$/;
+const TIME_EXTRACT_REGEX =
+  /(?:(오전|오후)\s*)?\d{1,2}\s*시(?:\s*(?:\d{1,2}\s*분|반))?|(?:(오전|오후)\s*)?\d{1,2}:\d{2}/;
 const TIME_QUESTION_REGEX = /^(?:(?:지금|현재)?(?:시간)?몇시(?:야|예요|에요|인가요|니|냐)?)$|^(?:지금시간|현재시간|지금몇시|현재몇시)$/;
 
 const RESULT_LIMITS = {
@@ -1085,7 +1103,13 @@ const QUERY_BUNDLES = [
 ];
 
 const QUERY_PARTS = [
-  { patterns: [/방|객실|룸/], primary: ["방", "객실"], related: ["다른 방"], display: ["방"], tags: ["이동"] },
+  {
+    patterns: [/^방$|객실|룸|방바꿔|방좀바꿔|다른방|빈방|조용한방|깨끗한방|더러운방|시원한방|고장난방|방이|방안/],
+    primary: ["방", "객실"],
+    related: ["다른 방"],
+    display: ["방"],
+    tags: ["이동"],
+  },
   { patterns: [/바꿔|바꾸|변경|교체/], primary: ["바꾸다", "변경"], related: ["방 바꿔주세요"], display: ["바꾸다"], tags: ["이동"] },
   { patterns: [/주세요|부탁|도와|해줘/], related: ["주세요", "부탁"], display: ["부탁"], tags: ["기본회화"] },
   { patterns: [/얼마|가격|비싸|깎/], primary: ["얼마", "가격"], related: ["비싸다", "깎아주세요"], display: ["가격"], tags: ["쇼핑"] },
@@ -1098,7 +1122,13 @@ const QUERY_PARTS = [
   { patterns: [/먹다|먹어요|먹는다|먹고/], primary: ["먹다"], related: ["메뉴", "음식"], display: ["먹다"], tags: ["식당", "기본회화"] },
   { patterns: [/마시다|마셔|마신다/], primary: ["마시다"], related: ["물", "음료"], display: ["마시다"], tags: ["식당", "기본회화"] },
   { patterns: [/주스|쥬스|음료/], primary: ["주스", "음료"], related: ["과일", "수박", "오렌지"], display: ["주스"], tags: ["식당", "쇼핑"] },
-  { patterns: [/시끄럽|소음/], primary: ["소음", "시끄럽다"], related: ["방이 시끄러워요", "조용한 방"], display: ["소음"], tags: ["이동", "기본회화"] },
+  {
+    patterns: [/시끄럽|소음/],
+    primary: ["시끄럽다", "소음"],
+    related: ["시끄러워요", "방이 시끄러워요", "이 방은 너무 시끄러워요"],
+    display: ["시끄럽다", "소음"],
+    tags: ["이동", "기본회화"],
+  },
   { patterns: [/조용하|조용해|조용한/], primary: ["조용하다", "조용한 방"], related: ["조용한 방 있나요?", "소음 없는 방"], display: ["조용한 방"], tags: ["이동", "기본회화"] },
   { patterns: [/냄새|더럽|지저분|청소/], primary: ["냄새", "청소"], related: ["방에서 냄새가 나요", "청소해 주세요"], display: ["청소"], tags: ["이동", "기본회화"] },
   { patterns: [/에어컨|냉방|안시원|안 시원/], primary: ["에어컨"], related: ["에어컨이 안 시원해요", "에어컨이 너무 추워요", "에어컨이 너무 더워요"], display: ["에어컨"], tags: ["이동", "기본회화"] },
@@ -1124,7 +1154,13 @@ const QUERY_PARTS = [
   { patterns: [/이해|알겠|알겠습니다|알겠어/], primary: ["이해"], related: ["이해해요", "이해하나요", "이해합니다", "알겠습니다"], display: ["이해"], tags: ["기본회화"] },
   { patterns: [/급해|급하다|서둘러|급합니다|빨리좀|빨리 해/], primary: ["급하다", "빨리"], related: ["서둘러", "지금", "바로"], display: ["급하다"], tags: ["기본회화"] },
   { patterns: [/배고프|허기|시장해/], primary: ["배고프다"], related: ["배고파요", "배고프세요?", "밥 먹고 싶어요", "먹을 거 있어요?"], display: ["배고프다"], tags: ["식당", "기본회화", "건강"] },
-  { patterns: [/빨래|세탁|세탁기|세탁실|건조기|세제/], primary: ["빨래", "세탁"], related: ["세탁기", "세탁실", "건조기", "세제"], display: ["빨래"], tags: ["기본회화", "이동"] },
+  {
+    patterns: [/^빨래$/, /^세탁$/, /빨래해|세탁해|빨래맡기|세탁맡기/, /세탁실|세제/],
+    primary: ["빨래", "세탁"],
+    related: ["세탁실", "세제", "빨래 맡기고 싶어요"],
+    display: ["빨래"],
+    tags: ["기본회화", "이동"],
+  },
   { patterns: [/병원|약국|약|아파|두통|열/], primary: ["병원", "약"], related: ["아프다", "두통", "열"], display: ["병원"], tags: ["건강"] },
   { patterns: [/머리|배탈|배아파|배가아파|복통|두통|기침|콧물|어지러|멀미|설사|구토|토할|상처|허리|다리|무릎|숨쉬기/], primary: ["아프다", "병원"], related: ["약국", "의사", "약", "도와주세요"], display: ["건강"], tags: ["건강"] },
   { patterns: [/티셔츠|셔츠|바지|치마|원피스|드레스|자켓|재킷|점퍼|속옷|양말|신발|모자|우산|수영복/], primary: ["옷"], related: ["사이즈", "색", "보여주세요"], display: ["옷"], tags: ["쇼핑"] },
@@ -1159,9 +1195,9 @@ const QUERY_ALIASES = [
   },
   {
     matches: ["시끄럽다", "시끄러워", "시끄러워요", "소음", "너무시끄러워", "너무시끄러워요", "조용한방", "조용하다", "조용해", "조용해요"],
-    primary: ["소음", "시끄럽다", "조용한 방"],
-    related: ["방이 시끄러워요", "조용한 방 있나요?", "조용한 방으로 부탁해요", "소음 없는 방"],
-    display: ["소음", "조용한 방"],
+    primary: ["시끄럽다", "소음"],
+    related: ["시끄러워요", "방이 시끄러워요", "이 방은 너무 시끄러워요", "조용한 방 있나요?"],
+    display: ["시끄럽다", "소음"],
     tags: ["이동", "기본회화"],
   },
   {
@@ -1212,7 +1248,7 @@ const QUERY_ALIASES = [
   {
     matches: ["현금인출기", "atm", "atm기", "현금뽑는기계"],
     primary: ["ATM", "현금인출기"],
-    related: ["ATM이 어디예요?", "현금 뽑고 싶어요", "ATM으로 가 주세요"],
+    related: ["ATM이 어디예요?", "현금 뽑고 싶어요", "여기서 ATM까지 멀어요?"],
     display: ["ATM"],
     tags: ["이동", "쇼핑"],
   },
@@ -1308,56 +1344,88 @@ const QUERY_ALIASES = [
     tags: ["기본회화", "이동"],
   },
   {
-    matches: [
-      "컴퓨터",
-      "컴퓨터가안돼요",
-      "컴퓨터안돼",
-      "노트북",
-      "노트북이안켜져요",
-      "잘하고있어",
-      "잘하고있어요",
-      "담배피우다",
-      "담배피워도돼요",
-      "흡연실",
-      "이쁘다",
-      "예쁘다",
-      "예뻐요",
-      "동전",
-      "잔돈",
-      "거스름돈",
-      "주식",
-      "주식시장",
-      "옷이줄었다",
-      "옷줄었다",
-      "더워",
-      "더워요",
-      "깍다",
-      "깎다",
-      "완성",
-      "완료",
-      "한가하다",
-      "한가해요",
-      "큰일난다",
-      "큰일났어요",
-      "큰일",
-    ],
-    primary: ["컴퓨터", "담배", "예쁘다", "동전", "주식", "옷", "덥다", "깎다", "완성", "한가하다", "큰일"],
-    related: [
-      "컴퓨터가 안 돼요",
-      "잘하고 있어요",
-      "담배 피워도 돼요?",
-      "예뻐요",
-      "동전 있어요?",
-      "주식을 사요",
-      "옷이 줄었어요",
-      "오늘 너무 더워요",
-      "깎아주세요",
-      "완성됐어요",
-      "지금 한가해요?",
-      "큰일 났어요",
-    ],
-    display: ["컴퓨터", "담배", "예쁘다", "동전", "주식", "완성", "큰일"],
-    tags: ["기본회화", "쇼핑", "이동", "일터"],
+    matches: ["컴퓨터", "컴퓨터가안돼요", "컴퓨터안돼", "노트북", "노트북이안켜져요"],
+    primary: ["컴퓨터"],
+    related: ["컴퓨터가 안 돼요", "노트북이 안 켜져요", "컴퓨터를 확인해 주세요"],
+    display: ["컴퓨터"],
+    tags: ["기본회화", "일터"],
+  },
+  {
+    matches: ["잘하고있어", "잘하고있어요"],
+    primary: ["잘하다"],
+    related: ["잘하고 있어요", "잘했어요", "대단해요"],
+    display: ["잘하다"],
+    tags: ["기본회화"],
+  },
+  {
+    matches: ["담배피우다", "담배피워도돼요", "흡연실"],
+    primary: ["담배", "담배 피우다"],
+    related: ["담배 피워도 돼요?", "흡연실이 어디예요?", "여기서 담배 피우면 안 돼요?"],
+    display: ["담배"],
+    tags: ["기본회화", "이동"],
+  },
+  {
+    matches: ["이쁘다", "예쁘다", "예뻐요"],
+    primary: ["예쁘다"],
+    related: ["예뻐요", "정말 예뻐요", "귀여워요"],
+    display: ["예쁘다"],
+    tags: ["기본회화", "쇼핑"],
+  },
+  {
+    matches: ["동전", "잔돈", "거스름돈"],
+    primary: ["동전", "잔돈"],
+    related: ["동전 있어요?", "거스름돈 주세요", "잔돈 있어요?"],
+    display: ["동전"],
+    tags: ["기본회화", "쇼핑"],
+  },
+  {
+    matches: ["주식", "주식시장"],
+    primary: ["주식"],
+    related: ["주식을 사요", "저는 주식에 투자해요", "요즘 주식이 내려가요"],
+    display: ["주식"],
+    tags: ["기본회화", "쇼핑"],
+  },
+  {
+    matches: ["옷이줄었다", "옷줄었다"],
+    primary: ["옷", "줄다"],
+    related: ["옷이 줄었어요", "세탁하니까 옷이 줄었어요", "이 옷이 작아졌어요"],
+    display: ["옷"],
+    tags: ["기본회화", "쇼핑"],
+  },
+  {
+    matches: ["더워", "더워요"],
+    primary: ["덥다"],
+    related: ["더워요", "오늘 너무 더워요", "이 방은 너무 더워요"],
+    display: ["덥다"],
+    tags: ["기본회화", "이동"],
+  },
+  {
+    matches: ["깍다", "깎다"],
+    primary: ["깎다"],
+    related: ["깎아주세요", "조금만 더 깎아 주세요", "현금으로 하면 깎아줄 수 있어요?"],
+    display: ["깎다"],
+    tags: ["쇼핑"],
+  },
+  {
+    matches: ["완성", "완료"],
+    primary: ["완성"],
+    related: ["완성됐어요", "다 끝났어요", "거의 다 됐어요"],
+    display: ["완성"],
+    tags: ["기본회화", "일터"],
+  },
+  {
+    matches: ["한가하다", "한가해요"],
+    primary: ["한가하다"],
+    related: ["지금 한가해요?", "지금 안 바빠요", "지금 바빠요"],
+    display: ["한가하다"],
+    tags: ["기본회화"],
+  },
+  {
+    matches: ["큰일난다", "큰일났어요", "큰일"],
+    primary: ["큰일"],
+    related: ["큰일 났어요", "이거 큰일이에요", "생각보다 심각해요"],
+    display: ["큰일"],
+    tags: ["기본회화"],
   },
   {
     matches: ["얼마에요", "얼마예요", "가격", "요금", "비용", "얼마", "깎아주세요", "할인", "비싸요", "싸요"],
@@ -1547,7 +1615,7 @@ const PREDICATE_QUERY_VARIANTS = {
   "피다": ["피워요", "담배 피워요"],
   "맵다": ["매워요", "안 맵게 해 주세요", "덜 맵게 해 주세요"],
   "달다": ["달아요", "이 과일 달아요?"],
-  "따뜻하다": ["따뜻해요", "따뜻한 물"],
+  "따뜻하다": ["따뜻해요"],
   "어렵다": ["어려워요", "어려워요?"],
   "춥다": ["추워요", "너무 추워요"],
   "좋아": ["좋아요", "좋아해요"],
@@ -1560,7 +1628,44 @@ const PREDICATE_QUERY_VARIANTS = {
   "어느": ["어느 거예요?", "어느 쪽이에요?"],
   "늦어요": ["늦었어요", "조금 늦어요"],
   "쉬다": ["쉬어요", "쉴게요", "쉬고 싶어요"],
+  "사다": ["사요", "사고 싶어요", "어디서 사요?"],
+  "공부하다": ["공부해요", "태국어 공부하고 있어요", "배워요"],
+  "언어": ["무슨 언어예요?", "한국어", "영어"],
+  "위험": ["위험해요", "위험하니까 조심하세요"],
+  "시끄럽다": ["시끄러워요", "방이 시끄러워요", "이 방은 너무 시끄러워요"],
+  "몇시": ["몇 시", "지금 몇 시예요?", "현재 시간"],
+  "몇시야": ["몇 시", "지금 몇 시예요?", "현재 시간"],
+  "현금인출기": ["atm", "atm이 어디예요?", "현금 뽑고 싶어요"],
+  "세탁소": ["세탁소가 어디예요?", "빨래방이 어디예요?", "빨래 맡기고 싶어요"],
 };
+
+function isLaundryShopOrMachineQuery(text) {
+  return /(세탁소|빨래방|코인세탁|세탁기|건조기)/.test(normalizeText(text));
+}
+
+function isGenericLaundryQuery(text) {
+  const normalized = normalizeText(text);
+  if (!normalized || isLaundryShopOrMachineQuery(normalized)) return false;
+  return normalized === "빨래" || normalized === "세탁" || /빨래해|세탁해|빨래맡기|세탁맡기|세탁실|세제/.test(normalized);
+}
+
+function expandLaundryVariants(item) {
+  const normalized = normalizeText(item);
+  if (!normalized) return [];
+
+  const variants = [];
+  if (normalized === "세탁") variants.push("빨래");
+  if (normalized === "빨래") variants.push("세탁");
+  if (/세탁해주세요/.test(normalized)) variants.push(normalized.replace(/세탁/g, "빨래"));
+  if (/빨래해주세요/.test(normalized)) variants.push(normalized.replace(/빨래/g, "세탁"));
+  if (/세탁맡기/.test(normalized)) variants.push(normalized.replace(/세탁/g, "빨래"));
+  if (/빨래맡기/.test(normalized)) variants.push(normalized.replace(/빨래/g, "세탁"));
+  return variants;
+}
+
+function isAtmSpecificQuery(text) {
+  return /atm|현금인출기|현금\s*뽑는\s*기계/i.test(normalizeText(text));
+}
 
 const searchIndexCache = new WeakMap();
 const searchRuntimeCache = new WeakMap();
@@ -2025,15 +2130,20 @@ function expandQueryVariants(query, rawTokens = []) {
         variants.push(`${stem}해`, `${stem}해요`, `${stem}합니다`, `${stem}했어요`);
       }
     }
-    if (item.includes("세탁")) variants.push(item.replace(/세탁/g, "빨래"));
-    if (item.includes("빨래")) variants.push(item.replace(/빨래/g, "세탁"));
+    variants.push(...expandLaundryVariants(item));
     if (item.includes("주스")) variants.push(item.replace(/주스/g, "쥬스"));
     if (item.includes("먹으로")) variants.push(item.replace(/먹으로/g, "먹으러"));
     if (/급해|급해요|급합니다|급한데|급하니까/.test(item)) {
       variants.push("급하다", "급해요", "빨리", "서둘러");
     }
-    if (/빨래|세탁/.test(item)) {
-      variants.push("세탁기", "세탁실", "건조기", "세제");
+    if (isGenericLaundryQuery(item)) {
+      variants.push("빨래", "세탁", "세탁실", "세제", "빨래 맡기고 싶어요");
+    }
+    if (/세탁소|빨래방|코인세탁/.test(item)) {
+      variants.push("세탁소", "빨래방", "세탁소가 어디예요?", "빨래방이 어디예요?", "빨래 맡기고 싶어요");
+    }
+    if (/세탁기|건조기/.test(item)) {
+      variants.push("세탁기", "건조기", "세탁기 어디에요?", "건조기 있어요?", "세탁기 쓰고 싶어요");
     }
     if (/주스|쥬스/.test(item)) {
       variants.push("음료", "과일", "물");
@@ -2041,7 +2151,7 @@ function expandQueryVariants(query, rawTokens = []) {
     if (machineNoiseQuery && /시끄럽|소음/.test(item)) {
       variants.push("기계", "기계 소음", "기계가 너무 시끄러워요", "기계 소음이 심해요", "기계를 확인해 주세요");
     } else if (/시끄럽|소음/.test(item)) {
-      variants.push("소음", "방이 시끄러워요", "조용한 방", "조용한 방 있나요");
+      variants.push("시끄러워요", "소음", "방이 시끄러워요", "이 방은 너무 시끄러워요");
     }
     if (/조용하/.test(item)) {
       variants.push("조용한 방", "소음 없는 방", "방");
@@ -2110,7 +2220,9 @@ function expandQueryVariants(query, rawTokens = []) {
     if (/예쁘|이쁘|예뻐|이뻐|귀엽|멋있|잘생겼/.test(item)) {
       variants.push("예쁘다", "예뻐요", "정말 예뻐요", "귀여워요", "멋있어요", "잘생겼어요");
     }
-    if (/동전|잔돈|거스름|지폐|현금|지갑/.test(item)) {
+    if (isAtmSpecificQuery(item)) {
+      variants.push("atm", "atm이 어디예요?", "현금 뽑고 싶어요");
+    } else if (/동전|잔돈|거스름|지폐|현금|지갑/.test(item)) {
       variants.push("동전", "잔돈", "현금", "지폐", "동전 있어요?", "잔돈 있어요?", "거스름돈 주세요", "현금 돼요?");
     }
     if (/주식|주가|주식시장|stock|투자|은행|계좌/.test(item)) {
@@ -2306,9 +2418,10 @@ function buildSearchIndex(entry) {
   const thaiScript = compactText(getThaiScriptText(entry));
   const note = compactText(entry.note);
   const keywords = unique((entry.keywords || []).map((item) => compactText(item)));
-  const coreTokens = unique(
-    [...tokenize(entry.korean), ...tokenize(entry.thai), ...tokenize(entry.thaiScript)].map((item) => compactText(item))
-  );
+  const koreanTokens = unique(tokenize(entry.korean).map((item) => compactText(item)));
+  const thaiTokens = unique(tokenize(entry.thai).map((item) => compactText(item)));
+  const thaiScriptTokens = unique(tokenize(getThaiScriptText(entry)).map((item) => compactText(item)));
+  const coreTokens = unique([...koreanTokens, ...thaiTokens, ...thaiScriptTokens]);
   const tokens = unique(
     [
       ...coreTokens,
@@ -2316,7 +2429,7 @@ function buildSearchIndex(entry) {
       ...(entry.keywords || []),
     ].map((item) => compactText(item))
   );
-  const index = { korean, thai, thaiScript, note, keywords, tokens, coreTokens };
+  const index = { korean, thai, thaiScript, note, keywords, tokens, coreTokens, koreanTokens, thaiTokens, thaiScriptTokens };
   searchIndexCache.set(entry, index);
   return index;
 }
@@ -2701,15 +2814,23 @@ function parseTimeQuery(query) {
 
   let hour = null;
   let minute = 0;
+  let usedHalf = false;
   let matched = body.match(/^(\d{1,2}):(\d{2})$/);
   if (matched) {
     hour = Number(matched[1]);
     minute = Number(matched[2]);
   } else {
-    matched = body.match(/^(\d{1,2})\s*시(?:\s*(\d{1,2})\s*분)?$/);
-    if (!matched) return null;
-    hour = Number(matched[1]);
-    minute = matched[2] ? Number(matched[2]) : 0;
+    matched = body.match(/^(\d{1,2})\s*시\s*반$/);
+    if (matched) {
+      hour = Number(matched[1]);
+      minute = 30;
+      usedHalf = true;
+    } else {
+      matched = body.match(/^(\d{1,2})\s*시(?:\s*(\d{1,2})\s*분)?$/);
+      if (!matched) return null;
+      hour = Number(matched[1]);
+      minute = matched[2] ? Number(matched[2]) : 0;
+    }
   }
 
   if (!Number.isInteger(hour) || !Number.isInteger(minute) || minute < 0 || minute > 59) return null;
@@ -2735,15 +2856,19 @@ function parseTimeQuery(query) {
   const digital = `${String(hour24).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
   const thaiDigital = toThaiNumeralDigits(digital);
   const canonicalKorean = `${meridiemWord ? `${meridiemWord.korean} ` : ""}${displayHour}시${minute ? ` ${minute}분` : ""}`;
+  const halfKorean = minute === 30 ? `${meridiemWord ? `${meridiemWord.korean} ` : ""}${displayHour}시 반` : "";
   const extraKeywords = unique([
     query,
     extracted,
     canonicalKorean,
     canonicalKorean.replace(/\s+/g, ""),
+    halfKorean,
+    halfKorean.replace(/\s+/g, ""),
     digital,
     thaiDigital,
     `${displayHour}시`,
     minute ? `${minute}분` : "",
+    usedHalf ? `${displayHour}시반` : "",
     "시간",
   ]);
 
@@ -2756,6 +2881,8 @@ function parseTimeQuery(query) {
     phraseLatin,
     phraseKo,
     minute,
+    usedHalf,
+    halfKorean,
     keywords: extraKeywords,
   };
 }
@@ -2860,7 +2987,7 @@ function buildGeneratedTimeEntries(query) {
           sheet: "시간 변환",
           thai: `${parsed.phraseKo} (반)`,
           thaiScript: `${parsed.phraseScript}`,
-          korean: `${parsed.canonicalKorean} 반`,
+          korean: parsed.halfKorean || `${parsed.canonicalKorean} 반`,
           note: "반 시각으로 기억하기 쉽게 한 번 더 보여줍니다",
           tags: ["숫자·시간"],
           keywords: [...parsed.keywords, "반"],
@@ -3101,6 +3228,7 @@ function buildSearchProfile(query, entries = []) {
     (intentHints.avoidTags || []).filter((tag) => tag && !preferredTags.includes(tag))
   );
   const aliasTexts = unique([compact, ...expandedCompacts]);
+  const endingTexts = unique([compact, ...rawTokens.map((item) => compactText(item)).filter(Boolean)]);
   const primaryTerms = [...rawTokens, ...expandedVariants];
   const relatedTerms = [];
   const displayTerms = [];
@@ -3141,7 +3269,7 @@ function buildSearchProfile(query, entries = []) {
   });
 
   QUERY_ENDINGS.forEach((rule) => {
-    if (aliasTexts.some((text) => text.endsWith(compactText(rule.suffix)))) {
+    if (endingTexts.some((text) => text.endsWith(compactText(rule.suffix)))) {
       primaryTerms.push(...(rule.primary || []));
       relatedTerms.push(...(rule.related || []));
       displayTerms.push(...(rule.display || []));
@@ -3180,6 +3308,8 @@ function buildSearchProfile(query, entries = []) {
   ]);
   const filteredPrimaryCompacts = primaryCompacts.filter((item) => !blockedTerms.has(item));
   const filteredRelatedCompacts = relatedCompacts.filter((item) => !blockedTerms.has(item));
+  const explicitRequestQuery = /(?:주세요|주세여|부탁|있어요|있나요|필요해요|없어요|없나요|어디예요|어디에요|어디야)/.test(compact);
+  const genericActionTerms = new Set(["주세요", "부탁", "있어요", "있나요", "필요해요"]);
   const objectTerms = unique(
     [...(intentHints.objectTerms || []), ...compactPhraseRoots]
       .map((item) => compactText(item))
@@ -3191,12 +3321,14 @@ function buildSearchProfile(query, entries = []) {
       .map((item) => compactText(item))
       .filter(Boolean)
       .filter((item) => !blockedTerms.has(item))
+      .filter((item) => explicitRequestQuery || !genericActionTerms.has(item))
   );
   const templateTerms = unique(
     (intentHints.templateTerms || [])
       .map((item) => compactText(item))
       .filter(Boolean)
       .filter((item) => !blockedTerms.has(item))
+      .filter((item) => explicitRequestQuery || !genericActionTerms.has(item))
   ).slice(0, 18);
   const rawAnchorTerms = unique(rawTokens.map((item) => compactText(item)).filter(isStrongAnchorTerm));
   const intentAnchorTerms = unique(
@@ -3259,6 +3391,13 @@ function matchesExactCoreField(index, term) {
     return true;
   }
   return index.coreTokens.some((token) => token === term);
+}
+
+function getExactFieldPriority(index, term) {
+  if (!term) return 0;
+  if (index.korean === term) return 2;
+  if (index.koreanTokens.includes(term)) return 1;
+  return 0;
 }
 
 function matchesCoreField(index, term) {
@@ -3529,6 +3668,11 @@ function scoreEntry(entry, searchProfile, kind) {
   };
 }
 
+function isGenericWhereOnlyQuery(searchProfile) {
+  if (!searchProfile?.query) return false;
+  return ["어디", "어디예요", "어디에요", "어디야"].includes(searchProfile.compact);
+}
+
 function getVocabResults(entries, searchProfile) {
   const candidateEntries = collectCandidateEntries(entries, searchProfile);
   const ranked = candidateEntries
@@ -3566,20 +3710,22 @@ function getVocabResults(entries, searchProfile) {
       return left.entry.korean.localeCompare(right.entry.korean, "ko");
     });
   const curatedFocused = ranked.filter(
-    (item) =>
-      item.entry.source !== "generated-bulk" &&
-      (item.objectHits.length || item.templateHits.length || item.match.directHits >= 1)
+      (item) =>
+        item.entry.source !== "generated-bulk" &&
+        (item.objectHits.length || item.templateHits.length || item.match.directHits >= 1)
   );
+  const genericWhereOnlyQuery = isGenericWhereOnlyQuery(searchProfile);
   const sourceFiltered =
-    curatedFocused.length && (searchProfile.objectTerms.length || searchProfile.anchorTerms.length)
+    genericWhereOnlyQuery
+      ? ranked.filter((item) => item.entry.source !== "generated-bulk")
+      : curatedFocused.length && (searchProfile.objectTerms.length || searchProfile.anchorTerms.length)
       ? ranked.filter((item) => item.entry.source !== "generated-bulk")
       : curatedFocused.length
         ? ranked.filter(
             (item) =>
               item.entry.source !== "generated-bulk" ||
               item.templateHits.length ||
-              item.objectHits.length >= 2 ||
-              item.match.directHits >= 2
+              (item.objectHits.length >= 2 && item.match.primaryHits >= 2)
           )
     : ranked;
   const intentFocused =
@@ -3678,8 +3824,8 @@ function getSentenceResults(entries, searchProfile, vocabSeeds) {
         (item) =>
           item.entry.source !== "generated-bulk" ||
           item.templateHits.length ||
-          item.objectHits.length >= 2 ||
-          item.match.directHits >= 2
+          item.exactObjectHits.length ||
+          (item.objectHits.length >= 2 && item.match.primaryHits >= 2)
       )
     : direct;
   const strictExactDirect =
@@ -3699,6 +3845,15 @@ function getSentenceResults(entries, searchProfile, vocabSeeds) {
       : visibleDirect;
   const prioritizedDirect =
     strictExactDirect.length >= 2 ? strictExactDirect : intentFilteredDirect.length >= 3 ? intentFilteredDirect : visibleDirect;
+
+  if (
+    curatedDirect.length >= 2 &&
+    !searchProfile.objectTerms.length &&
+    !searchProfile.actionTerms.length &&
+    !searchProfile.templateTerms.length
+  ) {
+    return curatedDirect.map(({ entry }) => entry).slice(0, RESULT_LIMITS.sentences + 2);
+  }
 
   if (prioritizedDirect.length >= 3) {
     return prioritizedDirect.map(({ entry }) => entry).slice(0, RESULT_LIMITS.sentences + 4);
@@ -3789,11 +3944,78 @@ function uniqueById(entries) {
 function findExactEntry(entries, searchProfile, options = {}) {
   if (!searchProfile.query) return null;
   const includeSupport = options.includeSupport ?? false;
-  const exactCore = entries.find((entry) => {
-    const index = buildSearchIndex(entry);
-    return matchesExactCoreField(index, searchProfile.compact);
-  });
-  if (exactCore || !includeSupport) return exactCore || null;
+  const includeTemplates = options.includeTemplates ?? false;
+  const templateTerms = includeTemplates ? unique((searchProfile.templateTerms || []).slice(0, 8).filter(Boolean)) : [];
+  const templateTermSet = new Set(templateTerms);
+  const exactTerms = unique([searchProfile.compact, ...(searchProfile.directTerms || []), ...templateTerms].filter(Boolean));
+  const exactCoreCandidates = entries
+    .map((entry) => {
+      const index = buildSearchIndex(entry);
+      const matchedTerms = exactTerms.filter((term) => matchesExactCoreField(index, term));
+      if (!matchedTerms.length) return null;
+      const exactFieldTerms = matchedTerms.filter((term) => getExactFieldPriority(index, term) > 0);
+      const compactFieldPriority = getExactFieldPriority(index, searchProfile.compact);
+      const templateFieldPriority = Math.max(
+        0,
+        ...matchedTerms.filter((term) => templateTermSet.has(term)).map((term) => getExactFieldPriority(index, term))
+      );
+      const bestFieldPriority = Math.max(0, ...matchedTerms.map((term) => getExactFieldPriority(index, term)));
+      return {
+        entry,
+        matchedTerms,
+        exactFieldTerms,
+        compactFieldPriority,
+        templateFieldPriority,
+        compactExactField: compactFieldPriority >= 2,
+        templateExactField: templateFieldPriority >= 2,
+        intentFieldPriority: Math.max(compactFieldPriority, templateFieldPriority),
+        bestFieldPriority,
+        koreanContainsCompact: Boolean(searchProfile.compact && index.korean.includes(searchProfile.compact)),
+      };
+    })
+    .filter(Boolean)
+    .sort((left, right) => {
+      if (left.compactExactField !== right.compactExactField) {
+        return Number(right.compactExactField) - Number(left.compactExactField);
+      }
+      if (left.templateExactField !== right.templateExactField) {
+        return Number(right.templateExactField) - Number(left.templateExactField);
+      }
+      if (left.intentFieldPriority !== right.intentFieldPriority) {
+        return right.intentFieldPriority - left.intentFieldPriority;
+      }
+      if (left.templateFieldPriority !== right.templateFieldPriority) {
+        return right.templateFieldPriority - left.templateFieldPriority;
+      }
+      if (left.compactFieldPriority !== right.compactFieldPriority) {
+        return right.compactFieldPriority - left.compactFieldPriority;
+      }
+      if (left.bestFieldPriority !== right.bestFieldPriority) {
+        return right.bestFieldPriority - left.bestFieldPriority;
+      }
+
+      if ((left.entry.source === "generated-bulk") !== (right.entry.source === "generated-bulk")) {
+        return Number(left.entry.source === "generated-bulk") - Number(right.entry.source === "generated-bulk");
+      }
+
+      const leftCompactMatch = left.matchedTerms.includes(searchProfile.compact);
+      const rightCompactMatch = right.matchedTerms.includes(searchProfile.compact);
+      if (leftCompactMatch !== rightCompactMatch) return Number(rightCompactMatch) - Number(leftCompactMatch);
+
+      if (left.koreanContainsCompact !== right.koreanContainsCompact) {
+        return Number(right.koreanContainsCompact) - Number(left.koreanContainsCompact);
+      }
+
+      const leftLongest = Math.max(...left.matchedTerms.map((term) => term.length));
+      const rightLongest = Math.max(...right.matchedTerms.map((term) => term.length));
+      if (leftLongest !== rightLongest) return rightLongest - leftLongest;
+
+      return left.entry.korean.length - right.entry.korean.length;
+    });
+
+  if (exactCoreCandidates.length || !includeSupport) {
+    return exactCoreCandidates.length ? exactCoreCandidates[0].entry : null;
+  }
   return (
     entries.find((entry) => {
       const index = buildSearchIndex(entry);
@@ -3963,7 +4185,7 @@ function isTimeLikeQuery(query) {
 
 function isTimeFocusedEntry(entry) {
   const text = normalizeText(`${entry.korean || ""} ${(entry.keywords || []).join(" ")} ${entry.note || ""}`);
-  return /(?:오전|오후)?\s*\d{1,2}\s*시(?:\s*\d{1,2}\s*분)?|\d{1,2}:\d{2}|몇\s*시|시간|시예요|시에|분/.test(text);
+  return /(?:오전|오후)?\s*\d{1,2}\s*시(?:\s*(?:\d{1,2}\s*분|반))?|\d{1,2}:\d{2}|몇\s*시|시간|시예요|시에|분/.test(text);
 }
 
 function openMenu() {
@@ -4244,7 +4466,7 @@ function render() {
     numberMode || timeQuestionMode || timeMode ? [] : mergedEntries
   );
   const exactVocabMatch = numberMode ? null : findExactEntry(merged.vocab, searchProfile);
-  const exactSentenceMatch = numberMode ? null : findExactEntry(merged.sentences, searchProfile);
+  const exactSentenceMatch = numberMode ? null : findExactEntry(merged.sentences, searchProfile, { includeTemplates: true });
   const actionPhraseMode = !numberMode && isActionPhraseQuery(searchProfile);
   const vocabSource = merged.vocab;
   const sentenceSource = merged.sentences;
@@ -4267,7 +4489,10 @@ function render() {
     ? (numberMode
         ? generated.sentences
         : timeQuestionMode
-          ? generatedTimeQuestion.sentences
+          ? uniqueById([...(exactSentenceMatch ? [exactSentenceMatch] : []), ...generatedTimeQuestion.sentences]).slice(
+              0,
+              RESULT_LIMITS.sentences
+            )
         : timeMode
           ? generatedTime.sentences
         : uniqueById([
