@@ -1,6 +1,6 @@
 ﻿const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
-const APP_VERSION = "20260416m";
+const APP_VERSION = "20260416n";
 
 const baseData = window.BASE_DATA || {
   appTitle: "태국어 포켓북",
@@ -1139,6 +1139,82 @@ const TIME_WORDS = {
   pm: { script: "บ่าย", latin: "bai", ko: "바이", korean: "오후" },
   whatTime: { script: "กี่โมง", latin: "ki mong", ko: "끼 몽" },
 };
+const NUMBER_UNIT_DEFINITIONS = {
+  won: { label: "원", thaiScript: "วอน", thaiKo: "원", english: "won", tags: ["쇼핑", "숫자·시간"] },
+  baht: { label: "바트", thaiScript: "บาท", thaiKo: "밧", english: "baht", tags: ["쇼핑", "숫자·시간"] },
+  pieces: { label: "개", thaiScript: "ชิ้น", thaiKo: "친", english: "pieces", tags: ["쇼핑", "숫자·시간"] },
+  people: { label: "명", thaiScript: "คน", thaiKo: "콘", english: "people", tags: ["숫자·시간"] },
+  floor: { label: "층", thaiScript: "ชั้น", thaiKo: "찬", english: "floor", tags: ["이동", "숫자·시간"] },
+};
+const NUMBER_UNIT_ALIAS_MAP = {
+  원: "won",
+  krw: "won",
+  바트: "baht",
+  บาท: "baht",
+  밧: "baht",
+  개: "pieces",
+  명: "people",
+  층: "floor",
+};
+const DEMONSTRATIVE_DEFINITIONS = [
+  { aliases: ["이거", "이것"], label: "이거", thaiKo: "안 니", thaiScript: "อันนี้" },
+  { aliases: ["그거", "그것"], label: "그거", thaiKo: "안 난", thaiScript: "อันนั้น" },
+  { aliases: ["저거", "저것"], label: "저거", thaiKo: "안 논", thaiScript: "อันโน้น" },
+];
+const ACTION_COMPOSITION_TEMPLATES = {
+  request: {
+    label: "주세요",
+    korean: (objectLabel) => `${objectLabel} 주세요`,
+    thaiKo: (objectThaiKo) => `커 ${objectThaiKo} 너이 캅`,
+    thaiScript: (objectThaiScript) => `ขอ${objectThaiScript}หน่อยครับ`,
+    note: "바로 가리키며 요청할 때",
+  },
+  bring: {
+    label: "가져다 주세요",
+    korean: (objectLabel) => `${objectLabel} 가져다 주세요`,
+    thaiKo: (objectThaiKo) => `츄어이 아오 ${objectThaiKo} 마 하이 너이 캅`,
+    thaiScript: (objectThaiScript) => `ช่วยเอา${objectThaiScript}มาให้หน่อยครับ`,
+    note: "가리킨 물건을 가져다 달라고 할 때",
+  },
+  show: {
+    label: "보여 주세요",
+    korean: (objectLabel) => `${objectLabel} 보여 주세요`,
+    thaiKo: (objectThaiKo) => `커 두 ${objectThaiKo} 너이 캅`,
+    thaiScript: (objectThaiScript) => `ขอดู${objectThaiScript}หน่อยครับ`,
+    note: "가리킨 물건을 보여 달라고 할 때",
+  },
+  change: {
+    label: "로 바꿔 주세요",
+    korean: (objectLabel) => `${objectLabel}로 바꿔 주세요`,
+    thaiKo: (objectThaiKo) => `츄어이 쁠리안 펜 ${objectThaiKo} 하이 너이 캅`,
+    thaiScript: (objectThaiScript) => `ช่วยเปลี่ยนเป็น${objectThaiScript}ให้หน่อยครับ`,
+    note: "가리킨 쪽으로 바꾸고 싶을 때",
+  },
+};
+const ACTION_COMPOSITION_SUFFIXES = {
+  request: ["부탁해요", "주세요", "주세여", "줘요", "줘", "부탁"],
+  bring: [
+    "가져와주세요",
+    "가져다주세요",
+    "가져오세요",
+    "가져와줘요",
+    "가져다줘요",
+    "가져와줘",
+    "가져다줘",
+    "갖고와줘",
+    "들고와줘",
+    "갖다줘",
+    "가져와",
+    "가져다",
+    "가져오",
+    "갖고와",
+    "들고와",
+  ],
+  show: ["보여주세요", "보여주세여", "보여줘요", "보여줘", "보여"],
+  change: ["바꿔주세요", "바꿔줘요", "바꿔줘", "변경해주세요", "변경해줘", "바꾸다", "바꿔", "변경"],
+};
+const ACTION_COMPOSITION_PARTICLE_SUFFIXES = ["으로", "로", "을", "를", "은", "는", "이", "가"];
+const ACTION_COMPOSITION_FILLER_SUFFIXES = ["조금만", "좀만", "쫌", "좀"];
 
 const QUERY_BUNDLES = [
   {
@@ -2902,6 +2978,26 @@ function normalizeNumberQuery(query) {
   return cleaned;
 }
 
+function parseNumberWithUnitQuery(query) {
+  const trimmed = String(query || "").trim();
+  if (!trimmed) return null;
+
+  const cleaned = trimmed.replace(/,/g, "").replace(/\s+/g, "");
+  const matched = cleaned.match(/^([+-]?(?:(?:\d+(?:\.\d+)?)|(?:\.\d+)))(원|krw|바트|บาท|밧|개|명|층)$/i);
+  if (!matched) return null;
+
+  const rawUnit = String(matched[2] || "");
+  const unitKey = NUMBER_UNIT_ALIAS_MAP[rawUnit.toLowerCase()] || NUMBER_UNIT_ALIAS_MAP[rawUnit];
+  if (!unitKey || !NUMBER_UNIT_DEFINITIONS[unitKey]) return null;
+
+  return {
+    query: trimmed,
+    number: matched[1],
+    unitKey,
+    unit: NUMBER_UNIT_DEFINITIONS[unitKey],
+  };
+}
+
 function toThaiNumeralDigits(text) {
   return String(text || "").replace(/\d/g, (digit) => THAI_NUMERAL_DIGITS[Number(digit)]);
 }
@@ -3068,7 +3164,9 @@ function convertNumberToThai(query) {
 }
 
 function buildGeneratedNumberEntries(query) {
-  const converted = convertNumberToThai(query);
+  const unitQuery = parseNumberWithUnitQuery(query);
+  const displayQuery = String(query || "").trim();
+  const converted = convertNumberToThai(unitQuery ? unitQuery.number : query);
   if (!converted) {
     return { vocab: [], sentences: [] };
   }
@@ -3076,35 +3174,59 @@ function buildGeneratedNumberEntries(query) {
   const notePieces = ["한국어식 발음"];
   if (converted.isDecimal) notePieces.push("소수점은 뒤 숫자를 하나씩 읽습니다");
   if (converted.isNegative) notePieces.push("음수는 앞에 ลบ를 붙입니다");
+  if (unitQuery) notePieces.push(`${unitQuery.unit.label} 단위까지 함께 읽습니다`);
+
+  const idSuffix = unitQuery ? `${converted.normalized}-${unitQuery.unitKey}` : converted.normalized;
+  const thaiWithUnitKo = unitQuery ? `${converted.thaiKo} ${unitQuery.unit.thaiKo}`.trim() : converted.thaiKo;
+  const thaiWithUnitScript = unitQuery ? `${converted.thaiScript}${unitQuery.unit.thaiScript}` : converted.thaiScript;
+  const thaiWithUnitLatin = unitQuery ? `${converted.thaiLatin} ${unitQuery.unit.english}` : converted.thaiLatin;
+  const baseTags = unitQuery ? unique(["숫자·시간", ...(unitQuery.unit.tags || [])]) : ["숫자·시간", "쇼핑"];
+  const commonKeywords = unique(
+    [
+      query,
+      displayQuery,
+      converted.normalized,
+      converted.thaiDigits,
+      converted.thaiKo,
+      converted.thaiScript,
+      unitQuery?.unit.label,
+      unitQuery?.unit.english,
+      unitQuery?.unit.thaiKo,
+      unitQuery?.unit.thaiScript,
+      "숫자",
+      "가격",
+      "수량",
+    ].filter(Boolean)
+  );
 
   const baseEntry = hydrateEntry(
     {
-      id: `generated-number-read-${converted.normalized}`,
+      id: `generated-number-read-${idSuffix}`,
       kind: "vocab",
       source: "generated",
       sheet: "숫자 변환",
-      thai: converted.thaiKo,
-      thaiScript: converted.thaiScript,
-      korean: query,
-      note: `${notePieces.join(" · ")} · 영문 표기: ${converted.thaiLatin}`,
-      tags: ["숫자·시간", "쇼핑"],
-      keywords: [query, converted.normalized, converted.thaiDigits, converted.thaiKo, "숫자", "가격", "수량"],
+      thai: thaiWithUnitKo,
+      thaiScript: thaiWithUnitScript,
+      korean: displayQuery,
+      note: `${notePieces.join(" · ")} · 영문 표기: ${thaiWithUnitLatin}`,
+      tags: baseTags,
+      keywords: commonKeywords,
     },
     "vocab"
   );
 
   const digitEntry = hydrateEntry(
     {
-      id: `generated-number-digits-${converted.normalized}`,
+      id: `generated-number-digits-${idSuffix}`,
       kind: "vocab",
       source: "generated",
       sheet: "숫자 변환",
       thai: converted.thaiDigits,
       thaiScript: converted.thaiDigits,
-      korean: `${query} 태국 숫자`,
+      korean: `${displayQuery} 태국 숫자`,
       note: "태국 숫자 표기",
       tags: ["숫자·시간"],
-      keywords: [query, converted.normalized, converted.thaiDigits, "태국 숫자", "숫자 표기"],
+      keywords: [...commonKeywords, "태국 숫자", "숫자 표기"],
     },
     "vocab"
   );
@@ -3112,39 +3234,321 @@ function buildGeneratedNumberEntries(query) {
   const sentenceEntries = [
     hydrateEntry(
       {
-        id: `generated-number-say-${converted.normalized}`,
+        id: `generated-number-say-${idSuffix}`,
         kind: "sentence",
         source: "generated",
         sheet: "숫자 변환",
-        thai: converted.thaiKo,
-        thaiScript: converted.thaiScript,
-        korean: `${query} 읽기`,
-        note: `숫자를 그대로 읽을 때 · 영문 표기: ${converted.thaiLatin}`,
-        tags: ["숫자·시간"],
-        keywords: [query, converted.normalized, converted.thaiDigits, converted.thaiKo, "숫자 읽기"],
+        thai: thaiWithUnitKo,
+        thaiScript: thaiWithUnitScript,
+        korean: `${displayQuery} 읽기`,
+        note: `숫자를 그대로 읽을 때 · 영문 표기: ${thaiWithUnitLatin}`,
+        tags: unique(["숫자·시간", ...(unitQuery?.unit.tags || [])]),
+        keywords: [...commonKeywords, "숫자 읽기"],
       },
       "sentence"
     ),
-    hydrateEntry(
-      {
-        id: `generated-number-price-${converted.normalized}`,
-        kind: "sentence",
-        source: "generated",
-        sheet: "숫자 변환",
-        thai: `${converted.thaiKo} 밧`,
-        thaiScript: `${converted.thaiScript}บาท`,
-        korean: `${query} 바트`,
-        note: `가격으로 바로 보여주기 · 영문 표기: ${converted.thaiLatin} baht`,
-        tags: ["쇼핑", "숫자·시간"],
-        keywords: [query, converted.normalized, converted.thaiDigits, converted.thaiKo, "바트", "가격", "금액"],
-      },
-      "sentence"
-    ),
+    unitQuery
+      ? hydrateEntry(
+          {
+            id: `generated-number-unit-${idSuffix}`,
+            kind: "sentence",
+            source: "generated",
+            sheet: "숫자 변환",
+            thai: thaiWithUnitKo,
+            thaiScript: thaiWithUnitScript,
+            korean: `${displayQuery} 표시`,
+            note: `단위까지 같이 보여주기 · 영문 표기: ${thaiWithUnitLatin}`,
+            tags: unique(["숫자·시간", ...(unitQuery.unit.tags || [])]),
+            keywords: [...commonKeywords, `${unitQuery.unit.label} 단위`, "금액", "수량"],
+          },
+          "sentence"
+        )
+      : hydrateEntry(
+          {
+            id: `generated-number-price-${idSuffix}`,
+            kind: "sentence",
+            source: "generated",
+            sheet: "숫자 변환",
+            thai: `${converted.thaiKo} 밧`,
+            thaiScript: `${converted.thaiScript}บาท`,
+            korean: `${displayQuery} 바트`,
+            note: `가격으로 바로 보여주기 · 영문 표기: ${converted.thaiLatin} baht`,
+            tags: ["쇼핑", "숫자·시간"],
+            keywords: [...commonKeywords, "바트", "가격", "금액"],
+          },
+          "sentence"
+        ),
   ];
 
   return {
     vocab: [baseEntry, digitEntry],
     sentences: sentenceEntries,
+  };
+}
+
+function getActionCompositionSuffixes(actionId) {
+  return [...(ACTION_COMPOSITION_SUFFIXES[actionId] || [])].sort((left, right) => right.length - left.length);
+}
+
+function detectComposableActionId(text) {
+  const compact = compactText(text);
+  if (!compact) return "";
+
+  return ["bring", "show", "change", "request"].find((actionId) =>
+    getActionCompositionSuffixes(actionId).some((suffix) => compact.endsWith(suffix))
+  ) || "";
+}
+
+function findDemonstrativeDefinition(text) {
+  const compact = compactText(text);
+  if (!compact) return null;
+
+  return (
+    DEMONSTRATIVE_DEFINITIONS.find((item) =>
+      item.aliases.some((alias) => compact.startsWith(compactText(alias)))
+    ) || null
+  );
+}
+
+function trimComposableCompact(compact) {
+  let current = compactText(compact);
+  let updated = true;
+
+  while (updated && current) {
+    updated = false;
+
+    ACTION_COMPOSITION_FILLER_SUFFIXES.forEach((suffix) => {
+      if (current.endsWith(suffix) && current.length > suffix.length) {
+        current = current.slice(0, -suffix.length);
+        updated = true;
+      }
+    });
+
+    ACTION_COMPOSITION_PARTICLE_SUFFIXES.forEach((suffix) => {
+      if (current.endsWith(suffix) && current.length > suffix.length) {
+        current = current.slice(0, -suffix.length);
+        updated = true;
+      }
+    });
+  }
+
+  return current;
+}
+
+function extractComposableObjectCompacts(query, actionId) {
+  const compact = compactText(query);
+  if (!compact) return [];
+
+  const suffix = getActionCompositionSuffixes(actionId).find((item) => compact.endsWith(item)) || "";
+  const stripped = suffix ? compact.slice(0, -suffix.length) : compact;
+  const variants = unique([
+    trimComposableCompact(stripped),
+    trimComposableCompact(compact),
+  ]).filter(Boolean);
+
+  const demonstrative = findDemonstrativeDefinition(stripped || compact);
+  if (demonstrative) {
+    variants.push(...demonstrative.aliases.map((alias) => compactText(alias)));
+  }
+
+  return unique(variants.filter(Boolean)).sort((left, right) => right.length - left.length);
+}
+
+function getComposableObjectMatchScore(entry, objectCompacts) {
+  if (!entry || entry.kind !== "vocab") return -1;
+  if (isSentenceLikeVocabEntry(entry) || isUtilityLabelVocabEntry(entry)) return -1;
+
+  const index = buildSearchIndex(entry);
+  let best = -1;
+
+  objectCompacts.forEach((term) => {
+    if (!term) return;
+    if (index.korean === term) {
+      best = Math.max(best, 120);
+      return;
+    }
+    if (index.koreanTokens.includes(term)) {
+      best = Math.max(best, 112);
+      return;
+    }
+    if (index.coreTokens.includes(term)) {
+      best = Math.max(best, 106);
+      return;
+    }
+    if (index.korean.startsWith(term)) {
+      best = Math.max(best, 96);
+      return;
+    }
+    if (index.korean.includes(term)) {
+      best = Math.max(best, 90);
+      return;
+    }
+    if (index.keywords.includes(term)) {
+      best = Math.max(best, 82);
+      return;
+    }
+    if (index.tokens.some((token) => token === term)) {
+      best = Math.max(best, 78);
+      return;
+    }
+    if (index.tokens.some((token) => token.startsWith(term) || (term.length >= 3 && token.includes(term)))) {
+      best = Math.max(best, 72);
+    }
+  });
+
+  if (entry.source === "generated-bulk") best -= 45;
+  if (!getThaiScriptText(entry)) best -= 18;
+  return best;
+}
+
+function findComposableObjectEntry(entries, objectCompacts) {
+  if (!objectCompacts.length) return null;
+
+  const ranked = entries
+    .filter((entry) => entry.kind === "vocab" && matchesScenario(entry))
+    .map((entry) => ({
+      entry,
+      score: getComposableObjectMatchScore(entry, objectCompacts),
+      hasThaiScript: Boolean(getThaiScriptText(entry)),
+    }))
+    .filter((item) => item.score >= 72)
+    .sort((left, right) => {
+      if (right.score !== left.score) return right.score - left.score;
+      if (left.hasThaiScript !== right.hasThaiScript) return Number(right.hasThaiScript) - Number(left.hasThaiScript);
+      if (left.entry.korean.length !== right.entry.korean.length) return left.entry.korean.length - right.entry.korean.length;
+      return left.entry.korean.localeCompare(right.entry.korean, "ko");
+    });
+
+  return ranked[0]?.entry || null;
+}
+
+function createGeneratedComposedSentence(query, actionId, objectLabel, objectThaiKo, objectThaiScript, tags = [], keywords = []) {
+  const template = ACTION_COMPOSITION_TEMPLATES[actionId];
+  if (!template || !objectLabel || !objectThaiKo || !objectThaiScript) return null;
+
+  return hydrateEntry(
+    {
+      id: `generated-compose-${actionId}-${compactText(query)}-${compactText(objectLabel)}`,
+      kind: "sentence",
+      source: "generated",
+      sheet: "자동 조합",
+      thai: template.thaiKo(objectThaiKo),
+      thaiScript: template.thaiScript(objectThaiScript),
+      korean: template.korean(objectLabel),
+      note: `입력한 표현에서 목적어와 동사를 분리해 자동 조합 · ${template.note}`,
+      tags: unique(["기본회화", ...tags]),
+      keywords: unique([query, objectLabel, ...keywords, template.label, actionId, "자동 조합"]),
+    },
+    "sentence"
+  );
+}
+
+function createGeneratedDemonstrativeVocab(query, demonstrative) {
+  if (!demonstrative) return null;
+
+  return hydrateEntry(
+    {
+      id: `generated-demo-${compactText(query)}-${compactText(demonstrative.label)}`,
+      kind: "vocab",
+      source: "generated",
+      sheet: "자동 조합",
+      thai: demonstrative.thaiKo,
+      thaiScript: demonstrative.thaiScript,
+      korean: demonstrative.label,
+      note: "손으로 가리키는 표현",
+      tags: ["기본회화"],
+      keywords: unique([query, demonstrative.label, ...demonstrative.aliases, "가리키기"]),
+    },
+    "vocab"
+  );
+}
+
+function buildGeneratedComposedEntries(query, searchProfile, vocabEntries) {
+  const trimmedQuery = String(query || "").trim();
+  if (!trimmedQuery) return { vocab: [], sentences: [] };
+
+  const actionId = detectComposableActionId(trimmedQuery);
+  const demonstrative = findDemonstrativeDefinition(trimmedQuery);
+  if (!actionId && !demonstrative) {
+    return { vocab: [], sentences: [], suppressFallbackSentences: false };
+  }
+
+  const vocab = [];
+  const sentences = [];
+
+  if (demonstrative) {
+    const demoVocab = createGeneratedDemonstrativeVocab(trimmedQuery, demonstrative);
+    if (demoVocab) vocab.push(demoVocab);
+  }
+
+  if (!actionId) {
+    if (!demonstrative) return { vocab: [], sentences: [] };
+
+    ["request", "show", "bring"].forEach((defaultActionId) => {
+      const entry = createGeneratedComposedSentence(
+        trimmedQuery,
+        defaultActionId,
+        demonstrative.label,
+        demonstrative.thaiKo,
+        demonstrative.thaiScript,
+        ["기본회화"],
+        demonstrative.aliases
+      );
+      if (entry) sentences.push(entry);
+    });
+
+    return {
+      vocab: uniqueById(vocab),
+      sentences: uniqueById(sentences),
+      suppressFallbackSentences: false,
+    };
+  }
+
+  let objectLabel = "";
+  let objectThaiKo = "";
+  let objectThaiScript = "";
+  let objectTags = [];
+  let objectKeywords = [];
+
+  if (demonstrative) {
+    objectLabel = demonstrative.label;
+    objectThaiKo = demonstrative.thaiKo;
+    objectThaiScript = demonstrative.thaiScript;
+    objectTags = ["기본회화"];
+    objectKeywords = demonstrative.aliases;
+  } else {
+    const objectCompacts = extractComposableObjectCompacts(trimmedQuery, actionId);
+    const objectEntry = findComposableObjectEntry(vocabEntries, objectCompacts);
+    if (!objectEntry) {
+      return {
+        vocab: uniqueById(vocab),
+        sentences: [],
+        suppressFallbackSentences: false,
+      };
+    }
+
+    vocab.push(objectEntry);
+    objectLabel = objectEntry.korean;
+    objectThaiKo = objectEntry.thai;
+    objectThaiScript = getThaiScriptText(objectEntry);
+    objectTags = objectEntry.tags || [];
+    objectKeywords = objectEntry.keywords || [];
+  }
+
+  const composed = createGeneratedComposedSentence(
+    trimmedQuery,
+    actionId,
+    objectLabel,
+    objectThaiKo,
+    objectThaiScript,
+    unique([...objectTags, ...(searchProfile?.tags || [])]),
+    unique([...objectKeywords, ...(searchProfile?.displayTerms || [])])
+  );
+
+  return {
+    vocab: uniqueById(vocab),
+    sentences: composed ? [composed] : [],
+    suppressFallbackSentences: Boolean(demonstrative),
   };
 }
 
@@ -4365,6 +4769,20 @@ function uniqueById(entries) {
   });
 }
 
+function uniqueByMeaning(entries) {
+  const seen = new Set();
+  return entries.filter((entry) => {
+    const meaningKey = [
+      entry.kind || "",
+      compactText(entry.korean),
+      compactText(getThaiScriptText(entry) || entry.thai),
+    ].join("::");
+    if (seen.has(meaningKey)) return false;
+    seen.add(meaningKey);
+    return true;
+  });
+}
+
 function findExactEntry(entries, searchProfile, options = {}) {
   if (!searchProfile.query) return null;
   const includeSupport = options.includeSupport ?? false;
@@ -4958,17 +5376,41 @@ function render() {
   const actionPhraseMode = !numberMode && isActionPhraseQuery(searchProfile);
   const vocabSource = merged.vocab;
   const sentenceSource = merged.sentences;
+  const preliminaryVocabResults =
+    numberMode || timeQuestionMode || timeMode
+      ? []
+      : uniqueById([
+          ...(exactVocabMatch ? [exactVocabMatch] : []),
+          ...getVocabResults(vocabSource, searchProfile),
+        ]);
+  const generatedComposed =
+    !numberMode && !timeQuestionMode && !timeMode
+      ? buildGeneratedComposedEntries(state.query, searchProfile, vocabSource)
+      : { vocab: [], sentences: [], suppressFallbackSentences: false };
+  const composedMode = Boolean(generatedComposed.vocab.length || generatedComposed.sentences.length);
+  const refinedVocabResults = composedMode
+    ? preliminaryVocabResults.filter((entry) => entry.source !== "generated-bulk")
+    : preliminaryVocabResults;
+  const refinedSentenceCandidates =
+    generatedComposed.suppressFallbackSentences
+      ? []
+      : composedMode && !numberMode && !timeQuestionMode && !timeMode
+      ? getSentenceResults(sentenceSource, searchProfile, uniqueByMeaning([...generatedComposed.vocab, ...refinedVocabResults])).filter(
+          (entry) => entry.source !== "generated-bulk"
+        )
+      : !numberMode && !timeQuestionMode && !timeMode
+        ? getSentenceResults(sentenceSource, searchProfile, uniqueByMeaning([...generatedComposed.vocab, ...refinedVocabResults]))
+        : [];
   const allVocabResults = numberMode
     ? generated.vocab
     : timeQuestionMode
       ? generatedTimeQuestion.vocab
     : timeMode
       ? generatedTime.vocab
-      : uniqueById([
-          ...(exactVocabMatch ? [exactVocabMatch] : []),
-          ...generated.vocab,
-          ...getVocabResults(vocabSource, searchProfile),
-        ]);
+      : uniqueByMeaning(uniqueById([
+          ...generatedComposed.vocab,
+          ...refinedVocabResults,
+        ]));
   const vocabSeeds = allVocabResults;
   const vocabResults = state.query
     ? allVocabResults.slice(0, RESULT_LIMITS.vocab)
@@ -4983,11 +5425,12 @@ function render() {
             )
         : timeMode
           ? generatedTime.sentences
-        : uniqueById([
+        : uniqueByMeaning(uniqueById([
             ...(exactSentenceMatch ? [exactSentenceMatch] : []),
             ...generated.sentences,
-            ...getSentenceResults(sentenceSource, searchProfile, vocabSeeds),
-          ]).slice(0, RESULT_LIMITS.sentences))
+            ...generatedComposed.sentences,
+            ...refinedSentenceCandidates,
+          ])).slice(0, RESULT_LIMITS.sentences))
     : [];
   const browsing = isBrowsingState();
   const expandedHint =
@@ -5008,7 +5451,9 @@ function render() {
         ? `시간 질문: 단어 ${vocabResults.length}개 · 회화 ${sentenceResults.length}개${expandedHint}`
       : timeMode
         ? `시간 검색: 단어 ${vocabResults.length}개 · 회화 ${sentenceResults.length}개${expandedHint}`
-      : `검색됨: 단어 ${vocabResults.length}개 · 회화 ${sentenceResults.length}개${expandedHint}`;
+      : composedMode
+        ? `검색됨: 단어 ${vocabResults.length}개 · 회화 ${sentenceResults.length}개 · 자동 조합 적용${expandedHint}`
+        : `검색됨: 단어 ${vocabResults.length}개 · 회화 ${sentenceResults.length}개${expandedHint}`;
 
   elements.filterSummary.textContent =
     state.scenario === "all"
@@ -5026,6 +5471,8 @@ function render() {
         ? "현재 시간을 묻는 표현과 기기 기준 현재 시각을 먼저 보여줍니다."
       : timeMode
         ? "검색한 시간을 그대로 변형해서 읽기와 시간 표현을 먼저 보여줍니다."
+      : composedMode
+        ? "핵심 단어를 먼저 잡고, 요청 문장은 자동으로 조합해 맨 위에 올렸습니다."
       : exactSentenceMatch
         ? "핵심 단어를 먼저 보여주고, 아래에 정확히 맞는 회화를 맨 위에 올렸습니다."
       : actionPhraseMode
@@ -5039,6 +5486,8 @@ function render() {
         ? "지금 몇 시인지 묻거나 답할 때 바로 보여줄 수 있게 만들었습니다."
       : timeMode
         ? "검색한 시간 그대로 문장에 넣어서 바로 보여줄 수 있게 만들었습니다."
+      : composedMode
+        ? "입력한 표현에서 목적어와 동사를 나눠 바로 보여줄 문장을 먼저 만들었습니다."
       : "위 단어를 바탕으로 바로 보여주기 좋은 회화만 추렸습니다."
     : "검색어를 넣으면 관련 회화가 나옵니다.";
 
