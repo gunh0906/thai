@@ -7081,11 +7081,13 @@ const LATIN_PRONUNCIATION_OVERRIDES = {
   bpai: "빠이",
   bts: "비티에스",
   chai: "차이",
+  chuea: "츠아",
   dai: "다이",
   duai: "두아이",
   grab: "그랩",
   hongnam: "홍남",
   kap: "캅",
+  khanom: "카놈",
   khrap: "캅",
   khrua: "크루아",
   krub: "캅",
@@ -7100,6 +7102,8 @@ const LATIN_PRONUNCIATION_OVERRIDES = {
   ok: "오케이",
   okay: "오케이",
   pai: "빠이",
+  phan: "판",
+  phrachao: "프라차오",
   phom: "폼",
   pom: "폼",
   sawatdee: "사왓디",
@@ -7409,6 +7413,40 @@ function getDisplayPronunciationText(entry) {
   return normalizePronunciationForDisplay(String(entry?.thai || "").trim());
 }
 
+function isExternalCorpusEntry(entry) {
+  return entry?.source === "external-corpus" || /외부 코퍼스/i.test(String(entry?.sheet || ""));
+}
+
+function getDisplayNoteText(entry) {
+  const raw = String(entry?.note || "").trim();
+  if (!raw) return "";
+
+  const withoutSource = raw.replace(/\s*\|\s*출처\s*[^|]+/gi, "").trim();
+  if (!isExternalCorpusEntry(entry)) {
+    return withoutSource || raw;
+  }
+
+  const sourceText = `${entry?.sheet || ""} ${raw}`;
+  if (/tatoeba|opus/i.test(sourceText)) {
+    return "외부 예문 보강";
+  }
+  if (/wiktionary|kaikki/i.test(sourceText)) {
+    return "외부 사전 보강";
+  }
+
+  const simplified = withoutSource
+    .replace(/Tatoeba English pivot:\s*[^|]+/gi, "")
+    .replace(/Tatoeba direct Korean-Thai sentence pair/gi, "")
+    .replace(/OPUS English pivot:\s*[^|]+/gi, "")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  if (!simplified || /[A-Za-z]{4,}/.test(simplified) || /pivot/i.test(raw)) {
+    return "외부 보강";
+  }
+  return simplified;
+}
+
 function hasNegativeMeaning(text) {
   return /(안|못|없|말고|잘못|틀리|실수|오류|오타|아니)/.test(normalizeText(text));
 }
@@ -7536,10 +7574,11 @@ function createEntryCard(entry, searchProfile = null) {
 
   card.append(korean, thai);
 
-  if (entry.note) {
+  const displayNote = getDisplayNoteText(entry);
+  if (displayNote) {
     const note = document.createElement("p");
     note.className = "entry-note";
-    renderHighlightedText(note, entry.note, searchProfile);
+    renderHighlightedText(note, displayNote, searchProfile);
     card.appendChild(note);
   }
 
