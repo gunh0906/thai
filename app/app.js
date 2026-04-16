@@ -1498,6 +1498,23 @@ const WHAT_QUESTION_SUFFIXES = [
 ];
 const PREDICATE_QUERY_FAMILIES = [
   {
+    id: "unknown",
+    patterns: [/모르다|모른다|몰라|모르겠/],
+    primary: ["모르다", "몰라요", "이해 못하다"],
+    display: ["모르다", "몰라요"],
+    tags: ["기본회화"],
+    vocab: [{ korean: "모르다", thaiKo: "마이 루", thaiScript: "ไม่รู้", note: "알지 못하다 / 모르다" }],
+    genericSentences: [
+      { korean: "몰라요", thaiKo: "마이 루 캅", thaiScript: "ไม่รู้ครับ" },
+      { korean: "잘 몰라요", thaiKo: "양 마이 루 캅", thaiScript: "ยังไม่รู้ครับ" },
+      { korean: "모르겠어요", thaiKo: "양 마이 카오짜이 캅", thaiScript: "ยังไม่เข้าใจครับ" },
+    ],
+    selfSentences: [
+      { korean: "저는 몰라요", thaiKo: "폼 마이 루 캅", thaiScript: "ผมไม่รู้ครับ" },
+      { korean: "저는 잘 몰라요", thaiKo: "폼 양 마이 루 캅", thaiScript: "ผมยังไม่รู้ครับ" },
+    ],
+  },
+  {
     id: "wrong",
     patterns: [/잘못|틀리|실수|오류|오타/],
     primary: ["잘못", "틀리다", "실수"],
@@ -2285,6 +2302,7 @@ const PREDICATE_QUERY_VARIANTS = {
   "중요하다": ["중요해요", "아주 중요해요"],
   "중요하지 않아": ["중요하지 않아요", "안 중요해요"],
   "가능한": ["가능해요", "할 수 있어요", "가능할까요?"],
+  "모르다": ["몰라요", "몰라", "잘 몰라요", "모르겠어요", "모른다"],
   "몰라요": ["모르다", "몰라", "잘 몰라요"],
   "알겠습니다": ["알겠어요", "알았어요"],
   "알겠습니다.": ["알겠어요", "알았어요"],
@@ -2424,9 +2442,15 @@ function expandPredicateInflectionVariants(item) {
 
 const searchIndexCache = new WeakMap();
 const searchRuntimeCache = new WeakMap();
+const searchComputationCache = new Map();
 let searchRuntimeWarmupQueued = false;
 let searchRuntimeWarmupDone = false;
 const hydratedBaseData = createHydratedBaseData();
+const hydratedBaseMergedEntries = [...hydratedBaseData.vocab, ...hydratedBaseData.sentences];
+const mergedEntriesCache = {
+  revision: -1,
+  entries: hydratedBaseMergedEntries,
+};
 
 const state = {
   query: "",
@@ -2445,6 +2469,7 @@ const state = {
     requestId: 0,
     trigger: "manual",
   },
+  customRevision: 0,
   lastSearchContext: null,
 };
 
@@ -2561,6 +2586,16 @@ function normalizeText(text) {
     .replace(/틀린거야/g, "틀리다")
     .replace(/틀린 거예요/g, "틀리다")
     .replace(/틀린 거야/g, "틀리다")
+    .replace(/모릅니다/g, "모르다")
+    .replace(/모른다/g, "모르다")
+    .replace(/모르겠어요/g, "모르다")
+    .replace(/모르겠어/g, "모르다")
+    .replace(/잘몰라요/g, "모르다")
+    .replace(/잘 몰라요/g, "모르다")
+    .replace(/잘몰라/g, "모르다")
+    .replace(/잘 몰라/g, "모르다")
+    .replace(/몰라요/g, "모르다")
+    .replace(/(^|\s)몰라(?=$|\s)/g, "$1모르다")
     .replace(/이쁘/g, "예쁘")
     .replace(/깍/g, "깎")
     .replace(/더워요/g, "덥다")
@@ -3420,6 +3455,9 @@ function loadAiSettings() {
 
 function saveCustomData() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state.custom));
+  state.customRevision += 1;
+  searchComputationCache.clear();
+  mergedEntriesCache.revision = -1;
 }
 
 function saveAiSettings() {
@@ -3446,6 +3484,22 @@ function getMergedData() {
     vocab: [...hydratedBaseData.vocab, ...state.custom.vocab],
     sentences: [...hydratedBaseData.sentences, ...state.custom.sentences],
   };
+}
+
+function getMergedEntries(merged) {
+  if (!state.custom.vocab.length && !state.custom.sentences.length) {
+    return hydratedBaseMergedEntries;
+  }
+  if (mergedEntriesCache.revision === state.customRevision) {
+    return mergedEntriesCache.entries;
+  }
+  mergedEntriesCache.revision = state.customRevision;
+  mergedEntriesCache.entries = [...merged.vocab, ...merged.sentences];
+  return mergedEntriesCache.entries;
+}
+
+function buildSearchComputationCacheKey(query) {
+  return [state.scenario, state.customRevision, compactText(query)].join("||");
 }
 
 function hasConfiguredAiAssist() {
@@ -4295,7 +4349,7 @@ function getMatchedPredicateFamilies(text) {
 }
 
 function hasSelfReferentQuery(text) {
-  return /(?:^|\s)(?:내|제|나의|저의)(?:\s|$)|내가|제가/.test(normalizeText(text));
+  return /(?:^|\s)(?:내|제|나의|저의|나는|저는|난|전)(?:\s|$)|내가|제가/.test(normalizeText(text));
 }
 
 function getDemonstrativeSubjectLabel(demonstrative) {
@@ -4343,6 +4397,8 @@ function getPredicateEntryPriority(entry, query, options = {}) {
   if (/실수|오류|오타/.test(normalizedQuery) && /실수/.test(korean)) score += 220;
   if (/잘못/.test(normalizedQuery) && /잘못/.test(korean)) score += 220;
   if (/틀리/.test(normalizedQuery) && /틀리|틀렸/.test(korean)) score += 220;
+  if (/모르|몰라/.test(normalizedQuery) && /모르|몰라/.test(korean)) score += 260;
+  if (/모르|몰라/.test(normalizedQuery) && /이해합니다|이해해요/.test(korean)) score -= 120;
   if (/맞아|맞다|정답|옳/.test(normalizedQuery) && /맞아|맞다|맞아요/.test(korean)) score += 220;
   if (/괜찮|문제없|이상없|쓸만/.test(normalizedQuery) && /괜찮/.test(korean)) score += 220;
   if (/문제|이상해|이상하다|고장났/.test(normalizedQuery) && /문제|이상/.test(korean)) score += 220;
@@ -4767,7 +4823,21 @@ function findThaiMeaningObjectEntry(entries, query) {
   const compactQuery = compactText(normalizeThaiMeaningQuery(query));
   if (!compactQuery) return null;
 
-  const ranked = entries
+  const seedProfile = {
+    query,
+    compact: compactQuery,
+    queryDirection: "thai",
+    directTerms: [compactQuery],
+    primaryTerms: [compactQuery],
+    relatedTerms: [],
+    objectTerms: [],
+    actionTerms: [],
+    anchorTerms: [compactQuery],
+    templateTerms: [],
+  };
+  const candidateEntries = collectCandidateEntries(entries, seedProfile);
+
+  const ranked = candidateEntries
     .filter((entry) => entry.kind === "vocab" && matchesScenario(entry))
     .map((entry) => ({
       entry,
@@ -5964,6 +6034,14 @@ function scoreEntry(entry, searchProfile, kind) {
     score += kind === "sentence" ? 340 : 210;
   }
   score += getEntrySourceScore(entry, kind);
+  if (/모르|몰라/.test(searchProfile.normalized)) {
+    if (/모르|몰라/.test(index.korean) || /모르|몰라/.test(index.note)) {
+      score += kind === "sentence" ? 240 : 180;
+    }
+    if (/이해합니다|이해해요|이해했어요/.test(entry.korean)) {
+      score -= kind === "sentence" ? 260 : 180;
+    }
+  }
   if (kind === "vocab" && searchProfile.compact) {
     const exactObjectHit = searchProfile.objectTerms.some(
       (term) => index.korean === term || index.tokens.includes(term)
@@ -7200,46 +7278,39 @@ function isBrowsingState() {
   return !state.query;
 }
 
-function render() {
+function computeSearchComputation(query = state.query) {
   const merged = getMergedData();
-  const mergedEntries = !state.query ? [] : [...merged.vocab, ...merged.sentences];
-  const generated = buildGeneratedNumberEntries(state.query);
+  const mergedEntries = query ? getMergedEntries(merged) : [];
+  const generated = buildGeneratedNumberEntries(query);
   const numberMode = generated.vocab.length > 0;
-  const generatedTimeQuestion = !numberMode ? buildGeneratedTimeQuestionEntries(state.query) : { vocab: [], sentences: [] };
+  const generatedTimeQuestion = !numberMode ? buildGeneratedTimeQuestionEntries(query) : { vocab: [], sentences: [] };
   const timeQuestionMode = !numberMode && generatedTimeQuestion.vocab.length > 0;
-  const generatedTime = !numberMode && !timeQuestionMode ? buildGeneratedTimeEntries(state.query) : { vocab: [], sentences: [] };
+  const generatedTime = !numberMode && !timeQuestionMode ? buildGeneratedTimeEntries(query) : { vocab: [], sentences: [] };
   const timeMode = !numberMode && !timeQuestionMode && generatedTime.vocab.length > 0;
-  const searchProfile = buildSearchProfile(
-    state.query,
-    numberMode || timeQuestionMode || timeMode ? [] : mergedEntries
-  );
+  const searchProfile = buildSearchProfile(query, numberMode || timeQuestionMode || timeMode ? [] : mergedEntries);
   const exactVocabMatch = numberMode ? null : findExactEntry(merged.vocab, searchProfile);
   const exactSentenceMatch = numberMode ? null : findExactEntry(merged.sentences, searchProfile, { includeTemplates: true });
-  const actionPhraseMode = !numberMode && isActionPhraseQuery(searchProfile);
   const vocabSource = merged.vocab;
   const sentenceSource = merged.sentences;
   const preliminaryVocabResults =
     numberMode || timeQuestionMode || timeMode
       ? []
-      : uniqueById([
-          ...(exactVocabMatch ? [exactVocabMatch] : []),
-          ...getVocabResults(vocabSource, searchProfile),
-        ]);
+      : uniqueById([...(exactVocabMatch ? [exactVocabMatch] : []), ...getVocabResults(vocabSource, searchProfile)]);
   const generatedComposed =
     !numberMode && !timeQuestionMode && !timeMode
-      ? buildGeneratedComposedEntries(state.query, searchProfile, vocabSource)
+      ? buildGeneratedComposedEntries(query, searchProfile, vocabSource)
       : { vocab: [], sentences: [], suppressFallbackSentences: false };
   const generatedWhatQuestion =
     !numberMode && !timeQuestionMode && !timeMode
-      ? buildGeneratedWhatQuestionEntries(state.query, searchProfile, vocabSource)
+      ? buildGeneratedWhatQuestionEntries(query, searchProfile, vocabSource)
       : { vocab: [], sentences: [], suppressFallbackSentences: false };
   const generatedPredicate =
     !numberMode && !timeQuestionMode && !timeMode
-      ? buildGeneratedPredicateEntries(state.query)
+      ? buildGeneratedPredicateEntries(query)
       : { vocab: [], sentences: [], suppressFallbackSentences: false };
   const generatedThaiMeaning =
     !numberMode && !timeQuestionMode && !timeMode
-      ? buildGeneratedThaiMeaningEntries(state.query, searchProfile, vocabSource)
+      ? buildGeneratedThaiMeaningEntries(query, searchProfile, vocabSource)
       : { vocab: [], sentences: [], suppressFallbackSentences: false };
   const generatedAssist = mergeGeneratedEntrySets(
     generatedComposed,
@@ -7264,27 +7335,23 @@ function render() {
     generatedAssist.suppressFallbackSentences
       ? []
       : (composedMode || strictPhraseMode) && !numberMode && !timeQuestionMode && !timeMode
-      ? getSentenceResults(sentenceSource, searchProfile, uniqueByMeaning([...generatedAssist.vocab, ...refinedVocabResults])).filter(
-          (entry) => entry.source !== "generated-bulk"
-        )
-      : !numberMode && !timeQuestionMode && !timeMode
-        ? getSentenceResults(sentenceSource, searchProfile, uniqueByMeaning([...generatedAssist.vocab, ...refinedVocabResults]))
-        : [];
+        ? getSentenceResults(
+            sentenceSource,
+            searchProfile,
+            uniqueByMeaning([...generatedAssist.vocab, ...refinedVocabResults])
+          ).filter((entry) => entry.source !== "generated-bulk")
+        : !numberMode && !timeQuestionMode && !timeMode
+          ? getSentenceResults(sentenceSource, searchProfile, uniqueByMeaning([...generatedAssist.vocab, ...refinedVocabResults]))
+          : [];
   const allVocabResults = numberMode
     ? generated.vocab
     : timeQuestionMode
       ? generatedTimeQuestion.vocab
-    : timeMode
-      ? generatedTime.vocab
-      : uniqueByMeaning(uniqueById([
-          ...generatedAssist.vocab,
-          ...refinedVocabResults,
-        ]));
-  const vocabSeeds = allVocabResults;
-  const vocabResults = state.query
-    ? allVocabResults.slice(0, RESULT_LIMITS.vocab)
-    : [];
-  const sentenceResults = state.query
+      : timeMode
+        ? generatedTime.vocab
+        : uniqueByMeaning(uniqueById([...generatedAssist.vocab, ...refinedVocabResults]));
+  const vocabResults = query ? allVocabResults.slice(0, RESULT_LIMITS.vocab) : [];
+  const sentenceResults = query
     ? (numberMode
         ? generated.sentences
         : timeQuestionMode
@@ -7292,15 +7359,65 @@ function render() {
               0,
               RESULT_LIMITS.sentences
             )
-        : timeMode
-          ? generatedTime.sentences
-        : uniqueByMeaning(uniqueById([
-            ...(safeExactSentenceMatch ? [safeExactSentenceMatch] : []),
-            ...generated.sentences,
-            ...generatedAssist.sentences,
-            ...refinedSentenceCandidates,
-          ])).slice(0, RESULT_LIMITS.sentences))
+          : timeMode
+            ? generatedTime.sentences
+            : uniqueByMeaning(
+                uniqueById([
+                  ...(safeExactSentenceMatch ? [safeExactSentenceMatch] : []),
+                  ...generated.sentences,
+                  ...generatedAssist.sentences,
+                  ...refinedSentenceCandidates,
+                ])
+              ).slice(0, RESULT_LIMITS.sentences))
     : [];
+  const thaiOnlySearch = isThaiOnlySearch(searchProfile);
+
+  return {
+    merged,
+    searchProfile,
+    exactVocabMatch,
+    safeExactSentenceMatch,
+    numberMode,
+    timeQuestionMode,
+    timeMode,
+    composedMode,
+    thaiOnlySearch,
+    vocabResults,
+    sentenceResults,
+  };
+}
+
+function getSearchComputation(query = state.query) {
+  const trimmedQuery = String(query || "").trim();
+  const cacheKey = buildSearchComputationCacheKey(trimmedQuery);
+  const cached = searchComputationCache.get(cacheKey);
+  if (cached) {
+    return cached;
+  }
+
+  const computed = computeSearchComputation(trimmedQuery);
+  searchComputationCache.set(cacheKey, computed);
+  if (searchComputationCache.size > 32) {
+    const oldestKey = searchComputationCache.keys().next().value;
+    if (oldestKey) searchComputationCache.delete(oldestKey);
+  }
+  return computed;
+}
+
+function render() {
+  const {
+    merged,
+    searchProfile,
+    exactVocabMatch,
+    safeExactSentenceMatch,
+    numberMode,
+    timeQuestionMode,
+    timeMode,
+    composedMode,
+    thaiOnlySearch,
+    vocabResults,
+    sentenceResults,
+  } = getSearchComputation(state.query);
   const browsing = isBrowsingState();
   const expandedHint =
     !timeQuestionMode && searchProfile.displayTerms.length
@@ -7311,7 +7428,6 @@ function render() {
   elements.searchInput.value = state.query;
   elements.datasetNote.textContent = baseData.note || "";
   elements.resultStack.hidden = browsing;
-  const thaiOnlySearch = isThaiOnlySearch(searchProfile);
 
   elements.searchStatus.textContent = browsing
     ? "한국어와 태국어 둘 다 검색할 수 있습니다. 한국어는 바로 쓸 태국어를, 태국어는 한국어 뜻을 먼저 보여줍니다."
