@@ -114,6 +114,7 @@ function buildAppContext(rootDir) {
         buildGeneratedTimeQuestionEntries,
         buildGeneratedTimeEntries,
         buildGeneratedComposedEntries,
+        buildGeneratedWhereQuestionEntries,
         buildGeneratedWhatQuestionEntries,
         buildGeneratedPredicateEntries,
         buildGeneratedThaiMeaningEntries,
@@ -155,6 +156,10 @@ function createSearchRunner(context) {
       !numberMode && !timeQuestionMode && !timeMode
         ? api.buildGeneratedComposedEntries(query, profile, merged.vocab)
         : { vocab: [], sentences: [], suppressFallbackSentences: false };
+    const generatedWhereQuestion =
+      !numberMode && !timeQuestionMode && !timeMode
+        ? api.buildGeneratedWhereQuestionEntries(query, profile, merged.vocab)
+        : { vocab: [], sentences: [], suppressFallbackSentences: false };
     const generatedWhatQuestion =
       !numberMode && !timeQuestionMode && !timeMode
         ? api.buildGeneratedWhatQuestionEntries(query, profile, merged.vocab)
@@ -169,6 +174,7 @@ function createSearchRunner(context) {
         : { vocab: [], sentences: [], suppressFallbackSentences: false };
     const generatedAssist = api.mergeGeneratedEntrySets(
       generatedComposed,
+      generatedWhereQuestion,
       generatedWhatQuestion,
       generatedPredicate,
       generatedThaiMeaning
@@ -176,7 +182,9 @@ function createSearchRunner(context) {
     const exactSentence = numberMode ? null : api.findExactEntry(merged.sentences, profile, { includeTemplates: true });
     const strictPhraseMode = Boolean(profile.templateTerms.length || (profile.objectTerms.length && profile.actionTerms.length));
     const safeExactSentence =
-      strictPhraseMode && exactSentence?.source === "generated-bulk" ? null : exactSentence;
+      (strictPhraseMode && exactSentence?.source === "generated-bulk") || generatedWhereQuestion.suppressFallbackSentences
+        ? null
+        : exactSentence;
     const refinedVocab =
       generatedAssist.vocab.length || generatedAssist.sentences.length
         ? preliminaryVocab.filter((entry) => entry.source !== "generated-bulk")

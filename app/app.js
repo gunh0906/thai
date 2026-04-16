@@ -1237,18 +1237,18 @@ const SEARCH_OBJECT_RULES = [
 const SEARCH_ACTION_RULES = [
   {
     id: "where",
-    patterns: [/어디|어디예요|어디에요|어딘지|어디야/],
-    terms: ["어디", "어디예요", "어디에요"],
-    related: ["어디예요", "어디에요"],
+    patterns: [/어디|어디예요|어디에요|어딘지|어디야|어디로|어디서|어딨어|어디있/],
+    terms: ["어디", "어디예요", "어디에요", "어디로"],
+    related: ["어디예요", "어디에요", "어디에 있어요?"],
     display: ["어디"],
     tags: ["이동"],
-    phrases: ["{object} 어디예요?", "{object} 어디에요?"],
+    phrases: ["어디예요?", "어디에요?", "어디에 있어요?", "{object} 어디예요?", "{object} 어디에요?"],
   },
   {
     id: "go",
-    patterns: [/가다|간다|가요|갑니다|가고싶|가고 싶|가야|갈게|갈래|가자|가도/],
-    terms: ["가다", "가요", "가고 싶어요", "가야 해요"],
-    related: ["가고 싶어요", "가야 해요"],
+    patterns: [/가다|간다|가요|가세요|가시나요|가십니까|갑니다|가고싶|가고 싶|가야|갈게|갈래|가자|가도/],
+    terms: ["가다", "가요", "가세요", "가고 싶어요", "가야 해요"],
+    related: ["가고 싶어요", "가야 해요", "어디 가세요?", "어디 가요?"],
     display: ["가다"],
     tags: ["이동", "기본회화"],
     phrases: ["{object} 가고 싶어요", "{object} 가야 해요", "{object} 가요"],
@@ -2261,6 +2261,10 @@ const QUERY_ENDINGS = [
   { suffix: "하자", primary: ["하다"], related: ["같이"], display: ["같이"] },
   { suffix: "가자", primary: ["가다"], related: ["같이"], display: ["같이"] },
   { suffix: "먹자", primary: ["먹다"], related: ["같이"], display: ["같이"] },
+  { suffix: "가세요", primary: ["가다"], related: ["이동", "어디 가세요?"], display: ["가다"] },
+  { suffix: "가시나요", primary: ["가다"], related: ["이동", "어디 가세요?"], display: ["가다"] },
+  { suffix: "가십니까", primary: ["가다"], related: ["이동", "어디 가세요?"], display: ["가다"] },
+  { suffix: "가요", primary: ["가다"], related: ["이동", "어디 가요?"], display: ["가다"] },
   { suffix: "주세요", related: ["주다", "부탁"], display: ["주세요"] },
   { suffix: "있나요", related: ["있다"], display: ["있다"] },
   { suffix: "있어요", related: ["있다"], display: ["있다"] },
@@ -2275,6 +2279,10 @@ const COMPACT_QUERY_SUFFIX_RULES = [
   { suffix: "보여주세요", spaced: (root) => `${root} 보여 주세요` },
   { suffix: "가져와주세요", spaced: (root) => `${root} 가져와 주세요` },
   { suffix: "가져다주세요", spaced: (root) => `${root} 가져다 주세요` },
+  { suffix: "가세요", spaced: (root) => `${root} 가세요` },
+  { suffix: "가시나요", spaced: (root) => `${root} 가시나요` },
+  { suffix: "가십니까", spaced: (root) => `${root} 가십니까` },
+  { suffix: "가요", spaced: (root) => `${root} 가요` },
   { suffix: "주세요", spaced: (root) => `${root} 주세요` },
   { suffix: "있어요", spaced: (root) => `${root} 있어요` },
   { suffix: "있나요", spaced: (root) => `${root} 있나요` },
@@ -2973,6 +2981,14 @@ function buildIntentHints(query, patternTexts) {
     }
     if (objectRules.some((rule) => rule.id === "meal") && (actionIds.has("go") || actionIds.has("eat"))) {
       phrases.push("점심 먹으러 가자", "점심 먹으러 갈래요?", "밥 먹으러 가자");
+    }
+  }
+
+  const actionIds = new Set(actionRules.map((rule) => rule.id));
+  if (!objectLabels.length && actionIds.has("where")) {
+    phrases.push("어디예요?", "어디에요?", "어디에 있어요?");
+    if (actionIds.has("go")) {
+      phrases.push("어디 가요?", "어디 가세요?", "어디로 가요?", "어디로 가세요?");
     }
   }
 
@@ -4605,6 +4621,25 @@ function createGeneratedWhatQuestionEntry(query, korean, thai, thaiScript, kind,
   );
 }
 
+function createGeneratedWhereQuestionEntry(query, korean, thai, thaiScript, kind, tags = [], note = "") {
+  if (!korean || !thai) return null;
+  return hydrateEntry(
+    {
+      id: `generated-where-${kind}-${compactText(query)}-${compactText(korean)}`,
+      kind,
+      source: "generated",
+      sheet: "질문 조합",
+      thai,
+      thaiScript,
+      korean,
+      note: note || "위치나 이동 방향을 바로 물을 때",
+      tags: sortTags(unique(["기본회화", "이동", ...tags])),
+      keywords: unique([query, korean, thai, thaiScript, "어디", "질문", "이동"]),
+    },
+    kind
+  );
+}
+
 function buildGeneratedWhatQuestionEntries(query, searchProfile, vocabEntries) {
   const trimmedQuery = String(query || "").trim();
   if (!trimmedQuery || !isWhatQuestionQuery(trimmedQuery)) {
@@ -4659,6 +4694,80 @@ function buildGeneratedWhatQuestionEntries(query, searchProfile, vocabEntries) {
     vocab: uniqueByMeaning(uniqueById(vocab)),
     sentences: uniqueByMeaning(uniqueById(sentences)),
     suppressFallbackSentences: true,
+  };
+}
+
+function buildGeneratedWhereQuestionEntries(query, searchProfile, vocabEntries) {
+  const trimmedQuery = String(query || "").trim();
+  if (!trimmedQuery || !searchProfile?.actionIds?.includes("where")) {
+    return { vocab: [], sentences: [], suppressFallbackSentences: false };
+  }
+
+  const vocab = [];
+  const sentences = [];
+  const hasSpecificObject = Boolean(searchProfile.objectTerms.length);
+
+  if (hasSpecificObject) {
+    const objectEntry = findComposableObjectEntry(vocabEntries, searchProfile.objectTerms);
+    if (objectEntry) {
+      vocab.push(objectEntry);
+      const objectLabel = getEntryPrimaryKoreanText(objectEntry) || objectEntry.korean;
+      const objectThaiKo = objectEntry.thai;
+      const objectThaiScript = getThaiScriptText(objectEntry);
+      const koreanQuestion = `${attachKoreanSubjectParticle(objectLabel)} 어디예요?`;
+      const thaiQuestion = `${objectThaiKo} 유 티 나이 캅`;
+      const thaiScriptQuestion = `${objectThaiScript}อยู่ที่ไหนครับ`;
+      const sentenceEntry = createGeneratedWhereQuestionEntry(
+        trimmedQuery,
+        koreanQuestion,
+        thaiQuestion,
+        thaiScriptQuestion,
+        "sentence",
+        objectEntry.tags || []
+      );
+      if (sentenceEntry) sentences.push(sentenceEntry);
+    }
+
+    return {
+      vocab: uniqueByMeaning(uniqueById(vocab)),
+      sentences: uniqueByMeaning(uniqueById(sentences)),
+      suppressFallbackSentences: true,
+    };
+  }
+
+  const whereVocab = createGeneratedWhereQuestionEntry(trimmedQuery, "어디", "티 나이", "ที่ไหน", "vocab");
+  if (whereVocab) vocab.push(whereVocab);
+
+  const normalized = normalizeText(trimmedQuery);
+  const goStyle = /가세요|가시나요|가십니까/.test(normalized)
+    ? "polite-go"
+    : /가요|갑니다|가고싶|가고 싶|가야|갈게|갈래|가자|가도/.test(normalized)
+      ? "go"
+      : "";
+
+  if (goStyle) {
+    const koreanQuestions =
+      goStyle === "polite-go" ? ["어디 가세요?", "어디로 가세요?"] : ["어디 가요?", "어디로 가요?"];
+    koreanQuestions.forEach((koreanQuestion, index) => {
+      const thai = index === 0 ? "빠이 나이 캅" : "빠이 티 나이 캅";
+      const thaiScript = index === 0 ? "ไปไหนครับ" : "ไปที่ไหนครับ";
+      const entry = createGeneratedWhereQuestionEntry(trimmedQuery, koreanQuestion, thai, thaiScript, "sentence");
+      if (entry) sentences.push(entry);
+    });
+  } else {
+    [
+      ["어디예요?", "티 나이 캅", "ที่ไหนครับ"],
+      ["어디에 있어요?", "유 티 나이 캅", "อยู่ที่ไหนครับ"],
+    ].forEach(([koreanQuestion, thai, thaiScript]) => {
+      const entry = createGeneratedWhereQuestionEntry(trimmedQuery, koreanQuestion, thai, thaiScript, "sentence");
+      if (entry) sentences.push(entry);
+    });
+  }
+
+  return {
+    vocab: uniqueByMeaning(uniqueById(vocab)),
+    sentences: uniqueByMeaning(uniqueById(sentences)),
+    suppressFallbackSentences: Boolean(goStyle),
   };
 }
 
@@ -5797,11 +5906,13 @@ function buildSearchProfile(query, entries = []) {
     /(?:주세요|주세여|부탁|있어요|있나요|필요해요|없어요|없나요|어디예요|어디에요|어디야)/.test(compact) ||
     Boolean(thaiMeaningHints?.actionTerms?.length);
   const genericActionTerms = new Set(["주세요", "부탁", "있어요", "있나요", "필요해요"]);
+  const whereActionIntent = actionIds.includes("where");
   const objectTerms = unique(
     [...(intentHints.objectTerms || []), ...(thaiMeaningHints?.objectTerms || []), ...compactPhraseRoots]
       .map((item) => compactText(item))
       .filter(Boolean)
       .filter((item) => !blockedTerms.has(item))
+      .filter((item) => !(whereActionIntent && ["어디", "어디예요", "어디에요", "어디로"].includes(item)))
   );
   const actionTerms = unique(
     [...(intentHints.actionTerms || []), ...(thaiMeaningHints?.actionTerms || [])]
@@ -7705,6 +7816,10 @@ function computeSearchComputation(query = state.query) {
     !numberMode && !timeQuestionMode && !timeMode
       ? buildGeneratedComposedEntries(query, searchProfile, vocabSource)
       : { vocab: [], sentences: [], suppressFallbackSentences: false };
+  const generatedWhereQuestion =
+    !numberMode && !timeQuestionMode && !timeMode
+      ? buildGeneratedWhereQuestionEntries(query, searchProfile, vocabSource)
+      : { vocab: [], sentences: [], suppressFallbackSentences: false };
   const generatedWhatQuestion =
     !numberMode && !timeQuestionMode && !timeMode
       ? buildGeneratedWhatQuestionEntries(query, searchProfile, vocabSource)
@@ -7719,6 +7834,7 @@ function computeSearchComputation(query = state.query) {
       : { vocab: [], sentences: [], suppressFallbackSentences: false };
   const generatedAssist = mergeGeneratedEntrySets(
     generatedComposed,
+    generatedWhereQuestion,
     generatedWhatQuestion,
     generatedPredicate,
     generatedThaiMeaning
@@ -7730,6 +7846,7 @@ function computeSearchComputation(query = state.query) {
   const safeExactSentenceMatch =
     exactSentenceMatch &&
     ((strictPhraseMode && exactSentenceMatch.source === "generated-bulk") ||
+      generatedWhereQuestion.suppressFallbackSentences ||
       !shouldKeepExactSentenceMatch(exactSentenceMatch, searchProfile))
       ? null
       : exactSentenceMatch;
