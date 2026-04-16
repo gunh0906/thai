@@ -1,6 +1,6 @@
 ﻿const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
-const APP_VERSION = "20260416r";
+const APP_VERSION = "20260416s";
 
 const baseData = window.BASE_DATA || {
   appTitle: "태국어 포켓북",
@@ -2615,6 +2615,9 @@ function getStructuredFieldMatchStrength(index, term, options = {}) {
 
 function buildIntentHints(query, patternTexts) {
   let objectRules = SEARCH_OBJECT_RULES.filter((rule) => matchesSearchRule(rule, patternTexts));
+  if (objectRules.some((rule) => rule.id === "education")) {
+    objectRules = objectRules.filter((rule) => !["workTask", "machine", "factoryWork", "problem"].includes(rule.id));
+  }
   if (objectRules.some((rule) => rule.id === "machineNoise")) {
     objectRules = objectRules.filter((rule) => !["noise", "problem"].includes(rule.id));
   }
@@ -5146,6 +5149,10 @@ function scoreEntry(entry, searchProfile, kind) {
     searchProfile.objectTerms.length >= 1 &&
     !searchProfile.actionTerms.length &&
     tokenize(searchProfile.query).length <= 2;
+  const strictObjectPhraseQuery =
+    kind === "sentence" &&
+    searchProfile.objectTerms.some((term) => term.length >= 2) &&
+    (searchProfile.actionTerms.length >= 1 || searchProfile.templateTerms.length >= 1);
   let score = 0;
   let directMatch = false;
   const directHits = new Set();
@@ -5331,7 +5338,7 @@ function scoreEntry(entry, searchProfile, kind) {
   const vocabPrimaryThreshold = searchProfile.minimumPrimaryHits > 1 ? 1 : searchProfile.minimumPrimaryHits;
   const hasIntentTerms =
     searchProfile.objectTerms.length || searchProfile.actionTerms.length || searchProfile.templateTerms.length;
-  const matched =
+  const matchedBase =
     directMatch ||
     templateHits.size >= 1 ||
     (kind === "sentence" && objectHits.size >= 1 && (actionHits.size >= 1 || templateHits.size >= 1) && score >= 220) ||
@@ -5345,6 +5352,9 @@ function scoreEntry(entry, searchProfile, kind) {
       (primaryHits.size >= searchProfile.minimumPrimaryHits || (primaryHits.size >= 1 && relatedHits.size >= 1)) &&
       score >= 220) ||
     (kind === "sentence" && !hasPrimaryPlan && (!hasIntentTerms ? score >= 340 : score >= 220));
+  const matched =
+    matchedBase &&
+    (!strictObjectPhraseQuery || templateHits.size >= 1 || objectHits.size >= 1 || exactObjectHits.length >= 1);
 
   return {
     matched,
