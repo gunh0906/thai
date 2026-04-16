@@ -115,6 +115,7 @@ function buildAppContext(rootDir) {
         buildGeneratedTimeEntries,
         buildGeneratedComposedEntries,
         buildGeneratedWhatQuestionEntries,
+        buildGeneratedPredicateEntries,
         buildGeneratedThaiMeaningEntries,
         findExactEntry,
         getVocabResults,
@@ -159,11 +160,20 @@ function createSearchRunner(context) {
       !numberMode && !timeQuestionMode && !timeMode
         ? api.buildGeneratedWhatQuestionEntries(query, profile, merged.vocab)
         : { vocab: [], sentences: [], suppressFallbackSentences: false };
+    const generatedPredicate =
+      !numberMode && !timeQuestionMode && !timeMode
+        ? api.buildGeneratedPredicateEntries(query)
+        : { vocab: [], sentences: [], suppressFallbackSentences: false };
     const generatedThaiMeaning =
       !numberMode && !timeQuestionMode && !timeMode
         ? api.buildGeneratedThaiMeaningEntries(query, profile, merged.vocab)
         : { vocab: [], sentences: [], suppressFallbackSentences: false };
-    const generatedAssist = api.mergeGeneratedEntrySets(generatedComposed, generatedWhatQuestion, generatedThaiMeaning);
+    const generatedAssist = api.mergeGeneratedEntrySets(
+      generatedComposed,
+      generatedWhatQuestion,
+      generatedPredicate,
+      generatedThaiMeaning
+    );
     const exactSentence = numberMode ? null : api.findExactEntry(merged.sentences, profile, { includeTemplates: true });
     const strictPhraseMode = Boolean(profile.templateTerms.length || (profile.objectTerms.length && profile.actionTerms.length));
     const safeExactSentence =

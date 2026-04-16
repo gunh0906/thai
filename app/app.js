@@ -1,6 +1,6 @@
 ﻿const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
-const APP_VERSION = "20260416t";
+const APP_VERSION = "20260416u";
 
 const baseData = window.BASE_DATA || {
   appTitle: "태국어 포켓북",
@@ -1483,6 +1483,70 @@ const WHAT_QUESTION_SUFFIXES = [
   "뭐지",
   "뭐냐",
   "뭔가",
+];
+const PREDICATE_QUERY_FAMILIES = [
+  {
+    id: "wrong",
+    patterns: [/잘못|틀리/],
+    primary: ["잘못", "틀리다"],
+    display: ["잘못", "틀리다"],
+    tags: ["기본회화"],
+    vocab: [
+      { korean: "잘못", thaiKo: "핏", thaiScript: "ผิด", note: "틀리거나 잘못된 상태" },
+      { korean: "틀리다", thaiKo: "마이 툭", thaiScript: "ไม่ถูก", note: "맞지 않다" },
+    ],
+    genericSentences: [
+      { korean: "잘못됐어요", thaiKo: "핏 캅", thaiScript: "ผิดครับ" },
+      { korean: "틀렸어요", thaiKo: "마이 툭 캅", thaiScript: "ไม่ถูกครับ" },
+    ],
+    demonstrativeSentences: [
+      { korean: (label) => `${label} 잘못됐어요`, thaiKo: (demo) => `${demo.thaiKo} 핏 캅`, thaiScript: (demo) => `${demo.thaiScript}ผิดครับ` },
+      { korean: (label) => `${label} 틀렸어요`, thaiKo: (demo) => `${demo.thaiKo} 마이 툭 캅`, thaiScript: (demo) => `${demo.thaiScript}ไม่ถูกครับ` },
+    ],
+  },
+  {
+    id: "correct",
+    patterns: [/맞아|맞다|정답|옳/],
+    primary: ["맞다"],
+    display: ["맞다"],
+    tags: ["기본회화"],
+    vocab: [{ korean: "맞다", thaiKo: "툭", thaiScript: "ถูก", note: "맞는 상태" }],
+    genericSentences: [{ korean: "맞아요", thaiKo: "툭 캅", thaiScript: "ถูกครับ" }],
+    demonstrativeSentences: [
+      { korean: (label) => `${label} 맞아요`, thaiKo: (demo) => `${demo.thaiKo} 툭 캅`, thaiScript: (demo) => `${demo.thaiScript}ถูกครับ` },
+    ],
+  },
+  {
+    id: "okay",
+    patterns: [/괜찮|문제없|이상없|쓸만/],
+    primary: ["괜찮다"],
+    display: ["괜찮다"],
+    tags: ["기본회화"],
+    vocab: [{ korean: "괜찮다", thaiKo: "오케", thaiScript: "โอเค", note: "문제없고 괜찮은 상태" }],
+    genericSentences: [{ korean: "괜찮아요", thaiKo: "오케 캅", thaiScript: "โอเคครับ" }],
+    demonstrativeSentences: [
+      { korean: (label) => `${label} 괜찮아요`, thaiKo: (demo) => `${demo.thaiKo} 오케 캅`, thaiScript: (demo) => `${demo.thaiScript}โอเคครับ` },
+    ],
+  },
+  {
+    id: "problem",
+    patterns: [/문제야|문제가있|이상해|이상하다|고장났/],
+    primary: ["문제", "이상하다"],
+    display: ["문제", "이상하다"],
+    tags: ["기본회화"],
+    vocab: [
+      { korean: "문제", thaiKo: "빤하", thaiScript: "ปัญหา", note: "문제 / 이슈" },
+      { korean: "이상하다", thaiKo: "쁠랏", thaiScript: "แปลก", note: "정상과 다른 상태" },
+    ],
+    genericSentences: [
+      { korean: "문제가 있어요", thaiKo: "미 빤하 캅", thaiScript: "มีปัญหาครับ" },
+      { korean: "이상해요", thaiKo: "쁠랏 캅", thaiScript: "แปลกครับ" },
+    ],
+    demonstrativeSentences: [
+      { korean: (label) => `${label} 문제가 있어요`, thaiKo: (demo) => `${demo.thaiKo} 미 빤하 캅`, thaiScript: (demo) => `${demo.thaiScript}มีปัญหาครับ` },
+      { korean: (label) => `${label} 이상해요`, thaiKo: (demo) => `${demo.thaiKo} 쁠랏 캅`, thaiScript: (demo) => `${demo.thaiScript}แปลกครับ` },
+    ],
+  },
 ];
 const THAI_MEANING_STOPWORD_TEXTS = [
   "ครับ",
@@ -3925,6 +3989,140 @@ function isStartComposableObjectEntry(entry) {
   );
 }
 
+function getMatchedPredicateFamilies(text) {
+  const normalized = normalizeText(text);
+  if (!normalized) return [];
+
+  return PREDICATE_QUERY_FAMILIES.filter((family) =>
+    (family.patterns || []).some((pattern) => pattern.test(normalized))
+  );
+}
+
+function getDemonstrativeSubjectLabel(demonstrative) {
+  if (!demonstrative?.label) return "";
+  if (demonstrative.label === "이거") return "이건";
+  if (demonstrative.label === "그거") return "그건";
+  if (demonstrative.label === "저거") return "저건";
+  return attachKoreanSubjectParticle(demonstrative.label);
+}
+
+function createGeneratedPredicateEntry(query, korean, thaiKo, thaiScript, kind, tags = [], keywords = [], note = "") {
+  if (!korean || !thaiKo || !thaiScript) return null;
+
+  return hydrateEntry(
+    {
+      id: `generated-predicate-${kind}-${compactText(query)}-${compactText(korean)}`,
+      kind,
+      source: "generated",
+      sheet: "판단 조합",
+      thai: thaiKo,
+      thaiScript,
+      korean,
+      note: note || "지시어와 상태 판단을 조합해 만든 표현",
+      tags: sortTags(unique(["기본회화", ...tags])),
+      keywords: unique([query, korean, thaiKo, thaiScript, ...keywords, "판단", "상태"]),
+    },
+    kind
+  );
+}
+
+function buildPredicateIntentHints(query) {
+  const families = getMatchedPredicateFamilies(query);
+  if (!families.length) return null;
+
+  const demonstrative = findDemonstrativeDefinition(query);
+  const subjectLabel = getDemonstrativeSubjectLabel(demonstrative);
+  const primaryTerms = [];
+  const relatedTerms = [];
+  const displayTerms = [];
+  const tags = [];
+
+  families.forEach((family) => {
+    primaryTerms.push(...(family.primary || []));
+    displayTerms.push(...(family.display || []));
+    tags.push(...(family.tags || []));
+
+    (family.genericSentences || []).forEach((item) => {
+      relatedTerms.push(item.korean);
+    });
+
+    if (demonstrative) {
+      relatedTerms.push(demonstrative.label);
+      (family.demonstrativeSentences || []).forEach((item) => {
+        relatedTerms.push(typeof item.korean === "function" ? item.korean(subjectLabel) : item.korean);
+      });
+    }
+  });
+
+  return {
+    primaryTerms: unique(primaryTerms),
+    relatedTerms: unique(relatedTerms),
+    displayTerms: unique(displayTerms),
+    tags: sortTags(unique(tags)),
+  };
+}
+
+function buildGeneratedPredicateEntries(query) {
+  const trimmedQuery = String(query || "").trim();
+  if (!trimmedQuery) return { vocab: [], sentences: [], suppressFallbackSentences: false };
+
+  const families = getMatchedPredicateFamilies(trimmedQuery);
+  if (!families.length) return { vocab: [], sentences: [], suppressFallbackSentences: false };
+
+  const demonstrative = findDemonstrativeDefinition(trimmedQuery);
+  const subjectLabel = getDemonstrativeSubjectLabel(demonstrative);
+  const vocab = [];
+  const sentences = [];
+
+  if (demonstrative) {
+    const demoVocab = createGeneratedDemonstrativeVocab(trimmedQuery, demonstrative);
+    if (demoVocab) vocab.push(demoVocab);
+  }
+
+  families.forEach((family) => {
+    (family.vocab || []).forEach((item) => {
+      const vocabEntry = createGeneratedPredicateEntry(
+        trimmedQuery,
+        item.korean,
+        item.thaiKo,
+        item.thaiScript,
+        "vocab",
+        family.tags || [],
+        [...(family.primary || []), ...(family.display || [])],
+        item.note
+      );
+      if (vocabEntry) vocab.push(vocabEntry);
+    });
+
+    const sentenceDefs = demonstrative && family.demonstrativeSentences?.length
+      ? family.demonstrativeSentences.map((item) => ({
+          korean: typeof item.korean === "function" ? item.korean(subjectLabel) : item.korean,
+          thaiKo: typeof item.thaiKo === "function" ? item.thaiKo(demonstrative) : item.thaiKo,
+          thaiScript: typeof item.thaiScript === "function" ? item.thaiScript(demonstrative) : item.thaiScript,
+        }))
+      : family.genericSentences || [];
+
+    sentenceDefs.forEach((item) => {
+      const sentenceEntry = createGeneratedPredicateEntry(
+        trimmedQuery,
+        item.korean,
+        item.thaiKo,
+        item.thaiScript,
+        "sentence",
+        family.tags || [],
+        [...(family.primary || []), ...(family.display || [])]
+      );
+      if (sentenceEntry) sentences.push(sentenceEntry);
+    });
+  });
+
+  return {
+    vocab: uniqueByMeaning(uniqueById(vocab)),
+    sentences: uniqueByMeaning(uniqueById(sentences)),
+    suppressFallbackSentences: true,
+  };
+}
+
 function extractWhatQuestionObjectCompacts(query) {
   const compact = compactText(query);
   const suffix = getWhatQuestionSuffix(compact);
@@ -4032,6 +4230,7 @@ function buildGeneratedComposedEntries(query, searchProfile, vocabEntries) {
 
   const actionId = detectComposableActionId(trimmedQuery);
   const demonstrative = findDemonstrativeDefinition(trimmedQuery);
+  const predicateFamilies = getMatchedPredicateFamilies(trimmedQuery);
   if (!actionId && !demonstrative) {
     return { vocab: [], sentences: [], suppressFallbackSentences: false };
   }
@@ -4044,7 +4243,7 @@ function buildGeneratedComposedEntries(query, searchProfile, vocabEntries) {
     if (demoVocab) vocab.push(demoVocab);
   }
 
-  if (!actionId && demonstrative && hasNegativeMeaning(trimmedQuery)) {
+  if (!actionId && demonstrative && predicateFamilies.length) {
     return {
       vocab: uniqueById(vocab),
       sentences: [],
@@ -4987,12 +5186,14 @@ function buildSearchProfile(query, entries = []) {
   const expandedCompacts = expandedVariants.map((item) => compactText(item)).filter(Boolean);
   const patternTexts = unique([trimmedQuery, normalized, compact, ...expandedVariants, ...expandedCompacts]);
   const intentHints = buildIntentHints(trimmedQuery, patternTexts);
+  const predicateHints = buildPredicateIntentHints(trimmedQuery);
   const thaiMeaningHints =
     queryDirection === "thai" || queryDirection === "mixed" ? buildThaiMeaningHints(trimmedQuery, entries) : null;
   const hasStrongIntent = Boolean(
     (intentHints.objectTerms && intentHints.objectTerms.length) ||
       (intentHints.actionTerms && intentHints.actionTerms.length) ||
       (intentHints.templateTerms && intentHints.templateTerms.length) ||
+      (predicateHints?.primaryTerms && predicateHints.primaryTerms.length) ||
       (thaiMeaningHints?.objectTerms && thaiMeaningHints.objectTerms.length) ||
       (thaiMeaningHints?.actionTerms && thaiMeaningHints.actionTerms.length) ||
       (thaiMeaningHints?.templateTerms && thaiMeaningHints.templateTerms.length)
@@ -5014,6 +5215,12 @@ function buildSearchProfile(query, entries = []) {
   displayTerms.push(...compactPhraseRoots);
   displayTerms.push(...(intentHints.displayTerms || []));
   tags.push(...(intentHints.tags || []));
+  if (predicateHints) {
+    primaryTerms.push(...(predicateHints.primaryTerms || []));
+    relatedTerms.push(...(predicateHints.relatedTerms || []));
+    displayTerms.push(...(predicateHints.displayTerms || []));
+    tags.push(...(predicateHints.tags || []));
+  }
   if (thaiMeaningHints) {
     primaryTerms.push(...(thaiMeaningHints.primaryTerms || []));
     relatedTerms.push(...(thaiMeaningHints.relatedTerms || []));
@@ -6456,11 +6663,20 @@ function render() {
     !numberMode && !timeQuestionMode && !timeMode
       ? buildGeneratedWhatQuestionEntries(state.query, searchProfile, vocabSource)
       : { vocab: [], sentences: [], suppressFallbackSentences: false };
+  const generatedPredicate =
+    !numberMode && !timeQuestionMode && !timeMode
+      ? buildGeneratedPredicateEntries(state.query)
+      : { vocab: [], sentences: [], suppressFallbackSentences: false };
   const generatedThaiMeaning =
     !numberMode && !timeQuestionMode && !timeMode
       ? buildGeneratedThaiMeaningEntries(state.query, searchProfile, vocabSource)
       : { vocab: [], sentences: [], suppressFallbackSentences: false };
-  const generatedAssist = mergeGeneratedEntrySets(generatedComposed, generatedWhatQuestion, generatedThaiMeaning);
+  const generatedAssist = mergeGeneratedEntrySets(
+    generatedComposed,
+    generatedWhatQuestion,
+    generatedPredicate,
+    generatedThaiMeaning
+  );
   const composedMode = Boolean(generatedAssist.vocab.length || generatedAssist.sentences.length);
   const strictPhraseMode = Boolean(
     searchProfile.templateTerms.length || (searchProfile.objectTerms.length && searchProfile.actionTerms.length)
