@@ -205,6 +205,7 @@ button:active {
 
 .search-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
 }
 
@@ -444,6 +445,16 @@ button:active {
     filter 160ms ease;
 }
 
+.ghost-button[disabled],
+.primary-button[disabled],
+.mini-button[disabled] {
+  opacity: 0.56;
+  cursor: not-allowed;
+  transform: none;
+  filter: none;
+  box-shadow: none;
+}
+
 .ghost-button:hover,
 .primary-button:hover,
 .mini-button:hover {
@@ -552,6 +563,26 @@ button:active {
   grid-column: 1 / -1;
 }
 
+.toggle-field {
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.82);
+}
+
+.inline-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.inline-toggle input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent-strong);
+}
+
 .form-grid input,
 .form-grid select,
 .form-grid textarea {
@@ -580,6 +611,34 @@ button:active {
   border-radius: var(--radius-lg);
   color: var(--muted);
   text-align: center;
+}
+
+.ai-assist-status {
+  margin-bottom: 12px;
+}
+
+.ai-summary-card {
+  gap: 8px;
+}
+
+.ai-summary-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.ai-summary-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(13, 143, 120, 0.1);
+  color: var(--green);
+  font-size: 0.76rem;
+  font-weight: 700;
 }
 
 .custom-row {

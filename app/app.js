@@ -1,6 +1,18 @@
 ﻿const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
-const APP_VERSION = "20260416x";
+const AI_STORAGE_KEY = "thai-pocketbook-ai-v1";
+const APP_VERSION = "20260416y";
+const AI_ASSIST_MIN_QUERY_LENGTH = 2;
+const AI_RESULT_LIMITS = {
+  vocab: 3,
+  sentences: 4,
+};
+const DEFAULT_AI_SETTINGS = {
+  enabled: false,
+  mode: "manual",
+  endpoint: "",
+  accessToken: "",
+};
 
 const baseData = window.BASE_DATA || {
   appTitle: "태국어 포켓북",
@@ -425,6 +437,7 @@ const GENERIC_ANCHOR_TERMS = new Set(["주세요", "주세여", "부탁", "좀",
 const SINGLE_SYLLABLE_ANCHORS = new Set(["방", "물", "밥", "약"]);
 const ENTRY_SOURCE_SCORES = {
   custom: 170,
+  "ai-assist": 148,
   "concept-corpus": 135,
   "external-corpus": 128,
   supplemental: 120,
@@ -2423,6 +2436,16 @@ const state = {
   menuOpen: false,
   searchFrame: 0,
   custom: loadCustomData(),
+  aiSettings: loadAiSettings(),
+  aiAssist: {
+    status: "idle",
+    query: "",
+    error: "",
+    result: null,
+    requestId: 0,
+    trigger: "manual",
+  },
+  lastSearchContext: null,
 };
 
 const elements = {
@@ -2435,6 +2458,7 @@ const elements = {
   searchButton: document.querySelector("#searchButton"),
   jumpVocabButton: document.querySelector("#jumpVocabButton"),
   jumpSentenceButton: document.querySelector("#jumpSentenceButton"),
+  aiAssistButton: document.querySelector("#aiAssistButton"),
   resetFiltersButton: document.querySelector("#resetFiltersButton"),
   scenarioChips: document.querySelector("#scenarioChips"),
   quickSearchChips: document.querySelector("#quickSearchChips"),
@@ -2443,6 +2467,10 @@ const elements = {
   filterSummary: document.querySelector("#filterSummary"),
   queryInsightsPanel: document.querySelector("#queryInsightsPanel"),
   queryInsights: document.querySelector("#queryInsights"),
+  aiAssistPanel: document.querySelector("#aiAssistPanel"),
+  aiAssistMeta: document.querySelector("#aiAssistMeta"),
+  aiAssistStatus: document.querySelector("#aiAssistStatus"),
+  aiAssistResults: document.querySelector("#aiAssistResults"),
   resultStack: document.querySelector("#resultStack"),
   vocabSection: document.querySelector("#vocabSection"),
   sentenceSection: document.querySelector("#sentenceSection"),
@@ -2460,6 +2488,12 @@ const elements = {
   clearCustomButton: document.querySelector("#clearCustomButton"),
   customSummary: document.querySelector("#customSummary"),
   customEntries: document.querySelector("#customEntries"),
+  aiSettingsForm: document.querySelector("#aiSettingsForm"),
+  aiEnabledInput: document.querySelector("#aiEnabledInput"),
+  aiModeInput: document.querySelector("#aiModeInput"),
+  aiEndpointInput: document.querySelector("#aiEndpointInput"),
+  aiTokenInput: document.querySelector("#aiTokenInput"),
+  aiSettingsFeedback: document.querySelector("#aiSettingsFeedback"),
 };
 
 function readStateFromUrl() {
@@ -3367,8 +3401,29 @@ function loadCustomData() {
   }
 }
 
+function loadAiSettings() {
+  try {
+    const raw = localStorage.getItem(AI_STORAGE_KEY);
+    if (!raw) return { ...DEFAULT_AI_SETTINGS };
+    const parsed = JSON.parse(raw);
+    return {
+      enabled: Boolean(parsed.enabled),
+      mode: parsed.mode === "auto" ? "auto" : "manual",
+      endpoint: String(parsed.endpoint || "").trim(),
+      accessToken: String(parsed.accessToken || "").trim(),
+    };
+  } catch (error) {
+    console.error("AI 설정 로드 실패", error);
+    return { ...DEFAULT_AI_SETTINGS };
+  }
+}
+
 function saveCustomData() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state.custom));
+}
+
+function saveAiSettings() {
+  localStorage.setItem(AI_STORAGE_KEY, JSON.stringify(state.aiSettings));
 }
 
 function createHydratedBaseData() {
@@ -3391,6 +3446,211 @@ function getMergedData() {
     vocab: [...hydratedBaseData.vocab, ...state.custom.vocab],
     sentences: [...hydratedBaseData.sentences, ...state.custom.sentences],
   };
+}
+
+function hasConfiguredAiAssist() {
+  return Boolean(
+    state.aiSettings.enabled &&
+      String(state.aiSettings.endpoint || "").trim() &&
+      /^https?:\/\//i.test(String(state.aiSettings.endpoint || "").trim())
+  );
+}
+
+function syncAiSettingsForm() {
+  if (!elements.aiSettingsForm) return;
+  if (elements.aiEnabledInput) elements.aiEnabledInput.checked = Boolean(state.aiSettings.enabled);
+  if (elements.aiModeInput) elements.aiModeInput.value = state.aiSettings.mode || "manual";
+  if (elements.aiEndpointInput) elements.aiEndpointInput.value = state.aiSettings.endpoint || "";
+  if (elements.aiTokenInput) elements.aiTokenInput.value = state.aiSettings.accessToken || "";
+}
+
+function serializeAiContextEntry(entry) {
+  return {
+    korean: entry.korean,
+    thai: entry.thai,
+    thaiScript: getThaiScriptText(entry),
+    tags: entry.tags || [],
+    note: entry.note || "",
+    source: entry.source || "",
+  };
+}
+
+function createAiAssistEntry(item, kind, query, index) {
+  const korean = String(item.korean || "").trim();
+  const thaiScript = String(item.thaiScript || "").trim();
+  const thai = String(item.thai || "").trim() || thaiScript;
+  const noteParts = [String(item.note || "").trim(), "AI 보강 제안"].filter(Boolean);
+  return hydrateEntry(
+    {
+      id: `ai-${kind}-${compactText(query).slice(0, 48) || "query"}-${index}`,
+      kind,
+      source: "ai-assist",
+      sheet: "AI 보강",
+      thai,
+      thaiScript,
+      korean,
+      note: noteParts.join(" · "),
+      tags: Array.isArray(item.tags) ? item.tags : [],
+      keywords: Array.isArray(item.keywords) ? item.keywords : [query, korean],
+      createdAt: new Date().toISOString(),
+    },
+    kind
+  );
+}
+
+function normalizeAiAssistResponse(payload, query) {
+  const raw = payload && typeof payload === "object" && payload.result ? payload.result : payload || {};
+  const hints = unique(
+    (Array.isArray(raw.searchHints) ? raw.searchHints : Array.isArray(raw.hints) ? raw.hints : [])
+      .map((item) => String(item || "").trim())
+      .filter(Boolean)
+  ).slice(0, 6);
+
+  const vocab = Array.isArray(raw.vocab)
+    ? raw.vocab
+        .map((item, index) => createAiAssistEntry(item, "vocab", query, index + 1))
+        .filter((entry) => entry.korean || entry.thai || entry.thaiScript)
+        .slice(0, AI_RESULT_LIMITS.vocab)
+    : [];
+
+  const sentences = Array.isArray(raw.sentences)
+    ? raw.sentences
+        .map((item, index) => createAiAssistEntry(item, "sentence", query, index + 1))
+        .filter((entry) => entry.korean || entry.thai || entry.thaiScript)
+        .slice(0, AI_RESULT_LIMITS.sentences)
+    : [];
+
+  return {
+    normalizedQuery: String(raw.normalizedQuery || "").trim(),
+    intent: String(raw.intent || "").trim(),
+    caution: String(raw.caution || "").trim(),
+    confidence: Number.isFinite(Number(raw.confidence)) ? Number(raw.confidence) : null,
+    hints,
+    vocab,
+    sentences,
+    model: String(payload?.model || raw.model || "").trim(),
+  };
+}
+
+function buildAiAssistRequestPayload(context) {
+  return {
+    query: String(context?.query || "").trim(),
+    scenario: state.scenario,
+    mode: state.aiSettings.mode,
+    searchProfile: {
+      displayTerms: (context?.searchProfile?.displayTerms || []).slice(0, 8),
+      primaryTerms: (context?.searchProfile?.primaryTerms || []).slice(0, 12),
+      tags: (context?.searchProfile?.tags || []).slice(0, 8),
+    },
+    localResults: {
+      vocab: (context?.vocabResults || []).slice(0, 6).map(serializeAiContextEntry),
+      sentences: (context?.sentenceResults || []).slice(0, 6).map(serializeAiContextEntry),
+    },
+  };
+}
+
+function isAiEligibleQuery(query) {
+  const trimmed = String(query || "").trim();
+  if (trimmed.length < AI_ASSIST_MIN_QUERY_LENGTH) return false;
+  if (/^[0-9\s:./-]+$/.test(trimmed)) return false;
+  return true;
+}
+
+function shouldAutoRunAiAssist(context) {
+  if (!hasConfiguredAiAssist()) return false;
+  if (state.aiSettings.mode !== "auto") return false;
+  if (!context || !isAiEligibleQuery(context.query)) return false;
+  if (context.numberMode || context.timeMode || context.timeQuestionMode) return false;
+  if (context.exactVocabMatch || context.exactSentenceMatch) return false;
+  if ((context.vocabResults || []).length >= 3 && (context.sentenceResults || []).length >= 3) return false;
+  return true;
+}
+
+async function requestAiAssist(context = state.lastSearchContext, options = {}) {
+  if (!context || !isAiEligibleQuery(context.query)) return;
+  if (!hasConfiguredAiAssist()) {
+    openMenu();
+    if (elements.aiSettingsFeedback) {
+      elements.aiSettingsFeedback.textContent = "AI 보강을 쓰려면 프록시 URL을 먼저 저장해 주세요.";
+    }
+    elements.aiEndpointInput?.focus();
+    return;
+  }
+
+  const trigger = options.trigger === "auto" ? "auto" : "manual";
+  const query = String(context.query || "").trim();
+  const requestId = state.aiAssist.requestId + 1;
+  state.aiAssist = {
+    status: "loading",
+    query,
+    error: "",
+    result: trigger === "manual" && state.aiAssist.query === query ? state.aiAssist.result : null,
+    requestId,
+    trigger,
+  };
+  render();
+
+  const headers = {
+    "Content-Type": "application/json",
+  };
+  if (state.aiSettings.accessToken) {
+    headers.Authorization = `Bearer ${state.aiSettings.accessToken}`;
+  }
+
+  try {
+    const response = await fetch(state.aiSettings.endpoint, {
+      method: "POST",
+      headers,
+      body: JSON.stringify(buildAiAssistRequestPayload(context)),
+    });
+
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      throw new Error(String(data.error || data.message || `AI 요청 실패 (${response.status})`));
+    }
+
+    if (requestId !== state.aiAssist.requestId) return;
+
+    state.aiAssist = {
+      status: "done",
+      query,
+      error: "",
+      result: normalizeAiAssistResponse(data, query),
+      requestId,
+      trigger,
+    };
+  } catch (error) {
+    if (requestId !== state.aiAssist.requestId) return;
+    state.aiAssist = {
+      status: "error",
+      query,
+      error: error instanceof Error ? error.message : "AI 보강 요청에 실패했습니다.",
+      result: null,
+      requestId,
+      trigger,
+    };
+  }
+
+  render();
+}
+
+function submitAiSettings(event) {
+  event.preventDefault();
+  const formData = new FormData(elements.aiSettingsForm);
+  state.aiSettings = {
+    enabled: formData.get("enabled") === "on",
+    mode: formData.get("mode") === "auto" ? "auto" : "manual",
+    endpoint: String(formData.get("endpoint") || "").trim(),
+    accessToken: String(formData.get("accessToken") || "").trim(),
+  };
+  saveAiSettings();
+  syncAiSettingsForm();
+  if (elements.aiSettingsFeedback) {
+    elements.aiSettingsFeedback.textContent = hasConfiguredAiAssist()
+      ? "AI 보강 설정을 저장했습니다."
+      : "프록시 URL이 비어 있어 AI 보강은 아직 꺼진 상태입니다.";
+  }
+  render();
 }
 
 function matchesScenario(entry) {
@@ -6742,6 +7002,115 @@ function createEntryCard(entry, searchProfile = null) {
   return card;
 }
 
+function createAiSummaryCard(result, searchProfile) {
+  const card = document.createElement("article");
+  card.className = "entry-card ai-summary-card";
+
+  const title = document.createElement("p");
+  title.className = "ai-summary-title";
+  title.textContent = result.normalizedQuery || state.query || "AI 보강";
+
+  if (result.confidence !== null) {
+    const badge = document.createElement("span");
+    badge.className = "ai-summary-badge";
+    badge.textContent = `신뢰도 ${Math.round(Math.max(0, Math.min(1, result.confidence)) * 100)}%`;
+    title.appendChild(badge);
+  }
+
+  card.appendChild(title);
+
+  if (result.intent) {
+    const intent = document.createElement("p");
+    intent.className = "entry-note";
+    renderHighlightedText(intent, `AI 해석: ${result.intent}`, searchProfile);
+    card.appendChild(intent);
+  }
+
+  if (result.hints.length) {
+    const hints = document.createElement("p");
+    hints.className = "entry-note";
+    hints.textContent = `확장 키워드: ${result.hints.join(", ")}`;
+    card.appendChild(hints);
+  }
+
+  if (result.caution) {
+    const caution = document.createElement("p");
+    caution.className = "entry-note";
+    caution.textContent = `참고: ${result.caution}`;
+    card.appendChild(caution);
+  }
+
+  return card;
+}
+
+function renderAiAssist(context) {
+  if (!elements.aiAssistButton || !elements.aiAssistPanel) return;
+
+  const query = String(context?.query || state.query || "").trim();
+  const configured = hasConfiguredAiAssist();
+  const sameQuery = Boolean(query && state.aiAssist.query === query);
+  const isLoading = sameQuery && state.aiAssist.status === "loading";
+
+  elements.aiAssistButton.disabled = !query || isLoading;
+  elements.aiAssistButton.textContent = isLoading ? "AI 보는 중..." : "AI 보강";
+  elements.aiAssistButton.title = configured
+    ? "로컬 검색이 애매할 때 AI가 뜻을 다시 풀어줍니다."
+    : "메뉴에서 AI 프록시 URL을 저장하면 사용할 수 있습니다.";
+
+  if (!query || (!configured && !isLoading) || (!sameQuery && state.aiAssist.status !== "loading")) {
+    elements.aiAssistPanel.hidden = true;
+    elements.aiAssistResults.innerHTML = "";
+    elements.aiAssistMeta.textContent = "";
+    elements.aiAssistStatus.hidden = true;
+    elements.aiAssistStatus.textContent = "";
+    return;
+  }
+
+  elements.aiAssistPanel.hidden = false;
+  elements.aiAssistResults.innerHTML = "";
+  elements.aiAssistMeta.textContent = "";
+  elements.aiAssistStatus.hidden = true;
+  elements.aiAssistStatus.textContent = "";
+
+  if (state.aiAssist.status === "loading" && sameQuery) {
+    elements.aiAssistMeta.textContent = state.aiAssist.trigger === "auto" ? "자동 보강" : "수동 보강";
+    elements.aiAssistStatus.hidden = false;
+    elements.aiAssistStatus.textContent = "AI가 검색어를 다시 해석하고 있어요.";
+    return;
+  }
+
+  if (state.aiAssist.status === "error" && sameQuery) {
+    elements.aiAssistMeta.textContent = "AI 보강 실패";
+    elements.aiAssistStatus.hidden = false;
+    elements.aiAssistStatus.textContent = state.aiAssist.error || "AI 보강 요청에 실패했습니다.";
+    return;
+  }
+
+  if (state.aiAssist.status !== "done" || !sameQuery || !state.aiAssist.result) {
+    elements.aiAssistPanel.hidden = true;
+    return;
+  }
+
+  const result = state.aiAssist.result;
+  const totalCount = result.vocab.length + result.sentences.length;
+  if (!totalCount) {
+    elements.aiAssistMeta.textContent = "AI가 확실한 보강 표현을 찾지 못했습니다.";
+    elements.aiAssistStatus.hidden = false;
+    elements.aiAssistStatus.textContent = "로컬 결과를 먼저 쓰고, 더 구체적인 검색어로 다시 시도해 주세요.";
+    return;
+  }
+
+  elements.aiAssistMeta.textContent =
+    result.model ? `${state.aiAssist.trigger === "auto" ? "자동 보강" : "수동 보강"} · ${result.model}` : state.aiAssist.trigger === "auto" ? "자동 보강" : "수동 보강";
+  elements.aiAssistResults.appendChild(createAiSummaryCard(result, context?.searchProfile || null));
+  result.vocab.forEach((entry) => {
+    elements.aiAssistResults.appendChild(createEntryCard(entry, context?.searchProfile || null));
+  });
+  result.sentences.forEach((entry) => {
+    elements.aiAssistResults.appendChild(createEntryCard(entry, context?.searchProfile || null));
+  });
+}
+
 function renderEntryStack(container, entries, emptyMessage, searchProfile = null) {
   container.innerHTML = "";
   if (!entries.length) {
@@ -7004,9 +7373,23 @@ function render() {
       : "위 단어를 바탕으로 바로 보여주기 좋은 회화만 추렸습니다."
     : "검색어를 넣으면 관련 회화가 나옵니다.";
 
+  const currentSearchContext = {
+    query: state.query,
+    searchProfile,
+    vocabResults,
+    sentenceResults,
+    exactVocabMatch: Boolean(exactVocabMatch),
+    exactSentenceMatch: Boolean(safeExactSentenceMatch),
+    numberMode,
+    timeMode,
+    timeQuestionMode,
+  };
+  state.lastSearchContext = currentSearchContext;
+
   renderScenarioChips();
   renderQuickSearches();
   renderQueryInsights(searchProfile);
+  renderAiAssist(currentSearchContext);
   renderStats(merged);
   renderEntryStack(
     elements.vocabResults,
@@ -7022,6 +7405,19 @@ function render() {
   );
   renderCustomEntries();
   syncUrl();
+
+  if (shouldAutoRunAiAssist(currentSearchContext)) {
+    const alreadyRequested =
+      state.aiAssist.query === currentSearchContext.query &&
+      (state.aiAssist.status === "loading" || state.aiAssist.status === "done");
+    if (!alreadyRequested) {
+      window.setTimeout(() => {
+        if (state.lastSearchContext?.query === currentSearchContext.query) {
+          requestAiAssist(currentSearchContext, { trigger: "auto" });
+        }
+      }, 20);
+    }
+  }
 }
 
 function submitEntryForm(event) {
@@ -7176,6 +7572,7 @@ function wireEvents() {
     elements.searchButton,
     elements.jumpVocabButton,
     elements.jumpSentenceButton,
+    elements.aiAssistButton,
     elements.resetFiltersButton,
     elements.menuButton,
     elements.menuCloseButton,
@@ -7186,6 +7583,7 @@ function wireEvents() {
 
   elements.jumpVocabButton.addEventListener("click", () => jumpToSection(elements.vocabSection));
   elements.jumpSentenceButton.addEventListener("click", () => jumpToSection(elements.sentenceSection));
+  elements.aiAssistButton.addEventListener("click", () => requestAiAssist(state.lastSearchContext, { trigger: "manual" }));
 
   elements.resetFiltersButton.addEventListener("click", () => {
     state.scenario = "all";
@@ -7206,6 +7604,7 @@ function wireEvents() {
   });
 
   elements.entryForm.addEventListener("submit", submitEntryForm);
+  elements.aiSettingsForm?.addEventListener("submit", submitAiSettings);
   elements.exportButton.addEventListener("click", exportCustomData);
   elements.importButton.addEventListener("click", () => elements.importInput.click());
   elements.importInput.addEventListener("change", importCustomData);
@@ -7214,6 +7613,7 @@ function wireEvents() {
 
 function boot() {
   wireEvents();
+  syncAiSettingsForm();
   setSearchButtonBusy(false);
   const initial = readStateFromUrl();
   const scenarioIds = new Set(baseData.scenarios.map((item) => item.id));

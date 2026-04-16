@@ -49,6 +49,7 @@
           <div class="search-actions">
             <button id="jumpVocabButton" class="ghost-button" type="button">단어</button>
             <button id="jumpSentenceButton" class="ghost-button" type="button">회화</button>
+            <button id="aiAssistButton" class="ghost-button" type="button">AI 보강</button>
           </div>
         </form>
 
@@ -78,6 +79,18 @@
             <p id="activeSummary" class="section-description"></p>
           </div>
           <div id="queryInsights" class="chip-row"></div>
+        </section>
+
+        <section id="aiAssistPanel" class="panel spotlight-panel" hidden>
+          <div class="section-top">
+            <div>
+              <p class="section-kicker">AI 보강</p>
+              <h2>애매한 검색을 뜻 중심으로 다시 풀어낸 결과</h2>
+            </div>
+            <p id="aiAssistMeta" class="section-description"></p>
+          </div>
+          <p id="aiAssistStatus" class="hero-note ai-assist-status" hidden></p>
+          <div id="aiAssistResults" class="card-stack"></div>
         </section>
 
         <section id="resultStack" class="result-stack" hidden>
@@ -212,6 +225,64 @@
         <section class="menu-section">
           <div class="section-top">
             <div>
+              <p class="section-kicker">AI 검색</p>
+              <h2>LLM 보강 연결</h2>
+            </div>
+            <p class="section-description">GitHub Pages에는 키를 넣지 않고 프록시 주소만 저장합니다.</p>
+          </div>
+
+          <form id="aiSettingsForm" class="entry-form">
+            <div class="form-grid">
+              <label class="wide toggle-field">
+                <span>사용</span>
+                <span class="inline-toggle">
+                  <input id="aiEnabledInput" name="enabled" type="checkbox" />
+                  <span>검색이 애매할 때 AI 보강 사용</span>
+                </span>
+              </label>
+
+              <label>
+                <span>실행 방식</span>
+                <select id="aiModeInput" name="mode">
+                  <option value="manual">수동 버튼</option>
+                  <option value="auto">결과 약할 때 자동</option>
+                </select>
+              </label>
+
+              <label class="wide">
+                <span>프록시 URL</span>
+                <input
+                  id="aiEndpointInput"
+                  name="endpoint"
+                  type="url"
+                  placeholder="예: https://thai-pocketbook-ai.example.workers.dev/assist"
+                />
+              </label>
+
+              <label class="wide">
+                <span>접속 토큰</span>
+                <input
+                  id="aiTokenInput"
+                  name="accessToken"
+                  type="password"
+                  placeholder="선택 사항 · OpenAI 키가 아니라 프록시 보호용 토큰"
+                />
+              </label>
+            </div>
+
+            <div class="form-actions">
+              <button class="primary-button" type="submit">AI 설정 저장</button>
+              <p id="aiSettingsFeedback" class="feedback-text" aria-live="polite"></p>
+            </div>
+            <p class="section-description">
+              Cloudflare Worker나 Vercel 함수에 OpenAI 키를 넣고, 이 앱에는 그 프록시 주소만 저장하세요.
+            </p>
+          </form>
+        </section>
+
+        <section class="menu-section">
+          <div class="section-top">
+            <div>
               <p class="section-kicker">단어장</p>
               <h2>앱 정보</h2>
             </div>
@@ -222,7 +293,7 @@
       </div>
     </aside>
 
-    <script src="./data.js?v=20260416x"></script>
-    <script src="./app.js?v=20260416x"></script>
+    <script src="./data.js?v=20260416y"></script>
+    <script src="./app.js?v=20260416y"></script>
   </body>
 </html>
