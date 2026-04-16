@@ -1,6 +1,6 @@
 ﻿const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
-const APP_VERSION = "20260416s";
+const APP_VERSION = "20260416t";
 
 const baseData = window.BASE_DATA || {
   appTitle: "태국어 포켓북",
@@ -192,6 +192,30 @@ const SUPPLEMENTAL_DATA = {
       tags: ["일터"],
       keywords: ["업무 시작", "일 시작", "작업 시작", "근무 시작"],
     },
+    {
+      id: "supp-vocab-wrong",
+      kind: "vocab",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "핏",
+      thaiScript: "ผิด",
+      korean: "잘못",
+      note: "틀림 / 잘못",
+      tags: ["기본회화"],
+      keywords: ["잘못", "잘못됐다", "잘못됐어요", "틀리다", "틀렸어", "틀렸어요"],
+    },
+    {
+      id: "supp-vocab-wrong-answer",
+      kind: "vocab",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "마이 툭",
+      thaiScript: "ไม่ถูก",
+      korean: "틀리다",
+      note: "맞지 않다 / 틀리다",
+      tags: ["기본회화"],
+      keywords: ["틀리다", "틀렸어", "틀렸어요", "정답이 아니다", "잘못"],
+    },
   ],
   sentences: [
     {
@@ -325,6 +349,42 @@ const SUPPLEMENTAL_DATA = {
       note: "회의를 시작할 때",
       tags: ["일터"],
       keywords: ["회의 시작", "미팅 시작", "회의"],
+    },
+    {
+      id: "supp-sentence-this-wrong",
+      kind: "sentence",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "안 니 핏 캅",
+      thaiScript: "อันนี้ผิดครับ",
+      korean: "이건 잘못됐어요",
+      note: "내 앞의 것이나 현재 방법이 틀렸다고 말할 때",
+      tags: ["기본회화"],
+      keywords: ["이건 잘못되었어", "이건 잘못됐어", "이건 틀렸어", "이건 틀렸어요", "잘못", "틀리다"],
+    },
+    {
+      id: "supp-sentence-that-wrong",
+      kind: "sentence",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "안 난 핏 캅",
+      thaiScript: "อันนั้นผิดครับ",
+      korean: "그건 잘못됐어요",
+      note: "상대가 가리킨 것이나 저쪽 방법이 틀렸다고 말할 때",
+      tags: ["기본회화"],
+      keywords: ["그건 잘못되었어", "그건 잘못됐어", "그건 틀렸어", "그건 틀렸어요", "잘못", "틀리다"],
+    },
+    {
+      id: "supp-sentence-this-wrong-answer",
+      kind: "sentence",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "안 니 마이 툭 캅",
+      thaiScript: "อันนี้ไม่ถูกครับ",
+      korean: "이건 틀렸어요",
+      note: "정답이나 방식이 틀렸다고 말할 때",
+      tags: ["기본회화"],
+      keywords: ["이건 틀렸어", "이건 틀렸어요", "잘못되었어", "잘못됐어", "틀리다"],
     },
   ],
 };
@@ -1976,10 +2036,36 @@ const QUERY_ALIASES = [
     tags: ["식당", "기본회화", "건강"],
   },
   {
-    matches: ["잘못된방법", "그건잘못된방법이야", "틀린방법", "그방법틀렸어"],
+    matches: [
+      "잘못된방법",
+      "그건잘못된방법이야",
+      "틀린방법",
+      "그방법틀렸어",
+      "잘못되었어",
+      "잘못됐어",
+      "잘못되었어요",
+      "잘못됐어요",
+      "잘못되었습니다",
+      "잘못됐습니다",
+      "틀렸어",
+      "틀렸어요",
+      "틀렸습니다",
+      "틀린거야",
+      "틀린거예요",
+      "이건잘못되었어",
+      "이건잘못됐어",
+      "이건잘못되었어요",
+      "이건잘못됐어요",
+      "이건틀렸어",
+      "이건틀렸어요",
+      "그건잘못되었어",
+      "그건잘못됐어",
+      "그건틀렸어",
+      "그건틀렸어요"
+    ],
     primary: ["잘못", "틀리다", "방법"],
-    related: ["그건 잘못된 방법이야", "다르게 해야 해요", "이건 맞는 방법이에요"],
-    display: ["잘못된 방법"],
+    related: ["이건 잘못됐어요", "그건 잘못됐어요", "이건 틀렸어요", "그건 잘못된 방법이야", "다르게 해야 해요", "이건 맞는 방법이에요"],
+    display: ["잘못", "틀리다"],
     tags: ["기본회화"],
   },
   {
@@ -2347,6 +2433,23 @@ function normalizeText(text) {
     .replace(/문제있습니다/g, "문제가 있어요")
     .replace(/문제있어요/g, "문제가 있어요")
     .replace(/문제있어/g, "문제가 있어요")
+    .replace(/잘못되었어요/g, "잘못")
+    .replace(/잘못됐어요/g, "잘못")
+    .replace(/잘못되었습니다/g, "잘못")
+    .replace(/잘못됐습니다/g, "잘못")
+    .replace(/잘못되었어/g, "잘못")
+    .replace(/잘못됐어/g, "잘못")
+    .replace(/잘못된거예요/g, "잘못")
+    .replace(/잘못된거야/g, "잘못")
+    .replace(/잘못된 거예요/g, "잘못")
+    .replace(/잘못된 거야/g, "잘못")
+    .replace(/틀렸어요/g, "틀리다")
+    .replace(/틀렸습니다/g, "틀리다")
+    .replace(/틀렸어/g, "틀리다")
+    .replace(/틀린거예요/g, "틀리다")
+    .replace(/틀린거야/g, "틀리다")
+    .replace(/틀린 거예요/g, "틀리다")
+    .replace(/틀린 거야/g, "틀리다")
     .replace(/이쁘/g, "예쁘")
     .replace(/깍/g, "깎")
     .replace(/더워요/g, "덥다")
@@ -3939,6 +4042,14 @@ function buildGeneratedComposedEntries(query, searchProfile, vocabEntries) {
   if (demonstrative) {
     const demoVocab = createGeneratedDemonstrativeVocab(trimmedQuery, demonstrative);
     if (demoVocab) vocab.push(demoVocab);
+  }
+
+  if (!actionId && demonstrative && hasNegativeMeaning(trimmedQuery)) {
+    return {
+      vocab: uniqueById(vocab),
+      sentences: [],
+      suppressFallbackSentences: false,
+    };
   }
 
   if (actionId === "start" && demonstrative) {
