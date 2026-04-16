@@ -1,6 +1,6 @@
 ﻿const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
-const APP_VERSION = "20260416n";
+const APP_VERSION = "20260416o";
 
 const baseData = window.BASE_DATA || {
   appTitle: "태국어 포켓북",
@@ -2176,6 +2176,21 @@ function compactText(text) {
   return normalizeText(text).replace(/[^0-9a-zA-Z가-힣\u0E00-\u0E7F]+/g, "");
 }
 
+function detectQueryDirection(text) {
+  const value = String(text || "");
+  const hasThai = /[\u0E00-\u0E7F]/.test(value);
+  const hasKorean = /[가-힣]/.test(value);
+
+  if (hasThai && !hasKorean) return "thai";
+  if (hasKorean && !hasThai) return "korean";
+  if (hasThai && hasKorean) return "mixed";
+  return "other";
+}
+
+function isThaiOnlySearch(searchProfile) {
+  return searchProfile?.queryDirection === "thai";
+}
+
 function tokenize(text) {
   return normalizeText(text)
     .split(/[\s,./()!?+\-:;]+/)
@@ -4138,6 +4153,7 @@ function buildSearchProfile(query, entries = []) {
     query: trimmedQuery,
     normalized,
     compact,
+    queryDirection: detectQueryDirection(trimmedQuery),
     directTerms: unique([compact, ...rawTokens.map((item) => compactText(item)), ...expandedCompacts].filter(Boolean)),
     primaryTerms: filteredPrimaryCompacts,
     relatedTerms: filteredRelatedCompacts,
@@ -4200,6 +4216,17 @@ function matchesIndexTerm(index, term) {
   return index.tokens.some((token) => {
     return token === term || token.includes(term);
   });
+}
+
+function matchesThaiField(index, term) {
+  if (!term) return false;
+  if ([index.thai, index.thaiScript].some((field) => field && matchesCompactField(field, term))) {
+    return true;
+  }
+  return (
+    index.thaiTokens.some((token) => token === term || token.includes(term)) ||
+    index.thaiScriptTokens.some((token) => token === term || token.includes(term))
+  );
 }
 
 const GENERIC_TEMPLATE_TERMS = new Set(["문제가있어요", "고장났어요", "수리해주세요"]);
@@ -4464,6 +4491,7 @@ function isGenericWhereOnlyQuery(searchProfile) {
 
 function getVocabResults(entries, searchProfile) {
   const candidateEntries = collectCandidateEntries(entries, searchProfile);
+  const thaiOnlySearch = isThaiOnlySearch(searchProfile);
   const ranked = candidateEntries
     .filter(matchesScenario)
     .map((entry) => {
@@ -4481,10 +4509,14 @@ function getVocabResults(entries, searchProfile) {
         objectHits: searchProfile.objectTerms.filter((term) => matchesIndexTerm(index, term)),
         actionHits: searchProfile.actionTerms.filter((term) => matchesIndexTerm(index, term)),
         templateHits: searchProfile.templateTerms.filter((term) => matchesTemplateTerm(index, term)),
+        thaiCoreHits: thaiOnlySearch ? searchProfile.directTerms.filter((term) => matchesThaiField(index, term)) : [],
       };
     })
     .filter(({ match }) => match.matched)
     .sort((left, right) => {
+      if (thaiOnlySearch && right.thaiCoreHits.length !== left.thaiCoreHits.length) {
+        return right.thaiCoreHits.length - left.thaiCoreHits.length;
+      }
       if (right.compactKoreanExact !== left.compactKoreanExact) {
         return Number(right.compactKoreanExact) - Number(left.compactKoreanExact);
       }
@@ -4534,8 +4566,9 @@ function getVocabResults(entries, searchProfile) {
       ? sourceFiltered.filter((item) => item.objectHits.length || item.templateHits.length)
       : [];
   const anchorFocused = searchProfile.anchorTerms.length ? sourceFiltered.filter((item) => item.anchorHits.length) : [];
+  const thaiFocused = thaiOnlySearch ? sourceFiltered.filter((item) => item.thaiCoreHits.length) : [];
   const preferredRanked =
-    intentFocused.length ? intentFocused : anchorFocused.length >= 2 ? anchorFocused : sourceFiltered;
+    thaiFocused.length ? thaiFocused : intentFocused.length ? intentFocused : anchorFocused.length >= 2 ? anchorFocused : sourceFiltered;
 
   if (
     !searchProfile.query ||
@@ -4566,6 +4599,7 @@ function getVocabResults(entries, searchProfile) {
 
 function getSentenceResults(entries, searchProfile, vocabSeeds) {
   const candidateEntries = collectCandidateEntries(entries, searchProfile);
+  const thaiOnlySearch = isThaiOnlySearch(searchProfile);
   const seedTerms = [];
   vocabSeeds.slice(0, 4).forEach((entry) => {
     const index = buildSearchIndex(entry);
@@ -4598,10 +4632,14 @@ function getSentenceResults(entries, searchProfile, vocabSeeds) {
         objectHits: searchProfile.objectTerms.filter((term) => matchesIndexTerm(index, term)),
         actionHits: searchProfile.actionTerms.filter((term) => matchesIndexTerm(index, term)),
         templateHits: searchProfile.templateTerms.filter((term) => matchesTemplateTerm(index, term)),
+        thaiCoreHits: thaiOnlySearch ? searchProfile.directTerms.filter((term) => matchesThaiField(index, term)) : [],
       };
     })
     .filter(({ match }) => match.matched)
     .sort((left, right) => {
+      if (thaiOnlySearch && right.thaiCoreHits.length !== left.thaiCoreHits.length) {
+        return right.thaiCoreHits.length - left.thaiCoreHits.length;
+      }
       if (right.compactKoreanExact !== left.compactKoreanExact) {
         return Number(right.compactKoreanExact) - Number(left.compactKoreanExact);
       }
@@ -4663,8 +4701,15 @@ function getSentenceResults(entries, searchProfile, vocabSeeds) {
             item.match.primaryHits >= 1
         )
       : visibleDirect;
+  const thaiFocusedDirect = thaiOnlySearch ? visibleDirect.filter((item) => item.thaiCoreHits.length) : [];
   const prioritizedDirect =
-    strictExactDirect.length >= 2 ? strictExactDirect : intentFilteredDirect.length >= 3 ? intentFilteredDirect : visibleDirect;
+    thaiFocusedDirect.length
+      ? thaiFocusedDirect
+      : strictExactDirect.length >= 2
+        ? strictExactDirect
+        : intentFilteredDirect.length >= 3
+          ? intentFilteredDirect
+          : visibleDirect;
 
   if (
     curatedDirect.length >= 2 &&
@@ -4705,12 +4750,14 @@ function getSentenceResults(entries, searchProfile, vocabSeeds) {
       const objectHits = searchProfile.objectTerms.filter((term) => matchesIndexTerm(index, term)).length;
       const actionHits = searchProfile.actionTerms.filter((term) => matchesIndexTerm(index, term)).length;
       const templateHits = searchProfile.templateTerms.filter((term) => matchesTemplateTerm(index, term)).length;
+      const thaiCoreHits = thaiOnlySearch ? searchProfile.directTerms.filter((term) => matchesThaiField(index, term)).length : 0;
       let score =
         sharedPrimary * 180 +
         shared * 45 +
         objectHits * 170 +
         actionHits * 110 +
         templateHits * 300 +
+        thaiCoreHits * 260 +
         getEntrySourceScore(entry, "sentence");
 
       if (searchProfile.objectTerms.length && !objectHits && !templateHits) {
@@ -4731,16 +4778,19 @@ function getSentenceResults(entries, searchProfile, vocabSeeds) {
         objectHits,
         actionHits,
         templateHits,
+        thaiCoreHits,
       };
     })
     .filter(
-      ({ score, shared, sharedPrimary, objectHits, templateHits }) =>
+      ({ score, shared, sharedPrimary, objectHits, templateHits, thaiCoreHits }) =>
+        thaiCoreHits >= 1 ||
         templateHits >= 1 ||
         objectHits >= 1 ||
         sharedPrimary >= 1 ||
         (shared >= 1 && score >= (searchProfile.minimumPrimaryHits > 1 ? 220 : 160))
     )
     .sort((left, right) => {
+      if (thaiOnlySearch && right.thaiCoreHits !== left.thaiCoreHits) return right.thaiCoreHits - left.thaiCoreHits;
       if (right.templateHits !== left.templateHits) return right.templateHits - left.templateHits;
       if (right.objectHits !== left.objectHits) return right.objectHits - left.objectHits;
       if (right.actionHits !== left.actionHits) return right.actionHits - left.actionHits;
@@ -5442,9 +5492,10 @@ function render() {
   elements.searchInput.value = state.query;
   elements.datasetNote.textContent = baseData.note || "";
   elements.resultStack.hidden = browsing;
+  const thaiOnlySearch = isThaiOnlySearch(searchProfile);
 
   elements.searchStatus.textContent = browsing
-    ? "한국어로 검색하면 단어를 먼저, 바로 쓸 회화를 그 아래에 보여줍니다."
+    ? "한국어와 태국어 둘 다 검색할 수 있습니다. 한국어는 바로 쓸 태국어를, 태국어는 한국어 뜻을 먼저 보여줍니다."
     : numberMode
       ? `숫자 변환: 읽기 ${vocabResults.length}개 · 활용 ${sentenceResults.length}개${expandedHint}`
       : timeQuestionMode
@@ -5462,7 +5513,9 @@ function render() {
 
   elements.activeSummary.textContent = browsing
     ? ""
-    : `검색어 "${state.query}"를 핵심 단어와 회화로 나눠서 찾고 있습니다.`;
+    : thaiOnlySearch
+      ? `검색어 "${state.query}"를 태국어에서 한국어 뜻 중심으로 찾고 있습니다.`
+      : `검색어 "${state.query}"를 핵심 단어와 회화로 나눠서 찾고 있습니다.`;
 
   elements.vocabMeta.textContent = state.query
     ? numberMode
@@ -5471,6 +5524,8 @@ function render() {
         ? "현재 시간을 묻는 표현과 기기 기준 현재 시각을 먼저 보여줍니다."
       : timeMode
         ? "검색한 시간을 그대로 변형해서 읽기와 시간 표현을 먼저 보여줍니다."
+      : thaiOnlySearch
+        ? "태국어 검색이라서 한국어 뜻과 가까운 단어를 먼저 올렸습니다."
       : composedMode
         ? "핵심 단어를 먼저 잡고, 요청 문장은 자동으로 조합해 맨 위에 올렸습니다."
       : exactSentenceMatch
@@ -5486,6 +5541,8 @@ function render() {
         ? "지금 몇 시인지 묻거나 답할 때 바로 보여줄 수 있게 만들었습니다."
       : timeMode
         ? "검색한 시간 그대로 문장에 넣어서 바로 보여줄 수 있게 만들었습니다."
+      : thaiOnlySearch
+        ? "태국어 검색이라서 해당 표현이 들어간 한국어 회화를 우선해서 보여줍니다."
       : composedMode
         ? "입력한 표현에서 목적어와 동사를 나눠 바로 보여줄 문장을 먼저 만들었습니다."
       : "위 단어를 바탕으로 바로 보여주기 좋은 회화만 추렸습니다."
