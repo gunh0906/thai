@@ -6962,6 +6962,342 @@ function getThaiScriptText(entry) {
   return THAI_SCRIPT_REGEX.test(String(entry.thai || "")) ? String(entry.thai || "").trim() : "";
 }
 
+const LATIN_PRONUNCIATION_OVERRIDES = {
+  aircon: "에어컨",
+  arai: "아라이",
+  atm: "에이티엠",
+  baht: "밧",
+  bpai: "빠이",
+  bts: "비티에스",
+  chai: "차이",
+  dai: "다이",
+  duai: "두아이",
+  grab: "그랩",
+  hongnam: "홍남",
+  kap: "캅",
+  khrap: "캅",
+  khrua: "크루아",
+  krub: "캅",
+  line: "라인",
+  mai: "마이",
+  mak: "막",
+  makmak: "막막",
+  mrt: "엠알티",
+  nai: "나이",
+  nid: "닛",
+  noi: "너이",
+  ok: "오케이",
+  okay: "오케이",
+  pai: "빠이",
+  phom: "폼",
+  pom: "폼",
+  sawatdee: "사왓디",
+  sawatdi: "사왓디",
+  swatdi: "사왓디",
+  suksan: "숙산",
+  thuk: "툭",
+  thukwan: "툭완",
+  tonbai: "톤바이",
+  wai: "와이",
+  wan: "완",
+  wifi: "와이파이",
+  yuu: "유",
+  yu: "유",
+};
+
+const LATIN_ACRONYM_PRONUNCIATION_MAP = {
+  A: "에이",
+  B: "비",
+  C: "씨",
+  D: "디",
+  E: "이",
+  F: "에프",
+  G: "지",
+  H: "에이치",
+  I: "아이",
+  J: "제이",
+  K: "케이",
+  L: "엘",
+  M: "엠",
+  N: "엔",
+  O: "오",
+  P: "피",
+  Q: "큐",
+  R: "알",
+  S: "에스",
+  T: "티",
+  U: "유",
+  V: "브이",
+  W: "더블유",
+  X: "엑스",
+  Y: "와이",
+  Z: "지",
+};
+
+const LATIN_CLUSTER_FALLBACK_MAP = {
+  b: "브",
+  bp: "브",
+  c: "크",
+  ch: "치",
+  d: "드",
+  f: "프",
+  g: "그",
+  h: "흐",
+  j: "지",
+  k: "크",
+  kh: "크",
+  l: "를",
+  m: "음",
+  n: "느",
+  ng: "응",
+  p: "프",
+  ph: "프",
+  q: "쿠",
+  r: "르",
+  s: "스",
+  sh: "시",
+  t: "트",
+  th: "트",
+  tm: "팀",
+  tn: "튼",
+  tt: "트",
+  w: "우",
+  x: "엑스",
+  y: "이",
+  z: "즈",
+};
+
+const ROMAN_INITIAL_INDEX = {
+  "": 11,
+  b: 7,
+  bp: 7,
+  c: 12,
+  ch: 14,
+  d: 3,
+  f: 17,
+  g: 0,
+  h: 18,
+  j: 12,
+  k: 15,
+  kh: 15,
+  l: 5,
+  m: 6,
+  n: 2,
+  ng: 11,
+  p: 17,
+  ph: 17,
+  q: 15,
+  r: 5,
+  s: 9,
+  sh: 10,
+  t: 16,
+  th: 16,
+  v: 17,
+  w: 11,
+  x: 9,
+  y: 11,
+  z: 12,
+};
+
+const ROMAN_MEDIAL_MAP = {
+  a: { index: 0, tail: "" },
+  aa: { index: 0, tail: "" },
+  ae: { index: 1, tail: "" },
+  ai: { index: 0, tail: "이" },
+  ao: { index: 0, tail: "오" },
+  au: { index: 0, tail: "우" },
+  aw: { index: 0, tail: "우" },
+  e: { index: 5, tail: "" },
+  ee: { index: 20, tail: "" },
+  i: { index: 20, tail: "" },
+  ia: { index: 20, tail: "아" },
+  ie: { index: 20, tail: "에" },
+  o: { index: 8, tail: "" },
+  oe: { index: 18, tail: "" },
+  oi: { index: 8, tail: "이" },
+  oo: { index: 13, tail: "" },
+  u: { index: 13, tail: "" },
+  ua: { index: 13, tail: "아" },
+  ue: { index: 18, tail: "" },
+  ui: { index: 19, tail: "" },
+  y: { index: 20, tail: "" },
+  ya: { index: 2, tail: "" },
+  ye: { index: 7, tail: "" },
+  yo: { index: 12, tail: "" },
+  yu: { index: 17, tail: "" },
+  wa: { index: 9, tail: "" },
+  we: { index: 15, tail: "" },
+  wi: { index: 16, tail: "" },
+  wo: { index: 14, tail: "" },
+};
+
+const ROMAN_FINAL_INDEX = {
+  "": 0,
+  b: 17,
+  c: 1,
+  ch: 23,
+  d: 7,
+  f: 26,
+  g: 1,
+  h: 27,
+  k: 1,
+  l: 8,
+  m: 16,
+  n: 4,
+  ng: 21,
+  p: 17,
+  r: 8,
+  s: 19,
+  sh: 19,
+  t: 7,
+  th: 25,
+  x: 19,
+  z: 22,
+};
+
+const ROMAN_ONSET_PATTERNS = ["ng", "kh", "ph", "th", "ch", "sh", "bp"];
+const ROMAN_VOWEL_PATTERNS = [
+  "ya",
+  "ye",
+  "yo",
+  "yu",
+  "wa",
+  "we",
+  "wi",
+  "wo",
+  "aa",
+  "ae",
+  "ai",
+  "ao",
+  "au",
+  "aw",
+  "ee",
+  "ia",
+  "ie",
+  "oe",
+  "oi",
+  "oo",
+  "ua",
+  "ue",
+  "ui",
+  "a",
+  "e",
+  "i",
+  "o",
+  "u",
+  "y",
+];
+
+function composeHangulSyllable(initialIndex, medialIndex, finalIndex = 0) {
+  return String.fromCharCode(0xac00 + (initialIndex * 21 + medialIndex) * 28 + finalIndex);
+}
+
+function matchRomanPattern(patterns, text, startIndex) {
+  return patterns.find((pattern) => text.startsWith(pattern, startIndex)) || "";
+}
+
+function splitRomanCoda(run) {
+  const value = String(run || "").toLowerCase();
+  if (!value) return { coda: "", rest: "" };
+  const matched = matchRomanPattern(["ng", "sh", "th", "ch"], value, 0);
+  if (matched) {
+    return { coda: matched, rest: value.slice(matched.length) };
+  }
+  return { coda: value[0], rest: value.slice(1) };
+}
+
+function convertRomanAcronym(token) {
+  if (!/^[A-Z]{2,5}$/.test(token)) return "";
+  return token
+    .split("")
+    .map((letter) => LATIN_ACRONYM_PRONUNCIATION_MAP[letter] || letter)
+    .join("");
+}
+
+function convertRomanClusterFallback(token) {
+  const normalized = String(token || "").toLowerCase().replace(/[^a-z]/g, "");
+  if (!normalized) return "";
+  if (LATIN_CLUSTER_FALLBACK_MAP[normalized]) return LATIN_CLUSTER_FALLBACK_MAP[normalized];
+  return normalized
+    .replace(/ng/g, "응 ")
+    .replace(/ph/g, "프 ")
+    .replace(/kh/g, "크 ")
+    .replace(/th/g, "트 ")
+    .replace(/ch/g, "치 ")
+    .replace(/sh/g, "시 ")
+    .replace(/([bcdfghjklmnpqrstvwxyz])/g, (char) => LATIN_CLUSTER_FALLBACK_MAP[char] || char)
+    .replace(/\s+/g, "")
+    .trim();
+}
+
+function convertRomanTokenToKorean(token) {
+  const original = String(token || "").trim();
+  if (!original) return "";
+  const acronym = convertRomanAcronym(original);
+  if (acronym) return acronym;
+
+  const normalized = original.toLowerCase().replace(/[^a-z]/g, "");
+  if (!normalized) return original;
+  if (LATIN_PRONUNCIATION_OVERRIDES[normalized]) {
+    return LATIN_PRONUNCIATION_OVERRIDES[normalized];
+  }
+
+  let cursor = 0;
+  let result = "";
+
+  while (cursor < normalized.length) {
+    let onset = "";
+    const vowelAtCursor = matchRomanPattern(ROMAN_VOWEL_PATTERNS, normalized, cursor);
+    if (!vowelAtCursor) {
+      onset = matchRomanPattern(ROMAN_ONSET_PATTERNS, normalized, cursor) || normalized[cursor];
+      cursor += onset.length;
+    }
+
+    const vowel = matchRomanPattern(ROMAN_VOWEL_PATTERNS, normalized, cursor);
+    if (!vowel) {
+      result += LATIN_PRONUNCIATION_OVERRIDES[onset] || convertRomanClusterFallback(onset);
+      continue;
+    }
+    cursor += vowel.length;
+
+    const runStart = cursor;
+    while (cursor < normalized.length && !matchRomanPattern(ROMAN_VOWEL_PATTERNS, normalized, cursor)) {
+      cursor += 1;
+    }
+
+    let coda = "";
+    if (runStart < normalized.length) {
+      const consonantRun = normalized.slice(runStart, cursor);
+      if (consonantRun) {
+        if (cursor < normalized.length) {
+          const split = splitRomanCoda(consonantRun);
+          coda = split.coda;
+          cursor = runStart + split.coda.length;
+        } else {
+          coda = consonantRun;
+        }
+      }
+    }
+
+    const initialIndex = ROMAN_INITIAL_INDEX[onset] ?? 11;
+    const medial = ROMAN_MEDIAL_MAP[vowel] || ROMAN_MEDIAL_MAP.a;
+    const finalIndex = ROMAN_FINAL_INDEX[coda] ?? 0;
+    result += composeHangulSyllable(initialIndex, medial.index, finalIndex) + (medial.tail || "");
+  }
+
+  return result || original;
+}
+
+function normalizePronunciationForDisplay(text) {
+  const raw = String(text || "").trim();
+  if (!/[A-Za-z]/.test(raw)) return raw;
+  return raw.replace(/[A-Za-z][A-Za-z-]*/g, (token) => convertRomanTokenToKorean(token));
+}
+
+function getDisplayPronunciationText(entry) {
+  return normalizePronunciationForDisplay(String(entry?.thai || "").trim());
+}
+
 function hasNegativeMeaning(text) {
   return /(안|못|없|말고|잘못|틀리|실수|오류|오타|아니)/.test(normalizeText(text));
 }
@@ -7085,7 +7421,7 @@ function createEntryCard(entry, searchProfile = null) {
 
   const thai = document.createElement("p");
   thai.className = "entry-thai";
-  thai.textContent = entry.thai;
+  thai.textContent = getDisplayPronunciationText(entry) || entry.thai;
 
   card.append(korean, thai);
 
