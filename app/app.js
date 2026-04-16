@@ -1443,7 +1443,7 @@ const ACTION_COMPOSITION_TEMPLATES = {
   },
   change: {
     label: "로 바꿔 주세요",
-    korean: (objectLabel) => `${objectLabel}로 바꿔 주세요`,
+    korean: (objectLabel) => `${attachKoreanDirectionalParticle(objectLabel)} 바꿔 주세요`,
     thaiKo: (objectThaiKo) => `츄어이 쁠리안 펜 ${objectThaiKo} 하이 너이 캅`,
     thaiScript: (objectThaiScript) => `ช่วยเปลี่ยนเป็น${objectThaiScript}ให้หน่อยครับ`,
     note: "가리킨 쪽으로 바꾸고 싶을 때",
@@ -3054,6 +3054,34 @@ function collectIntentDrivenVariants(text) {
   ]).filter(Boolean);
 }
 
+function filterExpandedQuestionVariants(baseQuery, variants = []) {
+  const normalizedBase = compactText(baseQuery);
+  const explicitWhere = /어디|어디예요|어디에요|어딘지|어디야|어디로|어디서|어딨어|어디있/.test(normalizedBase);
+  const explicitPrice = /얼마|가격|요금|비용|비싸|깎|깍|할인/.test(normalizedBase);
+  const explicitBuy = /사요|사다|구매|팔아요/.test(normalizedBase);
+
+  return unique(
+    variants
+      .map((item) => normalizeText(item))
+      .filter(Boolean)
+      .filter((item) => {
+        const compactItem = compactText(item);
+        if (
+          !explicitWhere &&
+          /어디예요|어디에요|어디에있어요|어디가요|어디가세요|어디로가요|어디로가세요|어디서사요|어디서내요|어디계세요/.test(
+            compactItem
+          )
+        ) {
+          return false;
+        }
+        if (!explicitPrice && !explicitBuy && /얼마예요|얼마에요/.test(compactItem)) {
+          return false;
+        }
+        return true;
+      })
+  );
+}
+
 function extractCompactPhraseRoots(item) {
   const normalized = normalizeText(item);
   if (!normalized || /\s/.test(normalized) || normalized.length < 4) return [];
@@ -3351,7 +3379,7 @@ function expandQueryVariants(query, rawTokens = []) {
     });
   });
 
-  return unique(variants.map((item) => normalizeText(item)).filter(Boolean));
+  return filterExpandedQuestionVariants(query, variants);
 }
 
 function unique(items) {
@@ -4918,10 +4946,25 @@ function hasKoreanBatchim(text) {
   return (lastChar.charCodeAt(0) - 44032) % 28 !== 0;
 }
 
+function getKoreanBatchimIndex(text) {
+  const trimmed = String(text || "").trim();
+  const lastChar = trimmed.charAt(trimmed.length - 1);
+  if (!/[가-힣]/.test(lastChar)) return -1;
+  return (lastChar.charCodeAt(0) - 44032) % 28;
+}
+
 function attachKoreanSubjectParticle(text) {
   const trimmed = String(text || "").trim();
   if (!trimmed) return "";
   return `${trimmed}${hasKoreanBatchim(trimmed) ? "이" : "가"}`;
+}
+
+function attachKoreanDirectionalParticle(text) {
+  const trimmed = String(text || "").trim();
+  if (!trimmed) return "";
+  const batchimIndex = getKoreanBatchimIndex(trimmed);
+  if (batchimIndex < 0) return `${trimmed}로`;
+  return `${trimmed}${batchimIndex === 0 || batchimIndex === 8 ? "로" : "으로"}`;
 }
 
 function isLikelyActionMeaningEntry(entry) {
