@@ -114,11 +114,13 @@ function buildAppContext(rootDir) {
         buildGeneratedTimeQuestionEntries,
         buildGeneratedTimeEntries,
         buildGeneratedComposedEntries,
+        buildGeneratedThaiMeaningEntries,
         findExactEntry,
         getVocabResults,
         getSentenceResults,
         uniqueById,
         uniqueByMeaning,
+        mergeGeneratedEntrySets,
         isSentenceLikeVocabEntry,
         isUtilityLabelVocabEntry,
       };
@@ -152,8 +154,13 @@ function createSearchRunner(context) {
       !numberMode && !timeQuestionMode && !timeMode
         ? api.buildGeneratedComposedEntries(query, profile, merged.vocab)
         : { vocab: [], sentences: [], suppressFallbackSentences: false };
+    const generatedThaiMeaning =
+      !numberMode && !timeQuestionMode && !timeMode
+        ? api.buildGeneratedThaiMeaningEntries(query, profile, merged.vocab)
+        : { vocab: [], sentences: [], suppressFallbackSentences: false };
+    const generatedAssist = api.mergeGeneratedEntrySets(generatedComposed, generatedThaiMeaning);
     const refinedVocab =
-      generatedComposed.vocab.length || generatedComposed.sentences.length
+      generatedAssist.vocab.length || generatedAssist.sentences.length
         ? preliminaryVocab.filter((entry) => entry.source !== "generated-bulk")
         : preliminaryVocab;
     const allVocab = numberMode
@@ -162,25 +169,25 @@ function createSearchRunner(context) {
         ? generatedTimeQuestion.vocab
         : timeMode
           ? generatedTime.vocab
-          : api.uniqueByMeaning(api.uniqueById([...generatedComposed.vocab, ...refinedVocab]));
+          : api.uniqueByMeaning(api.uniqueById([...generatedAssist.vocab, ...refinedVocab]));
     const vocab = allVocab.slice(0, 5);
 
     const exactSentence = numberMode ? null : api.findExactEntry(merged.sentences, profile, { includeTemplates: true });
     const refinedSentenceCandidates =
       numberMode || timeQuestionMode || timeMode
         ? []
-        : generatedComposed.suppressFallbackSentences
+        : generatedAssist.suppressFallbackSentences
           ? []
-          : (generatedComposed.vocab.length || generatedComposed.sentences.length
+          : (generatedAssist.vocab.length || generatedAssist.sentences.length
               ? api.getSentenceResults(
                   merged.sentences,
                   profile,
-                  api.uniqueByMeaning([...generatedComposed.vocab, ...refinedVocab])
+                  api.uniqueByMeaning([...generatedAssist.vocab, ...refinedVocab])
                 ).filter((entry) => entry.source !== "generated-bulk")
               : api.getSentenceResults(
                   merged.sentences,
                   profile,
-                  api.uniqueByMeaning([...generatedComposed.vocab, ...refinedVocab])
+                  api.uniqueByMeaning([...generatedAssist.vocab, ...refinedVocab])
                 ));
     const sentences = (
       numberMode
@@ -194,7 +201,7 @@ function createSearchRunner(context) {
           ? generatedTime.sentences
             : api.uniqueByMeaning(api.uniqueById([
                 ...(exactSentence ? [exactSentence] : []),
-                ...generatedComposed.sentences,
+                ...generatedAssist.sentences,
                 ...refinedSentenceCandidates,
               ]))
     ).slice(0, 5);

@@ -1,6 +1,6 @@
 ﻿const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
-const APP_VERSION = "20260416o";
+const APP_VERSION = "20260416p";
 
 const baseData = window.BASE_DATA || {
   appTitle: "태국어 포켓북",
@@ -1215,6 +1215,52 @@ const ACTION_COMPOSITION_SUFFIXES = {
 };
 const ACTION_COMPOSITION_PARTICLE_SUFFIXES = ["으로", "로", "을", "를", "은", "는", "이", "가"];
 const ACTION_COMPOSITION_FILLER_SUFFIXES = ["조금만", "좀만", "쫌", "좀"];
+const THAI_MEANING_STOPWORD_TEXTS = [
+  "ครับ",
+  "ค่ะ",
+  "คะ",
+  "นะ",
+  "นะครับ",
+  "นะคะ",
+  "หน่อย",
+  "หน่อยครับ",
+  "หน่อยค่ะ",
+  "ผม",
+  "ฉัน",
+  "ดิฉัน",
+  "ช่วย",
+  "ด้วย",
+  "เอา",
+  "มา",
+  "ให้",
+  "ดู",
+  "ขอ",
+  "ไม่",
+  "อยู่",
+  "ไหน",
+  "ที่ไหน",
+  "ตรงไหน",
+  "ราคา",
+  "เท่าไหร่",
+  "กี่บาท",
+  "เปลี่ยน",
+];
+const THAI_DEMONSTRATIVE_MEANINGS = [
+  { matches: ["อันนี้", "นี่"], label: "이거" },
+  { matches: ["อันนั้น", "นั้น"], label: "그거" },
+  { matches: ["อันโน้น", "โน้น"], label: "저거" },
+];
+const THAI_MEANING_INTENT_RULES = [
+  { id: "notUnderstand", matches: ["ไม่เข้าใจ", "ไม่ค่อยเข้าใจ"] },
+  { id: "help", matches: ["ช่วยด้วย"] },
+  { id: "where", matches: ["อยู่ไหน", "ที่ไหน", "ตรงไหน"] },
+  { id: "price", matches: ["ราคาเท่าไหร่", "เท่าไหร่", "กี่บาท"] },
+  { id: "change", matches: ["เปลี่ยน"] },
+  { id: "bring", matches: ["เอามาให้", "เอามา", "หยิบมาให้", "ยกมาให้"] },
+  { id: "show", matches: ["ขอดู", "ดู"] },
+  { id: "reject", matches: ["ไม่เอา", "ไม่ต้องเอา"] },
+  { id: "request", matches: ["เอา", "ขอ"] },
+];
 
 const QUERY_BUNDLES = [
   {
@@ -2189,6 +2235,40 @@ function detectQueryDirection(text) {
 
 function isThaiOnlySearch(searchProfile) {
   return searchProfile?.queryDirection === "thai";
+}
+
+function normalizeThaiMeaningQuery(text) {
+  return normalizeText(text)
+    .replace(/นะครับ|นะคะ/g, " ")
+    .replace(/ครับ|ค่ะ|คะ/g, " ")
+    .replace(/หน่อย/g, " ")
+    .replace(/ผม|ฉัน|ดิฉัน/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function isThaiMeaningStopword(term) {
+  const compact = compactText(term);
+  if (!compact) return true;
+  return THAI_MEANING_STOPWORD_TEXTS.some((item) => compactText(item) === compact);
+}
+
+function findThaiDemonstrativeMeaning(text) {
+  const compact = compactText(text);
+  if (!compact) return null;
+  return (
+    THAI_DEMONSTRATIVE_MEANINGS.find((item) =>
+      item.matches.some((match) => compact.includes(compactText(match)))
+    ) || null
+  );
+}
+
+function detectThaiMeaningIntentIds(text) {
+  const compact = compactText(text);
+  if (!compact) return [];
+  return THAI_MEANING_INTENT_RULES.filter((rule) =>
+    rule.matches.some((match) => compact.includes(compactText(match)))
+  ).map((rule) => rule.id);
 }
 
 function tokenize(text) {
@@ -3567,6 +3647,409 @@ function buildGeneratedComposedEntries(query, searchProfile, vocabEntries) {
   };
 }
 
+function getThaiMeaningTags(intentIds = [], objectEntry = null) {
+  const tags = [];
+  intentIds.forEach((intentId) => {
+    if (intentId === "where") tags.push("이동");
+    if (intentId === "price") tags.push("쇼핑");
+    if (intentId === "help" || intentId === "notUnderstand") tags.push("기본회화");
+    if (intentId === "change") tags.push("이동", "쇼핑", "일터");
+    if (intentId === "bring" || intentId === "show" || intentId === "request" || intentId === "reject") {
+      tags.push("기본회화");
+    }
+  });
+  if (objectEntry?.tags?.length) {
+    tags.push(...objectEntry.tags);
+  }
+  return sortTags(unique(tags));
+}
+
+function getEntryPrimaryKoreanText(entry) {
+  const korean = String(entry?.korean || "").trim();
+  if (!korean) return "";
+  return korean.split(/\s*\/\s*/)[0].trim();
+}
+
+function hasKoreanBatchim(text) {
+  const trimmed = String(text || "").trim();
+  const lastChar = trimmed.charAt(trimmed.length - 1);
+  if (!/[가-힣]/.test(lastChar)) return false;
+  return (lastChar.charCodeAt(0) - 44032) % 28 !== 0;
+}
+
+function attachKoreanSubjectParticle(text) {
+  const trimmed = String(text || "").trim();
+  if (!trimmed) return "";
+  return `${trimmed}${hasKoreanBatchim(trimmed) ? "이" : "가"}`;
+}
+
+function isLikelyActionMeaningEntry(entry) {
+  const korean = getEntryPrimaryKoreanText(entry);
+  return /(?:가져오다|가져다|보여|보다|바꾸다|변경|주세요|도와주|이해하다|이해)$/u.test(korean);
+}
+
+function getThaiMeaningObjectMatchScore(entry, compactQuery) {
+  if (!entry || entry.kind !== "vocab") return -1;
+  if (isSentenceLikeVocabEntry(entry) || isUtilityLabelVocabEntry(entry)) return -1;
+  if (isLikelyActionMeaningEntry(entry)) return -1;
+
+  const index = buildSearchIndex(entry);
+  const thaiTerms = unique([index.thai, index.thaiScript, ...index.thaiTokens, ...index.thaiScriptTokens]).filter(
+    (term) => term && term.length >= 2 && !isThaiMeaningStopword(term)
+  );
+  let best = -1;
+
+  thaiTerms.forEach((term) => {
+    if (compactQuery === term) {
+      best = Math.max(best, 160);
+      return;
+    }
+    if (compactQuery.includes(term)) {
+      best = Math.max(best, 110 + term.length * 8);
+      return;
+    }
+    if (term.includes(compactQuery) && compactQuery.length >= 2) {
+      best = Math.max(best, 80 + compactQuery.length * 5);
+    }
+  });
+
+  if (entry.source === "generated-bulk") best -= 45;
+  if (!getThaiScriptText(entry)) best -= 14;
+  return best;
+}
+
+function findThaiMeaningObjectEntry(entries, query) {
+  const compactQuery = compactText(normalizeThaiMeaningQuery(query));
+  if (!compactQuery) return null;
+
+  const ranked = entries
+    .filter((entry) => entry.kind === "vocab" && matchesScenario(entry))
+    .map((entry) => ({
+      entry,
+      score: getThaiMeaningObjectMatchScore(entry, compactQuery),
+    }))
+    .filter((item) => item.score >= 96)
+    .sort((left, right) => {
+      if (right.score !== left.score) return right.score - left.score;
+      const leftThai = Boolean(getThaiScriptText(left.entry));
+      const rightThai = Boolean(getThaiScriptText(right.entry));
+      if (leftThai !== rightThai) return Number(rightThai) - Number(leftThai);
+      return left.entry.korean.length - right.entry.korean.length;
+    });
+
+  return ranked[0]?.entry || null;
+}
+
+function analyzeThaiMeaningQuery(query, entries = []) {
+  const direction = detectQueryDirection(query);
+  if (direction !== "thai" && direction !== "mixed") return null;
+
+  const normalized = normalizeThaiMeaningQuery(query);
+  const compact = compactText(normalized);
+  if (!compact || compact.length < 2) return null;
+
+  const detectedIntentIds = detectThaiMeaningIntentIds(normalized);
+  const intentIds = detectedIntentIds.filter((intentId) => {
+    if (intentId === "request" && (detectedIntentIds.includes("reject") || detectedIntentIds.includes("bring"))) {
+      return false;
+    }
+    if (intentId === "show" && detectedIntentIds.includes("notUnderstand")) {
+      return false;
+    }
+    return true;
+  });
+  const demonstrative = findThaiDemonstrativeMeaning(normalized);
+  const objectEntry = findThaiMeaningObjectEntry(entries, normalized);
+  const objectLabel = demonstrative?.label || getEntryPrimaryKoreanText(objectEntry) || "";
+  const tags = getThaiMeaningTags(intentIds, objectEntry);
+  const primaryTerms = [];
+  const relatedTerms = [];
+  const displayTerms = [];
+  const objectTerms = [];
+  const actionTerms = [];
+  const templateTerms = [];
+
+  if (objectLabel) {
+    primaryTerms.push(objectLabel);
+    displayTerms.push(objectLabel);
+    objectTerms.push(objectLabel);
+  }
+
+  if (intentIds.includes("where")) {
+    primaryTerms.push("어디", "찾다");
+    relatedTerms.push(objectLabel ? `${objectLabel} 어디예요?` : "어디예요?");
+    displayTerms.push("어디");
+    actionTerms.push("어디");
+    templateTerms.push(objectLabel ? `${objectLabel} 어디예요?` : "어디예요?");
+  }
+  if (intentIds.includes("price")) {
+    primaryTerms.push("얼마", "가격");
+    relatedTerms.push(objectLabel && objectLabel !== "가격" ? `${objectLabel} 얼마예요?` : "얼마예요?");
+    displayTerms.push("가격");
+    actionTerms.push("얼마");
+    templateTerms.push(objectLabel && objectLabel !== "가격" ? `${objectLabel} 얼마예요?` : "얼마예요?");
+  }
+  if (intentIds.includes("help")) {
+    primaryTerms.push("도와주세요", "도와주다");
+    relatedTerms.push("도와주세요");
+    displayTerms.push("도와주세요");
+    actionTerms.push("도와주세요");
+    templateTerms.push("도와주세요");
+  }
+  if (intentIds.includes("notUnderstand")) {
+    primaryTerms.push("이해 못하다", "이해");
+    relatedTerms.push("이해 못해요", "한 번 더 말해주세요");
+    displayTerms.push("이해");
+    actionTerms.push("이해");
+    templateTerms.push("이해 못해요");
+  }
+  if (intentIds.includes("change")) {
+    primaryTerms.push("바꾸다", "변경");
+    relatedTerms.push(objectLabel ? `${objectLabel} 바꿔 주세요` : "바꿔 주세요");
+    displayTerms.push("바꾸다");
+    actionTerms.push("바꾸다");
+    templateTerms.push(objectLabel ? `${objectLabel} 바꿔 주세요` : "바꿔 주세요");
+  }
+  if (intentIds.includes("bring")) {
+    primaryTerms.push("가져오다", "가져다 주세요");
+    relatedTerms.push(objectLabel ? `${objectLabel} 가져다 주세요` : "가져다 주세요");
+    displayTerms.push("가져오다");
+    actionTerms.push("가져오다");
+    templateTerms.push(objectLabel ? `${objectLabel} 가져다 주세요` : "가져다 주세요");
+  }
+  if (intentIds.includes("show")) {
+    primaryTerms.push("보여주세요", "보다");
+    relatedTerms.push(objectLabel ? `${objectLabel} 보여 주세요` : "보여 주세요");
+    displayTerms.push("보여주세요");
+    actionTerms.push("보여주세요");
+    templateTerms.push(objectLabel ? `${objectLabel} 보여 주세요` : "보여 주세요");
+  }
+  if (intentIds.includes("request")) {
+    primaryTerms.push("주세요");
+    relatedTerms.push(objectLabel ? `${objectLabel} 주세요` : "주세요");
+    displayTerms.push("주세요");
+    actionTerms.push("주세요");
+    templateTerms.push(objectLabel ? `${objectLabel} 주세요` : "주세요");
+  }
+  if (intentIds.includes("reject")) {
+    primaryTerms.push("말고", "싫어");
+    relatedTerms.push(demonstrative ? `${demonstrative.label} 말고 다른 거 주세요` : "말고 다른 거 주세요", "싫어요");
+    displayTerms.push("말고");
+    actionTerms.push("말고");
+    templateTerms.push(demonstrative ? `${demonstrative.label} 말고 다른 거 주세요` : "말고 다른 거 주세요");
+  }
+  if (!intentIds.length && demonstrative) {
+    relatedTerms.push(demonstrative.label);
+  }
+
+  const strongIntents = ["where", "price", "help", "notUnderstand", "change", "bring", "show", "request", "reject"];
+  const suppressFallbackSentences = intentIds.some((intentId) => strongIntents.includes(intentId));
+
+  return {
+    normalized,
+    compact,
+    intentIds,
+    demonstrative,
+    objectEntry,
+    objectLabel,
+    tags,
+    primaryTerms: unique(primaryTerms),
+    relatedTerms: unique(relatedTerms),
+    displayTerms: unique(displayTerms),
+    objectTerms: unique(objectTerms),
+    actionTerms: unique(actionTerms),
+    templateTerms: unique(templateTerms),
+    suppressFallbackSentences,
+  };
+}
+
+function buildThaiMeaningHints(query, entries = []) {
+  const analysis = analyzeThaiMeaningQuery(query, entries);
+  if (!analysis) {
+    return {
+      primaryTerms: [],
+      relatedTerms: [],
+      displayTerms: [],
+      tags: [],
+      objectTerms: [],
+      actionTerms: [],
+      templateTerms: [],
+    };
+  }
+
+  return {
+    primaryTerms: analysis.primaryTerms,
+    relatedTerms: analysis.relatedTerms,
+    displayTerms: analysis.displayTerms,
+    tags: analysis.tags,
+    objectTerms: analysis.objectTerms,
+    actionTerms: analysis.actionTerms,
+    templateTerms: analysis.templateTerms,
+  };
+}
+
+function createGeneratedThaiMeaningEntry(query, korean, kind, tags = [], note = "") {
+  const thaiText = String(query || "").trim();
+  if (!thaiText || !korean) return null;
+
+  return hydrateEntry(
+    {
+      id: `generated-thai-meaning-${kind}-${compactText(query)}-${compactText(korean)}`,
+      kind,
+      source: "generated",
+      sheet: "태국어 해석",
+      thai: thaiText,
+      thaiScript: /[\u0E00-\u0E7F]/.test(thaiText) ? thaiText : "",
+      korean,
+      note: note || "태국어 입력을 한국어 뜻으로 바로 해석",
+      tags: sortTags(unique(["기본회화", ...tags])),
+      keywords: unique([query, thaiText, korean, "태국어 검색", "한국어 뜻"]),
+    },
+    kind
+  );
+}
+
+function buildGeneratedThaiMeaningEntries(query, searchProfile, vocabEntries) {
+  const analysis = analyzeThaiMeaningQuery(query, vocabEntries);
+  if (!analysis) {
+    return { vocab: [], sentences: [], suppressFallbackSentences: false };
+  }
+
+  const vocab = [];
+  const sentences = [];
+  const showObjectVocab =
+    analysis.objectLabel &&
+    !analysis.intentIds.includes("help") &&
+    !analysis.intentIds.includes("notUnderstand");
+
+  if (showObjectVocab) {
+    const vocabEntry = createGeneratedThaiMeaningEntry(
+      query,
+      analysis.objectLabel,
+      "vocab",
+      analysis.tags,
+      "태국어 문장에서 핵심 대상을 먼저 해석"
+    );
+    if (vocabEntry) vocab.push(vocabEntry);
+  }
+
+  if (analysis.intentIds.includes("help")) {
+    const vocabEntry = createGeneratedThaiMeaningEntry(query, "도와주세요", "vocab", analysis.tags);
+    if (vocabEntry) vocab.push(vocabEntry);
+    const sentenceEntry = createGeneratedThaiMeaningEntry(query, "도와주세요", "sentence", analysis.tags);
+    if (sentenceEntry) sentences.push(sentenceEntry);
+  }
+
+  if (analysis.intentIds.includes("notUnderstand")) {
+    const vocabEntry = createGeneratedThaiMeaningEntry(query, "이해 못하다", "vocab", analysis.tags);
+    if (vocabEntry) vocab.push(vocabEntry);
+    ["이해 못해요", "한 번 더 말해주세요"].forEach((text) => {
+      const entry = createGeneratedThaiMeaningEntry(query, text, "sentence", analysis.tags);
+      if (entry) sentences.push(entry);
+    });
+  }
+
+  if (analysis.intentIds.includes("where")) {
+    if (!analysis.objectLabel) {
+      const vocabEntry = createGeneratedThaiMeaningEntry(query, "어디", "vocab", analysis.tags);
+      if (vocabEntry) vocab.push(vocabEntry);
+    }
+    const entry = createGeneratedThaiMeaningEntry(
+      query,
+      analysis.objectLabel ? `${attachKoreanSubjectParticle(analysis.objectLabel)} 어디예요?` : "어디예요?",
+      "sentence",
+      analysis.tags
+    );
+    if (entry) sentences.push(entry);
+  }
+
+  if (analysis.intentIds.includes("price")) {
+    const vocabEntry = createGeneratedThaiMeaningEntry(query, "가격", "vocab", analysis.tags);
+    if (vocabEntry) vocab.push(vocabEntry);
+    const entry = createGeneratedThaiMeaningEntry(
+      query,
+      analysis.objectLabel && analysis.objectLabel !== "가격" ? `${analysis.objectLabel} 얼마예요?` : "얼마예요?",
+      "sentence",
+      analysis.tags
+    );
+    if (entry) sentences.push(entry);
+  }
+
+  if (analysis.intentIds.includes("change")) {
+    if (!analysis.objectLabel) {
+      const vocabEntry = createGeneratedThaiMeaningEntry(query, "바꾸다", "vocab", analysis.tags);
+      if (vocabEntry) vocab.push(vocabEntry);
+    }
+    const entry = createGeneratedThaiMeaningEntry(
+      query,
+      analysis.objectLabel ? `${analysis.objectLabel} 바꿔 주세요` : "바꿔 주세요",
+      "sentence",
+      analysis.tags
+    );
+    if (entry) sentences.push(entry);
+  }
+
+  if (analysis.intentIds.includes("bring")) {
+    if (!analysis.objectLabel) {
+      const vocabEntry = createGeneratedThaiMeaningEntry(query, "가져다 주세요", "vocab", analysis.tags);
+      if (vocabEntry) vocab.push(vocabEntry);
+    }
+    const entry = createGeneratedThaiMeaningEntry(
+      query,
+      analysis.objectLabel ? `${analysis.objectLabel} 가져다 주세요` : "가져다 주세요",
+      "sentence",
+      analysis.tags
+    );
+    if (entry) sentences.push(entry);
+  }
+
+  if (analysis.intentIds.includes("show")) {
+    if (!analysis.objectLabel) {
+      const vocabEntry = createGeneratedThaiMeaningEntry(query, "보여 주세요", "vocab", analysis.tags);
+      if (vocabEntry) vocab.push(vocabEntry);
+    }
+    const entry = createGeneratedThaiMeaningEntry(
+      query,
+      analysis.objectLabel ? `${analysis.objectLabel} 보여 주세요` : "보여 주세요",
+      "sentence",
+      analysis.tags
+    );
+    if (entry) sentences.push(entry);
+  }
+
+  if (analysis.intentIds.includes("request")) {
+    if (!analysis.objectLabel) {
+      const vocabEntry = createGeneratedThaiMeaningEntry(query, "주세요", "vocab", analysis.tags);
+      if (vocabEntry) vocab.push(vocabEntry);
+    }
+    const entry = createGeneratedThaiMeaningEntry(
+      query,
+      analysis.objectLabel ? `${analysis.objectLabel} 주세요` : "주세요",
+      "sentence",
+      analysis.tags
+    );
+    if (entry) sentences.push(entry);
+  }
+
+  if (analysis.intentIds.includes("reject")) {
+    const vocabEntry = createGeneratedThaiMeaningEntry(query, "말고", "vocab", analysis.tags);
+    if (vocabEntry) vocab.push(vocabEntry);
+    const entry = createGeneratedThaiMeaningEntry(
+      query,
+      analysis.demonstrative ? `${analysis.demonstrative.label} 말고 다른 거 주세요` : "말고 다른 거 주세요",
+      "sentence",
+      analysis.tags
+    );
+    if (entry) sentences.push(entry);
+  }
+
+  return {
+    vocab: uniqueByMeaning(uniqueById(vocab)),
+    sentences: uniqueByMeaning(uniqueById(sentences)),
+    suppressFallbackSentences: analysis.suppressFallbackSentences,
+  };
+}
+
 function extractStandaloneTimeQuery(query) {
   const normalized = normalizeText(query);
   const matched = normalized.match(TIME_EXTRACT_REGEX);
@@ -4004,6 +4487,7 @@ function getSeedExpansionTerms(entry, compactQuery) {
 function buildSearchProfile(query, entries = []) {
   const trimmedQuery = String(query || "").trim();
   const normalized = normalizeText(trimmedQuery);
+  const queryDirection = detectQueryDirection(trimmedQuery);
   const compact = compactText(trimmedQuery);
   const rawTokens = tokenize(trimmedQuery);
   const compactPhraseRoots = extractCompactPhraseRoots(trimmedQuery);
@@ -4011,10 +4495,15 @@ function buildSearchProfile(query, entries = []) {
   const expandedCompacts = expandedVariants.map((item) => compactText(item)).filter(Boolean);
   const patternTexts = unique([trimmedQuery, normalized, compact, ...expandedVariants, ...expandedCompacts]);
   const intentHints = buildIntentHints(trimmedQuery, patternTexts);
+  const thaiMeaningHints =
+    queryDirection === "thai" || queryDirection === "mixed" ? buildThaiMeaningHints(trimmedQuery, entries) : null;
   const hasStrongIntent = Boolean(
     (intentHints.objectTerms && intentHints.objectTerms.length) ||
       (intentHints.actionTerms && intentHints.actionTerms.length) ||
-      (intentHints.templateTerms && intentHints.templateTerms.length)
+      (intentHints.templateTerms && intentHints.templateTerms.length) ||
+      (thaiMeaningHints?.objectTerms && thaiMeaningHints.objectTerms.length) ||
+      (thaiMeaningHints?.actionTerms && thaiMeaningHints.actionTerms.length) ||
+      (thaiMeaningHints?.templateTerms && thaiMeaningHints.templateTerms.length)
   );
   const preferredTags = unique((intentHints.preferredTags || []).filter(Boolean));
   const avoidTags = unique(
@@ -4033,6 +4522,12 @@ function buildSearchProfile(query, entries = []) {
   displayTerms.push(...compactPhraseRoots);
   displayTerms.push(...(intentHints.displayTerms || []));
   tags.push(...(intentHints.tags || []));
+  if (thaiMeaningHints) {
+    primaryTerms.push(...(thaiMeaningHints.primaryTerms || []));
+    relatedTerms.push(...(thaiMeaningHints.relatedTerms || []));
+    displayTerms.push(...(thaiMeaningHints.displayTerms || []));
+    tags.push(...(thaiMeaningHints.tags || []));
+  }
 
   QUERY_BUNDLES.forEach((rule) => {
     if (rule.patterns.some((pattern) => patternTexts.some((text) => pattern.test(text)))) {
@@ -4101,23 +4596,25 @@ function buildSearchProfile(query, entries = []) {
   ]);
   const filteredPrimaryCompacts = primaryCompacts.filter((item) => !blockedTerms.has(item));
   const filteredRelatedCompacts = relatedCompacts.filter((item) => !blockedTerms.has(item));
-  const explicitRequestQuery = /(?:주세요|주세여|부탁|있어요|있나요|필요해요|없어요|없나요|어디예요|어디에요|어디야)/.test(compact);
+  const explicitRequestQuery =
+    /(?:주세요|주세여|부탁|있어요|있나요|필요해요|없어요|없나요|어디예요|어디에요|어디야)/.test(compact) ||
+    Boolean(thaiMeaningHints?.actionTerms?.length);
   const genericActionTerms = new Set(["주세요", "부탁", "있어요", "있나요", "필요해요"]);
   const objectTerms = unique(
-    [...(intentHints.objectTerms || []), ...compactPhraseRoots]
+    [...(intentHints.objectTerms || []), ...(thaiMeaningHints?.objectTerms || []), ...compactPhraseRoots]
       .map((item) => compactText(item))
       .filter(Boolean)
       .filter((item) => !blockedTerms.has(item))
   );
   const actionTerms = unique(
-    (intentHints.actionTerms || [])
+    [...(intentHints.actionTerms || []), ...(thaiMeaningHints?.actionTerms || [])]
       .map((item) => compactText(item))
       .filter(Boolean)
       .filter((item) => !blockedTerms.has(item))
       .filter((item) => explicitRequestQuery || !genericActionTerms.has(item))
   );
   const templateTerms = unique(
-    (intentHints.templateTerms || [])
+    [...(intentHints.templateTerms || []), ...(thaiMeaningHints?.templateTerms || [])]
       .map((item) => compactText(item))
       .filter(Boolean)
       .filter((item) => !blockedTerms.has(item))
@@ -4153,7 +4650,7 @@ function buildSearchProfile(query, entries = []) {
     query: trimmedQuery,
     normalized,
     compact,
-    queryDirection: detectQueryDirection(trimmedQuery),
+    queryDirection,
     directTerms: unique([compact, ...rawTokens.map((item) => compactText(item)), ...expandedCompacts].filter(Boolean)),
     primaryTerms: filteredPrimaryCompacts,
     relatedTerms: filteredRelatedCompacts,
@@ -4189,8 +4686,8 @@ function matchesExactCoreField(index, term) {
 
 function getExactFieldPriority(index, term) {
   if (!term) return 0;
-  if (index.korean === term) return 2;
-  if (index.koreanTokens.includes(term)) return 1;
+  if ([index.korean, index.thai, index.thaiScript].some((field) => field === term)) return 2;
+  if ([...index.koreanTokens, ...index.thaiTokens, ...index.thaiScriptTokens].includes(term)) return 1;
   return 0;
 }
 
@@ -4833,6 +5330,25 @@ function uniqueByMeaning(entries) {
   });
 }
 
+function mergeGeneratedEntrySets(...groups) {
+  const vocab = [];
+  const sentences = [];
+  let suppressFallbackSentences = false;
+
+  groups.forEach((group) => {
+    if (!group) return;
+    if (Array.isArray(group.vocab)) vocab.push(...group.vocab);
+    if (Array.isArray(group.sentences)) sentences.push(...group.sentences);
+    if (group.suppressFallbackSentences) suppressFallbackSentences = true;
+  });
+
+  return {
+    vocab: uniqueByMeaning(uniqueById(vocab)),
+    sentences: uniqueByMeaning(uniqueById(sentences)),
+    suppressFallbackSentences,
+  };
+}
+
 function findExactEntry(entries, searchProfile, options = {}) {
   if (!searchProfile.query) return null;
   const includeSupport = options.includeSupport ?? false;
@@ -5437,19 +5953,24 @@ function render() {
     !numberMode && !timeQuestionMode && !timeMode
       ? buildGeneratedComposedEntries(state.query, searchProfile, vocabSource)
       : { vocab: [], sentences: [], suppressFallbackSentences: false };
-  const composedMode = Boolean(generatedComposed.vocab.length || generatedComposed.sentences.length);
+  const generatedThaiMeaning =
+    !numberMode && !timeQuestionMode && !timeMode
+      ? buildGeneratedThaiMeaningEntries(state.query, searchProfile, vocabSource)
+      : { vocab: [], sentences: [], suppressFallbackSentences: false };
+  const generatedAssist = mergeGeneratedEntrySets(generatedComposed, generatedThaiMeaning);
+  const composedMode = Boolean(generatedAssist.vocab.length || generatedAssist.sentences.length);
   const refinedVocabResults = composedMode
     ? preliminaryVocabResults.filter((entry) => entry.source !== "generated-bulk")
     : preliminaryVocabResults;
   const refinedSentenceCandidates =
-    generatedComposed.suppressFallbackSentences
+    generatedAssist.suppressFallbackSentences
       ? []
       : composedMode && !numberMode && !timeQuestionMode && !timeMode
-      ? getSentenceResults(sentenceSource, searchProfile, uniqueByMeaning([...generatedComposed.vocab, ...refinedVocabResults])).filter(
+      ? getSentenceResults(sentenceSource, searchProfile, uniqueByMeaning([...generatedAssist.vocab, ...refinedVocabResults])).filter(
           (entry) => entry.source !== "generated-bulk"
         )
       : !numberMode && !timeQuestionMode && !timeMode
-        ? getSentenceResults(sentenceSource, searchProfile, uniqueByMeaning([...generatedComposed.vocab, ...refinedVocabResults]))
+        ? getSentenceResults(sentenceSource, searchProfile, uniqueByMeaning([...generatedAssist.vocab, ...refinedVocabResults]))
         : [];
   const allVocabResults = numberMode
     ? generated.vocab
@@ -5458,7 +5979,7 @@ function render() {
     : timeMode
       ? generatedTime.vocab
       : uniqueByMeaning(uniqueById([
-          ...generatedComposed.vocab,
+          ...generatedAssist.vocab,
           ...refinedVocabResults,
         ]));
   const vocabSeeds = allVocabResults;
@@ -5478,7 +5999,7 @@ function render() {
         : uniqueByMeaning(uniqueById([
             ...(exactSentenceMatch ? [exactSentenceMatch] : []),
             ...generated.sentences,
-            ...generatedComposed.sentences,
+            ...generatedAssist.sentences,
             ...refinedSentenceCandidates,
           ])).slice(0, RESULT_LIMITS.sentences))
     : [];
@@ -5502,6 +6023,8 @@ function render() {
         ? `시간 질문: 단어 ${vocabResults.length}개 · 회화 ${sentenceResults.length}개${expandedHint}`
       : timeMode
         ? `시간 검색: 단어 ${vocabResults.length}개 · 회화 ${sentenceResults.length}개${expandedHint}`
+      : thaiOnlySearch && composedMode
+        ? `태국어 해석: 단어 ${vocabResults.length}개 · 회화 ${sentenceResults.length}개${expandedHint}`
       : composedMode
         ? `검색됨: 단어 ${vocabResults.length}개 · 회화 ${sentenceResults.length}개 · 자동 조합 적용${expandedHint}`
         : `검색됨: 단어 ${vocabResults.length}개 · 회화 ${sentenceResults.length}개${expandedHint}`;
@@ -5524,6 +6047,8 @@ function render() {
         ? "현재 시간을 묻는 표현과 기기 기준 현재 시각을 먼저 보여줍니다."
       : timeMode
         ? "검색한 시간을 그대로 변형해서 읽기와 시간 표현을 먼저 보여줍니다."
+      : thaiOnlySearch && composedMode
+        ? "태국어 문장을 분해해서 한국어 핵심 뜻을 먼저 올렸습니다."
       : thaiOnlySearch
         ? "태국어 검색이라서 한국어 뜻과 가까운 단어를 먼저 올렸습니다."
       : composedMode
@@ -5541,6 +6066,8 @@ function render() {
         ? "지금 몇 시인지 묻거나 답할 때 바로 보여줄 수 있게 만들었습니다."
       : timeMode
         ? "검색한 시간 그대로 문장에 넣어서 바로 보여줄 수 있게 만들었습니다."
+      : thaiOnlySearch && composedMode
+        ? "태국어 문장을 해석해서 바로 쓸 한국어 문장을 먼저 보여줍니다."
       : thaiOnlySearch
         ? "태국어 검색이라서 해당 표현이 들어간 한국어 회화를 우선해서 보여줍니다."
       : composedMode
