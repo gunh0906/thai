@@ -138,14 +138,13 @@ function createSearchRunner(context) {
 
   function search(query) {
     const merged = api.getMergedData();
-    const mergedEntries = [...merged.vocab, ...merged.sentences];
     const generated = api.buildGeneratedNumberEntries(query);
     const numberMode = generated.vocab.length > 0;
     const generatedTimeQuestion = !numberMode ? api.buildGeneratedTimeQuestionEntries(query) : { vocab: [], sentences: [] };
     const timeQuestionMode = !numberMode && generatedTimeQuestion.vocab.length > 0;
     const generatedTime = !numberMode && !timeQuestionMode ? api.buildGeneratedTimeEntries(query) : { vocab: [], sentences: [] };
     const timeMode = !numberMode && !timeQuestionMode && generatedTime.vocab.length > 0;
-    const profile = api.buildSearchProfile(query, numberMode || timeQuestionMode || timeMode ? [] : mergedEntries);
+    const profile = api.buildSearchProfile(query, numberMode || timeQuestionMode || timeMode ? [] : merged.vocab);
 
     const exactVocab = numberMode ? null : api.findExactEntry(merged.vocab, profile);
     const preliminaryVocab =

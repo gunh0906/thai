@@ -2442,9 +2442,12 @@ function expandPredicateInflectionVariants(item) {
 
 const searchIndexCache = new WeakMap();
 const searchRuntimeCache = new WeakMap();
+const searchCollectionCacheIds = new WeakMap();
 const searchComputationCache = new Map();
+const thaiMeaningAnalysisCache = new Map();
 let searchRuntimeWarmupQueued = false;
 let searchRuntimeWarmupDone = false;
+let nextSearchCollectionCacheId = 1;
 const hydratedBaseData = createHydratedBaseData();
 const hydratedBaseMergedEntries = [...hydratedBaseData.vocab, ...hydratedBaseData.sentences];
 const mergedEntriesCache = {
@@ -3456,7 +3459,7 @@ function loadAiSettings() {
 function saveCustomData() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state.custom));
   state.customRevision += 1;
-  searchComputationCache.clear();
+  clearDerivedSearchCaches();
   mergedEntriesCache.revision = -1;
 }
 
@@ -3496,6 +3499,24 @@ function getMergedEntries(merged) {
   mergedEntriesCache.revision = state.customRevision;
   mergedEntriesCache.entries = [...merged.vocab, ...merged.sentences];
   return mergedEntriesCache.entries;
+}
+
+function getSearchCollectionCacheId(entries) {
+  if (!Array.isArray(entries) || !entries.length) {
+    return `empty-${state.customRevision}`;
+  }
+
+  const cached = searchCollectionCacheIds.get(entries);
+  if (cached) return cached;
+
+  const cacheId = `collection-${nextSearchCollectionCacheId++}-${entries.length}`;
+  searchCollectionCacheIds.set(entries, cacheId);
+  return cacheId;
+}
+
+function clearDerivedSearchCaches() {
+  searchComputationCache.clear();
+  thaiMeaningAnalysisCache.clear();
 }
 
 function buildSearchComputationCacheKey(query) {
@@ -3777,6 +3798,16 @@ function getSearchRuntime(entries) {
 
 function getCandidateSearchTerms(searchProfile) {
   if (!searchProfile?.query) return [];
+  if (searchProfile.queryDirection === "thai") {
+    return dropGenericTermsWhenSpecific([
+      searchProfile.compact,
+      ...(searchProfile.directTerms || []).slice(0, 6),
+      ...(searchProfile.objectTerms || []).slice(0, 3),
+      ...(searchProfile.templateTerms || []).slice(0, 4),
+      ...(searchProfile.relatedTerms || []).slice(0, 3),
+      ...(searchProfile.anchorTerms || []).slice(0, 2),
+    ]).slice(0, 14);
+  }
   return dropGenericTermsWhenSpecific([
     searchProfile.compact,
     ...(searchProfile.directTerms || []),
@@ -4978,8 +5009,29 @@ function analyzeThaiMeaningQuery(query, entries = []) {
   };
 }
 
-function buildThaiMeaningHints(query, entries = []) {
+function getThaiMeaningAnalysis(query, entries = []) {
+  const direction = detectQueryDirection(query);
+  if (direction !== "thai" && direction !== "mixed") return null;
+
+  const compact = compactText(normalizeThaiMeaningQuery(query));
+  if (!compact || compact.length < 2) return null;
+
+  const cacheKey = [state.scenario, state.customRevision, getSearchCollectionCacheId(entries), compact].join("||");
+  if (thaiMeaningAnalysisCache.has(cacheKey)) {
+    return thaiMeaningAnalysisCache.get(cacheKey);
+  }
+
   const analysis = analyzeThaiMeaningQuery(query, entries);
+  thaiMeaningAnalysisCache.set(cacheKey, analysis);
+  if (thaiMeaningAnalysisCache.size > 96) {
+    const oldestKey = thaiMeaningAnalysisCache.keys().next().value;
+    if (oldestKey) thaiMeaningAnalysisCache.delete(oldestKey);
+  }
+  return analysis;
+}
+
+function buildThaiMeaningHints(query, entries = []) {
+  const analysis = getThaiMeaningAnalysis(query, entries);
   if (!analysis) {
     return {
       primaryTerms: [],
@@ -5025,7 +5077,7 @@ function createGeneratedThaiMeaningEntry(query, korean, kind, tags = [], note = 
 }
 
 function buildGeneratedThaiMeaningEntries(query, searchProfile, vocabEntries) {
-  const analysis = analyzeThaiMeaningQuery(query, vocabEntries);
+  const analysis = getThaiMeaningAnalysis(query, vocabEntries);
   if (!analysis) {
     return { vocab: [], sentences: [], suppressFallbackSentences: false };
   }
@@ -5603,14 +5655,30 @@ function buildSearchProfile(query, entries = []) {
   const trimmedQuery = String(query || "").trim();
   const normalized = normalizeText(trimmedQuery);
   const queryDirection = detectQueryDirection(trimmedQuery);
+  const thaiOnlyQuery = queryDirection === "thai";
   const compact = compactText(trimmedQuery);
   const rawTokens = tokenize(trimmedQuery);
-  const compactPhraseRoots = extractCompactPhraseRoots(trimmedQuery);
-  const expandedVariants = expandQueryVariants(trimmedQuery, rawTokens);
+  const compactPhraseRoots = thaiOnlyQuery ? [] : extractCompactPhraseRoots(trimmedQuery);
+  const expandedVariants = thaiOnlyQuery ? rawTokens : expandQueryVariants(trimmedQuery, rawTokens);
   const expandedCompacts = expandedVariants.map((item) => compactText(item)).filter(Boolean);
   const patternTexts = unique([trimmedQuery, normalized, compact, ...expandedVariants, ...expandedCompacts]);
-  const intentHints = buildIntentHints(trimmedQuery, patternTexts);
-  const predicateHints = buildPredicateIntentHints(trimmedQuery);
+  const intentHints = thaiOnlyQuery
+    ? {
+        objectIds: [],
+        actionIds: [],
+        objectTerms: [],
+        actionTerms: [],
+        primaryTerms: [],
+        relatedTerms: [],
+        templateTerms: [],
+        displayTerms: [],
+        tags: [],
+        preferredTags: [],
+        avoidTags: [],
+        blockedTerms: [],
+      }
+    : buildIntentHints(trimmedQuery, patternTexts);
+  const predicateHints = thaiOnlyQuery ? null : buildPredicateIntentHints(trimmedQuery);
   const thaiMeaningHints =
     queryDirection === "thai" || queryDirection === "mixed" ? buildThaiMeaningHints(trimmedQuery, entries) : null;
   const hasStrongIntent = Boolean(
@@ -5656,49 +5724,51 @@ function buildSearchProfile(query, entries = []) {
     tags.push(...(thaiMeaningHints.tags || []));
   }
 
-  QUERY_BUNDLES.forEach((rule) => {
-    if (rule.patterns.some((pattern) => patternTexts.some((text) => pattern.test(text)))) {
-      primaryTerms.push(...(rule.primary || []));
-      relatedTerms.push(...(rule.related || []));
-      displayTerms.push(...(rule.display || []));
-      tags.push(...(rule.tags || []));
-    }
-  });
-
-  QUERY_PARTS.forEach((rule) => {
-    if (rule.patterns.some((pattern) => patternTexts.some((text) => pattern.test(text)))) {
-      primaryTerms.push(...(rule.primary || []));
-      relatedTerms.push(...(rule.related || []));
-      displayTerms.push(...(rule.display || []));
-      tags.push(...(rule.tags || []));
-    }
-  });
-
-  QUERY_ALIASES.forEach((rule) => {
-    if (rule.matches.some((item) => aliasTexts.some((text) => text.includes(compactText(item))))) {
-      primaryTerms.push(...(rule.primary || []));
-      relatedTerms.push(...(rule.related || []));
-      displayTerms.push(...(rule.display || []));
-      tags.push(...(rule.tags || []));
-    }
-  });
-
-  QUERY_ENDINGS.forEach((rule) => {
-    if (endingTexts.some((text) => text.endsWith(compactText(rule.suffix)))) {
-      primaryTerms.push(...(rule.primary || []));
-      relatedTerms.push(...(rule.related || []));
-      displayTerms.push(...(rule.display || []));
-    }
-  });
-
-  if (!hasStrongIntent && !isTimeQuestionQuery(trimmedQuery)) {
-    collectSeedEntries(entries, compact, intentHints).forEach((entry) => {
-      const seedTerms = getSeedExpansionTerms(entry, compact);
-      primaryTerms.push(...seedTerms);
-      relatedTerms.push(...seedTerms);
-      displayTerms.push(entry.korean);
-      tags.push(...(entry.tags || []));
+  if (!thaiOnlyQuery) {
+    QUERY_BUNDLES.forEach((rule) => {
+      if (rule.patterns.some((pattern) => patternTexts.some((text) => pattern.test(text)))) {
+        primaryTerms.push(...(rule.primary || []));
+        relatedTerms.push(...(rule.related || []));
+        displayTerms.push(...(rule.display || []));
+        tags.push(...(rule.tags || []));
+      }
     });
+
+    QUERY_PARTS.forEach((rule) => {
+      if (rule.patterns.some((pattern) => patternTexts.some((text) => pattern.test(text)))) {
+        primaryTerms.push(...(rule.primary || []));
+        relatedTerms.push(...(rule.related || []));
+        displayTerms.push(...(rule.display || []));
+        tags.push(...(rule.tags || []));
+      }
+    });
+
+    QUERY_ALIASES.forEach((rule) => {
+      if (rule.matches.some((item) => aliasTexts.some((text) => text.includes(compactText(item))))) {
+        primaryTerms.push(...(rule.primary || []));
+        relatedTerms.push(...(rule.related || []));
+        displayTerms.push(...(rule.display || []));
+        tags.push(...(rule.tags || []));
+      }
+    });
+
+    QUERY_ENDINGS.forEach((rule) => {
+      if (endingTexts.some((text) => text.endsWith(compactText(rule.suffix)))) {
+        primaryTerms.push(...(rule.primary || []));
+        relatedTerms.push(...(rule.related || []));
+        displayTerms.push(...(rule.display || []));
+      }
+    });
+
+    if (!hasStrongIntent && !isTimeQuestionQuery(trimmedQuery)) {
+      collectSeedEntries(entries, compact, intentHints).forEach((entry) => {
+        const seedTerms = getSeedExpansionTerms(entry, compact);
+        primaryTerms.push(...seedTerms);
+        relatedTerms.push(...seedTerms);
+        displayTerms.push(entry.korean);
+        tags.push(...(entry.tags || []));
+      });
+    }
   }
 
   const intentBlockedTerms = unique((intentHints.blockedTerms || []).map((item) => compactText(item)).filter(Boolean));
@@ -7280,18 +7350,17 @@ function isBrowsingState() {
 
 function computeSearchComputation(query = state.query) {
   const merged = getMergedData();
-  const mergedEntries = query ? getMergedEntries(merged) : [];
   const generated = buildGeneratedNumberEntries(query);
   const numberMode = generated.vocab.length > 0;
   const generatedTimeQuestion = !numberMode ? buildGeneratedTimeQuestionEntries(query) : { vocab: [], sentences: [] };
   const timeQuestionMode = !numberMode && generatedTimeQuestion.vocab.length > 0;
   const generatedTime = !numberMode && !timeQuestionMode ? buildGeneratedTimeEntries(query) : { vocab: [], sentences: [] };
   const timeMode = !numberMode && !timeQuestionMode && generatedTime.vocab.length > 0;
-  const searchProfile = buildSearchProfile(query, numberMode || timeQuestionMode || timeMode ? [] : mergedEntries);
-  const exactVocabMatch = numberMode ? null : findExactEntry(merged.vocab, searchProfile);
-  const exactSentenceMatch = numberMode ? null : findExactEntry(merged.sentences, searchProfile, { includeTemplates: true });
   const vocabSource = merged.vocab;
   const sentenceSource = merged.sentences;
+  const searchProfile = buildSearchProfile(query, numberMode || timeQuestionMode || timeMode ? [] : vocabSource);
+  const exactVocabMatch = numberMode ? null : findExactEntry(merged.vocab, searchProfile);
+  const exactSentenceMatch = numberMode ? null : findExactEntry(merged.sentences, searchProfile, { includeTemplates: true });
   const preliminaryVocabResults =
     numberMode || timeQuestionMode || timeMode
       ? []
@@ -7467,9 +7536,9 @@ function render() {
         ? "태국어 검색이라서 한국어 뜻과 가까운 단어를 먼저 올렸습니다."
       : composedMode
         ? "핵심 단어를 먼저 잡고, 요청 문장은 자동으로 조합해 맨 위에 올렸습니다."
-      : exactSentenceMatch
+      : safeExactSentenceMatch
         ? "핵심 단어를 먼저 보여주고, 아래에 정확히 맞는 회화를 맨 위에 올렸습니다."
-      : actionPhraseMode
+      : searchProfile.objectTerms.length && searchProfile.actionTerms.length
         ? "문장형 검색이라도 먼저 잡아둘 단어를 위에 보여줍니다."
       : "문장을 잘게 풀어서 먼저 잡아둘 단어부터 보여줍니다."
     : "검색어를 넣으면 관련 단어가 나옵니다.";
