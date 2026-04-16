@@ -1,6 +1,6 @@
 ﻿const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
-const APP_VERSION = "20260416w";
+const APP_VERSION = "20260416x";
 
 const baseData = window.BASE_DATA || {
   appTitle: "태국어 포켓북",
@@ -425,6 +425,8 @@ const GENERIC_ANCHOR_TERMS = new Set(["주세요", "주세여", "부탁", "좀",
 const SINGLE_SYLLABLE_ANCHORS = new Set(["방", "물", "밥", "약"]);
 const ENTRY_SOURCE_SCORES = {
   custom: 170,
+  "concept-corpus": 135,
+  "external-corpus": 128,
   supplemental: 120,
   excel: 95,
   "generated-bulk": -130,

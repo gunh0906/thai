@@ -8,12 +8,15 @@ from pathlib import Path
 from typing import Iterable
 
 import openpyxl
+from concept_corpus import build_concept_corpus_entries
 from expanded_more import MORE_SENTENCES, MORE_VOCAB
 from expanded_terms import EXPANDED_SENTENCES, EXPANDED_VOCAB
 from generated_bulk import generate_bulk_entries
 from more_stage2 import STAGE2_SENTENCES, STAGE2_VOCAB
 from more_stage3 import STAGE3_SENTENCES, STAGE3_VOCAB
 from more_stage4 import STAGE4_SENTENCES, STAGE4_VOCAB
+
+EXTERNAL_CORPUS_DIR = Path(__file__).resolve().parents[1] / "external_corpus"
 
 SCENARIOS = [
     {
@@ -886,6 +889,8 @@ def make_entry(
         "source": source,
         "sourceLabel": {
             "excel": "엑셀",
+            "concept-corpus": "개념 코퍼스",
+            "external-corpus": "외부 코퍼스",
             "supplemental": "확장",
             "custom": "내가 추가",
         }.get(source, source),
@@ -957,7 +962,63 @@ def parse_workbook(path: Path) -> tuple[list[dict], list[dict]]:
     return vocab_entries, sentence_entries
 
 
-def build_supplemental_entries() -> tuple[list[dict], list[dict]]:
+def join_notes(*parts: str) -> str:
+    values = [clean_text(part) for part in parts if clean_text(part)]
+    return " | ".join(values)
+
+
+def load_external_corpus_entries() -> tuple[list[dict], list[dict], dict[str, int]]:
+    vocab_entries: list[dict] = []
+    sentence_entries: list[dict] = []
+    stats = {"files": 0, "vocab": 0, "sentences": 0}
+    if not EXTERNAL_CORPUS_DIR.exists():
+        return vocab_entries, sentence_entries, stats
+
+    for path in sorted(EXTERNAL_CORPUS_DIR.glob("*.json")):
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        source_name = clean_text(payload.get("source", "")) or path.stem
+        source_note = f"출처 {source_name}"
+
+        for index, item in enumerate(payload.get("vocab", []), start=1):
+            vocab_entries.append(
+                make_entry(
+                    kind="vocab",
+                    source="external-corpus",
+                    sheet=f"외부 코퍼스 · {source_name}",
+                    index=index,
+                    thai=item["thai"],
+                    thai_script=item.get("thaiScript", ""),
+                    korean=item["korean"],
+                    tags=item.get("tags"),
+                    note=join_notes(item.get("note", ""), source_note),
+                    extra_keywords=item.get("keywords"),
+                )
+            )
+
+        for index, item in enumerate(payload.get("sentences", []), start=1):
+            sentence_entries.append(
+                make_entry(
+                    kind="sentence",
+                    source="external-corpus",
+                    sheet=f"외부 코퍼스 · {source_name}",
+                    index=index,
+                    thai=item["thai"],
+                    thai_script=item.get("thaiScript", ""),
+                    korean=item["korean"],
+                    tags=item.get("tags"),
+                    note=join_notes(item.get("note", ""), source_note),
+                    extra_keywords=item.get("keywords"),
+                )
+            )
+
+        stats["files"] += 1
+        stats["vocab"] += len(payload.get("vocab", []))
+        stats["sentences"] += len(payload.get("sentences", []))
+
+    return vocab_entries, sentence_entries, stats
+
+
+def build_supplemental_entries() -> tuple[list[dict], list[dict], int, int]:
     vocab_entries = [
         make_entry(
             kind="vocab",
@@ -1158,7 +1219,40 @@ def build_supplemental_entries() -> tuple[list[dict], list[dict]]:
             for index, item in enumerate(STAGE4_SENTENCES, start=1)
         ]
     )
-    return vocab_entries, sentence_entries
+    concept_vocab_raw, concept_sentence_raw = build_concept_corpus_entries()
+    concept_vocab_entries = [
+        make_entry(
+            kind="vocab",
+            source="concept-corpus",
+            sheet="개념 코퍼스",
+            index=index,
+            thai=item["thai"],
+            thai_script=item.get("thaiScript", ""),
+            korean=item["korean"],
+            tags=item.get("tags"),
+            note=item.get("note", ""),
+            extra_keywords=item.get("keywords"),
+        )
+        for index, item in enumerate(concept_vocab_raw, start=1)
+    ]
+    concept_sentence_entries = [
+        make_entry(
+            kind="sentence",
+            source="concept-corpus",
+            sheet="개념 코퍼스",
+            index=index,
+            thai=item["thai"],
+            thai_script=item.get("thaiScript", ""),
+            korean=item["korean"],
+            tags=item.get("tags"),
+            note=item.get("note", ""),
+            extra_keywords=item.get("keywords"),
+        )
+        for index, item in enumerate(concept_sentence_raw, start=1)
+    ]
+    vocab_entries.extend(concept_vocab_entries)
+    sentence_entries.extend(concept_sentence_entries)
+    return vocab_entries, sentence_entries, len(concept_vocab_entries), len(concept_sentence_entries)
 
 
 def entry_preference_score(entry: dict) -> tuple[int, int, int, int]:
@@ -1256,7 +1350,8 @@ def deduplicate_entries(entries: list[dict]) -> list[dict]:
 
 def build_data(workbook_path: Path) -> dict:
     excel_vocab, excel_sentences = parse_workbook(workbook_path)
-    extra_vocab, extra_sentences = build_supplemental_entries()
+    extra_vocab, extra_sentences, concept_vocab_count, concept_sentence_count = build_supplemental_entries()
+    external_vocab, external_sentences, external_stats = load_external_corpus_entries()
     bulk_vocab_raw, bulk_sentences_raw = generate_bulk_entries(deduplicate_entries(excel_vocab + extra_vocab))
     bulk_vocab = [
         make_entry(
@@ -1288,19 +1383,24 @@ def build_data(workbook_path: Path) -> dict:
         )
         for index, item in enumerate(bulk_sentences_raw, start=1)
     ]
-    vocab_entries = deduplicate_entries(excel_vocab + extra_vocab + bulk_vocab)
-    sentence_entries = deduplicate_entries(excel_sentences + extra_sentences + bulk_sentences)
+    vocab_entries = deduplicate_entries(excel_vocab + extra_vocab + external_vocab + bulk_vocab)
+    sentence_entries = deduplicate_entries(excel_sentences + extra_sentences + external_sentences + bulk_sentences)
     return {
         "appTitle": "태국어 포켓북",
         "generatedAt": datetime.now().isoformat(timespec="seconds"),
         "transliterationStyle": "practical-ko",
-        "note": "보강 표현의 발음 표기는 한국어 사용자 기준의 실전용 표기이며, 기존 단어를 씨앗으로 만든 대량 조합형 데이터까지 함께 검색합니다.",
+        "note": "엑셀, 직접 보강한 확장 데이터, 개념 코퍼스, 외부 코퍼스 JSON, 조합 생성 표현을 함께 검색합니다. 외부 코퍼스 파일이 있으면 빌드할 때 자동으로 합쳐집니다.",
         "scenarios": SCENARIOS,
         "stats": {
             "excelVocab": len(excel_vocab),
             "excelSentences": len(excel_sentences),
-            "supplementalVocab": len(extra_vocab),
-            "supplementalSentences": len(extra_sentences),
+            "supplementalVocab": len(extra_vocab) - concept_vocab_count,
+            "supplementalSentences": len(extra_sentences) - concept_sentence_count,
+            "conceptCorpusVocab": concept_vocab_count,
+            "conceptCorpusSentences": concept_sentence_count,
+            "externalCorpusFiles": external_stats["files"],
+            "externalCorpusVocab": external_stats["vocab"],
+            "externalCorpusSentences": external_stats["sentences"],
             "generatedBulkVocab": len(bulk_vocab),
             "generatedBulkSentences": len(bulk_sentences),
             "totalVocab": len(vocab_entries),
