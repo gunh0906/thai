@@ -1,6 +1,6 @@
 const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
-const APP_VERSION = "20260416e";
+const APP_VERSION = "20260416f";
 
 const baseData = window.BASE_DATA || {
   appTitle: "태국어 포켓북",
@@ -1779,10 +1779,38 @@ function normalizeText(text) {
     .replace(/잘하고있네/g, "잘하다")
     .replace(/잘 하고 있어요/g, "잘하다")
     .replace(/잘 하고 있어/g, "잘하다")
+    .replace(/예뻐요/g, "예쁘다")
+    .replace(/예뻐/g, "예쁘다")
+    .replace(/이쁘다/g, "예쁘다")
+    .replace(/이뻐요/g, "예쁘다")
+    .replace(/이뻐/g, "예쁘다")
     .replace(/귀여워요/g, "귀엽다")
     .replace(/귀여워/g, "귀엽다")
     .replace(/멋있어요/g, "멋있다")
     .replace(/멋있어/g, "멋있다")
+    .replace(/괜찮아요/g, "괜찮다")
+    .replace(/괜찮아/g, "괜찮다")
+    .replace(/배불러요/g, "배부르다")
+    .replace(/배불러/g, "배부르다")
+    .replace(/졸려요/g, "졸리다")
+    .replace(/졸려/g, "졸리다")
+    .replace(/힘들어요/g, "힘들다")
+    .replace(/힘들어/g, "힘들다")
+    .replace(/무거워요/g, "무겁다")
+    .replace(/무거워/g, "무겁다")
+    .replace(/가벼워요/g, "가볍다")
+    .replace(/가벼워/g, "가볍다")
+    .replace(/비싸요/g, "비싸다")
+    .replace(/(^|\\s)비싸(?=$|\\s)/g, "$1비싸다")
+    .replace(/(^|\\s)싸요(?=$|\\s)/g, "$1싸다")
+    .replace(/뜨거워요/g, "뜨겁다")
+    .replace(/뜨거워/g, "뜨겁다")
+    .replace(/차가워요/g, "차갑다")
+    .replace(/차가워/g, "차갑다")
+    .replace(/안전해요/g, "안전하다")
+    .replace(/안전해/g, "안전하다")
+    .replace(/위험해요/g, "위험하다")
+    .replace(/위험해/g, "위험하다")
     .replace(/잘생겼어요/g, "잘생겼다")
     .replace(/잘생겼어/g, "잘생겼다")
     .replace(/깎아줘요/g, "깎다")
@@ -1810,6 +1838,25 @@ function normalizeText(text) {
     .replace(/시원해/g, "시원하다")
     .replace(/심각해요/g, "심각하다")
     .replace(/심각해/g, "심각하다")
+    .replace(/좋아요/g, "좋다")
+    .replace(/나빠요/g, "나쁘다")
+    .replace(/나빠/g, "나쁘다")
+    .replace(/편해요/g, "편하다")
+    .replace(/편해/g, "편하다")
+    .replace(/불편해요/g, "불편하다")
+    .replace(/불편해/g, "불편하다")
+    .replace(/넓어요/g, "넓다")
+    .replace(/넓어/g, "넓다")
+    .replace(/좁아요/g, "좁다")
+    .replace(/좁아/g, "좁다")
+    .replace(/멀어요/g, "멀다")
+    .replace(/멀어/g, "멀다")
+    .replace(/가까워요/g, "가깝다")
+    .replace(/가까워/g, "가깝다")
+    .replace(/빨라요/g, "빠르다")
+    .replace(/빨라/g, "빠르다")
+    .replace(/느려요/g, "느리다")
+    .replace(/느려/g, "느리다")
     .replace(/시끄러워요/g, "시끄럽다")
     .replace(/시끄러워/g, "시끄럽다")
     .replace(/조용해요/g, "조용하다")
@@ -3796,6 +3843,7 @@ function getSentenceResults(entries, searchProfile, vocabSeeds) {
       return {
         entry,
         match: scoreEntry(entry, searchProfile, "sentence"),
+        compactKoreanExact: Boolean(searchProfile.compact && index.korean === searchProfile.compact),
         exactCoreHit: matchesExactCoreField(index, searchProfile.compact),
         exactObjectHits: searchProfile.objectTerms.filter((term) => matchesCoreField(index, term)),
         anchorHits: searchProfile.anchorTerms.filter((term) => matchesIndexTerm(index, term)),
@@ -3806,6 +3854,9 @@ function getSentenceResults(entries, searchProfile, vocabSeeds) {
     })
     .filter(({ match }) => match.matched)
     .sort((left, right) => {
+      if (right.compactKoreanExact !== left.compactKoreanExact) {
+        return Number(right.compactKoreanExact) - Number(left.compactKoreanExact);
+      }
       if (right.exactCoreHit !== left.exactCoreHit) return Number(right.exactCoreHit) - Number(left.exactCoreHit);
       if (right.exactObjectHits.length !== left.exactObjectHits.length) return right.exactObjectHits.length - left.exactObjectHits.length;
       if (right.templateHits.length !== left.templateHits.length) return right.templateHits.length - left.templateHits.length;
