@@ -1,6 +1,6 @@
 const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
-const APP_VERSION = "20260416b";
+const APP_VERSION = "20260416e";
 
 const baseData = window.BASE_DATA || {
   appTitle: "태국어 포켓북",
@@ -1759,6 +1759,15 @@ function normalizeText(text) {
     .replace(/안되요/g, "안 돼요")
     .replace(/안되냐/g, "안 되냐")
     .replace(/안되네/g, "안 되네")
+    .replace(/카드키안돼요/g, "카드키가 안 돼요")
+    .replace(/카드키안되요/g, "카드키가 안 돼요")
+    .replace(/냉장고안돼요/g, "냉장고가 안 돼요")
+    .replace(/냉장고안되요/g, "냉장고가 안 돼요")
+    .replace(/얼음좀주세요/g, "얼음 주세요")
+    .replace(/얼음주세요/g, "얼음 주세요")
+    .replace(/문제있습니다/g, "문제가 있어요")
+    .replace(/문제있어요/g, "문제가 있어요")
+    .replace(/문제있어/g, "문제가 있어요")
     .replace(/이쁘/g, "예쁘")
     .replace(/깍/g, "깎")
     .replace(/더워요/g, "덥다")
@@ -3819,6 +3828,12 @@ function getSentenceResults(entries, searchProfile, vocabSeeds) {
       item.entry.source !== "generated-bulk" &&
       (item.objectHits.length || item.templateHits.length || item.match.directHits >= 1)
   );
+  const nounLikeLookup = isSimpleCompactLookup(searchProfile);
+  const curatedCompactDirect = direct.filter(
+    (item) =>
+      item.entry.source !== "generated-bulk" &&
+      compactText(item.entry.korean).includes(searchProfile.compact)
+  );
   const visibleDirect = curatedDirect.length
     ? direct.filter(
         (item) =>
@@ -3853,6 +3868,13 @@ function getSentenceResults(entries, searchProfile, vocabSeeds) {
     !searchProfile.templateTerms.length
   ) {
     return curatedDirect.map(({ entry }) => entry).slice(0, RESULT_LIMITS.sentences + 2);
+  }
+
+  if (nounLikeLookup && curatedCompactDirect.length) {
+    return uniqueById([
+      ...curatedCompactDirect.map(({ entry }) => entry),
+      ...prioritizedDirect.map(({ entry }) => entry),
+    ]).slice(0, RESULT_LIMITS.sentences + 3);
   }
 
   if (prioritizedDirect.length >= 3) {
@@ -4013,14 +4035,74 @@ function findExactEntry(entries, searchProfile, options = {}) {
       return left.entry.korean.length - right.entry.korean.length;
     });
 
-  if (exactCoreCandidates.length || !includeSupport) {
-    return exactCoreCandidates.length ? exactCoreCandidates[0].entry : null;
+  const simpleCompactLookup = isSimpleCompactLookup(searchProfile);
+  const phraseLikeExactQuery = isPhraseLikeExactQuery(searchProfile);
+  const filteredExactCandidates = exactCoreCandidates.filter((item) => {
+    if (
+      includeTemplates &&
+      simpleCompactLookup &&
+      item.entry.source === "generated-bulk" &&
+      !item.compactExactField &&
+      !item.templateExactField
+    ) {
+      return false;
+    }
+
+    if (
+      phraseLikeExactQuery &&
+      !item.compactExactField &&
+      !item.templateExactField &&
+      item.bestFieldPriority < 2
+    ) {
+      return false;
+    }
+
+    if (phraseLikeExactQuery && item.bestFieldPriority >= 2 && !item.compactExactField && !item.templateExactField) {
+      const meaningfulExactTerms = item.exactFieldTerms.filter(
+        (term) => !GENERIC_ANCHOR_TERMS.has(term) && !GENERIC_SEARCH_TERMS.has(term) && !GENERIC_TEMPLATE_TERMS.has(term)
+      );
+      if (!meaningfulExactTerms.length) {
+        return false;
+      }
+    }
+
+    return true;
+  });
+
+  if (filteredExactCandidates.length || !includeSupport) {
+    return filteredExactCandidates.length ? filteredExactCandidates[0].entry : null;
   }
   return (
     entries.find((entry) => {
       const index = buildSearchIndex(entry);
       return [index.note, ...index.keywords].some((field) => field && field === searchProfile.compact);
     }) || null
+  );
+}
+
+function isSimpleCompactLookup(searchProfile) {
+  if (!searchProfile?.query || !searchProfile?.compact) return false;
+  return (
+    !/\s/.test(searchProfile.query) &&
+    searchProfile.compact.length >= 2 &&
+    !searchProfile.actionTerms.length &&
+    !searchProfile.templateTerms.length &&
+    !searchProfile.anchorTerms.length
+  );
+}
+
+function isPhraseLikeExactQuery(searchProfile) {
+  if (!searchProfile?.query) return false;
+  const normalized = normalizeText(searchProfile.query);
+  return Boolean(
+    /\s/.test(searchProfile.query) ||
+      searchProfile.actionTerms.length ||
+      searchProfile.templateTerms.length ||
+      searchProfile.anchorTerms.length ||
+      (normalized.length >= 4 &&
+        /(?:요|다|니|나|까|죠|줘|해|해요|했어요|주세요|돼요|되요|안돼요|안되요|있어요|없어요)$/.test(
+          normalized
+        ))
   );
 }
 
