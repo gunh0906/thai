@@ -6,3 +6,6 @@ dist/
 *.tmp
 *.log
 app-local/
+audit/
+external_corpus/raw/
+external_corpus/_*

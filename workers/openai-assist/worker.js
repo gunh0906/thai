@@ -1,4 +1,5 @@
 const DEFAULT_MODEL = "gpt-4o-mini";
+const DEFAULT_REASONING_EFFORT = "low";
 
 function corsHeaders(env) {
   const allowOrigin = env.ALLOWED_ORIGIN || "*";
@@ -41,35 +42,35 @@ function limitEntries(entries, limit = 6) {
 
 function buildPrompt(payload) {
   return [
-    "You are an AI assistant for a Korean-Thai mobile pocketbook.",
-    "Your job is to rescue ambiguous searches and return short, useful Thai results for daily life.",
-    "Use the local candidate results as grounding. Prefer adapting or clarifying them before inventing new items.",
+    "You improve Korean-Thai pocketbook search results for a mobile app.",
     "The user may search in Korean, Thai script, or Korean-style Thai pronunciation.",
-    "Return JSON only. No markdown.",
-    "JSON schema:",
+    "Local search results are provided. Use them as grounding, but fix them when they are clearly noisy or wrong.",
+    "Focus on daily life, work, shopping, transport, dormitory, factory, money, timing, and short practical conversation.",
+    "Return JSON only. No markdown. No text outside the JSON object.",
+    "Schema:",
     JSON.stringify(
       {
         normalizedQuery: "string",
-        intent: "short Korean explanation of what the user likely means",
+        intent: "short Korean explanation of the likely intent",
         confidence: 0.0,
-        searchHints: ["short keyword"],
-        caution: "optional string",
+        searchHints: ["keyword"],
+        caution: "optional note",
         vocab: [
           {
-            korean: "핵심 단어 또는 뜻",
-            thai: "한국어식 태국어 발음 표기",
-            thaiScript: "태국 문자",
-            tags: ["기본회화"],
-            note: "짧은 메모",
+            korean: "short Korean word or phrase",
+            thai: "Korean-friendly pronunciation guide",
+            thaiScript: "Thai script",
+            tags: ["tag"],
+            note: "short note",
           },
         ],
         sentences: [
           {
-            korean: "바로 보여줄 문장",
-            thai: "한국어식 태국어 발음 표기",
-            thaiScript: "태국 문자",
-            tags: ["기본회화"],
-            note: "짧은 메모",
+            korean: "useful sentence in Korean",
+            thai: "Korean-friendly pronunciation guide",
+            thaiScript: "Thai script",
+            tags: ["tag"],
+            note: "short note",
           },
         ],
       },
@@ -77,11 +78,13 @@ function buildPrompt(payload) {
       2
     ),
     "Rules:",
-    "- Keep vocab max 3, sentences max 4.",
-    "- If the query is already answered well by local results, keep additions minimal.",
-    "- If uncertain, lower confidence and explain briefly in caution.",
-    "- Prefer practical spoken Thai. Avoid long textbook sentences.",
-    "- thai must be a Korean-friendly pronunciation guide, and thaiScript must be actual Thai script whenever possible.",
+    "- Keep vocab to at most 3 items.",
+    "- Keep sentences to at most 4 items.",
+    "- Prefer simple spoken Thai, not textbook Thai.",
+    "- If the local results already answer the query well, keep additions minimal.",
+    "- If confidence is low, say so in caution.",
+    "- Always fill thaiScript when possible.",
+    "- Always make thai a Korean-friendly pronunciation guide, not Latin romanization.",
     "",
     "Context JSON:",
     JSON.stringify(payload, null, 2),
@@ -110,7 +113,7 @@ function parseJsonSafely(text) {
   if (!trimmed) return null;
   try {
     return JSON.parse(trimmed);
-  } catch (error) {
+  } catch {
     const match = trimmed.match(/\{[\s\S]*\}$/);
     if (!match) return null;
     try {
@@ -157,8 +160,7 @@ async function handleAssist(request, env) {
 
   if (env.SHARED_SECRET) {
     const authHeader = request.headers.get("Authorization") || "";
-    const expected = `Bearer ${env.SHARED_SECRET}`;
-    if (authHeader !== expected) {
+    if (authHeader !== `Bearer ${env.SHARED_SECRET}`) {
       return jsonResponse(env, { error: "Unauthorized." }, 401);
     }
   }
@@ -197,7 +199,8 @@ async function handleAssist(request, env) {
   };
 
   const model = env.OPENAI_MODEL || DEFAULT_MODEL;
-  const openaiResponse = await fetch("https://api.openai.com/v1/responses", {
+  const baseUrl = cleanText(env.OPENAI_BASE_URL || "https://api.openai.com/v1").replace(/\/+$/, "");
+  const openaiResponse = await fetch(`${baseUrl}/responses`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -205,7 +208,7 @@ async function handleAssist(request, env) {
     },
     body: JSON.stringify({
       model,
-      reasoning: { effort: env.OPENAI_REASONING_EFFORT || "low" },
+      reasoning: { effort: env.OPENAI_REASONING_EFFORT || DEFAULT_REASONING_EFFORT },
       max_output_tokens: 900,
       input: [
         {
@@ -251,10 +254,7 @@ async function handleAssist(request, env) {
 export default {
   async fetch(request, env) {
     if (request.method === "OPTIONS") {
-      return new Response(null, {
-        status: 204,
-        headers: corsHeaders(env),
-      });
+      return new Response(null, { status: 204, headers: corsHeaders(env) });
     }
 
     const url = new URL(request.url);

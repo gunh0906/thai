@@ -1,0 +1,5007 @@
+{
+  "source": "Tatoeba English pivot Korean-Thai",
+  "generatedAt": "2026-04-16T17:25:10",
+  "vocab": [],
+  "sentences": [
+    {
+      "korean": "무언가 바뀌었어.",
+      "thai": "bangoi ng pelinpaenng 빠이",
+      "thaiScript": "บางอย่างเปลี่ยนแปลงไป",
+      "note": "Tatoeba English pivot: Something changed",
+      "keywords": [
+        "Something changed"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "누구나 바뀌어.",
+      "thai": "thukkn pelinpaenng",
+      "thaiScript": "ทุกคนเปลี่ยนแปลง",
+      "note": "Tatoeba English pivot: Everyone changes",
+      "keywords": [
+        "Everyone changes"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "이건 저의 컴퓨터예요.",
+      "thai": "니 콤피우떠 콩 빤",
+      "thaiScript": "นี่คอมพิวเตอร์ของฉัน",
+      "note": "Tatoeba English pivot: This is my computer",
+      "keywords": [
+        "This is my computer"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "더 시간이 필요해요.",
+      "thai": "빤 똥깐 웰라 makkwa 니",
+      "thaiScript": "ฉันต้องการเวลามากกว่านี้",
+      "note": "Tatoeba English pivot: I need more time",
+      "keywords": [
+        "I need more time"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "지금 바빠요.",
+      "thai": "톤니 빤 마이 왕",
+      "thaiScript": "ตอนนี้ฉันไม่ว่าง",
+      "note": "Tatoeba English pivot: I'm busy now",
+      "keywords": [
+        "I'm busy now"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "바쁘세요?",
+      "thai": "쿤 융 유 마이",
+      "thaiScript": "คุณยุ่งอยู่ใช่ไหม?",
+      "note": "Tatoeba English pivot: Are you busy",
+      "keywords": [
+        "Are you busy"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "오 곱하기 칠은 삼십오이다.",
+      "thai": "하 쿤 체드 다이 samsipha",
+      "thaiScript": "ห้าคูณเจ็ดได้สามสิบห้า",
+      "note": "Tatoeba English pivot: Five times seven is thirty-five",
+      "keywords": [
+        "Five times seven is thirty-five"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "화장실이 어디죠?",
+      "thai": "ongnam 유 나이",
+      "thaiScript": "ห้องน้ำอยู่ที่ไหน?",
+      "note": "Tatoeba English pivot: Where is the toilet",
+      "keywords": [
+        "Where is the toilet"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "난 수박 좋아해.",
+      "thai": "빤 촙 땡모",
+      "thaiScript": "ฉันชอบแตงโม",
+      "note": "Tatoeba English pivot: I like watermelon",
+      "keywords": [
+        "I like watermelon"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "성탄을 축하합니다",
+      "thai": "suksan 완 khritmat",
+      "thaiScript": "สุขสันต์วันคริสต์มาส!",
+      "note": "Tatoeba English pivot: Merry Christmas",
+      "keywords": [
+        "Merry Christmas"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "경찰을 불러요!",
+      "thai": "토라삽 하 땀루앗",
+      "thaiScript": "โทรหาตำรวจ!",
+      "note": "Tatoeba English pivot: Call the police",
+      "keywords": [
+        "Call the police"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "당신과 함께 할 시간은 없습니다.",
+      "thai": "빤 마이 미 웰라 삼랍 쿤",
+      "thaiScript": "ฉันไม่มีเวลาสำหรับคุณ",
+      "note": "Tatoeba English pivot: I don't have time for you",
+      "keywords": [
+        "I don't have time for you"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "화장실에 가도 괜찮을까요?",
+      "thai": "커 빤 빠이 ongnam 다이 마이",
+      "thaiScript": "ขอฉันไปห้องน้ำได้ไหม?",
+      "note": "Tatoeba English pivot: May I go to the restroom",
+      "keywords": [
+        "May I go to the restroom"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "5 곱하기 7은 35다.",
+      "thai": "하 쿤 체드 다이 samsipha",
+      "thaiScript": "ห้าคูณเจ็ดได้สามสิบห้า",
+      "note": "Tatoeba English pivot: Five times seven is thirty-five",
+      "keywords": [
+        "Five times seven is thirty-five"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "나 일해.",
+      "thai": "빤 일하다",
+      "thaiScript": "ฉันทำงาน",
+      "note": "Tatoeba English pivot: I work",
+      "keywords": [
+        "I work"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "그는 많은 돈을 가지고 있다.",
+      "thai": "카오 mingoen chamnuanmak",
+      "thaiScript": "เขามีเงินจำนวนมาก",
+      "note": "Tatoeba English pivot: He has a lot of money",
+      "keywords": [
+        "He has a lot of money"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "내가 부엌에서 물을 마시고 있어요.",
+      "thai": "빤 깜랑 듬 남 나이 khrua",
+      "thaiScript": "ฉันกำลังดื่มน้ำในครัว",
+      "note": "Tatoeba English pivot: I'm drinking water in the kitchen",
+      "keywords": [
+        "I'm drinking water in the kitchen"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "몇 시입니까?",
+      "thai": "톤니 웰라 끼 몽",
+      "thaiScript": "ตอนนี้เวลากี่โมง?",
+      "note": "Tatoeba English pivot: What time is it",
+      "keywords": [
+        "What time is it"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "나는 공장에서 일한다.",
+      "thai": "빤 일하다 나이 rongngan",
+      "thaiScript": "ฉันทำงานในโรงงาน",
+      "note": "Tatoeba English pivot: I work in a factory",
+      "keywords": [
+        "I work in a factory"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "너랑 있을 시간 없어.",
+      "thai": "빤 마이 미 웰라 삼랍 쿤",
+      "thaiScript": "ฉันไม่มีเวลาสำหรับคุณ",
+      "note": "Tatoeba English pivot: I don't have time for you",
+      "keywords": [
+        "I don't have time for you"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "몇 시예요?",
+      "thai": "톤니 웰라 끼 몽",
+      "thaiScript": "ตอนนี้เวลากี่โมง?",
+      "note": "Tatoeba English pivot: What time is it",
+      "keywords": [
+        "What time is it"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "몇 시야?",
+      "thai": "톤니 웰라 끼 몽",
+      "thaiScript": "ตอนนี้เวลากี่โมง?",
+      "note": "Tatoeba English pivot: What time is it",
+      "keywords": [
+        "What time is it"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "행복한 부활절 되세요!",
+      "thai": "suksan 완 ittoe",
+      "thaiScript": "สุขสันต์วันอีสเตอร์!",
+      "note": "Tatoeba English pivot: Happy Easter",
+      "keywords": [
+        "Happy Easter"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "그 사람들은 도망 쳤어.",
+      "thai": "phuakkhao labahani 빠이 래우",
+      "thaiScript": "พวกเขาหลบหนีไปแล้ว",
+      "note": "Tatoeba English pivot: They escaped",
+      "keywords": [
+        "They escaped"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "우리는 캐나다 사람이다.",
+      "thai": "phuakrao 크으 차오나이 khaenada",
+      "thaiScript": "พวกเราคือชาวแคนาดา",
+      "note": "Tatoeba English pivot: We're Canadians",
+      "keywords": [
+        "We're Canadians"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "축하 합니다!",
+      "thai": "khosaetngkwamyindi 두어이",
+      "thaiScript": "ขอแสดงความยินดีด้วย!",
+      "note": "Tatoeba English pivot: Congratulations",
+      "keywords": [
+        "Congratulations"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "부활절 잘 보내세요!",
+      "thai": "suksan 완 ittoe",
+      "thaiScript": "สุขสันต์วันอีสเตอร์!",
+      "note": "Tatoeba English pivot: Happy Easter",
+      "keywords": [
+        "Happy Easter"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "아무도 그렇게 말하지 않았다.",
+      "thai": "마이 미 크라이 풋 sing 난",
+      "thaiScript": "ไม่มีใครพูดสิ่งนั้น",
+      "note": "Tatoeba English pivot: Nobody said that",
+      "keywords": [
+        "Nobody said that"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "나는 준비됐읍니다",
+      "thai": "빤 프롬 래우",
+      "thaiScript": "ฉันพร้อมแล้ว",
+      "note": "Tatoeba English pivot: I'm ready",
+      "keywords": [
+        "I'm ready"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "메리 크리스마스!",
+      "thai": "suksan 완 khritmat",
+      "thaiScript": "สุขสันต์วันคริสต์มาส!",
+      "note": "Tatoeba English pivot: Merry Christmas",
+      "keywords": [
+        "Merry Christmas"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "아무도 그런 얘기 한 적 없다.",
+      "thai": "마이 미 크라이 풋 sing 난",
+      "thaiScript": "ไม่มีใครพูดสิ่งนั้น",
+      "note": "Tatoeba English pivot: Nobody said that",
+      "keywords": [
+        "Nobody said that"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "시간 있는지 잘 모르겠어요.",
+      "thai": "빤 마이 ru wa 미 웰라 마이",
+      "thaiScript": "ฉันไม่รู้ว่ามีเวลามั้ย",
+      "note": "Tatoeba English pivot: I don't know if I have the time",
+      "keywords": [
+        "I don't know if I have the time"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "축하해요!",
+      "thai": "khosaetngkwamyindi 두어이",
+      "thaiScript": "ขอแสดงความยินดีด้วย!",
+      "note": "Tatoeba English pivot: Congratulations",
+      "keywords": [
+        "Congratulations"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "무언가 일어났어.",
+      "thai": "koet 아라이 bangoi ng 큰",
+      "thaiScript": "เกิดอะไรบางอย่างขึ้น",
+      "note": "Tatoeba English pivot: Something happened",
+      "keywords": [
+        "Something happened"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "운전 조심하세요.",
+      "thai": "khapnt 양 ramatrawang",
+      "thaiScript": "ขับรถอย่างระมัดระวัง",
+      "note": "Tatoeba English pivot: Drive carefully",
+      "keywords": [
+        "Drive carefully"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "매리 크리쓰마쓰",
+      "thai": "suksan 완 khritmat",
+      "thaiScript": "สุขสันต์วันคริสต์มาส!",
+      "note": "Tatoeba English pivot: Merry Christmas",
+      "keywords": [
+        "Merry Christmas"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "어찌나 사랑스러운지!",
+      "thai": "chang 나라크 chring",
+      "thaiScript": "ช่างน่ารักจริง ๆ!",
+      "note": "Tatoeba English pivot: How lovely",
+      "keywords": [
+        "How lovely"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "즐거운 성탄절!",
+      "thai": "suksan 완 khritmat",
+      "thaiScript": "สุขสันต์วันคริสต์มาส!",
+      "note": "Tatoeba English pivot: Merry Christmas",
+      "keywords": [
+        "Merry Christmas"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "\"감사합니다.\" \"천만에요.\"",
+      "thai": "컵쿤 maipeno rai",
+      "thaiScript": "\"ขอบคุณ\" \"ไม่เป็นอะไร\"",
+      "note": "Tatoeba English pivot: Thank you.\" \"You're welcome",
+      "keywords": [
+        "Thank you.\" \"You're welcome"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "초록색이 너한테 어울려.",
+      "thai": "씨 chiao ema tm 래 쿤",
+      "thaiScript": "สีเชียวเหมาะสมกับคุณ",
+      "note": "Tatoeba English pivot: Green suits you",
+      "keywords": [
+        "Green suits you"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "축하 합니다!",
+      "thai": "khosaetngkwamyindi",
+      "thaiScript": "ขอแสดงความยินดี!",
+      "note": "Tatoeba English pivot: Congratulations",
+      "keywords": [
+        "Congratulations"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "축하해!",
+      "thai": "khosaetngkwamyindi 두어이",
+      "thaiScript": "ขอแสดงความยินดีด้วย!",
+      "note": "Tatoeba English pivot: Congratulations",
+      "keywords": [
+        "Congratulations"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "신만이 아실 것입니다.",
+      "thai": "phrachao thaonan 티 ru",
+      "thaiScript": "พระเจ้าเท่านั้นที่รู้",
+      "note": "Tatoeba English pivot: Only God knows",
+      "keywords": [
+        "Only God knows"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "내일 전화하세요",
+      "thai": "토라삽 하 빤 phrungni",
+      "thaiScript": "โทรหาฉันพรุ่งนี้",
+      "note": "Tatoeba English pivot: Call me tomorrow",
+      "keywords": [
+        "Call me tomorrow"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "무언가 생겼어.",
+      "thai": "koet 아라이 bangoi ng 큰",
+      "thaiScript": "เกิดอะไรบางอย่างขึ้น",
+      "note": "Tatoeba English pivot: Something happened",
+      "keywords": [
+        "Something happened"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "일할 준비 됐니?",
+      "thai": "쿤 프롬 thicha 름 응안 rueyang",
+      "thaiScript": "คุณพร้อมที่จะเริ่มงานหรือยัง",
+      "note": "Tatoeba English pivot: Are you ready to start working",
+      "keywords": [
+        "Are you ready to start working"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "집에 누군가 있어?",
+      "thai": "미 크라이 유 ban 마이",
+      "thaiScript": "มีใครอยู่บ้านไหม?",
+      "note": "Tatoeba English pivot: Anybody home",
+      "keywords": [
+        "Anybody home"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "운전 조심해.",
+      "thai": "khapnt 양 ramatrawang",
+      "thaiScript": "ขับรถอย่างระมัดระวัง",
+      "note": "Tatoeba English pivot: Drive carefully",
+      "keywords": [
+        "Drive carefully"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "잠잘 시간이야.",
+      "thai": "뜽 웰라 빠이 nonlap",
+      "thaiScript": "ถึงเวลาไปนอนหลับ",
+      "note": "Tatoeba English pivot: It's time to go to bed",
+      "keywords": [
+        "It's time to go to bed"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "프랑스어는 어렵지 않다.",
+      "thai": "파싸 frangset 마이 얍",
+      "thaiScript": "ภาษาฝรั่งเศสไม่ยาก",
+      "note": "Tatoeba English pivot: French isn't difficult",
+      "keywords": [
+        "French isn't difficult"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "누구 집에 있어?",
+      "thai": "미 크라이 유 ban 마이",
+      "thaiScript": "มีใครอยู่บ้านไหม?",
+      "note": "Tatoeba English pivot: Anybody home",
+      "keywords": [
+        "Anybody home"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "아무일도 없었어.",
+      "thai": "마이 미 아라이 koetkhuen",
+      "thaiScript": "ไม่มีอะไรเกิดขึ้น",
+      "note": "Tatoeba English pivot: Nothing happened",
+      "keywords": [
+        "Nothing happened"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "탐, 이것들이 너의 것이야?",
+      "thai": "phuak 니 펜 콩 쿤 마이 thom",
+      "thaiScript": "พวกนี้เป็นของคุณไหมทอม?",
+      "note": "Tatoeba English pivot: Are these yours, Tom",
+      "keywords": [
+        "Are these yours, Tom"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "뭐든 중요하다.",
+      "thai": "thuksingthukoi ng mikwamsamkhan",
+      "thaiScript": "ทุกสิ่งทุกอย่างมีความสำคัญ",
+      "note": "Tatoeba English pivot: Everything matters",
+      "keywords": [
+        "Everything matters"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "어서 오십시오!",
+      "thai": "yinditonrap",
+      "thaiScript": "ยินดีต้อนรับ",
+      "note": "Tatoeba English pivot: Welcome",
+      "keywords": [
+        "Welcome"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "축하해요!",
+      "thai": "khosaetngkwamyindi",
+      "thaiScript": "ขอแสดงความยินดี!",
+      "note": "Tatoeba English pivot: Congratulations",
+      "keywords": [
+        "Congratulations"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "노래를 부르고 춤을 춥시다.",
+      "thai": "rongphenng lae tenram 깐 터",
+      "thaiScript": "ร้องเพลงและเต้นรำกันเถอะ",
+      "note": "Tatoeba English pivot: Let's sing and dance",
+      "keywords": [
+        "Let's sing and dance"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "여기에 살고 있습니다.",
+      "thai": "빤 asai 유 티니",
+      "thaiScript": "ฉันอาศัยอยู่ที่นี่",
+      "note": "Tatoeba English pivot: I live here",
+      "keywords": [
+        "I live here"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "이게 도움이 될 지도 몰라.",
+      "thai": "sing 니 하앗 츄어이 쿤 다이",
+      "thaiScript": "สิ่งนี้อาจช่วยคุณได้",
+      "note": "Tatoeba English pivot: This may help you",
+      "keywords": [
+        "This may help you"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "오늘은 일요일입니다.",
+      "thai": "완 크으 wano thit",
+      "thaiScript": "วันนี้คือวันอาทิตย์",
+      "note": "Tatoeba English pivot: Today is Sunday",
+      "keywords": [
+        "Today is Sunday"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "대만은 태국이 아니에요.",
+      "thai": "tahaiwan 마이 차이 prathet 타이",
+      "thaiScript": "ไต้หวันไม่ใช่ประเทศไทย",
+      "note": "Tatoeba English pivot: Taiwan is not Thailand",
+      "keywords": [
+        "Taiwan is not Thailand"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "대만은 태국이 아닙니다.",
+      "thai": "tahaiwan 마이 차이 prathet 타이",
+      "thaiScript": "ไต้หวันไม่ใช่ประเทศไทย",
+      "note": "Tatoeba English pivot: Taiwan is not Thailand",
+      "keywords": [
+        "Taiwan is not Thailand"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "어서 오세요!",
+      "thai": "yinditonrap",
+      "thaiScript": "ยินดีต้อนรับ",
+      "note": "Tatoeba English pivot: Welcome",
+      "keywords": [
+        "Welcome"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "축하해!",
+      "thai": "khosaetngkwamyindi",
+      "thaiScript": "ขอแสดงความยินดี!",
+      "note": "Tatoeba English pivot: Congratulations",
+      "keywords": [
+        "Congratulations"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "그사람들 싸웠어.",
+      "thai": "phuakkhao thalo 깐",
+      "thaiScript": "พวกเขาทะเลาะกัน",
+      "note": "Tatoeba English pivot: They quarreled",
+      "keywords": [
+        "They quarreled"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "나는 거짓말 하지 않습니다.",
+      "thai": "빤 마이 다이 kok",
+      "thaiScript": "ฉันไม่ได้โกหก",
+      "note": "Tatoeba English pivot: I don't lie",
+      "keywords": [
+        "I don't lie"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "누구 있어?",
+      "thai": "미 크라이 유 티니 마이",
+      "thaiScript": "มีใครอยู่ที่นี่ไหม?",
+      "note": "Tatoeba English pivot: Anybody here",
+      "keywords": [
+        "Anybody here"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "여기에 살고 있어요.",
+      "thai": "빤 asai 유 티니",
+      "thaiScript": "ฉันอาศัยอยู่ที่นี่",
+      "note": "Tatoeba English pivot: I live here",
+      "keywords": [
+        "I live here"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "오늘은 토요일입니다.",
+      "thai": "완 펜 완 sao",
+      "thaiScript": "วันนี้เป็นวันเสาร์",
+      "note": "Tatoeba English pivot: Today is Saturday",
+      "keywords": [
+        "Today is Saturday"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "이것이 당신을 도울 수 있습니다.",
+      "thai": "sing 니 하앗 츄어이 쿤 다이",
+      "thaiScript": "สิ่งนี้อาจช่วยคุณได้",
+      "note": "Tatoeba English pivot: This may help you",
+      "keywords": [
+        "This may help you"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "저는 하루에 100유로를 법니다.",
+      "thai": "빤 daingoen 완 통차이 yuro",
+      "thaiScript": "ฉันได้เงินวันละ 100 ยูโร",
+      "note": "Tatoeba English pivot: I make €100 a day",
+      "keywords": [
+        "I make €100 a day"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "내 안경은 어디 있어요?",
+      "thai": "왠딷 콩 빤 유 나이",
+      "thaiScript": "แว่นตาของฉันอยู่ที่ไหน?",
+      "note": "Tatoeba English pivot: Where are my glasses",
+      "keywords": [
+        "Where are my glasses"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "돈이 최고야.",
+      "thai": "응은 bandan thuksing",
+      "thaiScript": "เงินบันดาลทุกสิ่ง",
+      "note": "Tatoeba English pivot: Money talks",
+      "keywords": [
+        "Money talks"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "신은 존재해.",
+      "thai": "phrachao 미 유 chring",
+      "thaiScript": "พระเจ้ามีอยู่จริง",
+      "note": "Tatoeba English pivot: God exists",
+      "keywords": [
+        "God exists"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "오늘은 일요일이다.",
+      "thai": "완 크으 wano thit",
+      "thaiScript": "วันนี้คือวันอาทิตย์",
+      "note": "Tatoeba English pivot: Today is Sunday",
+      "keywords": [
+        "Today is Sunday"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "우리는 시도할거야.",
+      "thai": "phuakrao 롱 래우",
+      "thaiScript": "พวกเราลองแล้ว",
+      "note": "Tatoeba English pivot: We try",
+      "keywords": [
+        "We try"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "저는 일본어를 못 해요.",
+      "thai": "빤 풋 파싸 yipun 마이 다이",
+      "thaiScript": "ฉันพูดภาษาญี่ปุ่นไม่ได้",
+      "note": "Tatoeba English pivot: I don't speak Japanese",
+      "keywords": [
+        "I don't speak Japanese"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "그 사람은 미혼이에요.",
+      "thai": "터 마이 다이 taengngan",
+      "thaiScript": "เธอไม่ได้แต่งงาน",
+      "note": "Tatoeba English pivot: She isn't married",
+      "keywords": [
+        "She isn't married"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "그는 결혼하지 않았다.",
+      "thai": "터 마이 다이 taengngan",
+      "thaiScript": "เธอไม่ได้แต่งงาน",
+      "note": "Tatoeba English pivot: She isn't married",
+      "keywords": [
+        "She isn't married"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "나는 그것을 구매할 것이다.",
+      "thai": "빤 짜 쓰으 만",
+      "thaiScript": "ฉันจะซื้อมัน",
+      "note": "Tatoeba English pivot: I'll buy that",
+      "keywords": [
+        "I'll buy that"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "대만은 태국이 아니야.",
+      "thai": "tahaiwan 마이 차이 prathet 타이",
+      "thaiScript": "ไต้หวันไม่ใช่ประเทศไทย",
+      "note": "Tatoeba English pivot: Taiwan is not Thailand",
+      "keywords": [
+        "Taiwan is not Thailand"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "어서오세요.",
+      "thai": "yinditonrap",
+      "thaiScript": "ยินดีต้อนรับ",
+      "note": "Tatoeba English pivot: Welcome",
+      "keywords": [
+        "Welcome"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "우리는 완전한 문장을 원합니다.",
+      "thai": "라오 똥깐 prayok 티 samabun",
+      "thaiScript": "เราต้องการประโยคที่สมบูรณ์",
+      "note": "Tatoeba English pivot: We want complete sentences",
+      "keywords": [
+        "We want complete sentences"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "환영합니다.",
+      "thai": "yinditonrap",
+      "thaiScript": "ยินดีต้อนรับ",
+      "note": "Tatoeba English pivot: Welcome",
+      "keywords": [
+        "Welcome"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "결혼하셨습니까?",
+      "thai": "쿤 taengngan 래우 rueyang",
+      "thaiScript": "คุณแต่งงานแล้วหรือยัง",
+      "note": "Tatoeba English pivot: Are you married",
+      "keywords": [
+        "Are you married"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "나는 무신론자이다.",
+      "thai": "빤 펜 카놈 마이 chuea 나이 phrachao",
+      "thaiScript": "ฉันเป็นคนไม่เชื่อในพระเจ้า",
+      "note": "Tatoeba English pivot: I'm an atheist",
+      "keywords": [
+        "I'm an atheist"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "여기에 살고 있어.",
+      "thai": "빤 asai 유 티니",
+      "thaiScript": "ฉันอาศัยอยู่ที่นี่",
+      "note": "Tatoeba English pivot: I live here",
+      "keywords": [
+        "I live here"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "오늘은 토요일이다.",
+      "thai": "완 펜 완 sao",
+      "thaiScript": "วันนี้เป็นวันเสาร์",
+      "note": "Tatoeba English pivot: Today is Saturday",
+      "keywords": [
+        "Today is Saturday"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "나는 음악을 사랑한다.",
+      "thai": "빤 rak siangphenng",
+      "thaiScript": "ฉันรักเสียงเพลง",
+      "note": "Tatoeba English pivot: I love music",
+      "keywords": [
+        "I love music"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "안녕히 가십시오!",
+      "thai": "lakon",
+      "thaiScript": "ลาก่อน!",
+      "note": "Tatoeba English pivot: Goodbye",
+      "keywords": [
+        "Goodbye"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "안녕히 계십시오!",
+      "thai": "lakon",
+      "thaiScript": "ลาก่อน!",
+      "note": "Tatoeba English pivot: Goodbye",
+      "keywords": [
+        "Goodbye"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "영어를 할 줄 아세요?",
+      "thai": "쿤 풋 phasaangkrit 다이 마이",
+      "thaiScript": "คุณพูดภาษาอังกฤษได้ไหม?",
+      "note": "Tatoeba English pivot: Do you speak English",
+      "keywords": [
+        "Do you speak English"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "그 사람은 미혼이야.",
+      "thai": "터 마이 다이 taengngan",
+      "thaiScript": "เธอไม่ได้แต่งงาน",
+      "note": "Tatoeba English pivot: She isn't married",
+      "keywords": [
+        "She isn't married"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "그 아빠에 그 아들.",
+      "thai": "emuen pho emuen lukchai",
+      "thaiScript": "เหมือนพ่อ เหมือนลูกชาย",
+      "note": "Tatoeba English pivot: Like father, like son",
+      "keywords": [
+        "Like father, like son"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "나 삐친 거 아니야.",
+      "thai": "빤 마이 다이 ronghai",
+      "thaiScript": "ฉันไม่ได้ร้องไห้",
+      "note": "Tatoeba English pivot: I'm not sulking",
+      "keywords": [
+        "I'm not sulking"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "분명하게 말해.",
+      "thai": "풋 양 chatchen",
+      "thaiScript": "พูดอย่างชัดเจน",
+      "note": "Tatoeba English pivot: Speak clearly",
+      "keywords": [
+        "Speak clearly"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "샴폐인 부탁해.",
+      "thai": "커 chaempen 다이 마이",
+      "thaiScript": "ขอแชมเปญได้ไหม",
+      "note": "Tatoeba English pivot: Champagne, please",
+      "keywords": [
+        "Champagne, please"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "샴폐인 주세요.",
+      "thai": "커 chaempen 다이 마이",
+      "thaiScript": "ขอแชมเปญได้ไหม",
+      "note": "Tatoeba English pivot: Champagne, please",
+      "keywords": [
+        "Champagne, please"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "우리는 동의해.",
+      "thai": "phuakrao enduai",
+      "thaiScript": "พวกเราเห็นด้วย",
+      "note": "Tatoeba English pivot: We agree",
+      "keywords": [
+        "We agree"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "그들은 선생님이다.",
+      "thai": "phuakkhao 펜 achan",
+      "thaiScript": "พวกเขาเป็นอาจารย์",
+      "note": "Tatoeba English pivot: They are teachers",
+      "keywords": [
+        "They are teachers"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "나는 거짓말 하지 않아.",
+      "thai": "빤 마이 다이 kok",
+      "thaiScript": "ฉันไม่ได้โกหก",
+      "note": "Tatoeba English pivot: I don't lie",
+      "keywords": [
+        "I don't lie"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "나는 편지를 쓰고 있다.",
+      "thai": "빤 깜랑 khianttmai",
+      "thaiScript": "ฉันกำลังเขียนจดหมาย",
+      "note": "Tatoeba English pivot: I'm writing a letter",
+      "keywords": [
+        "I'm writing a letter"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "다시 한 번 해봐.",
+      "thai": "롱 크랑",
+      "thaiScript": "ลองอีกครั้ง",
+      "note": "Tatoeba English pivot: Try again",
+      "keywords": [
+        "Try again"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "수많은 나무가 쓰러졌다.",
+      "thai": "tanamai chamnuanmak 롬 롱",
+      "thaiScript": "ต้นไม้จำนวนมากล้มลง",
+      "note": "Tatoeba English pivot: Many trees fell down",
+      "keywords": [
+        "Many trees fell down"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "아무도 나를 도와주지 않았다.",
+      "thai": "마이 미 크라이 츄어이 빤",
+      "thaiScript": "ไม่มีใครช่วยฉัน",
+      "note": "Tatoeba English pivot: No one helped me",
+      "keywords": [
+        "No one helped me"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "움직이지 마!",
+      "thai": "윳 kheluenthi",
+      "thaiScript": "หยุดเคลื่อนที่!",
+      "note": "Tatoeba English pivot: Stop moving",
+      "keywords": [
+        "Stop moving"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "저는 라자냐를 좋아해요.",
+      "thai": "빤 rak 통차이 sanya",
+      "thaiScript": "ฉันรักลาซัญญา",
+      "note": "Tatoeba English pivot: I love lasagna",
+      "keywords": [
+        "I love lasagna"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "프랑스 빵은 맛있습니다.",
+      "thai": "khanamapangprangset 아러이",
+      "thaiScript": "ขนมปังฝรั่งเศสอร่อย",
+      "note": "Tatoeba English pivot: French bread is delicious",
+      "keywords": [
+        "French bread is delicious"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "버터가 어디 있습니까?",
+      "thai": "noei 유 나이",
+      "thaiScript": "เนยอยู่ที่ไหน?",
+      "note": "Tatoeba English pivot: Where's the butter",
+      "keywords": [
+        "Where's the butter"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "이분은 제 친구입니다.",
+      "thai": "니 크으 프언 콩 dichan",
+      "thaiScript": "นี่คือเพื่อนของดิฉัน",
+      "note": "Tatoeba English pivot: This is my friend",
+      "keywords": [
+        "This is my friend"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "그 은행은 어디에 있어요?",
+      "thai": "타나칸 유 나이",
+      "thaiScript": "ธนาคารอยู่ที่ไหน?",
+      "note": "Tatoeba English pivot: Where is the bank",
+      "keywords": [
+        "Where is the bank"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "그게 내 최선이었어.",
+      "thai": "tangchai 탐 temthi 래우",
+      "thaiScript": "ตั้งใจทำเต็มที่(แล้ว)",
+      "note": "Tatoeba English pivot: I did my best",
+      "keywords": [
+        "I did my best"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "나는 그녀가 헤엄치는 것을 봤다.",
+      "thai": "빤 헨 터 wainam",
+      "thaiScript": "ฉันเห็นเธอว่ายน้ำ",
+      "note": "Tatoeba English pivot: I saw her swim",
+      "keywords": [
+        "I saw her swim"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "나는 최선을 다했다.",
+      "thai": "tangchai 탐 temthi 래우",
+      "thaiScript": "ตั้งใจทำเต็มที่(แล้ว)",
+      "note": "Tatoeba English pivot: I did my best",
+      "keywords": [
+        "I did my best"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "뭔가 써.",
+      "thai": "팽 아라이 bangoi ng",
+      "thaiScript": "เขียนอะไรบางอย่าง",
+      "note": "Tatoeba English pivot: Write something",
+      "keywords": [
+        "Write something"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "안녕히 가세요!",
+      "thai": "lakon",
+      "thaiScript": "ลาก่อน!",
+      "note": "Tatoeba English pivot: Goodbye",
+      "keywords": [
+        "Goodbye"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "안녕히 계세요!",
+      "thai": "lakon",
+      "thaiScript": "ลาก่อน!",
+      "note": "Tatoeba English pivot: Goodbye",
+      "keywords": [
+        "Goodbye"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "어떻게 지내셨습니까?",
+      "thai": "쿤 펜 양라이",
+      "thaiScript": "คุณเป็นอย่างไร?",
+      "note": "Tatoeba English pivot: How are you",
+      "keywords": [
+        "How are you"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "우리는 좋은 친구다.",
+      "thai": "phuakrao penphuean 티 디",
+      "thaiScript": "พวกเราเป็นเพื่อนที่ดี",
+      "note": "Tatoeba English pivot: We are good friends",
+      "keywords": [
+        "We are good friends"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "톰이 졸업했어.",
+      "thai": "thom 촙 kansueksa",
+      "thaiScript": "ทอมจบการศึกษา",
+      "note": "Tatoeba English pivot: Tom graduated",
+      "keywords": [
+        "Tom graduated"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "그것을 잡고 있어!",
+      "thai": "척 만 와이",
+      "thaiScript": "จับมันไว้!",
+      "note": "Tatoeba English pivot: Hold it",
+      "keywords": [
+        "Hold it"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "그는 영어를 쓴다.",
+      "thai": "카오 풋 phasaangkrit",
+      "thaiScript": "เขาพูดภาษาอังกฤษ",
+      "note": "Tatoeba English pivot: He speaks English",
+      "keywords": [
+        "He speaks English"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "뭔가 해보자!",
+      "thai": "마 롱 bangoi ng 깐 터",
+      "thaiScript": "มาลองบางอย่างกันเถอะ",
+      "note": "Tatoeba English pivot: Let's try something",
+      "keywords": [
+        "Let's try something"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "뭔가 해보자!",
+      "thai": "롱 탐 아라이 삭 양 깐",
+      "thaiScript": "ลองทำอะไรสักอย่างกัน",
+      "note": "Tatoeba English pivot: Let's try something",
+      "keywords": [
+        "Let's try something"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "새해 복 많이 받으세요.",
+      "thai": "swatdi pihaim",
+      "thaiScript": "สวัสดีปีใหม่",
+      "note": "Tatoeba English pivot: Happy New Year",
+      "keywords": [
+        "Happy New Year"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "결혼했나요?",
+      "thai": "쿤 taengngan 래우 rueyang",
+      "thaiScript": "คุณแต่งงานแล้วหรือยัง",
+      "note": "Tatoeba English pivot: Are you married",
+      "keywords": [
+        "Are you married"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "그녀는 임신 중입니다.",
+      "thai": "터 텅",
+      "thaiScript": "เธอท้อง",
+      "note": "Tatoeba English pivot: She's pregnant",
+      "keywords": [
+        "She's pregnant"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "당신은 어머니를 사랑합니까?",
+      "thai": "쿤 rak mae 콩 쿤 ruemai",
+      "thaiScript": "คุณรักแม่ของคุณหรือไม่?",
+      "note": "Tatoeba English pivot: Do you love your mother",
+      "keywords": [
+        "Do you love your mother"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "아니요",
+      "thai": "마이",
+      "thaiScript": "ไม่",
+      "note": "Tatoeba English pivot: No",
+      "keywords": [
+        "No"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "열심히 해.",
+      "thai": "phayai m 양 낙",
+      "thaiScript": "พยายามอย่างหนัก",
+      "note": "Tatoeba English pivot: Try hard",
+      "keywords": [
+        "Try hard"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "정말이에요?",
+      "thai": "chring ero",
+      "thaiScript": "จริงเหรอ!",
+      "note": "Tatoeba English pivot: Really",
+      "keywords": [
+        "Really"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "정말입니까?",
+      "thai": "chring ero",
+      "thaiScript": "จริงเหรอ!",
+      "note": "Tatoeba English pivot: Really",
+      "keywords": [
+        "Really"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "하나 골라.",
+      "thai": "lueak yangnueng",
+      "thaiScript": "เลือกอย่างหนึ่ง",
+      "note": "Tatoeba English pivot: Choose one",
+      "keywords": [
+        "Choose one"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "더 크게.",
+      "thai": "당 큰 이익",
+      "thaiScript": "ดังขึ้นอีก",
+      "note": "Tatoeba English pivot: Louder",
+      "keywords": [
+        "Louder"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "목이 마릅니다.",
+      "thai": "빤 krahainam",
+      "thaiScript": "ฉันกระหายน้ำ",
+      "note": "Tatoeba English pivot: I'm thirsty",
+      "keywords": [
+        "I'm thirsty"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "안으로 들어와.",
+      "thai": "khaoma 안",
+      "thaiScript": "เข้ามาข้างใน",
+      "note": "Tatoeba English pivot: Come inside",
+      "keywords": [
+        "Come inside"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "왜 나야?",
+      "thai": "thammai 똥깐 펜 빤",
+      "thaiScript": "ทำไมต้องเป็นฉัน?",
+      "note": "Tatoeba English pivot: Why me",
+      "keywords": [
+        "Why me"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "톰은 예의가 바르다.",
+      "thai": "thom suphap",
+      "thaiScript": "ทอมสุภาพ",
+      "note": "Tatoeba English pivot: Tom's polite",
+      "keywords": [
+        "Tom's polite"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "나는 그를 죽일 것이다.",
+      "thai": "빤 짜 카 카오",
+      "thaiScript": "ฉันจะฆ่าเขา",
+      "note": "Tatoeba English pivot: I'll kill him",
+      "keywords": [
+        "I'll kill him"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "노래 시작해.",
+      "thai": "름 rongphenng",
+      "thaiScript": "เริ่มร้องเพลง",
+      "note": "Tatoeba English pivot: Start singing",
+      "keywords": [
+        "Start singing"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "무슨 일이야?",
+      "thai": "koet 아라이 큰",
+      "thaiScript": "เกิดอะไรขึ้น?",
+      "note": "Tatoeba English pivot: What happened",
+      "keywords": [
+        "What happened"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "성함이 어떻게 되십니까?",
+      "thai": "쿤 츼 아라이",
+      "thaiScript": "คุณชื่ออะไร",
+      "note": "Tatoeba English pivot: What's your name",
+      "keywords": [
+        "What's your name"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "안녕하십니까?",
+      "thai": "swatdi",
+      "thaiScript": "สวัสดี!",
+      "note": "Tatoeba English pivot: Hello",
+      "keywords": [
+        "Hello"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "어떻게 지내십니까?",
+      "thai": "쿤 펜 양라이",
+      "thaiScript": "คุณเป็นอย่างไร?",
+      "note": "Tatoeba English pivot: How are you",
+      "keywords": [
+        "How are you"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "이것은 누구의 책입니까?",
+      "thai": "nangsue 니 콩 크라이",
+      "thaiScript": "หนังสือนี่ของใคร?",
+      "note": "Tatoeba English pivot: Whose book is this",
+      "keywords": [
+        "Whose book is this"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "제 것입니다.",
+      "thai": "만 펜 콩 빤",
+      "thaiScript": "มันเป็นของฉัน",
+      "note": "Tatoeba English pivot: It's mine",
+      "keywords": [
+        "It's mine"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "제가 좀 도와 드릴까요?",
+      "thai": "빤 츄어이 쿤 다이 마이",
+      "thaiScript": "ฉันช่วยคุณได้ไหม?",
+      "note": "Tatoeba English pivot: Can I help you",
+      "keywords": [
+        "Can I help you"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "난 반대야.",
+      "thai": "마이 enduai 러이",
+      "thaiScript": "ไม่เห็นด้วยเลย",
+      "note": "Tatoeba English pivot: I disagree",
+      "keywords": [
+        "I disagree"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "난 반대야.",
+      "thai": "빤 마이 enduai",
+      "thaiScript": "ฉันไม่เห็นด้วย",
+      "note": "Tatoeba English pivot: I disagree",
+      "keywords": [
+        "I disagree"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "노래하는 거 좋아해요?",
+      "thai": "쿤 촙 rongphenng 마이",
+      "thaiScript": "คุณชอบร้องเพลงไหม?",
+      "note": "Tatoeba English pivot: Do you like singing",
+      "keywords": [
+        "Do you like singing"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "무엇을 하고 있습니까?",
+      "thai": "쿤 깜랑 탐 아라이 유",
+      "thaiScript": "คุณกำลังทำอะไรอยู่",
+      "note": "Tatoeba English pivot: What are you doing",
+      "keywords": [
+        "What are you doing"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "샴폐인 좀.",
+      "thai": "커 chaempen 다이 마이",
+      "thaiScript": "ขอแชมเปญได้ไหม",
+      "note": "Tatoeba English pivot: Champagne, please",
+      "keywords": [
+        "Champagne, please"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "설마!",
+      "thai": "마이 nachuea",
+      "thaiScript": "ไม่น่าเชื่อ!",
+      "note": "Tatoeba English pivot: Unbelievable",
+      "keywords": [
+        "Unbelievable"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "잘자.",
+      "thai": "ratritwat",
+      "thaiScript": "ราตรีสวัสดิ์",
+      "note": "Tatoeba English pivot: Goodnight",
+      "keywords": [
+        "Goodnight"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "저, 그만 두겠습니다.",
+      "thai": "빤 억",
+      "thaiScript": "ฉันออก",
+      "note": "Tatoeba English pivot: I quit",
+      "keywords": [
+        "I quit"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "그들은 교사다.",
+      "thai": "phuakkhao 펜 achan",
+      "thaiScript": "พวกเขาเป็นอาจารย์",
+      "note": "Tatoeba English pivot: They are teachers",
+      "keywords": [
+        "They are teachers"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "그리스는 오래된 나라이다.",
+      "thai": "krit 펜 prathet kaokae",
+      "thaiScript": "กรีซเป็นประเทศเก่าแก่",
+      "note": "Tatoeba English pivot: Greece is an old country",
+      "keywords": [
+        "Greece is an old country"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "나는 그 사람을 좋아한다.",
+      "thai": "빤 촙 카오",
+      "thaiScript": "ฉันชอบเขา",
+      "note": "Tatoeba English pivot: I like him",
+      "keywords": [
+        "I like him"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "내일은 내 생일이다.",
+      "thai": "phrungni 펜 wankoet 콩 빤",
+      "thaiScript": "พรุ่งนี้เป็นวันเกิดของฉัน",
+      "note": "Tatoeba English pivot: Tomorrow is my birthday",
+      "keywords": [
+        "Tomorrow is my birthday"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "배가 부릅니다.",
+      "thai": "빤 임 래우",
+      "thaiScript": "ฉันอิ่มแล้ว",
+      "note": "Tatoeba English pivot: I'm full",
+      "keywords": [
+        "I'm full"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "어떻게 지내셨습니까?",
+      "thai": "쿤 sabaidi 마이",
+      "thaiScript": "คุณสบายดีไหม?",
+      "note": "Tatoeba English pivot: How are you",
+      "keywords": [
+        "How are you"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "왜 나야?",
+      "thai": "thammai 똥깐 빤 통차이",
+      "thaiScript": "ทำไมต้องฉันล่ะ?",
+      "note": "Tatoeba English pivot: Why me",
+      "keywords": [
+        "Why me"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "정말이야?",
+      "thai": "chring ero",
+      "thaiScript": "จริงเหรอ!",
+      "note": "Tatoeba English pivot: Really",
+      "keywords": [
+        "Really"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "톰은 맥주를 마신다.",
+      "thai": "thom 듬 비아",
+      "thaiScript": "ทอมดื่มเบียร์",
+      "note": "Tatoeba English pivot: Tom drinks beer",
+      "keywords": [
+        "Tom drinks beer"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "톰은 이동했다.",
+      "thai": "thom yaiban",
+      "thaiScript": "ทอมย้ายบ้าน",
+      "note": "Tatoeba English pivot: Tom moved",
+      "keywords": [
+        "Tom moved"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "톰이 거짓말을 했어.",
+      "thai": "thom kok",
+      "thaiScript": "ทอมโกหก",
+      "note": "Tatoeba English pivot: Tom lied",
+      "keywords": [
+        "Tom lied"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "프랑스 빵은 맛있어.",
+      "thai": "khanamapangprangset 아러이",
+      "thaiScript": "ขนมปังฝรั่งเศสอร่อย",
+      "note": "Tatoeba English pivot: French bread is delicious",
+      "keywords": [
+        "French bread is delicious"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "노래부르고 춤추자.",
+      "thai": "rongphenng lae tenram 깐 터",
+      "thaiScript": "ร้องเพลงและเต้นรำกันเถอะ",
+      "note": "Tatoeba English pivot: Let's sing and dance",
+      "keywords": [
+        "Let's sing and dance"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "완벽해!",
+      "thai": "yiamyot",
+      "thaiScript": "เยี่ยมยอด!",
+      "note": "Tatoeba English pivot: Perfect",
+      "keywords": [
+        "Perfect"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "이거 내 친구예요.",
+      "thai": "니 크으 프언 콩 dichan",
+      "thaiScript": "นี่คือเพื่อนของดิฉัน",
+      "note": "Tatoeba English pivot: This is my friend",
+      "keywords": [
+        "This is my friend"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "이거 제 친구예요.",
+      "thai": "니 크으 프언 콩 dichan",
+      "thaiScript": "นี่คือเพื่อนของดิฉัน",
+      "note": "Tatoeba English pivot: This is my friend",
+      "keywords": [
+        "This is my friend"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "저 사람을 따라가.",
+      "thai": "땀 카오 빠이",
+      "thaiScript": "ตามเขาไป",
+      "note": "Tatoeba English pivot: Follow him",
+      "keywords": [
+        "Follow him"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "톰은 떠났어.",
+      "thai": "thom 억 빠이 래우",
+      "thaiScript": "ทอมออกไปแล้ว",
+      "note": "Tatoeba English pivot: Tom left",
+      "keywords": [
+        "Tom left"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "톰이 끝냈어.",
+      "thai": "thom 셋 래우",
+      "thaiScript": "ทอมเสร็จแล้ว",
+      "note": "Tatoeba English pivot: Tom finished",
+      "keywords": [
+        "Tom finished"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "톰이 떠났어.",
+      "thai": "thom 억 빠이 래우",
+      "thaiScript": "ทอมออกไปแล้ว",
+      "note": "Tatoeba English pivot: Tom left",
+      "keywords": [
+        "Tom left"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "거기 있어.",
+      "thai": "빠이 유 트렁 난",
+      "thaiScript": "ไปอยู่ตรงนั่น",
+      "note": "Tatoeba English pivot: Stay there",
+      "keywords": [
+        "Stay there"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "그 은행은 어디 있어?",
+      "thai": "타나칸 유 나이",
+      "thaiScript": "ธนาคารอยู่ที่ไหน?",
+      "note": "Tatoeba English pivot: Where is the bank",
+      "keywords": [
+        "Where is the bank"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "내 거예요.",
+      "thai": "만 펜 콩 빤",
+      "thaiScript": "มันเป็นของฉัน",
+      "note": "Tatoeba English pivot: It's mine",
+      "keywords": [
+        "It's mine"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "너는 세 가지 문제가 있다.",
+      "thai": "쿤 미 sam 분하",
+      "thaiScript": "คุณมีสามปัญหา",
+      "note": "Tatoeba English pivot: You have three problems",
+      "keywords": [
+        "You have three problems"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "설마!",
+      "thai": "eluechuea",
+      "thaiScript": "เหลือเชื่อ!",
+      "note": "Tatoeba English pivot: Unbelievable",
+      "keywords": [
+        "Unbelievable"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "안녕하세요.",
+      "thai": "swatdi",
+      "thaiScript": "สวัสดี!",
+      "note": "Tatoeba English pivot: Hello",
+      "keywords": [
+        "Hello"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "안녕하세요.",
+      "thai": "swatdi tonbai",
+      "thaiScript": "สวัสดีตอนบ่าย",
+      "note": "Tatoeba English pivot: Good afternoon",
+      "keywords": [
+        "Good afternoon"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "안녕하세요?",
+      "thai": "swatdi",
+      "thaiScript": "สวัสดี!",
+      "note": "Tatoeba English pivot: Hello",
+      "keywords": [
+        "Hello"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "어떻게 지내세요?",
+      "thai": "쿤 펜 양라이",
+      "thaiScript": "คุณเป็นอย่างไร?",
+      "note": "Tatoeba English pivot: How are you",
+      "keywords": [
+        "How are you"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "어떻게 지냅니까?",
+      "thai": "쿤 펜 양라이",
+      "thaiScript": "คุณเป็นอย่างไร?",
+      "note": "Tatoeba English pivot: How are you",
+      "keywords": [
+        "How are you"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "어떻게 지냈어요?",
+      "thai": "쿤 펜 양라이",
+      "thaiScript": "คุณเป็นอย่างไร?",
+      "note": "Tatoeba English pivot: How are you",
+      "keywords": [
+        "How are you"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "음악을 좋아해요.",
+      "thai": "빤 rak siangphenng",
+      "thaiScript": "ฉันรักเสียงเพลง",
+      "note": "Tatoeba English pivot: I love music",
+      "keywords": [
+        "I love music"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "이것은 사전이다.",
+      "thai": "만 크으 phachananuknm",
+      "thaiScript": "มันคือพจนานุกรม",
+      "note": "Tatoeba English pivot: It's a dictionary",
+      "keywords": [
+        "It's a dictionary"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "이분은 제 친구입니다.",
+      "thai": "니 크으 프언 콩 폼",
+      "thaiScript": "นี่คือเพื่อนของผม",
+      "note": "Tatoeba English pivot: This is my friend",
+      "keywords": [
+        "This is my friend"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "집에서 머무르는 것은 지루하다.",
+      "thai": "유 티 ban nabuea",
+      "thaiScript": "อยู่ที่บ้านน่าเบื่อ",
+      "note": "Tatoeba English pivot: Staying at home is boring",
+      "keywords": [
+        "Staying at home is boring"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "톰은 설거지를 하지 않았다.",
+      "thai": "thom 양 마이 다이 langchan",
+      "thaiScript": "ทอมยังไม่ได้ล้างจาน",
+      "note": "Tatoeba English pivot: Tom didn't do the dishes",
+      "keywords": [
+        "Tom didn't do the dishes"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "그녀는 울었다.",
+      "thai": "터 ronghai",
+      "thaiScript": "เธอร้องไห้",
+      "note": "Tatoeba English pivot: She cried",
+      "keywords": [
+        "She cried"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "그는 미혼이다.",
+      "thai": "터 마이 다이 taengngan",
+      "thaiScript": "เธอไม่ได้แต่งงาน",
+      "note": "Tatoeba English pivot: She isn't married",
+      "keywords": [
+        "She isn't married"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "노래하는 거 좋아해?",
+      "thai": "쿤 촙 rongphenng 마이",
+      "thaiScript": "คุณชอบร้องเพลงไหม?",
+      "note": "Tatoeba English pivot: Do you like singing",
+      "keywords": [
+        "Do you like singing"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "물은 빛을 반사한다.",
+      "thai": "남 sathon saeng",
+      "thaiScript": "น้ำสะท้อนแสง",
+      "note": "Tatoeba English pivot: Water reflects light",
+      "keywords": [
+        "Water reflects light"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "새가 노래하네.",
+      "thai": "nok rongphenng",
+      "thaiScript": "นกร้องเพลง",
+      "note": "Tatoeba English pivot: Birds sing",
+      "keywords": [
+        "Birds sing"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "새해 복 많이 받아.",
+      "thai": "swatdi pihaim",
+      "thaiScript": "สวัสดีปีใหม่",
+      "note": "Tatoeba English pivot: Happy New Year",
+      "keywords": [
+        "Happy New Year"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "아무도 안왔어.",
+      "thai": "마이 미 크라이 마",
+      "thaiScript": "ไม่มีใครมา",
+      "note": "Tatoeba English pivot: Nobody came",
+      "keywords": [
+        "Nobody came"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "왼쪽으로 돌아.",
+      "thai": "리여우 싸이",
+      "thaiScript": "เลี้ยวซ้าย",
+      "note": "Tatoeba English pivot: Turn left",
+      "keywords": [
+        "Turn left"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "잠깐 있어 봐!",
+      "thai": "척 만 와이",
+      "thaiScript": "จับมันไว้!",
+      "note": "Tatoeba English pivot: Hold it",
+      "keywords": [
+        "Hold it"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "그들은 선생님이다.",
+      "thai": "phuakkhao 펜 khru",
+      "thaiScript": "พวกเขาเป็นครู",
+      "note": "Tatoeba English pivot: They are teachers",
+      "keywords": [
+        "They are teachers"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "나는 모래가 싫다.",
+      "thai": "빤 kelit 타이",
+      "thaiScript": "ฉันเกลียดทราย",
+      "note": "Tatoeba English pivot: I hate sand",
+      "keywords": [
+        "I hate sand"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "나는 화학이 싫다.",
+      "thai": "빤 kelit khemi",
+      "thaiScript": "ฉันเกลียดเคมี",
+      "note": "Tatoeba English pivot: I hate chemistry",
+      "keywords": [
+        "I hate chemistry"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "도와줘!",
+      "thai": "chuaiduai",
+      "thaiScript": "ช่วยด้วย!",
+      "note": "Tatoeba English pivot: Help",
+      "keywords": [
+        "Help"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "배가 불러요.",
+      "thai": "빤 임 래우",
+      "thaiScript": "ฉันอิ่มแล้ว",
+      "note": "Tatoeba English pivot: I'm full",
+      "keywords": [
+        "I'm full"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "선생님의 말씀은 이해가 안 됩니다.",
+      "thai": "빤 마이 카오짜이 쿤",
+      "thaiScript": "ฉันไม่เข้าใจคุณ",
+      "note": "Tatoeba English pivot: I don't understand you",
+      "keywords": [
+        "I don't understand you"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "어느 쪽이 이겼어?",
+      "thai": "크라이 chana",
+      "thaiScript": "ใครชนะ?",
+      "note": "Tatoeba English pivot: Who won",
+      "keywords": [
+        "Who won"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "어떻게 지내십니까?",
+      "thai": "쿤 sabaidi 마이",
+      "thaiScript": "คุณสบายดีไหม?",
+      "note": "Tatoeba English pivot: How are you",
+      "keywords": [
+        "How are you"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "완벽해!",
+      "thai": "phodi pe",
+      "thaiScript": "พอดีเป๊ะ!",
+      "note": "Tatoeba English pivot: Perfect",
+      "keywords": [
+        "Perfect"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "정치에 관심 있으십니까?",
+      "thai": "쿤 sanachai kanmueang ruemai",
+      "thaiScript": "คุณสนใจการเมืองหรือไม่?",
+      "note": "Tatoeba English pivot: Are you interested in politics",
+      "keywords": [
+        "Are you interested in politics"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "톰은 옮겼다.",
+      "thai": "thom yaiban",
+      "thaiScript": "ทอมย้ายบ้าน",
+      "note": "Tatoeba English pivot: Tom moved",
+      "keywords": [
+        "Tom moved"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "10월 3일이다.",
+      "thai": "완 크으 완 thisam tulakm",
+      "thaiScript": "วันนี้คือวันที่สามตุลาคม",
+      "note": "Tatoeba English pivot: It's October the third",
+      "keywords": [
+        "It's October the third"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "나는 록이 좋다.",
+      "thai": "빤 촙 phenng r k",
+      "thaiScript": "ฉันชอบเพลงร็อค",
+      "note": "Tatoeba English pivot: I like rock",
+      "keywords": [
+        "I like rock"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "나는 의사가 아닙니다.",
+      "thai": "빤 마이 펜 khunmo",
+      "thaiScript": "ฉันไม่เป็นคุณหมอ",
+      "note": "Tatoeba English pivot: I'm not a doctor",
+      "keywords": [
+        "I'm not a doctor"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "나는 티브이 보느라 지쳤다.",
+      "thai": "빤 느어이 래 캥 duthonthat",
+      "thaiScript": "ฉันเหนื่อยกับการดูโทรทัศน์",
+      "note": "Tatoeba English pivot: I'm tired of watching television",
+      "keywords": [
+        "I'm tired of watching television"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "나도.",
+      "thai": "빤 두어이 emuenkan",
+      "thaiScript": "ฉันด้วยเหมือนกัน",
+      "note": "Tatoeba English pivot: Me, too",
+      "keywords": [
+        "Me, too"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "멋져!",
+      "thai": "yotyiam",
+      "thaiScript": "ยอดเยี่ยม!",
+      "note": "Tatoeba English pivot: Wonderful",
+      "keywords": [
+        "Wonderful"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "버터 어디 있어?",
+      "thai": "noei 유 나이",
+      "thaiScript": "เนยอยู่ที่ไหน?",
+      "note": "Tatoeba English pivot: Where's the butter",
+      "keywords": [
+        "Where's the butter"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "실례합니다.",
+      "thai": "khonuyat 캅",
+      "thaiScript": "ขออนุญาตครับ",
+      "note": "Tatoeba English pivot: Excuse me",
+      "keywords": [
+        "Excuse me"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "이거 내 친구야.",
+      "thai": "니 크으 프언 콩 dichan",
+      "thaiScript": "นี่คือเพื่อนของดิฉัน",
+      "note": "Tatoeba English pivot: This is my friend",
+      "keywords": [
+        "This is my friend"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "잘 지내요.",
+      "thai": "폼 sabaidi 캅",
+      "thaiScript": "ผมสบายดีครับ",
+      "note": "Tatoeba English pivot: I'm fine",
+      "keywords": [
+        "I'm fine"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "저건 뭐야?",
+      "thai": "난 크으 아라이",
+      "thaiScript": "นั่นคืออะไร?",
+      "note": "Tatoeba English pivot: What's that",
+      "keywords": [
+        "What's that"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "전화번호가 어떻게 되십니까?",
+      "thai": "커 boe 너이",
+      "thaiScript": "ขอเบอร์หน่อย",
+      "note": "Tatoeba English pivot: What's your phone number",
+      "keywords": [
+        "What's your phone number"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "나는 기절했어.",
+      "thai": "빤 pennm",
+      "thaiScript": "ฉันเป็นลม",
+      "note": "Tatoeba English pivot: I fainted",
+      "keywords": [
+        "I fainted"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "너는 어떤 기분이니?",
+      "thai": "쿤 rusuek 양라이",
+      "thaiScript": "คุณรู้สึกอย่างไร?",
+      "note": "Tatoeba English pivot: How are you feeling",
+      "keywords": [
+        "How are you feeling"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "당신 좀 자야겠어요.",
+      "thai": "쿤 khuancha 자다",
+      "thaiScript": "คุณควรจะนอน",
+      "note": "Tatoeba English pivot: You should sleep",
+      "keywords": [
+        "You should sleep"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "당신 좀 자야겠어요.",
+      "thai": "터 khuancha 자다",
+      "thaiScript": "เธอควรจะนอน",
+      "note": "Tatoeba English pivot: You should sleep",
+      "keywords": [
+        "You should sleep"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "더 크게.",
+      "thai": "당 큰",
+      "thaiScript": "ดังขึ้น",
+      "note": "Tatoeba English pivot: Louder",
+      "keywords": [
+        "Louder"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "식물에 물을 주세요.",
+      "thai": "radanamtnmai",
+      "thaiScript": "รดน้ำต้นไม้",
+      "note": "Tatoeba English pivot: Water the plants",
+      "keywords": [
+        "Water the plants"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "어떻게 지내요?",
+      "thai": "쿤 펜 양라이",
+      "thaiScript": "คุณเป็นอย่างไร?",
+      "note": "Tatoeba English pivot: How are you",
+      "keywords": [
+        "How are you"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "어떻게 지냈어?",
+      "thai": "쿤 펜 양라이",
+      "thaiScript": "คุณเป็นอย่างไร?",
+      "note": "Tatoeba English pivot: How are you",
+      "keywords": [
+        "How are you"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "여보세요!",
+      "thai": "swatdi",
+      "thaiScript": "สวัสดี!",
+      "note": "Tatoeba English pivot: Hello",
+      "keywords": [
+        "Hello"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "여보세요?",
+      "thai": "swatdi",
+      "thaiScript": "สวัสดี!",
+      "note": "Tatoeba English pivot: Hello",
+      "keywords": [
+        "Hello"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "잘 가요!",
+      "thai": "lakon",
+      "thaiScript": "ลาก่อน!",
+      "note": "Tatoeba English pivot: Goodbye",
+      "keywords": [
+        "Goodbye"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "잘 가요.",
+      "thai": "lakon",
+      "thaiScript": "ลาก่อน!",
+      "note": "Tatoeba English pivot: Goodbye",
+      "keywords": [
+        "Goodbye"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "잘 있어!",
+      "thai": "lakon",
+      "thaiScript": "ลาก่อน!",
+      "note": "Tatoeba English pivot: Goodbye",
+      "keywords": [
+        "Goodbye"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "잘 지내십니까?",
+      "thai": "쿤 펜 양라이",
+      "thaiScript": "คุณเป็นอย่างไร?",
+      "note": "Tatoeba English pivot: How are you",
+      "keywords": [
+        "How are you"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "주의깊게 들어.",
+      "thai": "tangchaifang",
+      "thaiScript": "ตั้งใจฟัง",
+      "note": "Tatoeba English pivot: Listen carefully",
+      "keywords": [
+        "Listen carefully"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "직업이 뭐예요?",
+      "thai": "쿤 탐 achip 아라이",
+      "thaiScript": "คุณทำอาชีพอะไร?",
+      "note": "Tatoeba English pivot: What's your job",
+      "keywords": [
+        "What's your job"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "톰이 점프했어.",
+      "thai": "thom kradot",
+      "thaiScript": "ทอมกระโดด",
+      "note": "Tatoeba English pivot: Tom jumped",
+      "keywords": [
+        "Tom jumped"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "그만 소리쳐!",
+      "thai": "윳 takon",
+      "thaiScript": "หยุดตะโกน!",
+      "note": "Tatoeba English pivot: Stop yelling",
+      "keywords": [
+        "Stop yelling"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "나는 맥주가 좋아.",
+      "thai": "빤 촙 비아",
+      "thaiScript": "ฉันชอบเบียร์",
+      "note": "Tatoeba English pivot: I like beer",
+      "keywords": [
+        "I like beer"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "네가 톰을 울렸어.",
+      "thai": "쿤 thamhai thom ronghai",
+      "thaiScript": "คุณทำให้ทอมร้องไห้",
+      "note": "Tatoeba English pivot: You made Tom cry",
+      "keywords": [
+        "You made Tom cry"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "누가 여기에 금괴를 묻었을까?",
+      "thai": "크라이 팡 thaeng thongkham 티니",
+      "thaiScript": "ใครฝังแท่งทองคำที่นี่?",
+      "note": "Tatoeba English pivot: Who buried the gold bars here",
+      "keywords": [
+        "Who buried the gold bars here"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "앞쪽으로 와.",
+      "thai": "마 khangna",
+      "thaiScript": "มาข้างหน้า",
+      "note": "Tatoeba English pivot: Come forward",
+      "keywords": [
+        "Come forward"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "어디에서 태어나셨습니까?",
+      "thai": "쿤 koet 나이",
+      "thaiScript": "คุณเกิดที่ไหน?",
+      "note": "Tatoeba English pivot: Where were you born",
+      "keywords": [
+        "Where were you born"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "얼마나 깊게?",
+      "thai": "luek khae 나이",
+      "thaiScript": "ลึกแค่ไหน?",
+      "note": "Tatoeba English pivot: How deep",
+      "keywords": [
+        "How deep"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "유감스럽게도 사실이네요.",
+      "thai": "만 펜 rueangtring 티 nasiadai",
+      "thaiScript": "มันเป็นเรื่องจริงที่น่าเสียดาย",
+      "note": "Tatoeba English pivot: It is unfortunately true",
+      "keywords": [
+        "It is unfortunately true"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "이해가 안 됩니다.",
+      "thai": "빤 마이 카오짜이",
+      "thaiScript": "ฉันไม่เข้าใจ",
+      "note": "Tatoeba English pivot: I don't understand",
+      "keywords": [
+        "I don't understand"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "항생제는 바이러스를 죽일 수 없어.",
+      "thai": "yaptichina 마이 쌈앗 카 wrai t 다이",
+      "thaiScript": "ยาปฏิชีวนะไม่สามารถฆ่าไวรัสได้",
+      "note": "Tatoeba English pivot: Antibiotics can't kill viruses",
+      "keywords": [
+        "Antibiotics can't kill viruses"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "과거를 지울 순 없어.",
+      "thai": "쿤 마이 쌈앗 lop dit 다이",
+      "thaiScript": "คุณไม่สามารถลบอดีตได้",
+      "note": "Tatoeba English pivot: You can't erase the past",
+      "keywords": [
+        "You can't erase the past"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "난 거짓말 안해.",
+      "thai": "빤 마이 다이 kok",
+      "thaiScript": "ฉันไม่ได้โกหก",
+      "note": "Tatoeba English pivot: I don't lie",
+      "keywords": [
+        "I don't lie"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "당신이 필요해요.",
+      "thai": "빤 똥깐 쿤",
+      "thaiScript": "ฉันต้องการคุณ",
+      "note": "Tatoeba English pivot: I need you",
+      "keywords": [
+        "I need you"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "배가 불러.",
+      "thai": "빤 임 래우",
+      "thaiScript": "ฉันอิ่มแล้ว",
+      "note": "Tatoeba English pivot: I'm full",
+      "keywords": [
+        "I'm full"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "배부릅니다.",
+      "thai": "빤 임 래우",
+      "thaiScript": "ฉันอิ่มแล้ว",
+      "note": "Tatoeba English pivot: I'm full",
+      "keywords": [
+        "I'm full"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "손대지 마.",
+      "thai": "아오 므 억 빠이",
+      "thaiScript": "เอามือออกไป",
+      "note": "Tatoeba English pivot: Hands off",
+      "keywords": [
+        "Hands off"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "실례합니다.",
+      "thai": "khonuyat 카",
+      "thaiScript": "ขออนุญาตค่ะ",
+      "note": "Tatoeba English pivot: Excuse me",
+      "keywords": [
+        "Excuse me"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "어떻게 지내세요?",
+      "thai": "쿤 sabaidi 마이",
+      "thaiScript": "คุณสบายดีไหม?",
+      "note": "Tatoeba English pivot: How are you",
+      "keywords": [
+        "How are you"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "어떻게 지냅니까?",
+      "thai": "쿤 sabaidi 마이",
+      "thaiScript": "คุณสบายดีไหม?",
+      "note": "Tatoeba English pivot: How are you",
+      "keywords": [
+        "How are you"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "어떻게 지냈어요?",
+      "thai": "쿤 sabaidi 마이",
+      "thaiScript": "คุณสบายดีไหม?",
+      "note": "Tatoeba English pivot: How are you",
+      "keywords": [
+        "How are you"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "정말?",
+      "thai": "chring ero",
+      "thaiScript": "จริงเหรอ!",
+      "note": "Tatoeba English pivot: Really",
+      "keywords": [
+        "Really"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "톰이 거짓말했어.",
+      "thai": "thom kok",
+      "thaiScript": "ทอมโกหก",
+      "note": "Tatoeba English pivot: Tom lied",
+      "keywords": [
+        "Tom lied"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "거북이는 이빨이 없습니다.",
+      "thai": "타오 마이 미 판",
+      "thaiScript": "เต่าไม่มีฟัน",
+      "note": "Tatoeba English pivot: Turtles don't have teeth",
+      "keywords": [
+        "Turtles don't have teeth"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "내일 만납시다.",
+      "thai": "choekan phrungni",
+      "thaiScript": "เจอกันพรุ่งนี้",
+      "note": "Tatoeba English pivot: See you tomorrow",
+      "keywords": [
+        "See you tomorrow"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "대부분의 사람들은 내가 미쳤다고 생각해",
+      "thai": "카놈 suanhain 킷 wa 빤 바코드",
+      "thaiScript": "คนส่วนใหญ่คิดว่าฉันบ้า",
+      "note": "Tatoeba English pivot: Most people think I'm crazy",
+      "keywords": [
+        "Most people think I'm crazy"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "들어와요.",
+      "thai": "khaoma 안",
+      "thaiScript": "เข้ามาข้างใน",
+      "note": "Tatoeba English pivot: Come in",
+      "keywords": [
+        "Come in"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "목말라요.",
+      "thai": "빤 krahainam",
+      "thaiScript": "ฉันกระหายน้ำ",
+      "note": "Tatoeba English pivot: I'm thirsty",
+      "keywords": [
+        "I'm thirsty"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "부끄러워하지 마세요.",
+      "thai": "야 아이 러이",
+      "thaiScript": "อย่าอายเลย",
+      "note": "Tatoeba English pivot: Don't be shy",
+      "keywords": [
+        "Don't be shy"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "우린 기다렸어.",
+      "thai": "라오 rokhoi",
+      "thaiScript": "เรารอคอย",
+      "note": "Tatoeba English pivot: We waited",
+      "keywords": [
+        "We waited"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "전화 좀 해줘.",
+      "thai": "토라삽 하 빤",
+      "thaiScript": "โทรหาฉัน",
+      "note": "Tatoeba English pivot: Call me",
+      "keywords": [
+        "Call me"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "걱정 그만해.",
+      "thai": "윳 kanguan",
+      "thaiScript": "หยุดกังวล",
+      "note": "Tatoeba English pivot: Stop worrying",
+      "keywords": [
+        "Stop worrying"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "굉장해!",
+      "thai": "sutyot",
+      "thaiScript": "สุดยอด!",
+      "note": "Tatoeba English pivot: Awesome",
+      "keywords": [
+        "Awesome"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "그것은 무엇입니까?",
+      "thai": "만 크으 아라이",
+      "thaiScript": "มันคืออะไร?",
+      "note": "Tatoeba English pivot: What is it",
+      "keywords": [
+        "What is it"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "그는 왼팔을 부러뜨렸다.",
+      "thai": "카오 ak 캔 싸이 콩 카오",
+      "thaiScript": "เขาหักแขนซ้ายของเขา",
+      "note": "Tatoeba English pivot: He broke his left arm",
+      "keywords": [
+        "He broke his left arm"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "그만 걱정해.",
+      "thai": "윳 kanguan",
+      "thaiScript": "หยุดกังวล",
+      "note": "Tatoeba English pivot: Stop worrying",
+      "keywords": [
+        "Stop worrying"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "나 피나",
+      "thai": "빤 미 블럿 억",
+      "thaiScript": "ฉันมีเลือดออก",
+      "note": "Tatoeba English pivot: I'm bleeding",
+      "keywords": [
+        "I'm bleeding"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "나는 톰이야.",
+      "thai": "빤 크으 thom",
+      "thaiScript": "ฉันคือทอม",
+      "note": "Tatoeba English pivot: I'm Tom",
+      "keywords": [
+        "I'm Tom"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "다시 한번 말씀해 주시겠어요?",
+      "thai": "쿤 까루나 풋 sing 난 sam 다이 마이",
+      "thaiScript": "คุณกรุณาพูดสิ่งนั้นซ้ำได้ไหม?",
+      "note": "Tatoeba English pivot: Could you please repeat that",
+      "keywords": [
+        "Could you please repeat that"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "말도 안 돼!",
+      "thai": "마이 mithang",
+      "thaiScript": "ไม่มีทาง!",
+      "note": "Tatoeba English pivot: No way",
+      "keywords": [
+        "No way"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "알았어.",
+      "thai": "빤 카오짜이 래우",
+      "thaiScript": "ฉันเข้าใจแล้ว",
+      "note": "Tatoeba English pivot: I see",
+      "keywords": [
+        "I see"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "어떻게 지내?",
+      "thai": "쿤 펜 양라이",
+      "thaiScript": "คุณเป็นอย่างไร?",
+      "note": "Tatoeba English pivot: How are you",
+      "keywords": [
+        "How are you"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "이거 내 친구예요.",
+      "thai": "니 크으 프언 콩 폼",
+      "thaiScript": "นี่คือเพื่อนของผม",
+      "note": "Tatoeba English pivot: This is my friend",
+      "keywords": [
+        "This is my friend"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "이거 제 친구예요.",
+      "thai": "니 크으 프언 콩 폼",
+      "thaiScript": "นี่คือเพื่อนของผม",
+      "note": "Tatoeba English pivot: This is my friend",
+      "keywords": [
+        "This is my friend"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "이름은 무엇입니까?",
+      "thai": "쿤 츼 아라이",
+      "thaiScript": "คุณชื่ออะไร",
+      "note": "Tatoeba English pivot: What's your name",
+      "keywords": [
+        "What's your name"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "잘 가!",
+      "thai": "lakon",
+      "thaiScript": "ลาก่อน!",
+      "note": "Tatoeba English pivot: Goodbye",
+      "keywords": [
+        "Goodbye"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "잘 지내세요?",
+      "thai": "쿤 펜 양라이",
+      "thaiScript": "คุณเป็นอย่างไร?",
+      "note": "Tatoeba English pivot: How are you",
+      "keywords": [
+        "How are you"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "저기요!",
+      "thai": "swatdi",
+      "thaiScript": "สวัสดี!",
+      "note": "Tatoeba English pivot: Hello",
+      "keywords": [
+        "Hello"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "절대 아니야.",
+      "thai": "마이 mithang",
+      "thaiScript": "ไม่มีทาง!",
+      "note": "Tatoeba English pivot: No way",
+      "keywords": [
+        "No way"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "절대로!",
+      "thai": "naenon",
+      "thaiScript": "แน่นอน!",
+      "note": "Tatoeba English pivot: Definitely",
+      "keywords": [
+        "Definitely"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "죽었나?",
+      "thai": "tai 양",
+      "thaiScript": "ตายยัง?",
+      "note": "Tatoeba English pivot: Dead",
+      "keywords": [
+        "Dead"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "죽었어?",
+      "thai": "tai 양",
+      "thaiScript": "ตายยัง?",
+      "note": "Tatoeba English pivot: Dead",
+      "keywords": [
+        "Dead"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "직업이 뭐야?",
+      "thai": "쿤 탐 achip 아라이",
+      "thaiScript": "คุณทำอาชีพอะไร?",
+      "note": "Tatoeba English pivot: What's your job",
+      "keywords": [
+        "What's your job"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "진정해.",
+      "thai": "팍 폰",
+      "thaiScript": "พักผ่อน",
+      "note": "Tatoeba English pivot: Relax",
+      "keywords": [
+        "Relax"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "천천히 걸어.",
+      "thai": "doen 차 렉",
+      "thaiScript": "เดินช้า ๆ",
+      "note": "Tatoeba English pivot: Walk slowly",
+      "keywords": [
+        "Walk slowly"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "톰은 애들이 3명 있다.",
+      "thai": "thom miluk sam 카놈",
+      "thaiScript": "ทอมมีลูกสามคน",
+      "note": "Tatoeba English pivot: Tom has three children",
+      "keywords": [
+        "Tom has three children"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "틀렸어.",
+      "thai": "핏 래우",
+      "thaiScript": "ผิดแล้ว",
+      "note": "Tatoeba English pivot: Wrong",
+      "keywords": [
+        "Wrong"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "나는 고양이 두 마리를 가지고 있다.",
+      "thai": "빤 미 maeo 썽 뚜어",
+      "thaiScript": "ฉันมีแมวสองตัว",
+      "note": "Tatoeba English pivot: I have two cats",
+      "keywords": [
+        "I have two cats"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "나는 잃어버렸다.",
+      "thai": "빤 패",
+      "thaiScript": "ฉันแพ้",
+      "note": "Tatoeba English pivot: I lost",
+      "keywords": [
+        "I lost"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "뒈져 버려!",
+      "thai": "tai",
+      "thaiScript": "ตาย!",
+      "note": "Tatoeba English pivot: Die",
+      "keywords": [
+        "Die"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "무엇을 하십니까?",
+      "thai": "쿤 깜랑 탐 아라이 유",
+      "thaiScript": "คุณกำลังทำอะไรอยู่",
+      "note": "Tatoeba English pivot: What are you doing",
+      "keywords": [
+        "What are you doing"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "뭐 하고 있어요?",
+      "thai": "쿤 깜랑 탐 아라이 유",
+      "thaiScript": "คุณกำลังทำอะไรอยู่",
+      "note": "Tatoeba English pivot: What are you doing",
+      "keywords": [
+        "What are you doing"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "사격 개시!",
+      "thai": "ying",
+      "thaiScript": "ยิง!",
+      "note": "Tatoeba English pivot: Fire",
+      "keywords": [
+        "Fire"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "시도해볼게.",
+      "thai": "빤 롱 래우",
+      "thaiScript": "ฉันลองแล้ว",
+      "note": "Tatoeba English pivot: I try",
+      "keywords": [
+        "I try"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "실례합니다.",
+      "thai": "khophai 캅",
+      "thaiScript": "ขออภัยครับ",
+      "note": "Tatoeba English pivot: Excuse me",
+      "keywords": [
+        "Excuse me"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "알 것 같습니다.",
+      "thai": "빤 킷 wa 빤 카오짜이",
+      "thaiScript": "ฉันคิดว่าฉันเข้าใจ",
+      "note": "Tatoeba English pivot: I think I understand",
+      "keywords": [
+        "I think I understand"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "어디에서 태어나셨어요?",
+      "thai": "쿤 koet 나이",
+      "thaiScript": "คุณเกิดที่ไหน?",
+      "note": "Tatoeba English pivot: Where were you born",
+      "keywords": [
+        "Where were you born"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "에취!",
+      "thai": "hatchio",
+      "thaiScript": "ฮัดชิ้ว!",
+      "note": "Tatoeba English pivot: Achoo",
+      "keywords": [
+        "Achoo"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "에취!",
+      "thai": "hatchoei",
+      "thaiScript": "ฮัดเช้ย!",
+      "note": "Tatoeba English pivot: Achoo",
+      "keywords": [
+        "Achoo"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "왜 여자가 싫은 거야?",
+      "thai": "thammai 쿤 뜽 kelit 잉차이",
+      "thaiScript": "ทำไมคุณถึงเกลียดผู้หญิง?",
+      "note": "Tatoeba English pivot: Why do you hate women",
+      "keywords": [
+        "Why do you hate women"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "이 사진 최근 거에요?",
+      "thai": "니 펜 phap lasut ruepela",
+      "thaiScript": "นี่เป็นภาพล่าสุดรึเปล่า?",
+      "note": "Tatoeba English pivot: Is it a recent picture",
+      "keywords": [
+        "Is it a recent picture"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "이해가 안 돼요.",
+      "thai": "빤 마이 카오짜이",
+      "thaiScript": "ฉันไม่เข้าใจ",
+      "note": "Tatoeba English pivot: I don't understand",
+      "keywords": [
+        "I don't understand"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "작별인사해.",
+      "thai": "풋 klao 통차이",
+      "thaiScript": "พูดกล่าวลา",
+      "note": "Tatoeba English pivot: Say goodbye",
+      "keywords": [
+        "Say goodbye"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "피곤합니다.",
+      "thai": "빤 느어이",
+      "thaiScript": "ฉันเหนื่อย",
+      "note": "Tatoeba English pivot: I'm tired",
+      "keywords": [
+        "I'm tired"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "괜찮은 거예요?",
+      "thai": "난 chaidai 마이",
+      "thaiScript": "นั่นใช้ได้ไหม",
+      "note": "Tatoeba English pivot: Is that okay",
+      "keywords": [
+        "Is that okay"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "그 사람은 집에 아주 늦게 왔어.",
+      "thai": "터 끌랍 득 막",
+      "thaiScript": "เธอกลับบ้านดึกมาก",
+      "note": "Tatoeba English pivot: She came home very late",
+      "keywords": [
+        "She came home very late"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "그는 뛰어간다.",
+      "thai": "카오 wing",
+      "thaiScript": "เขาวิ่ง",
+      "note": "Tatoeba English pivot: He runs",
+      "keywords": [
+        "He runs"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "그대는 달린다.",
+      "thai": "쿤 wing",
+      "thaiScript": "คุณวิ่ง",
+      "note": "Tatoeba English pivot: You run",
+      "keywords": [
+        "You run"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "그들은 교사다.",
+      "thai": "phuakkhao 펜 khru",
+      "thaiScript": "พวกเขาเป็นครู",
+      "note": "Tatoeba English pivot: They are teachers",
+      "keywords": [
+        "They are teachers"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "그만 투덜거려.",
+      "thai": "윳 bon",
+      "thaiScript": "หยุดบ่น",
+      "note": "Tatoeba English pivot: Stop grumbling",
+      "keywords": [
+        "Stop grumbling"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "난 톰을 원해.",
+      "thai": "빤 똥깐 thom",
+      "thaiScript": "ฉันต้องการทอม",
+      "note": "Tatoeba English pivot: I want Tom",
+      "keywords": [
+        "I want Tom"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "내가 너무 말을 많이 하고 있어?",
+      "thai": "폼 풋 makkoenpai 마이",
+      "thaiScript": "ผมพูดมากเกินไปไหม",
+      "note": "Tatoeba English pivot: Am I talking too much",
+      "keywords": [
+        "Am I talking too much"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "네가 필요해요.",
+      "thai": "빤 똥깐 쿤",
+      "thaiScript": "ฉันต้องการคุณ",
+      "note": "Tatoeba English pivot: I need you",
+      "keywords": [
+        "I need you"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "당신은 달린다.",
+      "thai": "쿤 wing",
+      "thaiScript": "คุณวิ่ง",
+      "note": "Tatoeba English pivot: You run",
+      "keywords": [
+        "You run"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "러시아에서 왔습니다.",
+      "thai": "빤 machak ratsia",
+      "thaiScript": "ฉันมาจากรัสเซีย",
+      "note": "Tatoeba English pivot: I am from Russia",
+      "keywords": [
+        "I am from Russia"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "무슨 일입니까?",
+      "thai": "koet 아라이 큰",
+      "thaiScript": "เกิดอะไรขึ้น?",
+      "note": "Tatoeba English pivot: What's going on",
+      "keywords": [
+        "What's going on"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "무엇이 필요하십니까?",
+      "thai": "쿤 똥깐 아라이",
+      "thaiScript": "คุณต้องการอะไร?",
+      "note": "Tatoeba English pivot: What do you need",
+      "keywords": [
+        "What do you need"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "배부르다.",
+      "thai": "빤 임 래우",
+      "thaiScript": "ฉันอิ่มแล้ว",
+      "note": "Tatoeba English pivot: I'm full",
+      "keywords": [
+        "I'm full"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "배불러요.",
+      "thai": "빤 임 래우",
+      "thaiScript": "ฉันอิ่มแล้ว",
+      "note": "Tatoeba English pivot: I'm full",
+      "keywords": [
+        "I'm full"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "생각해 주세요.",
+      "thai": "pont 킷 kiaokap 만",
+      "thaiScript": "โปรดคิดเกี่ยวกับมัน",
+      "note": "Tatoeba English pivot: Please think about it",
+      "keywords": [
+        "Please think about it"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "어떻게 지내요?",
+      "thai": "쿤 sabaidi 마이",
+      "thaiScript": "คุณสบายดีไหม?",
+      "note": "Tatoeba English pivot: How are you",
+      "keywords": [
+        "How are you"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "어떻게 지냈어?",
+      "thai": "쿤 sabaidi 마이",
+      "thaiScript": "คุณสบายดีไหม?",
+      "note": "Tatoeba English pivot: How are you",
+      "keywords": [
+        "How are you"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "어머니를 사랑합니까?",
+      "thai": "쿤 rak mae 콩 쿤 ruemai",
+      "thaiScript": "คุณรักแม่ของคุณหรือไม่?",
+      "note": "Tatoeba English pivot: Do you love your mother",
+      "keywords": [
+        "Do you love your mother"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "잘 지내십니까?",
+      "thai": "쿤 sabaidi 마이",
+      "thaiScript": "คุณสบายดีไหม?",
+      "note": "Tatoeba English pivot: How are you",
+      "keywords": [
+        "How are you"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "저리 가, 톰.",
+      "thai": "paihaipn thom",
+      "thaiScript": "ไปให้พ้น, ทอม",
+      "note": "Tatoeba English pivot: Go away, Tom",
+      "keywords": [
+        "Go away, Tom"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "정치에 관심 있나요?",
+      "thai": "쿤 sanachai kanmueang ruemai",
+      "thaiScript": "คุณสนใจการเมืองหรือไม่?",
+      "note": "Tatoeba English pivot: Are you interested in politics",
+      "keywords": [
+        "Are you interested in politics"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "정치에 관심 있어요?",
+      "thai": "쿤 sanachai kanmueang ruemai",
+      "thaiScript": "คุณสนใจการเมืองหรือไม่?",
+      "note": "Tatoeba English pivot: Are you interested in politics",
+      "keywords": [
+        "Are you interested in politics"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "톰이 지불했어.",
+      "thai": "thom 짜이",
+      "thaiScript": "ทอมจ่าย",
+      "note": "Tatoeba English pivot: Tom paid",
+      "keywords": [
+        "Tom paid"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "공격해!",
+      "thai": "chomti",
+      "thaiScript": "โจมตี!",
+      "note": "Tatoeba English pivot: Attack",
+      "keywords": [
+        "Attack"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "기다려.",
+      "thai": "로 끄론",
+      "thaiScript": "รอก่อน",
+      "note": "Tatoeba English pivot: Wait",
+      "keywords": [
+        "Wait"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "도와줘!",
+      "thai": "츄어이 빤 두어이",
+      "thaiScript": "ช่วยฉันด้วย!",
+      "note": "Tatoeba English pivot: Help me",
+      "keywords": [
+        "Help me"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "들어와.",
+      "thai": "khaoma 안",
+      "thaiScript": "เข้ามาข้างใน",
+      "note": "Tatoeba English pivot: Come in",
+      "keywords": [
+        "Come in"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "목말라.",
+      "thai": "빤 krahainam",
+      "thaiScript": "ฉันกระหายน้ำ",
+      "note": "Tatoeba English pivot: I'm thirsty",
+      "keywords": [
+        "I'm thirsty"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "성함이 어떻게 되십니까?",
+      "thai": "쿤 츼 아라이",
+      "thaiScript": "คุณชื่ออะไร?",
+      "note": "Tatoeba English pivot: What is your name",
+      "keywords": [
+        "What is your name"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "언어를 좋아합니다.",
+      "thai": "빤 촙 파싸",
+      "thaiScript": "ฉันชอบภาษา",
+      "note": "Tatoeba English pivot: I like languages",
+      "keywords": [
+        "I like languages"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "이 단어를 어떻게 발음합니까?",
+      "thai": "캄쌍 니 oksiang 양라이",
+      "thaiScript": "คำนี้ออกเสียงอย่างไร",
+      "note": "Tatoeba English pivot: How do you pronounce this word",
+      "keywords": [
+        "How do you pronounce this word"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "전화 번호가 무엇입니까?",
+      "thai": "커 boe 너이",
+      "thaiScript": "ขอเบอร์หน่อย",
+      "note": "Tatoeba English pivot: What's your phone number",
+      "keywords": [
+        "What's your phone number"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "점프해.",
+      "thai": "kradot",
+      "thaiScript": "กระโดด",
+      "note": "Tatoeba English pivot: Jump",
+      "keywords": [
+        "Jump"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "건배!",
+      "thai": "chia",
+      "thaiScript": "เชียร์!",
+      "note": "Tatoeba English pivot: Cheers",
+      "keywords": [
+        "Cheers"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "계속 읽어.",
+      "thai": "안 topai",
+      "thaiScript": "อ่านต่อไป",
+      "note": "Tatoeba English pivot: Keep reading",
+      "keywords": [
+        "Keep reading"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "그는 무례한 사람이다.",
+      "thai": "카오 펜 카놈 티 yapkhai",
+      "thaiScript": "เขาเป็นคนที่หยาบคาย",
+      "note": "Tatoeba English pivot: He is a rude person",
+      "keywords": [
+        "He is a rude person"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "꽃이 피네.",
+      "thai": "dokmai ban",
+      "thaiScript": "ดอกไม้บาน",
+      "note": "Tatoeba English pivot: Flowers bloom",
+      "keywords": [
+        "Flowers bloom"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "나는 집에 있다.",
+      "thai": "빤 유 ban",
+      "thaiScript": "ฉันอยู่บ้าน",
+      "note": "Tatoeba English pivot: I'm at home",
+      "keywords": [
+        "I'm at home"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "너무 늦어.",
+      "thai": "싸이 koenpai",
+      "thaiScript": "สายเกินไป",
+      "note": "Tatoeba English pivot: Too late",
+      "keywords": [
+        "Too late"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "누가 알아?",
+      "thai": "크라이 짜 ru",
+      "thaiScript": "ใครจะรู้?",
+      "note": "Tatoeba English pivot: Who knows",
+      "keywords": [
+        "Who knows"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "빨리 갔다 올게.",
+      "thai": "디여우 빤 짜 klapma",
+      "thaiScript": "เดี๋ยวฉันจะกลับมา",
+      "note": "Tatoeba English pivot: I'll be right back",
+      "keywords": [
+        "I'll be right back"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "새가 날고 있네.",
+      "thai": "nok 빌",
+      "thaiScript": "นกบิน",
+      "note": "Tatoeba English pivot: Birds fly",
+      "keywords": [
+        "Birds fly"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "실례합니다.",
+      "thai": "khothot 캅",
+      "thaiScript": "ขอโทษครับ",
+      "note": "Tatoeba English pivot: Excuse me",
+      "keywords": [
+        "Excuse me"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "실례합니다.",
+      "thai": "khophai 카",
+      "thaiScript": "ขออภัยค่ะ",
+      "note": "Tatoeba English pivot: Excuse me",
+      "keywords": [
+        "Excuse me"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "안 됩니다!",
+      "thai": "마이 mithang",
+      "thaiScript": "ไม่มีทาง!",
+      "note": "Tatoeba English pivot: No way",
+      "keywords": [
+        "No way"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "안녕!",
+      "thai": "swatdi",
+      "thaiScript": "สวัสดี!",
+      "note": "Tatoeba English pivot: Hello",
+      "keywords": [
+        "Hello"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "안녕!",
+      "thai": "lakon",
+      "thaiScript": "ลาก่อน!",
+      "note": "Tatoeba English pivot: Goodbye",
+      "keywords": [
+        "Goodbye"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "안녕, 톰.",
+      "thai": "swatdi thom",
+      "thaiScript": "สวัสดีทอม",
+      "note": "Tatoeba English pivot: Hello, Tom",
+      "keywords": [
+        "Hello, Tom"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "안녕?",
+      "thai": "swatdi",
+      "thaiScript": "สวัสดี!",
+      "note": "Tatoeba English pivot: Hello",
+      "keywords": [
+        "Hello"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "안녕하세요?",
+      "thai": "쿤 펜 양라이",
+      "thaiScript": "คุณเป็นอย่างไร?",
+      "note": "Tatoeba English pivot: How are you",
+      "keywords": [
+        "How are you"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "알겠습니다.",
+      "thai": "빤 카오짜이",
+      "thaiScript": "ฉันเข้าใจ",
+      "note": "Tatoeba English pivot: I understand",
+      "keywords": [
+        "I understand"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "이거 내 친구야.",
+      "thai": "니 크으 프언 콩 폼",
+      "thaiScript": "นี่คือเพื่อนของผม",
+      "note": "Tatoeba English pivot: This is my friend",
+      "keywords": [
+        "This is my friend"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "이해합니다.",
+      "thai": "빤 카오짜이",
+      "thaiScript": "ฉันเข้าใจ",
+      "note": "Tatoeba English pivot: I understand",
+      "keywords": [
+        "I understand"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "잘 지내요.",
+      "thai": "빤 sabaidi",
+      "thaiScript": "ฉันสบายดี",
+      "note": "Tatoeba English pivot: I'm fine",
+      "keywords": [
+        "I'm fine"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "점프!",
+      "thai": "kradot",
+      "thaiScript": "กระโดด!",
+      "note": "Tatoeba English pivot: Jump",
+      "keywords": [
+        "Jump"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "긴장돼요.",
+      "thai": "빤 prama",
+      "thaiScript": "ฉันประหม่า",
+      "note": "Tatoeba English pivot: I'm nervous",
+      "keywords": [
+        "I'm nervous"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "난 실제로 기린을 본 적이 없어.",
+      "thai": "폼 마이 khoei 헨 yirap chring",
+      "thaiScript": "ผมไม่เคยเห็นยีราฟจริงๆ",
+      "note": "Tatoeba English pivot: I've never actually seen a giraffe",
+      "keywords": [
+        "I've never actually seen a giraffe"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "너는 기억력이 좋아.",
+      "thai": "khwamcham 콩 쿤 디",
+      "thaiScript": "ความจำของคุณดี",
+      "note": "Tatoeba English pivot: Your memory is good",
+      "keywords": [
+        "Your memory is good"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "뭐 하러?",
+      "thai": "phuea 아라이",
+      "thaiScript": "เพื่ออะไร?",
+      "note": "Tatoeba English pivot: What for",
+      "keywords": [
+        "What for"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "어디에서 오셨습니까?",
+      "thai": "쿤 machak 나이",
+      "thaiScript": "คุณมาจากที่ไหน",
+      "note": "Tatoeba English pivot: Where are you from",
+      "keywords": [
+        "Where are you from"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "어디에서 태어났나요?",
+      "thai": "쿤 koet 나이",
+      "thaiScript": "คุณเกิดที่ไหน?",
+      "note": "Tatoeba English pivot: Where were you born",
+      "keywords": [
+        "Where were you born"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "우리가 이겼어.",
+      "thai": "라오 chana",
+      "thaiScript": "เราชนะ",
+      "note": "Tatoeba English pivot: We won",
+      "keywords": [
+        "We won"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "이건 틀림없이 바이러스야.",
+      "thai": "만 똥깐 펜 wrai t",
+      "thaiScript": "มันต้องเป็นไวรัส",
+      "note": "Tatoeba English pivot: It must be a virus",
+      "keywords": [
+        "It must be a virus"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "이해가 안 돼.",
+      "thai": "빤 마이 카오짜이",
+      "thaiScript": "ฉันไม่เข้าใจ",
+      "note": "Tatoeba English pivot: I don't understand",
+      "keywords": [
+        "I don't understand"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "좌회전해.",
+      "thai": "리여우 싸이",
+      "thaiScript": "เลี้ยวซ้าย",
+      "note": "Tatoeba English pivot: Turn left",
+      "keywords": [
+        "Turn left"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "톰은 잊어버려.",
+      "thai": "룸 thom",
+      "thaiScript": "ลืมทอม",
+      "note": "Tatoeba English pivot: Forget Tom",
+      "keywords": [
+        "Forget Tom"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "톰이 대답했어.",
+      "thai": "thom top",
+      "thaiScript": "ทอมตอบ",
+      "note": "Tatoeba English pivot: Tom answered",
+      "keywords": [
+        "Tom answered"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "피곤해요.",
+      "thai": "빤 느어이",
+      "thaiScript": "ฉันเหนื่อย",
+      "note": "Tatoeba English pivot: I'm tired",
+      "keywords": [
+        "I'm tired"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "그는 달렸다.",
+      "thai": "카오 wing",
+      "thaiScript": "เขาวิ่ง",
+      "note": "Tatoeba English pivot: He ran",
+      "keywords": [
+        "He ran"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "꼼짝마!",
+      "thai": "fri s",
+      "thaiScript": "ฟรีส!",
+      "note": "Tatoeba English pivot: Freeze",
+      "keywords": [
+        "Freeze"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "꼼짝마!",
+      "thai": "캥",
+      "thaiScript": "แข็ง!",
+      "note": "Tatoeba English pivot: Freeze",
+      "keywords": [
+        "Freeze"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "나무가 탄다.",
+      "thai": "마이 마이",
+      "thaiScript": "ไม้ไหม้",
+      "note": "Tatoeba English pivot: Wood burns",
+      "keywords": [
+        "Wood burns"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "내가 이겼어!",
+      "thai": "빤 chana",
+      "thaiScript": "ฉันชนะ!",
+      "note": "Tatoeba English pivot: I won",
+      "keywords": [
+        "I won"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "너는 달린다.",
+      "thai": "쿤 wing",
+      "thaiScript": "คุณวิ่ง",
+      "note": "Tatoeba English pivot: You run",
+      "keywords": [
+        "You run"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "네가 달린다.",
+      "thai": "쿤 wing",
+      "thaiScript": "คุณวิ่ง",
+      "note": "Tatoeba English pivot: You run",
+      "keywords": [
+        "You run"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "네가 이해가 안돼.",
+      "thai": "빤 마이 카오짜이 쿤",
+      "thaiScript": "ฉันไม่เข้าใจคุณ",
+      "note": "Tatoeba English pivot: I don't understand you",
+      "keywords": [
+        "I don't understand you"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "네가 필요해.",
+      "thai": "빤 똥깐 쿤",
+      "thaiScript": "ฉันต้องการคุณ",
+      "note": "Tatoeba English pivot: I need you",
+      "keywords": [
+        "I need you"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "누가 이겼어?",
+      "thai": "크라이 chana",
+      "thaiScript": "ใครชนะ?",
+      "note": "Tatoeba English pivot: Who won",
+      "keywords": [
+        "Who won"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "동의해.",
+      "thai": "빤 enduai",
+      "thaiScript": "ฉันเห็นด้วย",
+      "note": "Tatoeba English pivot: I agree",
+      "keywords": [
+        "I agree"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "러시아에서 왔어요.",
+      "thai": "빤 machak ratsia",
+      "thaiScript": "ฉันมาจากรัสเซีย",
+      "note": "Tatoeba English pivot: I am from Russia",
+      "keywords": [
+        "I am from Russia"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "무슨 일이야?",
+      "thai": "koet 아라이 khuenkap 쿤",
+      "thaiScript": "เกิดอะไรขึ้นกับคุณ?",
+      "note": "Tatoeba English pivot: What's wrong with you",
+      "keywords": [
+        "What's wrong with you"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "무엇을 원하십니까?",
+      "thai": "쿤 똥깐 아라이",
+      "thaiScript": "คุณต้องการอะไร?",
+      "note": "Tatoeba English pivot: What do you want",
+      "keywords": [
+        "What do you want"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "무엇이 필요하세요?",
+      "thai": "쿤 똥깐 아라이",
+      "thaiScript": "คุณต้องการอะไร?",
+      "note": "Tatoeba English pivot: What do you need",
+      "keywords": [
+        "What do you need"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "배불러.",
+      "thai": "빤 임 래우",
+      "thaiScript": "ฉันอิ่มแล้ว",
+      "note": "Tatoeba English pivot: I'm full",
+      "keywords": [
+        "I'm full"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "알겠어!",
+      "thai": "카오짜이 래우",
+      "thaiScript": "เข้าใจแล้ว!",
+      "note": "Tatoeba English pivot: Got it",
+      "keywords": [
+        "Got it"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "알겠어!",
+      "thai": "chapdai 래우",
+      "thaiScript": "จับได้แล้ว!",
+      "note": "Tatoeba English pivot: Got it",
+      "keywords": [
+        "Got it"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "알겠어?",
+      "thai": "카오짜이 마이",
+      "thaiScript": "เข้าใจมั้ย?",
+      "note": "Tatoeba English pivot: Got it",
+      "keywords": [
+        "Got it"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "알았어?",
+      "thai": "카오짜이 마이",
+      "thaiScript": "เข้าใจมั้ย?",
+      "note": "Tatoeba English pivot: Got it",
+      "keywords": [
+        "Got it"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "어떻게 지내?",
+      "thai": "쿤 sabaidi 마이",
+      "thaiScript": "คุณสบายดีไหม?",
+      "note": "Tatoeba English pivot: How are you",
+      "keywords": [
+        "How are you"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "어머니를 사랑해요?",
+      "thai": "쿤 rak mae 콩 쿤 ruemai",
+      "thaiScript": "คุณรักแม่ของคุณหรือไม่?",
+      "note": "Tatoeba English pivot: Do you love your mother",
+      "keywords": [
+        "Do you love your mother"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "옆으로 비켜.",
+      "thai": "likthang",
+      "thaiScript": "หลีกทาง",
+      "note": "Tatoeba English pivot: Step aside",
+      "keywords": [
+        "Step aside"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "왜 울고 있습니까?",
+      "thai": "쿤 ronghai thammai",
+      "thaiScript": "คุณร้องไห้ทำไม?",
+      "note": "Tatoeba English pivot: Why are you crying",
+      "keywords": [
+        "Why are you crying"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "잘 지내세요?",
+      "thai": "쿤 sabaidi 마이",
+      "thaiScript": "คุณสบายดีไหม?",
+      "note": "Tatoeba English pivot: How are you",
+      "keywords": [
+        "How are you"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "정치에 관심 있어?",
+      "thai": "쿤 sanachai kanmueang ruemai",
+      "thaiScript": "คุณสนใจการเมืองหรือไม่?",
+      "note": "Tatoeba English pivot: Are you interested in politics",
+      "keywords": [
+        "Are you interested in politics"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "톰은 키가 큰 사람이다.",
+      "thai": "thom 펜 사용하다 rang 쑹",
+      "thaiScript": "ทอมเป็นชายร่างสูง",
+      "note": "Tatoeba English pivot: Tom is a tall man",
+      "keywords": [
+        "Tom is a tall man"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "공격!",
+      "thai": "chomti",
+      "thaiScript": "โจมตี!",
+      "note": "Tatoeba English pivot: Attack",
+      "keywords": [
+        "Attack"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "성함이 어떻게 되세요?",
+      "thai": "쿤 츼 아라이",
+      "thaiScript": "คุณชื่ออะไร?",
+      "note": "Tatoeba English pivot: What is your name",
+      "keywords": [
+        "What is your name"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "실례합니다.",
+      "thai": "khonuyat",
+      "thaiScript": "ขออนุญาต",
+      "note": "Tatoeba English pivot: Excuse me",
+      "keywords": [
+        "Excuse me"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "실례합니다.",
+      "thai": "khothot 카",
+      "thaiScript": "ขอโทษค่ะ",
+      "note": "Tatoeba English pivot: Excuse me",
+      "keywords": [
+        "Excuse me"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "안녕.",
+      "thai": "swatdi",
+      "thaiScript": "สวัสดี",
+      "note": "Tatoeba English pivot: Hi",
+      "keywords": [
+        "Hi"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "언어가 좋습니다.",
+      "thai": "빤 촙 파싸",
+      "thaiScript": "ฉันชอบภาษา",
+      "note": "Tatoeba English pivot: I like languages",
+      "keywords": [
+        "I like languages"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "얼마나 걸리나요?",
+      "thai": "만 짜 chaiwelanan khae 나이",
+      "thaiScript": "มันจะใช้เวลานานแค่ไหน?",
+      "note": "Tatoeba English pivot: How long does it take",
+      "keywords": [
+        "How long does it take"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "이 단어를 어떻게 발음해요?",
+      "thai": "캄쌍 니 oksiang 양라이",
+      "thaiScript": "คำนี้ออกเสียงอย่างไร",
+      "note": "Tatoeba English pivot: How do you pronounce this word",
+      "keywords": [
+        "How do you pronounce this word"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "이분은 제 친구입니다.",
+      "thai": "니 프언 라오",
+      "thaiScript": "นี่เพื่อนเรา",
+      "note": "Tatoeba English pivot: This is my friend",
+      "keywords": [
+        "This is my friend"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "전화해 줘.",
+      "thai": "토라삽 하 빤",
+      "thaiScript": "โทรหาฉัน",
+      "note": "Tatoeba English pivot: Call me",
+      "keywords": [
+        "Call me"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "피곤합니다.",
+      "thai": "빤 pheli",
+      "thaiScript": "ฉันเพลีย",
+      "note": "Tatoeba English pivot: I'm tired",
+      "keywords": [
+        "I'm tired"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "그건 몰랐어요.",
+      "thai": "빤 마이 ru sing 난",
+      "thaiScript": "ฉันไม่รู้สิ่งนั้น",
+      "note": "Tatoeba English pivot: I didn't know that",
+      "keywords": [
+        "I didn't know that"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "그럴리가!",
+      "thai": "마이 mithang",
+      "thaiScript": "ไม่มีทาง!",
+      "note": "Tatoeba English pivot: No way",
+      "keywords": [
+        "No way"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "아니에요.",
+      "thai": "마이",
+      "thaiScript": "ไม่",
+      "note": "Tatoeba English pivot: No",
+      "keywords": [
+        "No"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "아닙니다.",
+      "thai": "마이",
+      "thaiScript": "ไม่",
+      "note": "Tatoeba English pivot: No",
+      "keywords": [
+        "No"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "안 돼요!",
+      "thai": "마이 mithang",
+      "thaiScript": "ไม่มีทาง!",
+      "note": "Tatoeba English pivot: No way",
+      "keywords": [
+        "No way"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "알았어요.",
+      "thai": "빤 카오짜이",
+      "thaiScript": "ฉันเข้าใจ",
+      "note": "Tatoeba English pivot: I understand",
+      "keywords": [
+        "I understand"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "이름이 뭐예요?",
+      "thai": "쿤 츼 아라이",
+      "thaiScript": "คุณชื่ออะไร",
+      "note": "Tatoeba English pivot: What's your name",
+      "keywords": [
+        "What's your name"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "이해한다.",
+      "thai": "빤 카오짜이",
+      "thaiScript": "ฉันเข้าใจ",
+      "note": "Tatoeba English pivot: I understand",
+      "keywords": [
+        "I understand"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "이해해요.",
+      "thai": "빤 카오짜이",
+      "thaiScript": "ฉันเข้าใจ",
+      "note": "Tatoeba English pivot: I understand",
+      "keywords": [
+        "I understand"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "잘 지내?",
+      "thai": "쿤 펜 양라이",
+      "thaiScript": "คุณเป็นอย่างไร?",
+      "note": "Tatoeba English pivot: How are you",
+      "keywords": [
+        "How are you"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "제 이름은 톰입니다.",
+      "thai": "폼 츼 thom 캅",
+      "thaiScript": "ผมชื่อทอมครับ",
+      "note": "Tatoeba English pivot: My name is Tom",
+      "keywords": [
+        "My name is Tom"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "제 이름은 톰입니다.",
+      "thai": "빤 chuewa thom",
+      "thaiScript": "ฉันชื่อว่าทอม",
+      "note": "Tatoeba English pivot: My name is Tom",
+      "keywords": [
+        "My name is Tom"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "톰은 기침했어.",
+      "thai": "thom 아이",
+      "thaiScript": "ทอมไอ",
+      "note": "Tatoeba English pivot: Tom coughed",
+      "keywords": [
+        "Tom coughed"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "괜찮으십니까?",
+      "thai": "쿤 sabaidi 마이",
+      "thaiScript": "คุณสบายดีไหม",
+      "note": "Tatoeba English pivot: Are you OK",
+      "keywords": [
+        "Are you OK"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "그거 연필이야",
+      "thai": "난 크으 dinso",
+      "thaiScript": "นั่นคือดินสอ",
+      "note": "Tatoeba English pivot: That's a pencil",
+      "keywords": [
+        "That's a pencil"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "기다려!",
+      "thai": "척 만 와이",
+      "thaiScript": "จับมันไว้!",
+      "note": "Tatoeba English pivot: Hold it",
+      "keywords": [
+        "Hold it"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "기억하시나요?",
+      "thai": "쿤 chamdai 마이",
+      "thaiScript": "คุณจำได้ไหม?",
+      "note": "Tatoeba English pivot: Do you remember",
+      "keywords": [
+        "Do you remember"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "너 멍청하게 보여.",
+      "thai": "쿤 두 응어",
+      "thaiScript": "คุณดูโง่",
+      "note": "Tatoeba English pivot: You look stupid",
+      "keywords": [
+        "You look stupid"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "너 없인 못 살아.",
+      "thai": "빤 유 마이 다이 doi 마이 미 쿤",
+      "thaiScript": "ฉันอยู่ไม่ได้โดยไม่มีคุณ",
+      "note": "Tatoeba English pivot: I can't live without you",
+      "keywords": [
+        "I can't live without you"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "누가 신경써?",
+      "thai": "크라이 son",
+      "thaiScript": "ใครสน?",
+      "note": "Tatoeba English pivot: Who cares",
+      "keywords": [
+        "Who cares"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "떨려요.",
+      "thai": "빤 prama",
+      "thaiScript": "ฉันประหม่า",
+      "note": "Tatoeba English pivot: I'm nervous",
+      "keywords": [
+        "I'm nervous"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "모르겠습니다.",
+      "thai": "빤 마이 카오짜이",
+      "thaiScript": "ฉันไม่เข้าใจ",
+      "note": "Tatoeba English pivot: I don't understand",
+      "keywords": [
+        "I don't understand"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "뭐하고 있어?",
+      "thai": "쿤 깜랑 탐 아라이 유",
+      "thaiScript": "คุณกำลังทำอะไรอยู่",
+      "note": "Tatoeba English pivot: What are you doing",
+      "keywords": [
+        "What are you doing"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "보여줘.",
+      "thai": "saetng 하이 빤",
+      "thaiScript": "แสดงให้ฉัน",
+      "note": "Tatoeba English pivot: Show me",
+      "keywords": [
+        "Show me"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "불이야!",
+      "thai": "ying",
+      "thaiScript": "ยิง!",
+      "note": "Tatoeba English pivot: Fire",
+      "keywords": [
+        "Fire"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "아이들은 몇 명 다쳤어?",
+      "thai": "덱 batchep 끼 카놈",
+      "thaiScript": "เด็กบาดเจ็บกี่คน",
+      "note": "Tatoeba English pivot: How many children were injured",
+      "keywords": [
+        "How many children were injured"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "알겠어!",
+      "thai": "thamdai 래우",
+      "thaiScript": "ทำได้แล้ว!",
+      "note": "Tatoeba English pivot: Got it",
+      "keywords": [
+        "Got it"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "어디가 아프십니까?",
+      "thai": "만 쩹 나이",
+      "thaiScript": "มันเจ็บที่ไหน?",
+      "note": "Tatoeba English pivot: Where does it hurt",
+      "keywords": [
+        "Where does it hurt"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "어디에서 오셨어요?",
+      "thai": "쿤 machak 나이",
+      "thaiScript": "คุณมาจากที่ไหน",
+      "note": "Tatoeba English pivot: Where are you from",
+      "keywords": [
+        "Where are you from"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "어디에서 태어났어?",
+      "thai": "쿤 koet 나이",
+      "thaiScript": "คุณเกิดที่ไหน?",
+      "note": "Tatoeba English pivot: Where were you born",
+      "keywords": [
+        "Where were you born"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "우리가 졌다.",
+      "thai": "라오 패",
+      "thaiScript": "เราแพ้",
+      "note": "Tatoeba English pivot: We lost",
+      "keywords": [
+        "We lost"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "이해했습니다.",
+      "thai": "빤 킷 wa 빤 카오짜이",
+      "thaiScript": "ฉันคิดว่าฉันเข้าใจ",
+      "note": "Tatoeba English pivot: I think I understand",
+      "keywords": [
+        "I think I understand"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "잠깐만!",
+      "thai": "척 만 와이",
+      "thaiScript": "จับมันไว้!",
+      "note": "Tatoeba English pivot: Hold it",
+      "keywords": [
+        "Hold it"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "제가 살게요.",
+      "thai": "빤 짜 쓰으 만",
+      "thaiScript": "ฉันจะซื้อมัน",
+      "note": "Tatoeba English pivot: I'll buy that",
+      "keywords": [
+        "I'll buy that"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "톰에게 말해.",
+      "thai": "보그 thom",
+      "thaiScript": "บอกทอม",
+      "note": "Tatoeba English pivot: Tell Tom",
+      "keywords": [
+        "Tell Tom"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "톰이 그만둬.",
+      "thai": "thom 깨",
+      "thaiScript": "ทอมแแก",
+      "note": "Tatoeba English pivot: Tom quit",
+      "keywords": [
+        "Tom quit"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "톰이 죽었어.",
+      "thai": "thom tai",
+      "thaiScript": "ทอมตาย",
+      "note": "Tatoeba English pivot: Tom died",
+      "keywords": [
+        "Tom died"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "톰한테 말해.",
+      "thai": "보그 thom",
+      "thaiScript": "บอกทอม",
+      "note": "Tatoeba English pivot: Tell Tom",
+      "keywords": [
+        "Tell Tom"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "피곤해.",
+      "thai": "빤 느어이",
+      "thaiScript": "ฉันเหนื่อย",
+      "note": "Tatoeba English pivot: I'm tired",
+      "keywords": [
+        "I'm tired"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "그렇습니다.",
+      "thai": "차이 래우",
+      "thaiScript": "ใช่แล้ว",
+      "note": "Tatoeba English pivot: That's right",
+      "keywords": [
+        "That's right"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "들어.",
+      "thai": "팡 나",
+      "thaiScript": "ฟังนะ",
+      "note": "Tatoeba English pivot: Listen",
+      "keywords": [
+        "Listen"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "무엇을 원하세요?",
+      "thai": "쿤 똥깐 아라이",
+      "thaiScript": "คุณต้องการอะไร?",
+      "note": "Tatoeba English pivot: What do you want",
+      "keywords": [
+        "What do you want"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "뭐가 필요하세요?",
+      "thai": "쿤 똥깐 아라이",
+      "thaiScript": "คุณต้องการอะไร?",
+      "note": "Tatoeba English pivot: What do you need",
+      "keywords": [
+        "What do you need"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "성함이 어떻게 되세요?",
+      "thai": "쿤 츼 아라이",
+      "thaiScript": "คุณชื่ออะไร",
+      "note": "Tatoeba English pivot: What is your name",
+      "keywords": [
+        "What is your name"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "안녕하세요?",
+      "thai": "쿤 sabaidi 마이",
+      "thaiScript": "คุณสบายดีไหม?",
+      "note": "Tatoeba English pivot: How are you",
+      "keywords": [
+        "How are you"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "얼마나 머무실 건가요?",
+      "thai": "쿤 유 난 khae 나이",
+      "thaiScript": "คุณอยู่นานแค่ไหน?",
+      "note": "Tatoeba English pivot: How long did you stay",
+      "keywords": [
+        "How long did you stay"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "와 !",
+      "thai": "wao",
+      "thaiScript": "ว้าว!",
+      "note": "Tatoeba English pivot: Wow",
+      "keywords": [
+        "Wow"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "왜 울고 있어요?",
+      "thai": "쿤 ronghai thammai",
+      "thaiScript": "คุณร้องไห้ทำไม?",
+      "note": "Tatoeba English pivot: Why are you crying",
+      "keywords": [
+        "Why are you crying"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "왜요?",
+      "thai": "thammai",
+      "thaiScript": "ทำไม?",
+      "note": "Tatoeba English pivot: Why",
+      "keywords": [
+        "Why"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "우와!",
+      "thai": "wao",
+      "thaiScript": "ว้าว!",
+      "note": "Tatoeba English pivot: Wow",
+      "keywords": [
+        "Wow"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "웃어.",
+      "thai": "yim",
+      "thaiScript": "ยิ้ม!",
+      "note": "Tatoeba English pivot: Smile",
+      "keywords": [
+        "Smile"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "이분은 제 친구입니다.",
+      "thai": "니 프언 폼",
+      "thaiScript": "นี่เพื่อนผม",
+      "note": "Tatoeba English pivot: This is my friend",
+      "keywords": [
+        "This is my friend"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "정말이에요?",
+      "thai": "쿤 naechai rue",
+      "thaiScript": "คุณแน่ใจหรือ?",
+      "note": "Tatoeba English pivot: Are you sure",
+      "keywords": [
+        "Are you sure"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "확실합니까?",
+      "thai": "쿤 naechai rue",
+      "thaiScript": "คุณแน่ใจหรือ?",
+      "note": "Tatoeba English pivot: Are you sure",
+      "keywords": [
+        "Are you sure"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "그 여자는 정말 놀란 것 같았다.",
+      "thai": "터 두 tuenten sut 렉 러이",
+      "thaiScript": "เธอดูตื่นเต้นสุดๆเลย",
+      "note": "Tatoeba English pivot: She seemed to be very surprised",
+      "keywords": [
+        "She seemed to be very surprised"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "신발을 벗어라.",
+      "thai": "thot 렁타오 콩 쿤",
+      "thaiScript": "ถอดรองเท้าของคุณ",
+      "note": "Tatoeba English pivot: Take off your shoes",
+      "keywords": [
+        "Take off your shoes"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "심심해요.",
+      "thai": "빤 buea",
+      "thaiScript": "ฉันเบื่อ",
+      "note": "Tatoeba English pivot: I'm bored",
+      "keywords": [
+        "I'm bored"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "약속할게.",
+      "thai": "빤 sanya",
+      "thaiScript": "ฉันสัญญา",
+      "note": "Tatoeba English pivot: I promise",
+      "keywords": [
+        "I promise"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "어디세요?",
+      "thai": "쿤 유 나이",
+      "thaiScript": "คุณอยู่ที่ไหน?",
+      "note": "Tatoeba English pivot: Where are you",
+      "keywords": [
+        "Where are you"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "어디에서 오셨습니까?",
+      "thai": "쿤 machak 나이",
+      "thaiScript": "คุณมาจากไหน?",
+      "note": "Tatoeba English pivot: Where are you from",
+      "keywords": [
+        "Where are you from"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "오늘 밤엔 별이 안보이네.",
+      "thai": "khuenni 마이 미 dao",
+      "thaiScript": "คืนนี้ไม่มีดาว",
+      "note": "Tatoeba English pivot: There are no stars tonight",
+      "keywords": [
+        "There are no stars tonight"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "저리 가!",
+      "thai": "빠이 끌라이 렉",
+      "thaiScript": "ไปไกล ๆ!",
+      "note": "Tatoeba English pivot: Go away",
+      "keywords": [
+        "Go away"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "저리 가.",
+      "thai": "thamlai 만",
+      "thaiScript": "ทำลายมัน",
+      "note": "Tatoeba English pivot: Beat it",
+      "keywords": [
+        "Beat it"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "지루해요.",
+      "thai": "빤 buea",
+      "thaiScript": "ฉันเบื่อ",
+      "note": "Tatoeba English pivot: I'm bored",
+      "keywords": [
+        "I'm bored"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "피곤해요.",
+      "thai": "빤 pheli",
+      "thaiScript": "ฉันเพลีย",
+      "note": "Tatoeba English pivot: I'm tired",
+      "keywords": [
+        "I'm tired"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "학교를 가세요.",
+      "thai": "빠이 rongrian",
+      "thaiScript": "ไปโรงเรียน",
+      "note": "Tatoeba English pivot: Go to school",
+      "keywords": [
+        "Go to school"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "확신해요.",
+      "thai": "빤 naechai",
+      "thaiScript": "ฉันแน่ใจ",
+      "note": "Tatoeba English pivot: I'm sure",
+      "keywords": [
+        "I'm sure"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "괜찮으십니까?",
+      "thai": "쿤 오케 마이",
+      "thaiScript": "คุณโอเคมั้ย",
+      "note": "Tatoeba English pivot: Are you OK",
+      "keywords": [
+        "Are you OK"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "그는 버릇이 없다.",
+      "thai": "카오 펜 카놈 티 yapkhai",
+      "thaiScript": "เขาเป็นคนที่หยาบคาย",
+      "note": "Tatoeba English pivot: He is a rude person",
+      "keywords": [
+        "He is a rude person"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "그는 울기만 했다.",
+      "thai": "카오 마이 탐 아라이 nokchak ronghai",
+      "thaiScript": "เขาไม่ทำอะไรนอกจากร้องไห้",
+      "note": "Tatoeba English pivot: He did nothing but cry",
+      "keywords": [
+        "He did nothing but cry"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "금방 올께요.",
+      "thai": "디여우 빤 짜 klapma",
+      "thaiScript": "เดี๋ยวฉันจะกลับมา",
+      "note": "Tatoeba English pivot: I'll be right back",
+      "keywords": [
+        "I'll be right back"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "나는 산에 있었어.",
+      "thai": "tonnan 빤 유 나이 카오",
+      "thaiScript": "ตอนนั้นฉันอยู่ในเขา",
+      "note": "Tatoeba English pivot: I was in the mountains",
+      "keywords": [
+        "I was in the mountains"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "나는 학교에 가요.",
+      "thai": "빤 빠이 rongrian",
+      "thaiScript": "ฉันไปโรงเรียน",
+      "note": "Tatoeba English pivot: I go to school",
+      "keywords": [
+        "I go to school"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "내가 학교에 간다.",
+      "thai": "빤 빠이 rongrian",
+      "thaiScript": "ฉันไปโรงเรียน",
+      "note": "Tatoeba English pivot: I go to school",
+      "keywords": [
+        "I go to school"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "늦어서 죄송합니다.",
+      "thai": "khothot 티 masai",
+      "thaiScript": "ขอโทษที่มาสาย",
+      "note": "Tatoeba English pivot: Sorry for being late",
+      "keywords": [
+        "Sorry for being late"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "마음에 드셨습니까?",
+      "thai": "쿤 촙 만 마이",
+      "thaiScript": "คุณชอบมันไหม?",
+      "note": "Tatoeba English pivot: Did you like it",
+      "keywords": [
+        "Did you like it"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "마음에 들었습니까?",
+      "thai": "쿤 촙 만 마이",
+      "thaiScript": "คุณชอบมันไหม?",
+      "note": "Tatoeba English pivot: Did you like it",
+      "keywords": [
+        "Did you like it"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "맞아요.",
+      "thai": "차이",
+      "thaiScript": "ใช่",
+      "note": "Tatoeba English pivot: Yes",
+      "keywords": [
+        "Yes"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "사랑이 뭐야?",
+      "thai": "rak 크으 아라이",
+      "thaiScript": "รักคืออะไร?",
+      "note": "Tatoeba English pivot: What is love",
+      "keywords": [
+        "What is love"
+      ],
+      "tags": []
+    },
+    {
+      "korean": "아니야.",
+      "thai": "마이",
+      "thaiScript": "ไม่",
+      "note": "Tatoeba English pivot: No",
+      "keywords": [
+        "No"
+      ],
+      "tags": []
+    }
+  ]
+}

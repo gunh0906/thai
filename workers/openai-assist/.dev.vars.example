@@ -1,0 +1,5 @@
+OPENAI_API_KEY=sk-...
+SHARED_SECRET=change-me
+OPENAI_MODEL=gpt-4o-mini
+OPENAI_REASONING_EFFORT=low
+ALLOWED_ORIGIN=https://gunh0906.github.io

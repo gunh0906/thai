@@ -1,0 +1,55 @@
+{
+  "source": "Tatoeba direct Korean-Thai",
+  "generatedAt": "2026-04-16T17:25:10",
+  "vocab": [],
+  "sentences": [
+    {
+      "korean": "케이트는 매일 빵을 먹는다.",
+      "thai": "khe th 킨 빵 thukwan",
+      "thaiScript": "เคทกินขนมปังทุกวัน",
+      "note": "Tatoeba direct Korean-Thai sentence pair",
+      "keywords": [],
+      "tags": []
+    },
+    {
+      "korean": "알러지 약 좀 주세요.",
+      "thai": "빤 똥깐 킨 야 깨 패 카",
+      "thaiScript": "ฉันต้องกินยาแก้แพ้ค่ะ",
+      "note": "Tatoeba direct Korean-Thai sentence pair",
+      "keywords": [],
+      "tags": []
+    },
+    {
+      "korean": "커피를 못 마십니다.",
+      "thai": "빤 듬 까페 마이 다이",
+      "thaiScript": "ฉันดื่มกาแฟไม่ได้",
+      "note": "Tatoeba direct Korean-Thai sentence pair",
+      "keywords": [],
+      "tags": []
+    },
+    {
+      "korean": "커피를 못 마십니다.",
+      "thai": "폼 듬 까페 마이 다이",
+      "thaiScript": "ผมดื่มกาแฟไม่ได้",
+      "note": "Tatoeba direct Korean-Thai sentence pair",
+      "keywords": [],
+      "tags": []
+    },
+    {
+      "korean": "안녕하세요.",
+      "thai": "swatdi 캅",
+      "thaiScript": "สวัสดีครับ",
+      "note": "Tatoeba direct Korean-Thai sentence pair",
+      "keywords": [],
+      "tags": []
+    },
+    {
+      "korean": "안녕하세요.",
+      "thai": "swatdi 카",
+      "thaiScript": "สวัสดีค่ะ",
+      "note": "Tatoeba direct Korean-Thai sentence pair",
+      "keywords": [],
+      "tags": []
+    }
+  ]
+}

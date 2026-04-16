@@ -1,0 +1,8 @@
+name = "thai-pocketbook-ai"
+main = "worker.js"
+compatibility_date = "2026-04-16"
+
+[vars]
+OPENAI_MODEL = "gpt-4o-mini"
+OPENAI_REASONING_EFFORT = "low"
+ALLOWED_ORIGIN = "https://gunh0906.github.io"
