@@ -1170,9 +1170,9 @@ def entry_preference_score(entry: dict) -> tuple[int, int, int, int]:
 
 
 def entries_overlap(left: dict, right: dict) -> bool:
-    left_thai = normalize_compact(left.get("thaiScript") or left.get("thai", ""))
-    right_thai = normalize_compact(right.get("thaiScript") or right.get("thai", ""))
-    if left_thai and right_thai and left_thai == right_thai:
+    left_thai_script = normalize_compact(left.get("thaiScript", ""))
+    right_thai_script = normalize_compact(right.get("thaiScript", ""))
+    if left_thai_script and right_thai_script and left_thai_script == right_thai_script:
         return True
 
     left_korean = normalize_compact(left.get("korean", ""))
@@ -1180,9 +1180,16 @@ def entries_overlap(left: dict, right: dict) -> bool:
     if left_korean and right_korean and left_korean == right_korean:
         return True
 
+    left_thai = normalize_compact(left.get("thai", ""))
+    right_thai = normalize_compact(right.get("thai", ""))
+    if left_thai and right_thai and left_thai == right_thai:
+        if left_korean and right_korean and left_korean != right_korean:
+            return False
+        return True
+
     left_variants = split_korean_variants(left.get("korean", ""))
     right_variants = split_korean_variants(right.get("korean", ""))
-    if left_thai and right_thai and left_variants and right_variants:
+    if (left_thai_script or left_thai) and (right_thai_script or right_thai) and left_variants and right_variants:
         if any(item in right_variants for item in left_variants):
             return True
 
@@ -1228,9 +1235,13 @@ def deduplicate_entries(entries: list[dict]) -> list[dict]:
         match_index = None
 
         if thai_key:
-            match_index = thai_index.get((kind_key, thai_key))
+            candidate_index = thai_index.get((kind_key, thai_key))
+            if candidate_index is not None and entries_overlap(deduped[candidate_index], entry):
+                match_index = candidate_index
         if match_index is None and korean_key:
-            match_index = korean_index.get((kind_key, korean_key))
+            candidate_index = korean_index.get((kind_key, korean_key))
+            if candidate_index is not None and entries_overlap(deduped[candidate_index], entry):
+                match_index = candidate_index
 
         if match_index is None:
             deduped.append(entry)

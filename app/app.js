@@ -1,6 +1,6 @@
 const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
-const APP_VERSION = "20260416f";
+const APP_VERSION = "20260416g";
 
 const baseData = window.BASE_DATA || {
   appTitle: "태국어 포켓북",
@@ -1633,6 +1633,33 @@ const PREDICATE_QUERY_VARIANTS = {
   "언어": ["무슨 언어예요?", "한국어", "영어"],
   "위험": ["위험해요", "위험하니까 조심하세요"],
   "시끄럽다": ["시끄러워요", "방이 시끄러워요", "이 방은 너무 시끄러워요"],
+  "강하다": ["강해요"],
+  "약하다": ["약해요"],
+  "깨끗하다": ["깨끗해요"],
+  "지저분하다": ["지저분해요", "더러워요"],
+  "조용하다": ["조용해요", "조용한 방"],
+  "아깝다": ["아까워요"],
+  "유명하다": ["유명해요"],
+  "친절하다": ["친절해요"],
+  "불친절하다": ["불친절해요"],
+  "쉽다": ["쉬워요"],
+  "시원하다": ["시원해요"],
+  "행복하다": ["행복해요"],
+  "슬프다": ["슬퍼요"],
+  "화나다": ["화나요"],
+  "무섭다": ["무서워요"],
+  "놀라다": ["놀랐어요"],
+  "싱겁다": ["싱거워요"],
+  "짜다": ["짜요"],
+  "쓰다": ["써요"],
+  "시다": ["셔요"],
+  "부드럽다": ["부드러워요"],
+  "딱딱하다": ["딱딱해요"],
+  "높다": ["높아요"],
+  "낮다": ["낮아요"],
+  "길다": ["길어요"],
+  "크다": ["커요"],
+  "작다": ["작아요"],
   "몇시": ["몇 시", "지금 몇 시예요?", "현재 시간"],
   "몇시야": ["몇 시", "지금 몇 시예요?", "현재 시간"],
   "현금인출기": ["atm", "atm이 어디예요?", "현금 뽑고 싶어요"],
@@ -1665,6 +1692,53 @@ function expandLaundryVariants(item) {
 
 function isAtmSpecificQuery(text) {
   return /atm|현금인출기|현금\s*뽑는\s*기계/i.test(normalizeText(text));
+}
+
+function addBatchimToLastSyllable(text, jongseongIndex) {
+  if (!text) return "";
+  const chars = [...text];
+  const last = chars.at(-1);
+  if (!last) return "";
+  const code = last.charCodeAt(0);
+  const base = 0xac00;
+  const end = 0xd7a3;
+  if (code < base || code > end) return "";
+  const syllableIndex = code - base;
+  const currentJong = syllableIndex % 28;
+  if (currentJong !== 0) return "";
+  const leadVowel = Math.floor(syllableIndex / 28);
+  const next = String.fromCharCode(base + leadVowel * 28 + jongseongIndex);
+  chars[chars.length - 1] = next;
+  return chars.join("");
+}
+
+function expandPredicateInflectionVariants(item) {
+  const normalized = normalizeText(item);
+  if (!normalized || /\s/.test(normalized)) return [];
+
+  const variants = [];
+  const bieupMatch = normalized.match(/^(.*?)(워요|워)$/);
+  if (bieupMatch?.[1]) {
+    const stem = addBatchimToLastSyllable(bieupMatch[1], 17);
+    if (stem) variants.push(`${stem}다`);
+  }
+
+  const peuMatch = normalized.match(/^(.*?)(파요|파)$/);
+  if (peuMatch?.[1]) {
+    variants.push(`${peuMatch[1]}프다`);
+  }
+
+  const riMatch = normalized.match(/^(.*?)(려요|려)$/);
+  if (riMatch?.[1]) {
+    variants.push(`${riMatch[1]}리다`);
+  }
+
+  if (normalized === "써요" || normalized === "써") variants.push("쓰다");
+  if (normalized === "셔요" || normalized === "셔") variants.push("시다");
+  if (normalized === "커요" || normalized === "커") variants.push("크다");
+  if (normalized === "화나요" || normalized === "화나") variants.push("화나다");
+
+  return unique(variants);
 }
 
 const searchIndexCache = new WeakMap();
@@ -2180,6 +2254,7 @@ function expandQueryVariants(query, rawTokens = []) {
     if (PREDICATE_QUERY_VARIANTS[item]) {
       variants.push(...PREDICATE_QUERY_VARIANTS[item]);
     }
+    variants.push(...expandPredicateInflectionVariants(item));
     if (/하다$/.test(item)) {
       const stem = item.slice(0, -2);
       if (stem) {
@@ -3514,6 +3589,8 @@ function scoreEntry(entry, searchProfile, kind) {
   const queryNegative = hasNegativeMeaning(searchProfile.query);
   const entryNegative = hasNegativeMeaning(entry.korean) || hasNegativeMeaning(entry.note);
   const exactCoreHit = matchesExactCoreField(index, searchProfile.compact);
+  const exactDirectHits = searchProfile.directTerms.filter((term) => matchesExactCoreField(index, term));
+  const exactVariantHits = exactDirectHits.filter((term) => term !== searchProfile.compact);
   const exactObjectHits = searchProfile.objectTerms.filter((term) => matchesCoreField(index, term));
   const singleObjectQuery =
     kind === "sentence" &&
@@ -3610,8 +3687,17 @@ function scoreEntry(entry, searchProfile, kind) {
   if (kind === "sentence" && primaryHits.size) {
     score += 40;
   }
+  if (kind === "vocab" && exactCoreHit) {
+    score += 260;
+  }
   if (kind === "sentence" && exactCoreHit) {
     score += 240;
+  }
+  if (kind === "vocab" && exactVariantHits.length) {
+    score += 190 + exactVariantHits.length * 25;
+  }
+  if (kind === "sentence" && exactVariantHits.length) {
+    score += 280 + exactVariantHits.length * 35;
   }
   if (objectHits.size) {
     score += 110 + objectHits.size * 35;
@@ -3738,6 +3824,11 @@ function getVocabResults(entries, searchProfile) {
       return {
         entry,
         match: scoreEntry(entry, searchProfile, "vocab"),
+        compactKoreanExact: Boolean(searchProfile.compact && index.korean === searchProfile.compact),
+        exactCoreHit: matchesExactCoreField(index, searchProfile.compact),
+        exactVariantHits: searchProfile.directTerms.filter(
+          (term) => term !== searchProfile.compact && matchesExactCoreField(index, term)
+        ),
         termHits: searchProfile.primaryTerms.filter((term) => matchesIndexTerm(index, term)),
         anchorHits: searchProfile.anchorTerms.filter((term) => matchesIndexTerm(index, term)),
         objectHits: searchProfile.objectTerms.filter((term) => matchesIndexTerm(index, term)),
@@ -3747,6 +3838,13 @@ function getVocabResults(entries, searchProfile) {
     })
     .filter(({ match }) => match.matched)
     .sort((left, right) => {
+      if (right.compactKoreanExact !== left.compactKoreanExact) {
+        return Number(right.compactKoreanExact) - Number(left.compactKoreanExact);
+      }
+      if (right.exactCoreHit !== left.exactCoreHit) return Number(right.exactCoreHit) - Number(left.exactCoreHit);
+      if (right.exactVariantHits.length !== left.exactVariantHits.length) {
+        return right.exactVariantHits.length - left.exactVariantHits.length;
+      }
       if (right.templateHits.length !== left.templateHits.length) return right.templateHits.length - left.templateHits.length;
       if (right.objectHits.length !== left.objectHits.length) return right.objectHits.length - left.objectHits.length;
       if (right.actionHits.length !== left.actionHits.length) return right.actionHits.length - left.actionHits.length;
@@ -3845,6 +3943,9 @@ function getSentenceResults(entries, searchProfile, vocabSeeds) {
         match: scoreEntry(entry, searchProfile, "sentence"),
         compactKoreanExact: Boolean(searchProfile.compact && index.korean === searchProfile.compact),
         exactCoreHit: matchesExactCoreField(index, searchProfile.compact),
+        exactVariantHits: searchProfile.directTerms.filter(
+          (term) => term !== searchProfile.compact && matchesExactCoreField(index, term)
+        ),
         exactObjectHits: searchProfile.objectTerms.filter((term) => matchesCoreField(index, term)),
         anchorHits: searchProfile.anchorTerms.filter((term) => matchesIndexTerm(index, term)),
         objectHits: searchProfile.objectTerms.filter((term) => matchesIndexTerm(index, term)),
@@ -3858,6 +3959,9 @@ function getSentenceResults(entries, searchProfile, vocabSeeds) {
         return Number(right.compactKoreanExact) - Number(left.compactKoreanExact);
       }
       if (right.exactCoreHit !== left.exactCoreHit) return Number(right.exactCoreHit) - Number(left.exactCoreHit);
+      if (right.exactVariantHits.length !== left.exactVariantHits.length) {
+        return right.exactVariantHits.length - left.exactVariantHits.length;
+      }
       if (right.exactObjectHits.length !== left.exactObjectHits.length) return right.exactObjectHits.length - left.exactObjectHits.length;
       if (right.templateHits.length !== left.templateHits.length) return right.templateHits.length - left.templateHits.length;
       if (right.objectHits.length !== left.objectHits.length) return right.objectHits.length - left.objectHits.length;
@@ -3880,10 +3984,13 @@ function getSentenceResults(entries, searchProfile, vocabSeeds) {
       (item.objectHits.length || item.templateHits.length || item.match.directHits >= 1)
   );
   const nounLikeLookup = isSimpleCompactLookup(searchProfile);
+  const exactVariantDirect = direct.filter(
+    (item) => item.entry.source !== "generated-bulk" && item.exactVariantHits.length
+  );
   const curatedCompactDirect = direct.filter(
     (item) =>
       item.entry.source !== "generated-bulk" &&
-      compactText(item.entry.korean).includes(searchProfile.compact)
+      (compactText(item.entry.korean).includes(searchProfile.compact) || item.exactVariantHits.length)
   );
   const visibleDirect = curatedDirect.length
     ? direct.filter(
@@ -3923,6 +4030,7 @@ function getSentenceResults(entries, searchProfile, vocabSeeds) {
 
   if (nounLikeLookup && curatedCompactDirect.length) {
     return uniqueById([
+      ...exactVariantDirect.map(({ entry }) => entry),
       ...curatedCompactDirect.map(({ entry }) => entry),
       ...prioritizedDirect.map(({ entry }) => entry),
     ]).slice(0, RESULT_LIMITS.sentences + 3);
@@ -4018,6 +4126,10 @@ function findExactEntry(entries, searchProfile, options = {}) {
   if (!searchProfile.query) return null;
   const includeSupport = options.includeSupport ?? false;
   const includeTemplates = options.includeTemplates ?? false;
+  const strictKoreanExact = entries.find((entry) => compactText(entry.korean) === searchProfile.compact);
+  if (strictKoreanExact) {
+    return strictKoreanExact;
+  }
   const templateTerms = includeTemplates ? unique((searchProfile.templateTerms || []).slice(0, 8).filter(Boolean)) : [];
   const templateTermSet = new Set(templateTerms);
   const exactTerms = unique([searchProfile.compact, ...(searchProfile.directTerms || []), ...templateTerms].filter(Boolean));
