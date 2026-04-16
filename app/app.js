@@ -1,6 +1,6 @@
 ﻿const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
-const APP_VERSION = "20260416p";
+const APP_VERSION = "20260416q";
 
 const baseData = window.BASE_DATA || {
   appTitle: "태국어 포켓북",
@@ -1157,9 +1157,9 @@ const NUMBER_UNIT_ALIAS_MAP = {
   층: "floor",
 };
 const DEMONSTRATIVE_DEFINITIONS = [
-  { aliases: ["이거", "이것"], label: "이거", thaiKo: "안 니", thaiScript: "อันนี้" },
-  { aliases: ["그거", "그것"], label: "그거", thaiKo: "안 난", thaiScript: "อันนั้น" },
-  { aliases: ["저거", "저것"], label: "저거", thaiKo: "안 논", thaiScript: "อันโน้น" },
+  { aliases: ["이거", "이것", "이건", "이게"], label: "이거", thaiKo: "안 니", thaiScript: "อันนี้" },
+  { aliases: ["그거", "그것", "그건", "그게"], label: "그거", thaiKo: "안 난", thaiScript: "อันนั้น" },
+  { aliases: ["저거", "저것", "저건", "저게"], label: "저거", thaiKo: "안 논", thaiScript: "อันโน้น" },
 ];
 const ACTION_COMPOSITION_TEMPLATES = {
   request: {
@@ -1215,6 +1215,21 @@ const ACTION_COMPOSITION_SUFFIXES = {
 };
 const ACTION_COMPOSITION_PARTICLE_SUFFIXES = ["으로", "로", "을", "를", "은", "는", "이", "가"];
 const ACTION_COMPOSITION_FILLER_SUFFIXES = ["조금만", "좀만", "쫌", "좀"];
+const WHAT_QUESTION_SUFFIXES = [
+  "무슨뜻이야",
+  "무슨뜻일까",
+  "무엇이야",
+  "무엇인가",
+  "무엇일까",
+  "뭐예요",
+  "뭐에요",
+  "뭘까요",
+  "뭘까",
+  "뭐야",
+  "뭐지",
+  "뭐냐",
+  "뭔가",
+];
 const THAI_MEANING_STOPWORD_TEXTS = [
   "ครับ",
   "ค่ะ",
@@ -3394,6 +3409,16 @@ function detectComposableActionId(text) {
   ) || "";
 }
 
+function getWhatQuestionSuffix(text) {
+  const compact = compactText(text);
+  if (!compact) return "";
+  return WHAT_QUESTION_SUFFIXES.find((suffix) => compact.endsWith(suffix)) || "";
+}
+
+function isWhatQuestionQuery(text) {
+  return Boolean(getWhatQuestionSuffix(text));
+}
+
 function findDemonstrativeDefinition(text) {
   const compact = compactText(text);
   if (!compact) return null;
@@ -3436,10 +3461,8 @@ function extractComposableObjectCompacts(query, actionId) {
 
   const suffix = getActionCompositionSuffixes(actionId).find((item) => compact.endsWith(item)) || "";
   const stripped = suffix ? compact.slice(0, -suffix.length) : compact;
-  const variants = unique([
-    trimComposableCompact(stripped),
-    trimComposableCompact(compact),
-  ]).filter(Boolean);
+  const strippedCompact = trimComposableCompact(stripped);
+  const variants = unique([strippedCompact]).filter(Boolean);
 
   const demonstrative = findDemonstrativeDefinition(stripped || compact);
   if (demonstrative) {
@@ -3452,6 +3475,7 @@ function extractComposableObjectCompacts(query, actionId) {
 function getComposableObjectMatchScore(entry, objectCompacts) {
   if (!entry || entry.kind !== "vocab") return -1;
   if (isSentenceLikeVocabEntry(entry) || isUtilityLabelVocabEntry(entry)) return -1;
+  if (isLikelyActionMeaningEntry(entry)) return -1;
 
   const index = buildSearchIndex(entry);
   let best = -1;
@@ -3558,9 +3582,110 @@ function createGeneratedDemonstrativeVocab(query, demonstrative) {
   );
 }
 
+function extractWhatQuestionObjectCompacts(query) {
+  const compact = compactText(query);
+  const suffix = getWhatQuestionSuffix(compact);
+  if (!suffix) return [];
+
+  const root = compact.slice(0, -suffix.length);
+  const variants = [];
+  if (root) {
+    variants.push(root);
+    if (/[은는이가을를]$/.test(root) && root.length > 1) {
+      variants.push(root.slice(0, -1));
+    }
+  }
+
+  const demonstrative = findDemonstrativeDefinition(query);
+  if (demonstrative) {
+    variants.push(...demonstrative.aliases.map((alias) => compactText(alias)));
+  }
+
+  return unique(variants.filter(Boolean)).sort((left, right) => right.length - left.length);
+}
+
+function createGeneratedWhatQuestionEntry(query, korean, thai, thaiScript, kind, tags = [], note = "") {
+  if (!korean || !thai) return null;
+  return hydrateEntry(
+    {
+      id: `generated-what-${kind}-${compactText(query)}-${compactText(korean)}`,
+      kind,
+      source: "generated",
+      sheet: "질문 조합",
+      thai,
+      thaiScript,
+      korean,
+      note: note || "대상의 정체나 뜻을 물을 때",
+      tags: sortTags(unique(["기본회화", ...tags])),
+      keywords: unique([query, korean, thai, thaiScript, "뭐예요", "무엇", "질문"]),
+    },
+    kind
+  );
+}
+
+function buildGeneratedWhatQuestionEntries(query, searchProfile, vocabEntries) {
+  const trimmedQuery = String(query || "").trim();
+  if (!trimmedQuery || !isWhatQuestionQuery(trimmedQuery)) {
+    return { vocab: [], sentences: [], suppressFallbackSentences: false };
+  }
+
+  const demonstrative = findDemonstrativeDefinition(trimmedQuery);
+  const objectCompacts = extractWhatQuestionObjectCompacts(trimmedQuery);
+  const objectEntry = demonstrative ? null : findComposableObjectEntry(vocabEntries, objectCompacts);
+  const vocab = [];
+  const sentences = [];
+  let objectLabel = "";
+  let objectThaiKo = "";
+  let objectThaiScript = "";
+  let tags = ["기본회화"];
+
+  if (demonstrative) {
+    const demoVocab = createGeneratedDemonstrativeVocab(trimmedQuery, demonstrative);
+    if (demoVocab) vocab.push(demoVocab);
+    objectLabel = demonstrative.label;
+    objectThaiKo = demonstrative.thaiKo;
+    objectThaiScript = demonstrative.thaiScript;
+  } else if (objectEntry) {
+    vocab.push(objectEntry);
+    objectLabel = getEntryPrimaryKoreanText(objectEntry) || objectEntry.korean;
+    objectThaiKo = objectEntry.thai;
+    objectThaiScript = getThaiScriptText(objectEntry);
+    tags = sortTags(unique([...tags, ...(objectEntry.tags || [])]));
+  } else {
+    const vocabEntry = createGeneratedWhatQuestionEntry(trimmedQuery, "무엇", "아라이", "อะไร", "vocab");
+    if (vocabEntry) vocab.push(vocabEntry);
+  }
+
+  const koreanQuestion = !objectLabel
+    ? "뭐예요?"
+    : ["이거", "그거", "저거"].includes(objectLabel)
+      ? `${objectLabel} 뭐예요?`
+      : `${attachKoreanSubjectParticle(objectLabel)} 뭐예요?`;
+  const thaiQuestion = objectThaiKo ? `${objectThaiKo} 크ือ 아라이 캅` : "아라이 캅";
+  const thaiScriptQuestion = objectThaiScript ? `${objectThaiScript}คืออะไรครับ` : "อะไรครับ";
+  const sentenceEntry = createGeneratedWhatQuestionEntry(
+    trimmedQuery,
+    koreanQuestion,
+    thaiQuestion,
+    thaiScriptQuestion,
+    "sentence",
+    tags
+  );
+  if (sentenceEntry) sentences.push(sentenceEntry);
+
+  return {
+    vocab: uniqueByMeaning(uniqueById(vocab)),
+    sentences: uniqueByMeaning(uniqueById(sentences)),
+    suppressFallbackSentences: true,
+  };
+}
+
 function buildGeneratedComposedEntries(query, searchProfile, vocabEntries) {
   const trimmedQuery = String(query || "").trim();
   if (!trimmedQuery) return { vocab: [], sentences: [] };
+  if (isWhatQuestionQuery(trimmedQuery)) {
+    return { vocab: [], sentences: [], suppressFallbackSentences: false };
+  }
 
   const actionId = detectComposableActionId(trimmedQuery);
   const demonstrative = findDemonstrativeDefinition(trimmedQuery);
@@ -3623,7 +3748,7 @@ function buildGeneratedComposedEntries(query, searchProfile, vocabEntries) {
     }
 
     vocab.push(objectEntry);
-    objectLabel = objectEntry.korean;
+    objectLabel = getEntryPrimaryKoreanText(objectEntry) || objectEntry.korean;
     objectThaiKo = objectEntry.thai;
     objectThaiScript = getThaiScriptText(objectEntry);
     objectTags = objectEntry.tags || [];
@@ -5953,11 +6078,15 @@ function render() {
     !numberMode && !timeQuestionMode && !timeMode
       ? buildGeneratedComposedEntries(state.query, searchProfile, vocabSource)
       : { vocab: [], sentences: [], suppressFallbackSentences: false };
+  const generatedWhatQuestion =
+    !numberMode && !timeQuestionMode && !timeMode
+      ? buildGeneratedWhatQuestionEntries(state.query, searchProfile, vocabSource)
+      : { vocab: [], sentences: [], suppressFallbackSentences: false };
   const generatedThaiMeaning =
     !numberMode && !timeQuestionMode && !timeMode
       ? buildGeneratedThaiMeaningEntries(state.query, searchProfile, vocabSource)
       : { vocab: [], sentences: [], suppressFallbackSentences: false };
-  const generatedAssist = mergeGeneratedEntrySets(generatedComposed, generatedThaiMeaning);
+  const generatedAssist = mergeGeneratedEntrySets(generatedComposed, generatedWhatQuestion, generatedThaiMeaning);
   const composedMode = Boolean(generatedAssist.vocab.length || generatedAssist.sentences.length);
   const refinedVocabResults = composedMode
     ? preliminaryVocabResults.filter((entry) => entry.source !== "generated-bulk")

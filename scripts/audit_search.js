@@ -114,6 +114,7 @@ function buildAppContext(rootDir) {
         buildGeneratedTimeQuestionEntries,
         buildGeneratedTimeEntries,
         buildGeneratedComposedEntries,
+        buildGeneratedWhatQuestionEntries,
         buildGeneratedThaiMeaningEntries,
         findExactEntry,
         getVocabResults,
@@ -154,11 +155,15 @@ function createSearchRunner(context) {
       !numberMode && !timeQuestionMode && !timeMode
         ? api.buildGeneratedComposedEntries(query, profile, merged.vocab)
         : { vocab: [], sentences: [], suppressFallbackSentences: false };
+    const generatedWhatQuestion =
+      !numberMode && !timeQuestionMode && !timeMode
+        ? api.buildGeneratedWhatQuestionEntries(query, profile, merged.vocab)
+        : { vocab: [], sentences: [], suppressFallbackSentences: false };
     const generatedThaiMeaning =
       !numberMode && !timeQuestionMode && !timeMode
         ? api.buildGeneratedThaiMeaningEntries(query, profile, merged.vocab)
         : { vocab: [], sentences: [], suppressFallbackSentences: false };
-    const generatedAssist = api.mergeGeneratedEntrySets(generatedComposed, generatedThaiMeaning);
+    const generatedAssist = api.mergeGeneratedEntrySets(generatedComposed, generatedWhatQuestion, generatedThaiMeaning);
     const refinedVocab =
       generatedAssist.vocab.length || generatedAssist.sentences.length
         ? preliminaryVocab.filter((entry) => entry.source !== "generated-bulk")
