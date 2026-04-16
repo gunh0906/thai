@@ -1,6 +1,6 @@
 ﻿const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
-const APP_VERSION = "20260416v";
+const APP_VERSION = "20260416w";
 
 const baseData = window.BASE_DATA || {
   appTitle: "태국어 포켓북",
@@ -521,11 +521,11 @@ const SEARCH_OBJECT_RULES = [
     id: "toilet",
     patterns: [/화장실|욕실|변기|샤워실/],
     terms: ["화장실", "욕실"],
-    related: ["화장실 가고 싶어요", "화장실이 어디예요?"],
+    related: ["화장실", "욕실", "샤워실"],
     display: ["화장실"],
     tags: ["이동", "건강"],
     avoidTags: ["일터"],
-    phrases: ["화장실 가고 싶어요", "화장실이 어디예요?"],
+    phrases: [],
   },
   {
     id: "laundry",
@@ -579,7 +579,7 @@ const SEARCH_OBJECT_RULES = [
   {
     id: "gift",
     patterns: [
-      /선물|기프트|기념품|기념선물|선물용|선물세트|선물셋트|기프트세트|선물포장|선물\s*포장|기념품가게|기념품\s*가게|선물가게|선물\s*가게|엽서|포스트카드|키링|열쇠고리|자석|냉장고자석|쇼핑백|선물가방|포장지|선물포장지|리본|말린망고|망고선물/,
+      /선물|기프트|기념품|기념선물|선물용|선물세트|선물셋트|기프트세트|선물포장|선물\s*포장|기념품가게|기념품\s*가게|선물가게|선물\s*가게|엽서|포스트카드|키링|열쇠고리|자석|냉장고자석|포장지|선물포장지|리본|말린망고|망고선물/,
     ],
     focusTerms: ["선물", "기념품"],
     terms: [
@@ -589,7 +589,6 @@ const SEARCH_OBJECT_RULES = [
       "선물 포장",
       "선물세트",
       "기념품 가게",
-      "쇼핑백",
       "엽서",
       "열쇠고리",
       "자석",
@@ -602,7 +601,6 @@ const SEARCH_OBJECT_RULES = [
       "선물 포장해 주세요",
       "기념품 가게가 어디예요?",
       "선물세트 있어요?",
-      "쇼핑백도 같이 주세요",
       "말린 망고 선물용으로 좋아요?",
     ],
     display: ["선물", "기념품"],
@@ -616,7 +614,6 @@ const SEARCH_OBJECT_RULES = [
       "선물 포장해 주세요",
       "기념품 가게가 어디예요?",
       "선물세트 있어요?",
-      "쇼핑백도 같이 주세요",
     ],
   },
   {
@@ -2046,15 +2043,22 @@ const QUERY_ALIASES = [
   {
     matches: ["화장실", "욕실", "샤워", "온수"],
     primary: ["화장실", "욕실"],
-    related: ["화장실 어디예요", "화장실 가고 싶어요", "가다", "샤워기", "온수"],
+    related: ["화장실 어디예요", "샤워기", "온수"],
     display: ["화장실"],
     tags: ["이동", "건강"],
   },
   {
-    matches: ["화장실간다", "화장실가고싶어", "화장실가고싶어요", "화장실가", "화장실가야해", "화장실어디에요", "화장실어디예요", "화장실이어디예요"],
+    matches: ["화장실간다", "화장실가고싶어", "화장실가고싶어요", "화장실가", "화장실가야해"],
     primary: ["화장실", "가다"],
-    related: ["화장실 가고 싶어요", "화장실 어디예요", "화장실", "어디"],
+    related: ["화장실 가고 싶어요", "화장실", "가다"],
     display: ["화장실", "가다"],
+    tags: ["이동", "기본회화"],
+  },
+  {
+    matches: ["화장실어디에요", "화장실어디예요", "화장실이어디예요"],
+    primary: ["화장실", "어디"],
+    related: ["화장실 어디예요", "화장실", "어디"],
+    display: ["화장실", "어디"],
     tags: ["이동", "기본회화"],
   },
   {
@@ -2899,6 +2903,8 @@ function buildIntentHints(query, patternTexts) {
   }
 
   return {
+    objectIds: unique(objectRules.map((rule) => rule.id)),
+    actionIds: unique(actionRules.map((rule) => rule.id)),
     objectTerms: unique(
       objectRules.flatMap((rule) => (rule.focusTerms && rule.focusTerms.length ? rule.focusTerms : rule.display?.length ? rule.display : (rule.terms || []).slice(0, 1)))
     ),
@@ -2936,6 +2942,26 @@ function buildIntentHints(query, patternTexts) {
       ...actionRules.flatMap((rule) => rule.blockedTerms || []),
     ]),
   };
+}
+
+function collectIntentDrivenVariants(text) {
+  const normalized = normalizeText(text);
+  if (!normalized) return [];
+
+  // Keep query expansion aligned with the same intent tables used for scoring.
+  const patternTexts = unique([normalized, ...expandCompactPhraseVariants(normalized)]);
+  const hints = buildIntentHints(normalized, patternTexts);
+  const hasActionIntent = Boolean(hints.actionIds?.length);
+  const multiTokenQuery = tokenize(normalized).length >= 2;
+  const phraseLevelVariants = hasActionIntent || multiTokenQuery;
+  return unique([
+    ...(hints.objectTerms || []),
+    ...(hints.actionTerms || []),
+    ...(hints.primaryTerms || []),
+    ...(hints.displayTerms || []),
+    ...(phraseLevelVariants ? hints.relatedTerms || [] : []),
+    ...(phraseLevelVariants ? hints.templateTerms || [] : []),
+  ]).filter(Boolean);
 }
 
 function extractCompactPhraseRoots(item) {
@@ -2995,6 +3021,7 @@ function expandQueryVariants(query, rawTokens = []) {
       variants.push(...PREDICATE_QUERY_VARIANTS[item]);
     }
     variants.push(...expandPredicateInflectionVariants(item));
+    variants.push(...collectIntentDrivenVariants(item));
     if (/하다$/.test(item)) {
       const stem = item.slice(0, -2);
       if (stem) {
@@ -5273,6 +5300,8 @@ function buildSearchProfile(query, entries = []) {
   const relatedTerms = [];
   const displayTerms = [];
   const tags = [];
+  const objectIds = [];
+  const actionIds = [];
 
   primaryTerms.push(...(intentHints.primaryTerms || []));
   primaryTerms.push(...compactPhraseRoots);
@@ -5280,6 +5309,8 @@ function buildSearchProfile(query, entries = []) {
   displayTerms.push(...compactPhraseRoots);
   displayTerms.push(...(intentHints.displayTerms || []));
   tags.push(...(intentHints.tags || []));
+  objectIds.push(...(intentHints.objectIds || []));
+  actionIds.push(...(intentHints.actionIds || []));
   if (predicateHints) {
     primaryTerms.push(...(predicateHints.primaryTerms || []));
     relatedTerms.push(...(predicateHints.relatedTerms || []));
@@ -5419,7 +5450,9 @@ function buildSearchProfile(query, entries = []) {
     primaryTerms: filteredPrimaryCompacts,
     relatedTerms: filteredRelatedCompacts,
     objectTerms,
+    objectIds: unique(objectIds),
     actionTerms,
+    actionIds: unique(actionIds),
     templateTerms,
     anchorTerms: unique([...rawAnchorTerms, ...intentAnchorTerms, ...fallbackAnchorTerms]).slice(0, 4),
     displayTerms: unique(displayTerms.length ? displayTerms : rawTokens)
@@ -5501,6 +5534,21 @@ function matchesTemplateTerm(index, term) {
     return false;
   }
   return getStructuredFieldMatchStrength(index, term) >= 4;
+}
+
+function prioritizeRankedItems(...groups) {
+  const prioritized = [];
+  const seen = new Set();
+
+  groups.forEach((group) => {
+    (group || []).forEach((item) => {
+      if (!item?.entry?.id || seen.has(item.entry.id)) return;
+      seen.add(item.entry.id);
+      prioritized.push(item);
+    });
+  });
+
+  return prioritized;
 }
 
 function scoreEntry(entry, searchProfile, kind) {
@@ -5835,8 +5883,30 @@ function getVocabResults(entries, searchProfile) {
       : [];
   const anchorFocused = searchProfile.anchorTerms.length ? sourceFiltered.filter((item) => item.anchorHits.length) : [];
   const thaiFocused = thaiOnlySearch ? sourceFiltered.filter((item) => item.thaiCoreHits.length) : [];
+  const whereIntent = searchProfile.actionIds?.includes("where");
+  const tightIntentVocab =
+    searchProfile.objectTerms.length && (searchProfile.actionTerms.length || searchProfile.templateTerms.length)
+      ? sourceFiltered.filter(
+          (item) =>
+            !isSentenceLikeVocabEntry(item.entry) &&
+            !isUtilityLabelVocabEntry(item.entry) &&
+            (item.exactCoreHit ||
+              item.templateHits.length ||
+              (item.objectHits.length && (item.actionHits.length || whereIntent)))
+        )
+      : [];
   const preferredRanked =
-    thaiFocused.length ? thaiFocused : intentFocused.length ? intentFocused : anchorFocused.length >= 2 ? anchorFocused : sourceFiltered;
+    thaiFocused.length
+      ? thaiFocused
+      : tightIntentVocab.length
+        ? whereIntent
+          ? tightIntentVocab
+          : prioritizeRankedItems(tightIntentVocab, intentFocused, sourceFiltered)
+        : intentFocused.length
+          ? intentFocused
+          : anchorFocused.length >= 2
+            ? anchorFocused
+            : sourceFiltered;
 
   if (
     !searchProfile.query ||
@@ -5970,9 +6040,25 @@ function getSentenceResults(entries, searchProfile, vocabSeeds) {
         )
       : visibleDirect;
   const thaiFocusedDirect = thaiOnlySearch ? visibleDirect.filter((item) => item.thaiCoreHits.length) : [];
+  const tightIntentDirect =
+    searchProfile.objectTerms.length && (searchProfile.actionTerms.length || searchProfile.templateTerms.length)
+      ? visibleDirect.filter(
+          (item) =>
+            item.objectHits.length &&
+            (item.templateHits.length ||
+              item.actionHits.length ||
+              (searchProfile.actionIds?.includes("where") &&
+                /어디(?:예요|에요)?/.test(normalizeText(item.entry.korean))))
+        )
+      : [];
+  const whereFocusedDirect = searchProfile.actionIds?.includes("where") && tightIntentDirect.length ? tightIntentDirect : [];
   const prioritizedDirect =
     thaiFocusedDirect.length
       ? thaiFocusedDirect
+      : whereFocusedDirect.length
+        ? whereFocusedDirect
+      : tightIntentDirect.length
+        ? prioritizeRankedItems(tightIntentDirect, intentFilteredDirect, visibleDirect)
       : strictExactDirect.length >= 2
         ? strictExactDirect
         : intentFilteredDirect.length >= 3
@@ -5994,6 +6080,10 @@ function getSentenceResults(entries, searchProfile, vocabSeeds) {
       ...curatedCompactDirect.map(({ entry }) => entry),
       ...prioritizedDirect.map(({ entry }) => entry),
     ]).slice(0, RESULT_LIMITS.sentences + 3);
+  }
+
+  if (whereFocusedDirect.length) {
+    return whereFocusedDirect.map(({ entry }) => entry).slice(0, RESULT_LIMITS.sentences);
   }
 
   if (prioritizedDirect.length >= 3) {
@@ -6154,6 +6244,10 @@ function findExactEntry(entries, searchProfile, options = {}) {
         intentFieldPriority: Math.max(compactFieldPriority, templateFieldPriority),
         bestFieldPriority,
         koreanContainsCompact: Boolean(searchProfile.compact && index.korean.includes(searchProfile.compact)),
+        hasObjectIntentHit: (searchProfile.objectTerms || []).some(
+          (term) => matchesCoreField(index, term) || matchesIndexTerm(index, term)
+        ),
+        koreanNormalized: normalizeText(entry.korean),
       };
     })
     .filter(Boolean)
@@ -6199,6 +6293,9 @@ function findExactEntry(entries, searchProfile, options = {}) {
   const simpleCompactLookup = isSimpleCompactLookup(searchProfile);
   const phraseLikeExactQuery = isPhraseLikeExactQuery(searchProfile);
   const filteredExactCandidates = exactCoreCandidates.filter((item) => {
+    const hasTightIntent = Boolean(
+      searchProfile.objectTerms.length && (searchProfile.actionTerms.length || searchProfile.templateTerms.length)
+    );
     if (
       includeTemplates &&
       simpleCompactLookup &&
@@ -6227,6 +6324,20 @@ function findExactEntry(entries, searchProfile, options = {}) {
       }
     }
 
+    if (hasTightIntent && !item.hasObjectIntentHit && !item.templateExactField) {
+      return false;
+    }
+
+    if (
+      hasTightIntent &&
+      searchProfile.actionIds?.includes("where") &&
+      item.hasObjectIntentHit &&
+      !item.templateExactField &&
+      !/어디(?:예요|에요)?/.test(item.koreanNormalized)
+    ) {
+      return false;
+    }
+
     return true;
   });
 
@@ -6250,6 +6361,29 @@ function isSimpleCompactLookup(searchProfile) {
     !searchProfile.templateTerms.length &&
     !searchProfile.anchorTerms.length
   );
+}
+
+function shouldKeepExactSentenceMatch(entry, searchProfile) {
+  if (!entry || !searchProfile?.query) return false;
+  const hasTightIntent = Boolean(
+    searchProfile.objectTerms?.length && (searchProfile.actionTerms?.length || searchProfile.templateTerms?.length)
+  );
+  if (!hasTightIntent) return true;
+
+  const index = buildSearchIndex(entry);
+  const hasObjectHit = searchProfile.objectTerms.some(
+    (term) => matchesCoreField(index, term) || matchesIndexTerm(index, term)
+  );
+  if (!hasObjectHit) return false;
+
+  if (searchProfile.actionIds?.includes("where")) {
+    return (
+      /어디(?:예요|에요)?/.test(normalizeText(entry.korean)) ||
+      searchProfile.templateTerms.some((term) => matchesTemplateTerm(index, term))
+    );
+  }
+
+  return true;
 }
 
 function isPhraseLikeExactQuery(searchProfile) {
@@ -6747,7 +6881,11 @@ function render() {
     searchProfile.templateTerms.length || (searchProfile.objectTerms.length && searchProfile.actionTerms.length)
   );
   const safeExactSentenceMatch =
-    strictPhraseMode && exactSentenceMatch?.source === "generated-bulk" ? null : exactSentenceMatch;
+    exactSentenceMatch &&
+    ((strictPhraseMode && exactSentenceMatch.source === "generated-bulk") ||
+      !shouldKeepExactSentenceMatch(exactSentenceMatch, searchProfile))
+      ? null
+      : exactSentenceMatch;
   const refinedVocabResults = composedMode
     ? preliminaryVocabResults.filter((entry) => entry.source !== "generated-bulk")
     : preliminaryVocabResults;
