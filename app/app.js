@@ -1361,6 +1361,8 @@ const TIME_QUERY_REGEX =
 const TIME_EXTRACT_REGEX =
   /(?:(오전|오후)\s*)?\d{1,2}\s*시(?:\s*(?:\d{1,2}\s*분|반))?|(?:(오전|오후)\s*)?\d{1,2}:\d{2}/;
 const TIME_QUESTION_REGEX = /^(?:(?:지금|현재)?(?:시간)?몇시(?:야|예요|에요|인가요|니|냐)?)$|^(?:지금시간|현재시간|지금몇시|현재몇시)$/;
+const DATE_EXTRACT_REGEX =
+  /(?:\d{4}\s*년\s*)?\d{1,2}\s*월\s*\d{1,2}\s*일|(?:\d{4}[/-])\d{1,2}[/-]\d{1,2}|\d{1,2}[/-]\d{1,2}/;
 
 const RESULT_LIMITS = {
   vocab: 8,
@@ -1396,6 +1398,24 @@ const TIME_WORDS = {
   am: { script: "เช้า", latin: "chao", ko: "차오", korean: "오전" },
   pm: { script: "บ่าย", latin: "bai", ko: "바이", korean: "오후" },
   whatTime: { script: "กี่โมง", latin: "ki mong", ko: "끼 몽" },
+};
+const DATE_MONTH_WORDS = {
+  1: { script: "มกราคม", ko: "마까라콤" },
+  2: { script: "กุมภาพันธ์", ko: "꿈파판" },
+  3: { script: "มีนาคม", ko: "미나콤" },
+  4: { script: "เมษายน", ko: "메사욘" },
+  5: { script: "พฤษภาคม", ko: "프륵사파콤" },
+  6: { script: "มิถุนายน", ko: "미투나욘" },
+  7: { script: "กรกฎาคม", ko: "까라까다콤" },
+  8: { script: "สิงหาคม", ko: "씽하콤" },
+  9: { script: "กันยายน", ko: "깐야욘" },
+  10: { script: "ตุลาคม", ko: "뚤라콤" },
+  11: { script: "พฤศจิกายน", ko: "프륵사치까욘" },
+  12: { script: "ธันวาคม", ko: "탄와콤" },
+};
+const DATE_WORDS = {
+  date: { script: "วันที่", ko: "완 티" },
+  meet: { script: "เจอกันวันที่", ko: "저 깐 완 티" },
 };
 const NUMBER_UNIT_DEFINITIONS = {
   won: { label: "원", thaiScript: "วอน", thaiKo: "원", english: "won", tags: ["쇼핑", "숫자·시간"] },
@@ -3682,7 +3702,7 @@ function shouldAutoRunAiAssist(context) {
   if (!hasConfiguredAiAssist()) return false;
   if (state.aiSettings.mode !== "auto") return false;
   if (!context || !isAiEligibleQuery(context.query)) return false;
-  if (context.numberMode || context.timeMode || context.timeQuestionMode) return false;
+  if (context.numberMode || context.dateMode || context.timeMode || context.timeQuestionMode) return false;
   if (context.exactVocabMatch || context.exactSentenceMatch) return false;
   if ((context.vocabResults || []).length >= 3 && (context.sentenceResults || []).length >= 3) return false;
   return true;
@@ -4970,6 +4990,12 @@ function attachKoreanDirectionalParticle(text) {
   return `${trimmed}${batchimIndex === 0 || batchimIndex === 8 ? "로" : "으로"}`;
 }
 
+function attachKoreanCopula(text) {
+  const trimmed = String(text || "").trim();
+  if (!trimmed) return "";
+  return `${trimmed}${hasKoreanBatchim(trimmed) ? "이에요" : "예요"}`;
+}
+
 function isLikelyActionMeaningEntry(entry) {
   const korean = getEntryPrimaryKoreanText(entry);
   return /(?:가져오다|가져다|보여|보다|바꾸다|변경|주세요|도와주|이해하다|이해)$/u.test(korean);
@@ -5386,12 +5412,114 @@ function extractStandaloneTimeQuery(query) {
   return remainder ? "" : extracted;
 }
 
+function extractStandaloneDateQuery(query) {
+  const normalized = normalizeText(query);
+  const matched = normalized.match(DATE_EXTRACT_REGEX);
+  if (!matched) return "";
+  const extracted = matched[0].trim();
+  const remainder = normalized
+    .replace(extracted, " ")
+    .replace(/(인데|인대|예요|에요|입니다|이야|야|쯤|정도|쯔음|날짜는|날짜가|날짜|날|맞아|맞죠|맞나요|맞습니까)/g, " ")
+    .replace(/[은는이가을를요.!?,]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  return remainder ? "" : extracted;
+}
+
 function convertSmallNumberBundle(value) {
   const converted = convertIntegerToThaiTokens(String(value));
   return {
     script: converted.script.join(""),
     latin: converted.latin.join(" "),
     ko: converted.ko.join(" "),
+  };
+}
+
+function isValidDateParts(year, month, day) {
+  if (!Number.isInteger(month) || !Number.isInteger(day) || month < 1 || month > 12 || day < 1) return false;
+  const referenceYear = Number.isInteger(year) ? year : 2024;
+  const lastDay = new Date(referenceYear, month, 0).getDate();
+  return day <= lastDay;
+}
+
+function parseDateQuery(query) {
+  const extracted = extractStandaloneDateQuery(query);
+  if (!extracted) return null;
+
+  const normalized = normalizeText(extracted);
+  let year = null;
+  let month = null;
+  let day = null;
+  let matched = normalized.match(/^(?:(\d{4})\s*년\s*)?(\d{1,2})\s*월\s*(\d{1,2})\s*일$/);
+  if (matched) {
+    year = matched[1] ? Number(matched[1]) : null;
+    month = Number(matched[2]);
+    day = Number(matched[3]);
+  } else {
+    matched = normalized.match(/^(\d{4})[/-](\d{1,2})[/-](\d{1,2})$/);
+    if (matched) {
+      year = Number(matched[1]);
+      month = Number(matched[2]);
+      day = Number(matched[3]);
+    } else {
+      matched = normalized.match(/^(\d{1,2})[/-](\d{1,2})$/);
+      if (!matched) return null;
+      month = Number(matched[1]);
+      day = Number(matched[2]);
+    }
+  }
+
+  if (!isValidDateParts(year, month, day)) return null;
+
+  const monthWord = DATE_MONTH_WORDS[month];
+  if (!monthWord) return null;
+
+  const dayBundle = convertSmallNumberBundle(day);
+  const yearBundle = year ? convertNumberToThai(String(year)) : null;
+  const thaiDayDigits = toThaiNumeralDigits(String(day));
+  const thaiYearDigits = year ? toThaiNumeralDigits(String(year)) : "";
+  const canonicalKorean = `${year ? `${year}년 ` : ""}${month}월 ${day}일`;
+  const compactKorean = canonicalKorean.replace(/\s+/g, "");
+  const shortNumeric = `${month}/${day}`;
+  const isoDate = year ? `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}` : "";
+  const bodyScript = `${thaiDayDigits} ${monthWord.script}${thaiYearDigits ? ` ${thaiYearDigits}` : ""}`;
+  const phraseScript = `${DATE_WORDS.date.script} ${bodyScript}`;
+  const phraseKo = `${DATE_WORDS.date.ko} ${dayBundle.ko} ${monthWord.ko}${yearBundle ? ` ${yearBundle.thaiKo}` : ""}`.trim();
+  const meetKo = `${DATE_WORDS.meet.ko} ${dayBundle.ko} ${monthWord.ko}${yearBundle ? ` ${yearBundle.thaiKo}` : ""}`.trim();
+  const meetScript = `${DATE_WORDS.meet.script} ${bodyScript}`;
+  const keywords = unique([
+    query,
+    extracted,
+    canonicalKorean,
+    compactKorean,
+    `${month}월`,
+    `${day}일`,
+    shortNumeric,
+    monthWord.script,
+    phraseScript,
+    phraseKo,
+    isoDate,
+    year ? `${year}년` : "",
+    "날짜",
+  ]);
+
+  return {
+    extracted,
+    year,
+    month,
+    day,
+    canonicalKorean,
+    compactKorean,
+    shortNumeric,
+    isoDate,
+    thaiDayDigits,
+    thaiYearDigits,
+    phraseScript,
+    phraseKo,
+    meetScript,
+    meetKo,
+    monthWord,
+    keywords,
   };
 }
 
@@ -5594,6 +5722,67 @@ function buildGeneratedTimeEntries(query) {
       )
     );
   }
+
+  return {
+    vocab: vocabEntries,
+    sentences: sentenceEntries,
+  };
+}
+
+function buildGeneratedDateEntries(query) {
+  const parsed = parseDateQuery(query);
+  if (!parsed) return { vocab: [], sentences: [] };
+
+  const vocabEntries = [
+    hydrateEntry(
+      {
+        id: `generated-date-read-${parsed.isoDate || parsed.compactKorean}`,
+        kind: "vocab",
+        source: "generated",
+        sheet: "날짜 변환",
+        thai: parsed.phraseKo,
+        thaiScript: parsed.phraseScript,
+        korean: parsed.canonicalKorean,
+        note: "날짜를 그대로 보여주는 태국어 표현",
+        tags: ["숫자·시간"],
+        keywords: parsed.keywords,
+      },
+      "vocab"
+    ),
+  ];
+
+  const sentenceEntries = [
+    hydrateEntry(
+      {
+        id: `generated-date-show-${parsed.isoDate || parsed.compactKorean}`,
+        kind: "sentence",
+        source: "generated",
+        sheet: "날짜 변환",
+        thai: parsed.phraseKo,
+        thaiScript: parsed.phraseScript,
+        korean: `날짜는 ${attachKoreanCopula(parsed.canonicalKorean)}`,
+        note: "날짜를 바로 보여주기 좋게 정리한 문장",
+        tags: ["숫자·시간", "기본회화"],
+        keywords: parsed.keywords,
+      },
+      "sentence"
+    ),
+    hydrateEntry(
+      {
+        id: `generated-date-meet-${parsed.isoDate || parsed.compactKorean}`,
+        kind: "sentence",
+        source: "generated",
+        sheet: "날짜 변환",
+        thai: parsed.meetKo,
+        thaiScript: parsed.meetScript,
+        korean: `${parsed.canonicalKorean}에 만나요`,
+        note: "약속 날짜를 말할 때",
+        tags: ["숫자·시간", "기본회화"],
+        keywords: [...parsed.keywords, "약속", "만나요"],
+      },
+      "sentence"
+    ),
+  ];
 
   return {
     vocab: vocabEntries,
@@ -7884,37 +8073,39 @@ function computeSearchComputation(query = state.query) {
   const merged = getMergedData();
   const generated = buildGeneratedNumberEntries(query);
   const numberMode = generated.vocab.length > 0;
-  const generatedTimeQuestion = !numberMode ? buildGeneratedTimeQuestionEntries(query) : { vocab: [], sentences: [] };
-  const timeQuestionMode = !numberMode && generatedTimeQuestion.vocab.length > 0;
-  const generatedTime = !numberMode && !timeQuestionMode ? buildGeneratedTimeEntries(query) : { vocab: [], sentences: [] };
-  const timeMode = !numberMode && !timeQuestionMode && generatedTime.vocab.length > 0;
+  const generatedDate = !numberMode ? buildGeneratedDateEntries(query) : { vocab: [], sentences: [] };
+  const dateMode = !numberMode && generatedDate.vocab.length > 0;
+  const generatedTimeQuestion = !numberMode && !dateMode ? buildGeneratedTimeQuestionEntries(query) : { vocab: [], sentences: [] };
+  const timeQuestionMode = !numberMode && !dateMode && generatedTimeQuestion.vocab.length > 0;
+  const generatedTime = !numberMode && !dateMode && !timeQuestionMode ? buildGeneratedTimeEntries(query) : { vocab: [], sentences: [] };
+  const timeMode = !numberMode && !dateMode && !timeQuestionMode && generatedTime.vocab.length > 0;
   const vocabSource = merged.vocab;
   const sentenceSource = merged.sentences;
-  const searchProfile = buildSearchProfile(query, numberMode || timeQuestionMode || timeMode ? [] : vocabSource);
-  const exactVocabMatch = numberMode ? null : findExactEntry(merged.vocab, searchProfile);
-  const exactSentenceMatch = numberMode ? null : findExactEntry(merged.sentences, searchProfile, { includeTemplates: true });
+  const searchProfile = buildSearchProfile(query, numberMode || dateMode || timeQuestionMode || timeMode ? [] : vocabSource);
+  const exactVocabMatch = numberMode || dateMode ? null : findExactEntry(merged.vocab, searchProfile);
+  const exactSentenceMatch = numberMode || dateMode ? null : findExactEntry(merged.sentences, searchProfile, { includeTemplates: true });
   const preliminaryVocabResults =
-    numberMode || timeQuestionMode || timeMode
+    numberMode || dateMode || timeQuestionMode || timeMode
       ? []
       : uniqueById([...(exactVocabMatch ? [exactVocabMatch] : []), ...getVocabResults(vocabSource, searchProfile)]);
   const generatedComposed =
-    !numberMode && !timeQuestionMode && !timeMode
+    !numberMode && !dateMode && !timeQuestionMode && !timeMode
       ? buildGeneratedComposedEntries(query, searchProfile, vocabSource)
       : { vocab: [], sentences: [], suppressFallbackSentences: false };
   const generatedWhereQuestion =
-    !numberMode && !timeQuestionMode && !timeMode
+    !numberMode && !dateMode && !timeQuestionMode && !timeMode
       ? buildGeneratedWhereQuestionEntries(query, searchProfile, vocabSource)
       : { vocab: [], sentences: [], suppressFallbackSentences: false };
   const generatedWhatQuestion =
-    !numberMode && !timeQuestionMode && !timeMode
+    !numberMode && !dateMode && !timeQuestionMode && !timeMode
       ? buildGeneratedWhatQuestionEntries(query, searchProfile, vocabSource)
       : { vocab: [], sentences: [], suppressFallbackSentences: false };
   const generatedPredicate =
-    !numberMode && !timeQuestionMode && !timeMode
+    !numberMode && !dateMode && !timeQuestionMode && !timeMode
       ? buildGeneratedPredicateEntries(query)
       : { vocab: [], sentences: [], suppressFallbackSentences: false };
   const generatedThaiMeaning =
-    !numberMode && !timeQuestionMode && !timeMode
+    !numberMode && !dateMode && !timeQuestionMode && !timeMode
       ? buildGeneratedThaiMeaningEntries(query, searchProfile, vocabSource)
       : { vocab: [], sentences: [], suppressFallbackSentences: false };
   const generatedAssist = mergeGeneratedEntrySets(
@@ -7941,18 +8132,20 @@ function computeSearchComputation(query = state.query) {
   const refinedSentenceCandidates =
     generatedAssist.suppressFallbackSentences
       ? []
-      : (composedMode || strictPhraseMode) && !numberMode && !timeQuestionMode && !timeMode
+      : (composedMode || strictPhraseMode) && !numberMode && !dateMode && !timeQuestionMode && !timeMode
         ? getSentenceResults(
             sentenceSource,
             searchProfile,
             uniqueByMeaning([...generatedAssist.vocab, ...refinedVocabResults])
           ).filter((entry) => entry.source !== "generated-bulk")
-        : !numberMode && !timeQuestionMode && !timeMode
+        : !numberMode && !dateMode && !timeQuestionMode && !timeMode
           ? getSentenceResults(sentenceSource, searchProfile, uniqueByMeaning([...generatedAssist.vocab, ...refinedVocabResults]))
           : [];
   const allVocabResults = numberMode
     ? generated.vocab
-    : timeQuestionMode
+    : dateMode
+      ? generatedDate.vocab
+      : timeQuestionMode
       ? generatedTimeQuestion.vocab
       : timeMode
         ? generatedTime.vocab
@@ -7961,7 +8154,9 @@ function computeSearchComputation(query = state.query) {
   const sentenceResults = query
     ? (numberMode
         ? generated.sentences
-        : timeQuestionMode
+        : dateMode
+          ? generatedDate.sentences
+          : timeQuestionMode
           ? uniqueById([...(safeExactSentenceMatch ? [safeExactSentenceMatch] : []), ...generatedTimeQuestion.sentences]).slice(
               0,
               RESULT_LIMITS.sentences
@@ -7985,6 +8180,7 @@ function computeSearchComputation(query = state.query) {
     exactVocabMatch,
     safeExactSentenceMatch,
     numberMode,
+    dateMode,
     timeQuestionMode,
     timeMode,
     composedMode,
@@ -8018,6 +8214,7 @@ function render() {
     exactVocabMatch,
     safeExactSentenceMatch,
     numberMode,
+    dateMode,
     timeQuestionMode,
     timeMode,
     composedMode,
@@ -8040,6 +8237,8 @@ function render() {
     ? "한국어와 태국어 둘 다 검색할 수 있습니다. 한국어는 바로 쓸 태국어를, 태국어는 한국어 뜻을 먼저 보여줍니다."
     : numberMode
       ? `숫자 변환: 읽기 ${vocabResults.length}개 · 활용 ${sentenceResults.length}개${expandedHint}`
+      : dateMode
+        ? `날짜 검색: 단어 ${vocabResults.length}개 · 회화 ${sentenceResults.length}개${expandedHint}`
       : timeQuestionMode
         ? `시간 질문: 단어 ${vocabResults.length}개 · 회화 ${sentenceResults.length}개${expandedHint}`
       : timeMode
@@ -8064,6 +8263,8 @@ function render() {
   elements.vocabMeta.textContent = state.query
     ? numberMode
       ? "숫자는 태국어 읽기와 태국 숫자 표기를 함께 보여줍니다."
+      : dateMode
+        ? "검색한 날짜를 태국어 날짜 표현으로 바로 보여줍니다."
       : timeQuestionMode
         ? "현재 시간을 묻는 표현과 기기 기준 현재 시각을 먼저 보여줍니다."
       : timeMode
@@ -8083,6 +8284,8 @@ function render() {
   elements.sentenceMeta.textContent = state.query
     ? numberMode
       ? "가격이나 수량으로 바로 보여줄 수 있게 같이 만들었습니다."
+      : dateMode
+        ? "약속이나 일정에 바로 쓸 날짜 문장을 같이 보여줍니다."
       : timeQuestionMode
         ? "지금 몇 시인지 묻거나 답할 때 바로 보여줄 수 있게 만들었습니다."
       : timeMode
@@ -8104,6 +8307,7 @@ function render() {
     exactVocabMatch: Boolean(exactVocabMatch),
     exactSentenceMatch: Boolean(safeExactSentenceMatch),
     numberMode,
+    dateMode,
     timeMode,
     timeQuestionMode,
   };
