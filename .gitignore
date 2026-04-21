@@ -9,3 +9,5 @@ app-local/
 audit/
 external_corpus/raw/
 external_corpus/_*
+workers/openai-assist/.dev.vars
+workers/openai-assist/.wrangler/

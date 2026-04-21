@@ -1,5 +1,6 @@
-OPENAI_API_KEY=sk-...
-SHARED_SECRET=change-me
-OPENAI_MODEL=gpt-4o-mini
-OPENAI_REASONING_EFFORT=low
-ALLOWED_ORIGIN=https://gunh0906.github.io
+OPENAI_API_KEY="sk-your-openai-key"
+SHARED_SECRET="replace-with-a-random-long-proxy-token"
+OPENAI_MODEL="gpt-4o-mini"
+OPENAI_REASONING_EFFORT="low"
+ALLOWED_ORIGINS="https://gunh0906.github.io"
+REQUIRE_SHARED_SECRET="true"

@@ -1,7 +1,7 @@
 ﻿const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
 const AI_STORAGE_KEY = "thai-pocketbook-ai-v1";
-const APP_VERSION = "20260421c";
+const APP_VERSION = "20260421d";
 const AI_ASSIST_MIN_QUERY_LENGTH = 2;
 const AI_RESULT_LIMITS = {
   vocab: 3,
@@ -3950,11 +3950,42 @@ function buildSearchComputationCacheKey(query) {
   return [state.scenario, state.customRevision, compactText(query)].join("||");
 }
 
+function looksLikeOpenAiApiKey(value) {
+  return /^sk-[A-Za-z0-9_-]{16,}$/i.test(String(value || "").trim());
+}
+
+function isDirectOpenAiEndpoint(value) {
+  try {
+    const url = new URL(String(value || "").trim());
+    return /(^|\.)openai\.com$/i.test(url.hostname);
+  } catch {
+    return false;
+  }
+}
+
+function getAiSettingsValidationError(settings) {
+  const endpoint = String(settings?.endpoint || "").trim();
+  const accessToken = String(settings?.accessToken || "").trim();
+
+  if (endpoint && !/^https?:\/\//i.test(endpoint)) {
+    return "프록시 URL은 https://로 시작하는 주소만 넣어 주세요.";
+  }
+  if (endpoint && isDirectOpenAiEndpoint(endpoint)) {
+    return "OpenAI API 주소를 직접 넣으면 안 됩니다. 프록시 서버 주소만 넣어 주세요.";
+  }
+  if (accessToken && looksLikeOpenAiApiKey(accessToken)) {
+    return "여기에는 OpenAI API 키를 넣으면 안 됩니다. 프록시 보호용 토큰만 넣어 주세요.";
+  }
+
+  return "";
+}
+
 function hasConfiguredAiAssist() {
+  const endpoint = String(state.aiSettings.endpoint || "").trim();
+  if (!state.aiSettings.enabled || !endpoint) return false;
+  if (getAiSettingsValidationError(state.aiSettings)) return false;
   return Boolean(
-    state.aiSettings.enabled &&
-      String(state.aiSettings.endpoint || "").trim() &&
-      /^https?:\/\//i.test(String(state.aiSettings.endpoint || "").trim())
+    /^https?:\/\//i.test(endpoint)
   );
 }
 
@@ -4125,6 +4156,14 @@ function shouldAutoRunAiAssist(context) {
 
 async function requestAiAssist(context = state.lastSearchContext, options = {}) {
   if (!context || !isAiEligibleQuery(context.query)) return;
+  const settingsError = getAiSettingsValidationError(state.aiSettings);
+  if (settingsError) {
+    openMenu();
+    if (elements.aiSettingsFeedback) {
+      elements.aiSettingsFeedback.textContent = settingsError;
+    }
+    return;
+  }
   if (!hasConfiguredAiAssist()) {
     openMenu();
     if (elements.aiSettingsFeedback) {
@@ -4195,12 +4234,20 @@ function submitAiSettings(event) {
   event.preventDefault();
   const formData = new FormData(elements.aiSettingsForm);
   const nextMode = normalizeAiMode(formData.get("mode"));
-  state.aiSettings = {
+  const nextSettings = {
     enabled: formData.get("enabled") === "on",
     mode: nextMode,
     endpoint: String(formData.get("endpoint") || "").trim(),
     accessToken: String(formData.get("accessToken") || "").trim(),
   };
+  const validationError = getAiSettingsValidationError(nextSettings);
+  if (validationError) {
+    if (elements.aiSettingsFeedback) {
+      elements.aiSettingsFeedback.textContent = validationError;
+    }
+    return;
+  }
+  state.aiSettings = nextSettings;
   saveAiSettings();
   syncAiSettingsForm();
   if (elements.aiSettingsFeedback) {

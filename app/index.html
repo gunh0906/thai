@@ -228,7 +228,7 @@
               <p class="section-kicker">AI 검색</p>
               <h2>LLM 보강 연결</h2>
             </div>
-            <p class="section-description">GitHub Pages에는 키를 넣지 않고 프록시 주소만 저장합니다.</p>
+            <p class="section-description">GitHub Pages에는 OpenAI 키를 넣지 않고 프록시 주소와 프록시 토큰만 저장합니다.</p>
           </div>
 
           <form id="aiSettingsForm" class="entry-form">
@@ -262,12 +262,12 @@
               </label>
 
               <label class="wide">
-                <span>접속 토큰</span>
+                <span>프록시 토큰</span>
                 <input
                   id="aiTokenInput"
                   name="accessToken"
                   type="password"
-                  placeholder="선택 사항 · OpenAI 키가 아니라 프록시 보호용 토큰"
+                  placeholder="선택 사항 · OpenAI 키 금지, 프록시 보호용 토큰만"
                 />
               </label>
             </div>
@@ -277,7 +277,7 @@
               <p id="aiSettingsFeedback" class="feedback-text" aria-live="polite"></p>
             </div>
             <p class="section-description">
-              Cloudflare Worker나 Vercel 함수에 OpenAI 키를 넣고, 이 앱에는 그 프록시 주소만 저장하세요.
+              OpenAI 키는 Cloudflare Worker나 Vercel 서버 비밀값으로만 넣고, 이 앱에는 프록시 주소와 프록시 토큰만 저장하세요.
             </p>
           </form>
         </section>
@@ -295,7 +295,7 @@
       </div>
     </aside>
 
-    <script src="./data.js?v=20260421c"></script>
-    <script src="./app.js?v=20260421c"></script>
+    <script src="./data.js?v=20260421d"></script>
+    <script src="./app.js?v=20260421d"></script>
   </body>
 </html>
