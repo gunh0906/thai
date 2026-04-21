@@ -228,6 +228,102 @@ const SUPPLEMENTAL_DATA = {
       tags: ["기본회화"],
       keywords: ["틀리다", "틀렸어", "틀렸어요", "정답이 아니다", "잘못"],
     },
+    {
+      id: "supp-vocab-plant",
+      kind: "vocab",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "톤마이",
+      thaiScript: "ต้นไม้",
+      korean: "식물",
+      note: "식물 / 화초 / 나무 종류를 넓게 가리킬 때",
+      tags: ["기본회화", "쇼핑"],
+      keywords: ["식물", "화초", "초록", "화분", "나무", "잎", "정원"],
+    },
+    {
+      id: "supp-vocab-tree",
+      kind: "vocab",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "톤마이",
+      thaiScript: "ต้นไม้",
+      korean: "나무",
+      note: "나무 / 트리",
+      tags: ["기본회화", "쇼핑"],
+      keywords: ["나무", "식물", "나뭇가지", "숲", "목재"],
+    },
+    {
+      id: "supp-vocab-flower",
+      kind: "vocab",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "덕마이",
+      thaiScript: "ดอกไม้",
+      korean: "꽃",
+      note: "꽃 / 꽃 종류",
+      tags: ["기본회화", "쇼핑"],
+      keywords: ["꽃", "꽃잎", "화초", "식물", "꽃다발", "꽃집"],
+    },
+    {
+      id: "supp-vocab-flowerpot",
+      kind: "vocab",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "끄라탕 톤마이",
+      thaiScript: "กระถางต้นไม้",
+      korean: "화분",
+      note: "화분 / 식물 화분",
+      tags: ["기본회화", "쇼핑"],
+      keywords: ["화분", "식물", "꽃", "화초", "나무", "분갈이"],
+    },
+    {
+      id: "supp-vocab-leaf",
+      kind: "vocab",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "바이마이",
+      thaiScript: "ใบไม้",
+      korean: "잎",
+      note: "잎 / 나뭇잎 / 잎사귀",
+      tags: ["기본회화", "쇼핑"],
+      keywords: ["잎", "잎사귀", "나뭇잎", "식물", "꽃", "나무"],
+    },
+    {
+      id: "supp-vocab-seed",
+      kind: "vocab",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "멜렛",
+      thaiScript: "เมล็ด",
+      korean: "씨앗",
+      note: "씨앗 / 종자",
+      tags: ["기본회화", "쇼핑"],
+      keywords: ["씨앗", "씨", "종자", "심다", "식물", "꽃"],
+    },
+    {
+      id: "supp-vocab-garden",
+      kind: "vocab",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "수언",
+      thaiScript: "สวน",
+      korean: "정원",
+      note: "정원 / 가든",
+      tags: ["기본회화", "이동"],
+      keywords: ["정원", "가든", "마당", "식물", "꽃", "나무"],
+    },
+    {
+      id: "supp-vocab-flower-shop",
+      kind: "vocab",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "란 덕마이",
+      thaiScript: "ร้านดอกไม้",
+      korean: "꽃집",
+      note: "꽃집 / 꽃을 파는 가게",
+      tags: ["쇼핑"],
+      keywords: ["꽃집", "꽃 가게", "꽃", "꽃다발", "식물", "화분"],
+    },
   ],
   sentences: [
     {
@@ -398,6 +494,54 @@ const SUPPLEMENTAL_DATA = {
       tags: ["기본회화"],
       keywords: ["이건 틀렸어", "이건 틀렸어요", "잘못되었어", "잘못됐어", "틀리다"],
     },
+    {
+      id: "supp-sentence-water-plant",
+      kind: "sentence",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "롯 남 톤마이 너이 캅",
+      thaiScript: "รดน้ำต้นไม้หน่อยครับ",
+      korean: "식물에 물을 주세요",
+      note: "식물이나 화분에 물을 달라고 할 때",
+      tags: ["기본회화", "쇼핑"],
+      keywords: ["식물", "화분", "나무", "꽃", "물 주다", "물 주세요"],
+    },
+    {
+      id: "supp-sentence-flowerpot-request",
+      kind: "sentence",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "커 끄라탕 톤마이 능 안 캅",
+      thaiScript: "ขอกระถางต้นไม้หนึ่งอันครับ",
+      korean: "화분 하나 주세요",
+      note: "화분을 사고 싶을 때",
+      tags: ["쇼핑"],
+      keywords: ["화분", "식물", "꽃", "화초", "하나 주세요"],
+    },
+    {
+      id: "supp-sentence-flower-pretty",
+      kind: "sentence",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "덕마이 수아이 막 캅",
+      thaiScript: "ดอกไม้สวยมากครับ",
+      korean: "꽃이 정말 예뻐요",
+      note: "꽃이 예쁘다고 말할 때",
+      tags: ["기본회화", "쇼핑"],
+      keywords: ["꽃", "예쁘다", "예뻐요", "꽃이 예뻐요", "식물"],
+    },
+    {
+      id: "supp-sentence-like-plants",
+      kind: "sentence",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "폼 촙 톤마이 캅",
+      thaiScript: "ผมชอบต้นไม้ครับ",
+      korean: "식물을 좋아해요",
+      note: "식물이나 나무를 좋아한다고 말할 때",
+      tags: ["기본회화"],
+      keywords: ["식물", "좋아하다", "나무", "꽃", "화초"],
+    },
   ],
 };
 
@@ -451,6 +595,8 @@ const GENERATED_BULK_ENDING_REGEX =
 const VOCAB_SENTENCE_LIKE_REGEX =
   /(?:\?|있어요|있다|없어요|없다|해주세요|해 주세요|주실 수 있나요|가고 싶어요|가야 해요|가요|해요|됩니다|돼요|나와요|잠겨요|더러워요|시끄러워요|문제가 있어요|필요해요)$/u;
 const VOCAB_GENERIC_LABEL_REGEX = /(?:문제|필요|있음|확인)$/u;
+const WATER_QUERY_PATTERN =
+  /(?:^물$|생수|마실\s*물|마실물|차가운\s*물|차가운물|따뜻한\s*물|따뜻한물|찬물|냉수|(?:^|\s)물\s*(?:좀\s*)?(?:주세요|주세여|줘요|줘|더\s*주세요|더\s*주세여|있어요|있나요|한병|한잔)|^물(?:좀)?(?:주세요|주세여|줘요|줘|더주세요|더주세여|있어요|있나요|한병|한잔)$|물한병|물한잔)/;
 const SEARCH_OBJECT_RULES = [
   {
     id: "room",
@@ -582,6 +728,18 @@ const SEARCH_OBJECT_RULES = [
     phrases: ["과일 있어요?", "과일 주스 있어요?"],
   },
   {
+    id: "plant",
+    patterns: [/식물|화초|나무|꽃|화분|잎|잎사귀|씨앗|종자|정원|꽃집|꽃다발/],
+    focusTerms: ["식물", "꽃", "화분"],
+    terms: ["식물", "나무", "꽃", "화분", "잎", "씨앗", "정원", "꽃집"],
+    related: ["식물", "나무", "꽃", "화분", "잎", "씨앗", "정원", "꽃집"],
+    display: ["식물"],
+    tags: ["기본회화", "쇼핑"],
+    avoidTags: ["일터"],
+    blockedTerms: ["물", "생수", "차가운물", "따뜻한물"],
+    phrases: ["식물 있어요?", "화분 하나 주세요", "꽃집이 어디예요?"],
+  },
+  {
     id: "juice",
     patterns: [/주스|쥬스|음료/],
     terms: ["주스", "음료", "과일주스"],
@@ -646,7 +804,7 @@ const SEARCH_OBJECT_RULES = [
   },
   {
     id: "water",
-    patterns: [/물|생수|마실물|차가운물|따뜻한물/],
+    patterns: [WATER_QUERY_PATTERN],
     terms: ["물", "생수", "차가운 물", "따뜻한 물"],
     related: ["차가운 물", "따뜻한 물"],
     display: ["물"],
@@ -1687,7 +1845,7 @@ const QUERY_BUNDLES = [
     tags: ["식당", "쇼핑"],
   },
   {
-    patterns: [/(물|생수|마실)/],
+    patterns: [WATER_QUERY_PATTERN],
     primary: ["물", "생수"],
     related: ["차가운 물", "따뜻한 물"],
     display: ["물"],
@@ -1742,7 +1900,7 @@ const QUERY_PARTS = [
   { patterns: [/주세요|부탁|도와|해줘/], related: ["주세요", "부탁"], display: ["부탁"], tags: ["기본회화"] },
   { patterns: [/얼마|가격|비싸|깎/], primary: ["얼마", "가격"], related: ["비싸다", "깎아주세요"], display: ["가격"], tags: ["쇼핑"] },
   { patterns: [/계산|결제|영수증|카드/], primary: ["계산"], related: ["결제", "영수증", "카드"], display: ["계산"], tags: ["식당", "쇼핑"] },
-  { patterns: [/물|생수/], primary: ["물", "생수"], related: ["차가운 물", "따뜻한 물"], display: ["물"], tags: ["식당", "건강"] },
+  { patterns: [WATER_QUERY_PATTERN], primary: ["물", "생수"], related: ["차가운 물", "따뜻한 물"], display: ["물"], tags: ["식당", "건강"] },
   { patterns: [/화장실|욕실|변기/], primary: ["화장실"], related: ["욕실", "어디", "가다"], display: ["화장실"], tags: ["이동", "건강"] },
   { patterns: [/매표소|발권\s*창구|티켓\s*부스|티켓\s*창구|표\s*(?:사는|파는)\s*곳/], primary: ["매표소", "티켓", "표"], related: ["매표소가 어디예요?", "표 파는 곳이 어디예요?", "여기서 표를 사요?"], display: ["매표소"], tags: ["이동", "쇼핑"] },
   { patterns: [/가다|간다|가요|갑니다|갈게|갈래|가고|갔다/], primary: ["가다"], related: ["어디", "화장실", "공항"], display: ["가다"], tags: ["이동", "기본회화"] },
@@ -2916,6 +3074,9 @@ function buildIntentHints(query, patternTexts) {
   if (objectRules.some((rule) => rule.id === "gift")) {
     objectRules = objectRules.filter((rule) => !["water", "juice", "fruit"].includes(rule.id));
   }
+  if (objectRules.some((rule) => rule.id === "plant")) {
+    objectRules = objectRules.filter((rule) => rule.id !== "water");
+  }
   if (objectRules.some((rule) => rule.id === "giftBag")) {
     objectRules = objectRules.filter((rule) => rule.id !== "gift");
   }
@@ -3223,6 +3384,20 @@ function expandQueryVariants(query, rawTokens = []) {
     }
     if (/세탁기|건조기/.test(item)) {
       variants.push("세탁기", "건조기", "세탁기 어디에요?", "건조기 있어요?", "세탁기 쓰고 싶어요");
+    }
+    if (/식물|화초|나무|꽃|화분|잎|잎사귀|씨앗|종자|정원|꽃집|꽃다발/.test(item)) {
+      variants.push(
+        "식물",
+        "나무",
+        "꽃",
+        "화분",
+        "잎",
+        "씨앗",
+        "정원",
+        "꽃집",
+        "화분 하나 주세요",
+        "꽃집이 어디예요?"
+      );
     }
     if (/주스|쥬스/.test(item)) {
       variants.push("음료", "과일", "물");
