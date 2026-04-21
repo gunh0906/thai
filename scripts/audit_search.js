@@ -111,6 +111,7 @@ function buildAppContext(rootDir) {
         getMergedData,
         buildSearchProfile,
         buildGeneratedNumberEntries,
+        buildGeneratedDateEntries,
         buildGeneratedTimeQuestionEntries,
         buildGeneratedTimeEntries,
         buildGeneratedComposedEntries,
@@ -123,7 +124,9 @@ function buildAppContext(rootDir) {
         getSentenceResults,
         uniqueById,
         uniqueByMeaning,
+        uniqueByCompactKorean,
         mergeGeneratedEntrySets,
+        finalizeSearchEntries,
         isSentenceLikeVocabEntry,
         isUtilityLabelVocabEntry,
       };
@@ -141,35 +144,37 @@ function createSearchRunner(context) {
     const merged = api.getMergedData();
     const generated = api.buildGeneratedNumberEntries(query);
     const numberMode = generated.vocab.length > 0;
-    const generatedTimeQuestion = !numberMode ? api.buildGeneratedTimeQuestionEntries(query) : { vocab: [], sentences: [] };
-    const timeQuestionMode = !numberMode && generatedTimeQuestion.vocab.length > 0;
-    const generatedTime = !numberMode && !timeQuestionMode ? api.buildGeneratedTimeEntries(query) : { vocab: [], sentences: [] };
-    const timeMode = !numberMode && !timeQuestionMode && generatedTime.vocab.length > 0;
-    const profile = api.buildSearchProfile(query, numberMode || timeQuestionMode || timeMode ? [] : merged.vocab);
+    const generatedDate = !numberMode ? api.buildGeneratedDateEntries(query) : { vocab: [], sentences: [] };
+    const dateMode = !numberMode && generatedDate.vocab.length > 0;
+    const generatedTimeQuestion = !numberMode && !dateMode ? api.buildGeneratedTimeQuestionEntries(query) : { vocab: [], sentences: [] };
+    const timeQuestionMode = !numberMode && !dateMode && generatedTimeQuestion.vocab.length > 0;
+    const generatedTime = !numberMode && !dateMode && !timeQuestionMode ? api.buildGeneratedTimeEntries(query) : { vocab: [], sentences: [] };
+    const timeMode = !numberMode && !dateMode && !timeQuestionMode && generatedTime.vocab.length > 0;
+    const profile = api.buildSearchProfile(query, numberMode || dateMode || timeQuestionMode || timeMode ? [] : merged.vocab);
 
-    const exactVocab = numberMode ? null : api.findExactEntry(merged.vocab, profile);
+    const exactVocab = numberMode || dateMode ? null : api.findExactEntry(merged.vocab, profile);
     const preliminaryVocab =
-      numberMode || timeQuestionMode || timeMode
+      numberMode || dateMode || timeQuestionMode || timeMode
         ? []
         : api.uniqueById([...(exactVocab ? [exactVocab] : []), ...api.getVocabResults(merged.vocab, profile)]);
     const generatedComposed =
-      !numberMode && !timeQuestionMode && !timeMode
+      !numberMode && !dateMode && !timeQuestionMode && !timeMode
         ? api.buildGeneratedComposedEntries(query, profile, merged.vocab)
         : { vocab: [], sentences: [], suppressFallbackSentences: false };
     const generatedWhereQuestion =
-      !numberMode && !timeQuestionMode && !timeMode
+      !numberMode && !dateMode && !timeQuestionMode && !timeMode
         ? api.buildGeneratedWhereQuestionEntries(query, profile, merged.vocab)
         : { vocab: [], sentences: [], suppressFallbackSentences: false };
     const generatedWhatQuestion =
-      !numberMode && !timeQuestionMode && !timeMode
+      !numberMode && !dateMode && !timeQuestionMode && !timeMode
         ? api.buildGeneratedWhatQuestionEntries(query, profile, merged.vocab)
         : { vocab: [], sentences: [], suppressFallbackSentences: false };
     const generatedPredicate =
-      !numberMode && !timeQuestionMode && !timeMode
+      !numberMode && !dateMode && !timeQuestionMode && !timeMode
         ? api.buildGeneratedPredicateEntries(query)
         : { vocab: [], sentences: [], suppressFallbackSentences: false };
     const generatedThaiMeaning =
-      !numberMode && !timeQuestionMode && !timeMode
+      !numberMode && !dateMode && !timeQuestionMode && !timeMode
         ? api.buildGeneratedThaiMeaningEntries(query, profile, merged.vocab)
         : { vocab: [], sentences: [], suppressFallbackSentences: false };
     const generatedAssist = api.mergeGeneratedEntrySets(
@@ -179,7 +184,7 @@ function createSearchRunner(context) {
       generatedPredicate,
       generatedThaiMeaning
     );
-    const exactSentence = numberMode ? null : api.findExactEntry(merged.sentences, profile, { includeTemplates: true });
+    const exactSentence = numberMode || dateMode ? null : api.findExactEntry(merged.sentences, profile, { includeTemplates: true });
     const strictPhraseMode = Boolean(profile.templateTerms.length || (profile.objectTerms.length && profile.actionTerms.length));
     const safeExactSentence =
       (strictPhraseMode && exactSentence?.source === "generated-bulk") || generatedWhereQuestion.suppressFallbackSentences
@@ -189,17 +194,19 @@ function createSearchRunner(context) {
       generatedAssist.vocab.length || generatedAssist.sentences.length
         ? preliminaryVocab.filter((entry) => entry.source !== "generated-bulk")
         : preliminaryVocab;
-    const allVocab = numberMode
+    const rawVocab = numberMode
       ? generated.vocab
+      : dateMode
+        ? generatedDate.vocab
       : timeQuestionMode
         ? generatedTimeQuestion.vocab
         : timeMode
           ? generatedTime.vocab
           : api.uniqueByMeaning(api.uniqueById([...generatedAssist.vocab, ...refinedVocab]));
-    const vocab = allVocab.slice(0, 5);
+    const vocab = api.finalizeSearchEntries(rawVocab, profile, "vocab", 5);
 
     const refinedSentenceCandidates =
-      numberMode || timeQuestionMode || timeMode
+      numberMode || dateMode || timeQuestionMode || timeMode
         ? []
         : generatedAssist.suppressFallbackSentences
           ? []
@@ -214,9 +221,14 @@ function createSearchRunner(context) {
                   profile,
                   api.uniqueByMeaning([...generatedAssist.vocab, ...refinedVocab])
                 ));
-    const sentences = (
+    const rawSentences = (
       numberMode
         ? generated.sentences
+        : dateMode
+          ? api.uniqueById([
+              ...(safeExactSentence ? [safeExactSentence] : []),
+              ...generatedDate.sentences,
+            ])
         : timeQuestionMode
           ? api.uniqueById([
               ...(safeExactSentence ? [safeExactSentence] : []),
@@ -229,7 +241,8 @@ function createSearchRunner(context) {
                 ...generatedAssist.sentences,
                 ...refinedSentenceCandidates,
               ]))
-    ).slice(0, 5);
+    );
+    const sentences = api.finalizeSearchEntries(rawSentences, profile, "sentence", 5);
 
     return { profile, vocab, sentences };
   }

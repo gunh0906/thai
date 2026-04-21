@@ -1,7 +1,7 @@
 ﻿const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
 const AI_STORAGE_KEY = "thai-pocketbook-ai-v1";
-const APP_VERSION = "20260416y";
+const APP_VERSION = "20260421b";
 const AI_ASSIST_MIN_QUERY_LENGTH = 2;
 const AI_RESULT_LIMITS = {
   vocab: 3,
@@ -324,6 +324,66 @@ const SUPPLEMENTAL_DATA = {
       tags: ["쇼핑"],
       keywords: ["꽃집", "꽃 가게", "꽃", "꽃다발", "식물", "화분"],
     },
+    {
+      id: "supp-vocab-thai-language",
+      kind: "vocab",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "파싸 타이",
+      thaiScript: "ภาษาไทย",
+      korean: "태국어",
+      note: "태국어 / 태국말",
+      tags: ["기본회화"],
+      keywords: ["태국어", "태국말", "번역", "해석", "언어"],
+    },
+    {
+      id: "supp-vocab-korean-language",
+      kind: "vocab",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "파싸 까올리",
+      thaiScript: "ภาษาเกาหลี",
+      korean: "한국어",
+      note: "한국어 / 한국말",
+      tags: ["기본회화"],
+      keywords: ["한국어", "한국말", "번역", "해석", "언어"],
+    },
+    {
+      id: "supp-vocab-english-language",
+      kind: "vocab",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "파싸 앙끄릿",
+      thaiScript: "ภาษาอังกฤษ",
+      korean: "영어",
+      note: "영어 / 영어 표현",
+      tags: ["기본회화"],
+      keywords: ["영어", "영문", "번역", "해석", "언어"],
+    },
+    {
+      id: "supp-vocab-noisy-generic",
+      kind: "vocab",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "씨앙 당",
+      thaiScript: "เสียงดัง",
+      korean: "시끄럽다",
+      note: "소리가 커서 시끄러운 상태",
+      tags: ["기본회화"],
+      keywords: ["시끄럽다", "시끄러워요", "소음", "소리", "조용하다"],
+    },
+    {
+      id: "supp-vocab-price-generic",
+      kind: "vocab",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "타오라이",
+      thaiScript: "เท่าไร",
+      korean: "얼마예요",
+      note: "가격이나 요금을 물을 때",
+      tags: ["쇼핑"],
+      keywords: ["얼마예요", "얼마에요", "가격", "요금", "비용"],
+    },
   ],
   sentences: [
     {
@@ -542,6 +602,54 @@ const SUPPLEMENTAL_DATA = {
       tags: ["기본회화"],
       keywords: ["식물", "좋아하다", "나무", "꽃", "화초"],
     },
+    {
+      id: "supp-sentence-show-thai-language",
+      kind: "sentence",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "츄어이 벅 펜 파싸 타이 너이 캅",
+      thaiScript: "ช่วยบอกเป็นภาษาไทยหน่อยครับ",
+      korean: "태국어로 보여 주세요",
+      note: "태국어로 다시 보여 달라고 할 때",
+      tags: ["기본회화"],
+      keywords: ["태국어로 보여줘", "태국어로 보여 주세요", "태국어", "번역", "해석"],
+    },
+    {
+      id: "supp-sentence-show-korean-language",
+      kind: "sentence",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "츄어이 벅 펜 파싸 까올리 너이 캅",
+      thaiScript: "ช่วยบอกเป็นภาษาเกาหลีหน่อยครับ",
+      korean: "한국어로 보여 주세요",
+      note: "한국어로 다시 보여 달라고 할 때",
+      tags: ["기본회화"],
+      keywords: ["한국어로 보여줘", "한국어로 보여 주세요", "한국어", "번역", "해석"],
+    },
+    {
+      id: "supp-sentence-write-thai-language",
+      kind: "sentence",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "츄어이 키안 펜 파싸 타이 너이 캅",
+      thaiScript: "ช่วยเขียนเป็นภาษาไทยหน่อยครับ",
+      korean: "태국어로 써 주세요",
+      note: "태국어로 적어 달라고 할 때",
+      tags: ["기본회화"],
+      keywords: ["태국어로 써줘", "태국어로 적어줘", "태국어", "번역", "해석"],
+    },
+    {
+      id: "supp-sentence-noisy-generic",
+      kind: "sentence",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "당 막 캅",
+      thaiScript: "ดังมากครับ",
+      korean: "너무 시끄러워요",
+      note: "상황을 특정하지 않고 그냥 시끄럽다고 말할 때",
+      tags: ["기본회화"],
+      keywords: ["시끄럽다", "시끄러워요", "너무 시끄러워요", "소음"],
+    },
   ],
 };
 
@@ -612,11 +720,11 @@ const SEARCH_OBJECT_RULES = [
     id: "noise",
     patterns: [/시끄럽|시끄러|소음|조용하|조용해|조용한/],
     terms: ["시끄럽다", "소음", "시끄러워요"],
-    related: ["시끄러워요", "방이 시끄러워요", "이 방은 너무 시끄러워요", "조용한 방 있나요?"],
+    related: ["시끄러워요", "너무 시끄러워요", "소음이 있어요", "방이 시끄러워요", "조용한 방 있나요?"],
     display: ["시끄럽다", "소음"],
     tags: ["이동", "기본회화"],
     avoidTags: ["일터"],
-    phrases: ["시끄러워요", "방이 시끄러워요", "이 방은 너무 시끄러워요", "조용한 방 있나요?"],
+    phrases: ["시끄러워요", "너무 시끄러워요", "방이 시끄러워요", "이 방은 너무 시끄러워요", "조용한 방 있나요?"],
   },
   {
     id: "machineNoise",
@@ -810,7 +918,29 @@ const SEARCH_OBJECT_RULES = [
     display: ["물"],
     tags: ["식당", "건강"],
     avoidTags: ["일터"],
+    blockedTerms: ["누수", "물샘", "물 샘"],
     phrases: ["물 주세요", "차가운 물 주세요"],
+  },
+  {
+    id: "language",
+    patterns: [/태국어|태국말|한국어|한국말|영어|영문|번역|해석/],
+    focusTerms: ["태국어", "한국어"],
+    terms: ["태국어", "한국어", "영어", "번역", "해석"],
+    related: ["태국어로 보여 주세요", "한국어로 보여 주세요", "태국어로 써 주세요"],
+    display: ["태국어"],
+    tags: ["기본회화"],
+    phrases: ["태국어로 보여 주세요", "한국어로 보여 주세요", "태국어로 써 주세요"],
+  },
+  {
+    id: "smokingAction",
+    patterns: [/담배\s*피우|담배피우|피워도|피워|흡연해|담배펴/],
+    terms: ["담배 피우다", "담배", "금연"],
+    related: ["담배 피워도 돼요?", "여기서 담배 피워도 돼요?", "금연 구역이에요"],
+    display: ["담배 피우다"],
+    tags: ["기본회화", "이동"],
+    avoidTags: ["일터"],
+    blockedTerms: ["흡연실"],
+    phrases: ["담배 피워도 돼요?", "여기서 담배 피워도 돼요?", "금연 구역이에요"],
   },
   {
     id: "wetTissue",
@@ -1095,11 +1225,11 @@ const SEARCH_OBJECT_RULES = [
     id: "smoking",
     patterns: [/담배|흡연|금연|흡연실|담배피우|라이터|재떨이|전자담배/],
     terms: ["담배", "담배 피우다", "흡연실", "라이터", "재떨이"],
-    related: ["담배 피워도 돼요?", "흡연실이 어디예요?", "금연 구역이에요", "라이터 있어요?", "재떨이 있어요?"],
+    related: ["흡연실이 어디예요?", "담배 피워도 돼요?", "금연 구역이에요", "라이터 있어요?", "재떨이 있어요?"],
     display: ["담배", "흡연실"],
     tags: ["기본회화", "이동"],
     avoidTags: ["일터"],
-    phrases: ["담배 피워도 돼요?", "흡연실이 어디예요?", "금연 구역이에요", "라이터 있어요?", "재떨이 있어요?"],
+    phrases: ["흡연실이 어디예요?", "담배 피워도 돼요?", "금연 구역이에요", "라이터 있어요?", "재떨이 있어요?"],
   },
   {
     id: "beauty",
@@ -1215,11 +1345,11 @@ const SEARCH_OBJECT_RULES = [
     id: "price",
     patterns: [/얼마|가격|요금|비용|비싸|깎|할인/],
     terms: ["가격", "얼마", "얼마예요"],
-    related: ["얼마예요", "깎아주세요", "할인"],
-    display: ["가격"],
+    related: ["얼마예요", "이거 얼마예요?", "가격", "요금"],
+    display: ["얼마"],
     tags: ["쇼핑"],
     avoidTags: ["일터"],
-    phrases: ["얼마예요?", "좀 깎아주세요"],
+    phrases: ["얼마예요?", "이거 얼마예요?"],
   },
   {
     id: "hospital",
@@ -1833,8 +1963,8 @@ const QUERY_BUNDLES = [
   {
     patterns: [/(얼마|가격|비싸|깎|할인)/],
     primary: ["얼마", "가격"],
-    related: ["얼마예요", "깎아주세요", "할인", "비싸다", "카드", "영수증"],
-    display: ["가격"],
+    related: ["얼마예요", "이거 얼마예요?", "가격", "요금", "카드", "영수증"],
+    display: ["얼마"],
     tags: ["쇼핑"],
   },
   {
@@ -1898,7 +2028,7 @@ const QUERY_PARTS = [
   },
   { patterns: [/바꿔|바꾸|변경|교체/], primary: ["바꾸다", "변경"], related: ["방 바꿔주세요"], display: ["바꾸다"], tags: ["이동"] },
   { patterns: [/주세요|부탁|도와|해줘/], related: ["주세요", "부탁"], display: ["부탁"], tags: ["기본회화"] },
-  { patterns: [/얼마|가격|비싸|깎/], primary: ["얼마", "가격"], related: ["비싸다", "깎아주세요"], display: ["가격"], tags: ["쇼핑"] },
+  { patterns: [/얼마|가격|요금|비용/], primary: ["얼마", "가격"], related: ["얼마예요", "이거 얼마예요?", "가격", "요금"], display: ["얼마"], tags: ["쇼핑"] },
   { patterns: [/계산|결제|영수증|카드/], primary: ["계산"], related: ["결제", "영수증", "카드"], display: ["계산"], tags: ["식당", "쇼핑"] },
   { patterns: [WATER_QUERY_PATTERN], primary: ["물", "생수"], related: ["차가운 물", "따뜻한 물"], display: ["물"], tags: ["식당", "건강"] },
   { patterns: [/화장실|욕실|변기/], primary: ["화장실"], related: ["욕실", "어디", "가다"], display: ["화장실"], tags: ["이동", "건강"] },
@@ -2160,10 +2290,17 @@ const QUERY_ALIASES = [
     tags: ["기본회화"],
   },
   {
-    matches: ["담배피우다", "담배피워도돼요", "흡연실"],
-    primary: ["담배", "담배 피우다"],
-    related: ["담배 피워도 돼요?", "흡연실이 어디예요?", "여기서 담배 피우면 안 돼요?"],
-    display: ["담배"],
+    matches: ["담배피우다", "담배피워도돼요"],
+    primary: ["담배 피우다", "담배"],
+    related: ["담배 피워도 돼요?", "여기서 담배 피워도 돼요?", "금연 구역이에요"],
+    display: ["담배 피우다"],
+    tags: ["기본회화", "이동"],
+  },
+  {
+    matches: ["흡연실"],
+    primary: ["흡연실", "담배"],
+    related: ["흡연실이 어디예요?", "담배 피워도 돼요?"],
+    display: ["흡연실"],
     tags: ["기본회화", "이동"],
   },
   {
@@ -2230,11 +2367,25 @@ const QUERY_ALIASES = [
     tags: ["기본회화"],
   },
   {
-    matches: ["얼마에요", "얼마예요", "가격", "요금", "비용", "얼마", "깎아주세요", "할인", "비싸요", "싸요"],
+    matches: ["얼마에요", "얼마예요", "가격", "요금", "비용", "얼마"],
     primary: ["얼마", "가격"],
-    related: ["비용", "요금", "할인", "깎아주세요", "비싸다", "싸다", "카드", "현금"],
-    display: ["가격"],
+    related: ["얼마예요", "이거 얼마예요?", "비용", "요금"],
+    display: ["얼마"],
     tags: ["쇼핑"],
+  },
+  {
+    matches: ["깎아주세요", "할인", "비싸요", "싸요"],
+    primary: ["깎다", "할인", "비싸다"],
+    related: ["깎아주세요", "조금만 더 깎아 주세요", "너무 비싸요", "할인돼요?"],
+    display: ["깎다"],
+    tags: ["쇼핑"],
+  },
+  {
+    matches: ["태국어", "태국말", "태국어로보여줘", "태국어로써줘", "한국어", "한국말", "한국어로보여줘", "영어"],
+    primary: ["태국어", "한국어", "영어"],
+    related: ["태국어로 보여 주세요", "한국어로 보여 주세요", "태국어로 써 주세요"],
+    display: ["태국어"],
+    tags: ["기본회화"],
   },
   {
     matches: ["계산해주세요", "계산", "결제", "카드돼요", "카드되나요", "영수증", "환불", "교환", "큐알", "qr"],
@@ -2517,7 +2668,7 @@ const PREDICATE_QUERY_VARIANTS = {
   "공부하다": ["공부해요", "태국어 공부하고 있어요", "배워요"],
   "언어": ["무슨 언어예요?", "한국어", "영어"],
   "위험": ["위험해요", "위험하니까 조심하세요"],
-  "시끄럽다": ["시끄러워요", "방이 시끄러워요", "이 방은 너무 시끄러워요"],
+  "시끄럽다": ["시끄러워요", "너무 시끄러워요", "소음이 있어요"],
   "강하다": ["강해요"],
   "약하다": ["약해요"],
   "깨끗하다": ["깨끗해요"],
@@ -3077,6 +3228,9 @@ function buildIntentHints(query, patternTexts) {
   if (objectRules.some((rule) => rule.id === "plant")) {
     objectRules = objectRules.filter((rule) => rule.id !== "water");
   }
+  if (objectRules.some((rule) => rule.id === "smokingAction")) {
+    objectRules = objectRules.filter((rule) => rule.id !== "smoking");
+  }
   if (objectRules.some((rule) => rule.id === "giftBag")) {
     objectRules = objectRules.filter((rule) => rule.id !== "gift");
   }
@@ -3399,13 +3553,26 @@ function expandQueryVariants(query, rawTokens = []) {
         "꽃집이 어디예요?"
       );
     }
+    if (/태국어|태국말|한국어|한국말|영어|영문/.test(item)) {
+      variants.push(
+        "태국어",
+        "한국어",
+        "영어",
+        "태국어로 보여 주세요",
+        "한국어로 보여 주세요",
+        "태국어로 써 주세요"
+      );
+    }
     if (/주스|쥬스/.test(item)) {
       variants.push("음료", "과일", "물");
     }
     if (machineNoiseQuery && /시끄럽|소음/.test(item)) {
       variants.push("기계", "기계 소음", "기계가 너무 시끄러워요", "기계 소음이 심해요", "기계를 확인해 주세요");
     } else if (/시끄럽|소음/.test(item)) {
-      variants.push("시끄러워요", "소음", "방이 시끄러워요", "이 방은 너무 시끄러워요");
+      variants.push("시끄럽다", "시끄러워요", "너무 시끄러워요", "소음");
+      if (/방|객실|룸/.test(normalizedQuery) || /방|객실|룸/.test(item)) {
+        variants.push("방이 시끄러워요", "이 방은 너무 시끄러워요", "조용한 방 있나요?");
+      }
     }
     if (/조용하/.test(item)) {
       variants.push("조용한 방", "소음 없는 방", "방");
@@ -3469,9 +3636,12 @@ function expandQueryVariants(query, rawTokens = []) {
       variants.push("잘하다", "잘하고 있어요", "잘했어요", "대단해요", "고생 많았어요");
     }
     if (/담배|흡연|금연|라이터|재떨이|전자담배/.test(item)) {
-      variants.push("담배", "담배 피우다", "담배 피워도 돼요?", "금연 구역", "라이터 있어요?", "재떨이 있어요?");
+      variants.push("담배", "담배 피우다", "담배 피워도 돼요?", "여기서 담배 피워도 돼요?", "금연 구역");
       if (!/피우|피워|흡연해/.test(item)) {
         variants.push("흡연실");
+      }
+      if (/라이터|재떨이/.test(item)) {
+        variants.push("라이터 있어요?", "재떨이 있어요?");
       }
     }
     if (/예쁘|이쁘|예뻐|이뻐|귀엽|멋있|잘생겼/.test(item)) {
@@ -3546,7 +3716,10 @@ function expandQueryVariants(query, rawTokens = []) {
       variants.push("조퇴", "조퇴하고 싶어요", "조퇴해도 될까요?");
     }
     if (/기숙사|기숙사비|숙소비|공과금|전기세|전기요금|수도세|수도요금|가스비|가스요금|인터넷비|와이파이요금|관리비/.test(item)) {
-      variants.push("기숙사", "공과금", "전기세", "수도세", "기숙사에 문제가 있어요", "기숙사비 얼마예요?", "공과금은 어디서 내요?");
+      variants.push("기숙사", "공과금", "전기세", "수도세", "기숙사비 얼마예요?", "공과금은 어디서 내요?");
+      if (/문제|고장|이상|안돼|안 돼|불편/.test(item)) {
+        variants.push("기숙사에 문제가 있어요");
+      }
     }
     if (/버스시간|버스시간표|첫차|막차|통근버스|셔틀버스|회사버스|버스몇시|버스가몇시에와요/.test(item)) {
       variants.push("버스 시간표", "통근버스", "첫차", "막차", "버스 시간표 보여 주세요", "버스가 몇 시에 와요?", "막차가 몇 시예요?");
@@ -4559,6 +4732,10 @@ function findComposableObjectEntry(entries, objectCompacts) {
 function createGeneratedComposedSentence(query, actionId, objectLabel, objectThaiKo, objectThaiScript, tags = [], keywords = []) {
   const template = ACTION_COMPOSITION_TEMPLATES[actionId];
   if (!template || !objectLabel || !objectThaiKo || !objectThaiScript) return null;
+  const koreanText =
+    actionId === "show" && /(?:태국어|한국어|영어)$/.test(objectLabel)
+      ? `${attachKoreanDirectionalParticle(objectLabel)} 보여 주세요`
+      : template.korean(objectLabel);
 
   return hydrateEntry(
     {
@@ -4568,7 +4745,7 @@ function createGeneratedComposedSentence(query, actionId, objectLabel, objectTha
       sheet: "자동 조합",
       thai: template.thaiKo(objectThaiKo),
       thaiScript: template.thaiScript(objectThaiScript),
-      korean: template.korean(objectLabel),
+      korean: koreanText,
       note: `입력한 표현에서 목적어와 동사를 분리해 자동 조합 · ${template.note}`,
       tags: unique(["기본회화", ...tags]),
       keywords: unique([query, objectLabel, ...keywords, template.label, actionId, "자동 조합"]),
@@ -6626,6 +6803,88 @@ function scoreEntry(entry, searchProfile, kind) {
   }
   score += getEntrySourceScore(entry, kind);
   if (/모르|몰라/.test(searchProfile.normalized)) {
+    const unknownRelated =
+      /모르|몰라|이해/.test(index.korean) ||
+      /모르|몰라|이해/.test(index.note) ||
+      index.keywords.some((keyword) => /모르|몰라|이해/.test(keyword));
+    if (!unknownRelated) {
+      score -= kind === "sentence" ? 320 : 260;
+    }
+  }
+  if (/(?:담배\s*피우|담배피우|피워도|피워)/.test(searchProfile.normalized)) {
+    if (/흡연실이\s*어디(?:예요|에요)?/.test(index.korean)) {
+      score -= kind === "sentence" ? 240 : 200;
+    }
+    if (/담배\s*피워도\s*돼요|여기서\s*담배\s*피워도\s*돼요/.test(index.korean)) {
+      score += kind === "sentence" ? 260 : 160;
+    }
+  }
+  if (
+    /(?:^|\s)물\s*(?:주세요|주세여|줘요|줘|있어요|있나요)?$|생수|차가운\s*물|따뜻한\s*물|찬물|냉수/.test(
+      searchProfile.normalized
+    ) &&
+    /누수|물\s*샘|물샘/.test(index.korean)
+  ) {
+    score -= kind === "sentence" ? 260 : 220;
+  }
+  if (
+    /(?:^|\s)물\s*(?:주세요|주세여|줘요|줘|있어요|있나요)?$|생수|차가운\s*물|따뜻한\s*물|찬물|냉수/.test(
+      searchProfile.normalized
+    ) &&
+    /물\s*많이\s*마시|온수/.test(index.korean)
+  ) {
+    score -= kind === "sentence" ? 180 : 140;
+  }
+  if (
+    /(?:태국어|한국어|영어).*(?:보여|써|적어|번역)|(?:보여|써|적어|번역).*(?:태국어|한국어|영어)/.test(
+      searchProfile.normalized
+    )
+  ) {
+    if (/태국어로\s*보여\s*주세요|한국어로\s*보여\s*주세요|태국어로\s*써\s*주세요/.test(index.korean)) {
+      score += kind === "sentence" ? 280 : 180;
+    }
+    if (/서류\s*보여|여기\s*보여|지도\s*보여/.test(index.korean)) {
+      score -= kind === "sentence" ? 220 : 160;
+    }
+    if (/공부|배워/.test(index.korean)) {
+      score -= kind === "sentence" ? 220 : 160;
+    }
+  }
+  if (
+    /얼마|가격|요금|비용/.test(searchProfile.normalized) &&
+    !/깎|깍|할인|비싸|싸게|흥정/.test(searchProfile.normalized) &&
+    /깎|할인|비싸/.test(index.korean) &&
+    !/얼마|가격|요금|비용/.test(index.korean)
+  ) {
+    score -= kind === "sentence" ? 220 : 180;
+  }
+  if (
+    /얼마|가격|요금|비용/.test(searchProfile.normalized) &&
+    !/깎|깍|할인|비싸|싸게|흥정/.test(searchProfile.normalized)
+  ) {
+    const priceRelated =
+      /얼마|가격|요금|비용/.test(index.korean) ||
+      index.keywords.some((keyword) => /얼마|가격|요금|비용/.test(keyword));
+    if (!priceRelated) {
+      score -= kind === "sentence" ? 260 : 210;
+    }
+  }
+  if (
+    /기숙사비|공과금|전기세|전기요금|수도세|수도요금|관리비/.test(searchProfile.normalized) &&
+    !/문제|고장|이상|불편/.test(searchProfile.normalized) &&
+    /문제/.test(index.korean)
+  ) {
+    score -= kind === "sentence" ? 240 : 180;
+  }
+  if (/시끄럽|소음/.test(searchProfile.normalized) && !/(기계|장비|설비|라인|공장|방|객실|룸)/.test(searchProfile.normalized)) {
+    if (/기계|장비|설비/.test(index.korean)) {
+      score -= kind === "sentence" ? 180 : 140;
+    }
+    if (/방/.test(index.korean)) {
+      score -= kind === "sentence" ? 80 : 60;
+    }
+  }
+  if (/모르|몰라/.test(searchProfile.normalized)) {
     if (/모르|몰라/.test(index.korean) || /모르|몰라/.test(index.note)) {
       score += kind === "sentence" ? 240 : 180;
     }
@@ -6845,7 +7104,12 @@ function getVocabResults(entries, searchProfile) {
     searchProfile.objectTerms.length ||
     searchProfile.templateTerms.length
   ) {
-    return preferredRanked.map(({ entry }) => entry);
+    return finalizeSearchEntries(
+      preferredRanked.map(({ entry }) => entry),
+      searchProfile,
+      "vocab",
+      RESULT_LIMITS.vocab + 6
+    );
   }
 
   const diversified = [];
@@ -6863,7 +7127,7 @@ function getVocabResults(entries, searchProfile) {
     diversified.push(entry);
   });
 
-  return diversified;
+  return finalizeSearchEntries(diversified, searchProfile, "vocab", RESULT_LIMITS.vocab + 6);
 }
 
 function getSentenceResults(entries, searchProfile, vocabSeeds) {
@@ -7002,30 +7266,72 @@ function getSentenceResults(entries, searchProfile, vocabSeeds) {
     !searchProfile.actionTerms.length &&
     !searchProfile.templateTerms.length
   ) {
-    return curatedDirect.map(({ entry }) => entry).slice(0, RESULT_LIMITS.sentences + 2);
+    return finalizeSearchEntries(
+      curatedDirect.map(({ entry }) => entry),
+      searchProfile,
+      "sentence",
+      RESULT_LIMITS.sentences + 2
+    );
+  }
+
+  if (nounLikeLookup && !curatedDirect.length && !curatedCompactDirect.length && !exactVariantDirect.length) {
+    return [];
   }
 
   if (nounLikeLookup && curatedCompactDirect.length) {
-    return uniqueById([
-      ...exactVariantDirect.map(({ entry }) => entry),
-      ...curatedCompactDirect.map(({ entry }) => entry),
-      ...prioritizedDirect.map(({ entry }) => entry),
-    ]).slice(0, RESULT_LIMITS.sentences + 3);
+    return finalizeSearchEntries(
+      uniqueById([
+        ...exactVariantDirect.map(({ entry }) => entry),
+        ...curatedCompactDirect.map(({ entry }) => entry),
+        ...prioritizedDirect.map(({ entry }) => entry),
+      ]),
+      searchProfile,
+      "sentence",
+      RESULT_LIMITS.sentences + 3
+    );
+  }
+
+  if (nounLikeLookup && curatedDirect.length) {
+    return finalizeSearchEntries(
+      uniqueById([
+        ...exactVariantDirect.map(({ entry }) => entry),
+        ...curatedDirect.map(({ entry }) => entry),
+        ...curatedCompactDirect.map(({ entry }) => entry),
+      ]),
+      searchProfile,
+      "sentence",
+      RESULT_LIMITS.sentences + 3
+    );
   }
 
   if (whereFocusedDirect.length) {
-    return whereFocusedDirect.map(({ entry }) => entry).slice(0, RESULT_LIMITS.sentences);
+    return finalizeSearchEntries(
+      whereFocusedDirect.map(({ entry }) => entry),
+      searchProfile,
+      "sentence",
+      RESULT_LIMITS.sentences
+    );
   }
 
   if (prioritizedDirect.length >= 3) {
-    return prioritizedDirect.map(({ entry }) => entry).slice(0, RESULT_LIMITS.sentences + 4);
+    return finalizeSearchEntries(
+      prioritizedDirect.map(({ entry }) => entry),
+      searchProfile,
+      "sentence",
+      RESULT_LIMITS.sentences + 4
+    );
   }
 
   if (
     prioritizedDirect.length >= 2 &&
     (searchProfile.objectTerms.length || searchProfile.templateTerms.length || searchProfile.actionTerms.length)
   ) {
-    return prioritizedDirect.map(({ entry }) => entry).slice(0, RESULT_LIMITS.sentences + 2);
+    return finalizeSearchEntries(
+      prioritizedDirect.map(({ entry }) => entry),
+      searchProfile,
+      "sentence",
+      RESULT_LIMITS.sentences + 2
+    );
   }
 
   const directIds = new Set(prioritizedDirect.map(({ entry }) => entry.id));
@@ -7093,10 +7399,15 @@ function getSentenceResults(entries, searchProfile, vocabSeeds) {
       return right.sharedPrimary - left.sharedPrimary;
     });
 
-  return uniqueById([
-    ...prioritizedDirect.map(({ entry }) => entry),
-    ...related.map(({ entry }) => entry),
-  ]).slice(0, RESULT_LIMITS.sentences + 4);
+  return finalizeSearchEntries(
+    uniqueById([
+      ...prioritizedDirect.map(({ entry }) => entry),
+      ...related.map(({ entry }) => entry),
+    ]),
+    searchProfile,
+    "sentence",
+    RESULT_LIMITS.sentences + 4
+  );
 }
 
 function uniqueById(entries) {
@@ -7120,6 +7431,160 @@ function uniqueByMeaning(entries) {
     seen.add(meaningKey);
     return true;
   });
+}
+
+function uniqueByCompactKorean(entries) {
+  const seen = new Set();
+  return entries.filter((entry) => {
+    const key = compactText(entry.korean);
+    if (!key) return true;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+function getEntrySearchTexts(entry) {
+  return unique(
+    [entry.korean, entry.note, getThaiScriptText(entry), ...(entry.keywords || [])]
+      .map((item) => compactText(item))
+      .filter(Boolean)
+  );
+}
+
+function getEntryCoreSearchTexts(entry) {
+  return unique([entry.korean, entry.note, getThaiScriptText(entry)].map((item) => compactText(item)).filter(Boolean));
+}
+
+function matchesEntrySearchTexts(entry, pattern) {
+  return getEntrySearchTexts(entry).some((text) => pattern.test(text));
+}
+
+function matchesEntryCoreSearchTexts(entry, pattern) {
+  return getEntryCoreSearchTexts(entry).some((text) => pattern.test(text));
+}
+
+function matchesEntryKoreanText(entry, pattern) {
+  const korean = compactText(entry.korean);
+  return Boolean(korean && pattern.test(korean));
+}
+
+function filterEntriesIfEnough(entries, predicate, minimum = 1) {
+  const filtered = entries.filter(predicate);
+  return filtered.length >= minimum ? filtered : entries;
+}
+
+function prioritizeEntriesIfEnough(entries, predicate, minimum = 1) {
+  const prioritized = entries.filter(predicate);
+  if (prioritized.length < minimum) return entries;
+  return [...prioritized, ...entries.filter((entry) => !predicate(entry))];
+}
+
+function isWaterRequestSearch(searchProfile) {
+  return /(?:^|\s)물\s*(?:주세요|주세여|줘요|줘|있어요|있나요)?$|생수|차가운\s*물|따뜻한\s*물|찬물|냉수/.test(
+    searchProfile.normalized
+  );
+}
+
+function isUnknownSearch(searchProfile) {
+  return /모르|몰라/.test(searchProfile.normalized);
+}
+
+function isGenericPriceSearch(searchProfile) {
+  return (
+    /얼마|가격|요금|비용/.test(searchProfile.normalized) &&
+    !/깎|깍|할인|비싸|싸게|흥정/.test(searchProfile.normalized)
+  );
+}
+
+function isDormitoryBillingSearch(searchProfile) {
+  return (
+    /기숙사비|공과금|전기세|전기요금|수도세|수도요금|관리비|가스비|가스요금|인터넷비|와이파이요금/.test(
+      searchProfile.normalized
+    ) && !/문제|고장|이상|불편/.test(searchProfile.normalized)
+  );
+}
+
+function isLanguageDisplaySearch(searchProfile) {
+  return /(?:태국어|한국어|영어).*(?:보여|써|적어|번역)|(?:보여|써|적어|번역).*(?:태국어|한국어|영어)/.test(
+    searchProfile.normalized
+  );
+}
+
+function isGenericNoiseSearch(searchProfile) {
+  return /시끄럽|소음/.test(searchProfile.normalized) && !/(기계|장비|설비|라인|공장|방|객실|룸)/.test(searchProfile.normalized);
+}
+
+function isEntryUnknownRelated(entry) {
+  return matchesEntryKoreanText(entry, /모르|몰라|모르겠|이해못|이해안/);
+}
+
+function isEntryWaterRequestRelated(entry) {
+  if (matchesEntryKoreanText(entry, /누수|물샘|물많이마시|온수|물티슈|물수건|식물|화분|나무|꽃/)) {
+    return false;
+  }
+  return matchesEntryKoreanText(entry, /물|생수|차가운물|따뜻한물|찬물|냉수/);
+}
+
+function isEntryPriceRelated(entry) {
+  return matchesEntryKoreanText(entry, /얼마|가격|요금|비용|계산|영수증|바트|원|결제/);
+}
+
+function isEntryDormitoryBillingRelated(entry) {
+  if (matchesEntryKoreanText(entry, /문제|고장|이상|불편/)) {
+    return false;
+  }
+  return matchesEntryKoreanText(entry, /기숙사비|공과금|전기세|전기요금|수도세|수도요금|관리비|가스비|가스요금|인터넷비|와이파이요금|납부|내요/);
+}
+
+function isEntryLanguageDisplayRelated(entry, kind) {
+  if (
+    matchesEntryKoreanText(entry, /(?:태국어|한국어|영어).*(?:보여|써|적어|번역)|(?:보여|써|적어|번역).*(?:태국어|한국어|영어)/)
+  ) {
+    return true;
+  }
+  return kind === "vocab" && matchesEntryKoreanText(entry, /태국어|한국어|영어|번역|해석/);
+}
+
+function isEntryGenericNoiseRelated(entry) {
+  return (
+    matchesEntryKoreanText(entry, /시끄럽|시끄러워|소음/) &&
+    !matchesEntryKoreanText(entry, /기계|장비|설비|라인|공장|방|객실|룸/)
+  );
+}
+
+function finalizeSearchEntries(entries, searchProfile, kind, limit) {
+  let result = uniqueByMeaning(uniqueById(entries));
+
+  if (kind === "sentence" || isLanguageDisplaySearch(searchProfile)) {
+    result = uniqueByCompactKorean(result);
+  }
+  if (isWaterRequestSearch(searchProfile)) {
+    result = filterEntriesIfEnough(result, isEntryWaterRequestRelated, 1);
+  }
+  if (isUnknownSearch(searchProfile)) {
+    result = filterEntriesIfEnough(result, isEntryUnknownRelated, 1);
+  }
+  if (isGenericPriceSearch(searchProfile)) {
+    result = filterEntriesIfEnough(result, isEntryPriceRelated, kind === "vocab" ? 2 : 1);
+  }
+  if (isDormitoryBillingSearch(searchProfile)) {
+    result = filterEntriesIfEnough(result, isEntryDormitoryBillingRelated, 1);
+  }
+  if (isLanguageDisplaySearch(searchProfile)) {
+    result =
+      kind === "sentence"
+        ? filterEntriesIfEnough(result, (entry) => isEntryLanguageDisplayRelated(entry, kind), 1)
+        : prioritizeEntriesIfEnough(result, (entry) => isEntryLanguageDisplayRelated(entry, kind), 1);
+  }
+  if (isGenericNoiseSearch(searchProfile)) {
+    result =
+      kind === "sentence"
+        ? filterEntriesIfEnough(result, isEntryGenericNoiseRelated, 2)
+        : prioritizeEntriesIfEnough(result, isEntryGenericNoiseRelated, 1);
+  }
+
+  return result.slice(0, limit);
 }
 
 function mergeGeneratedEntrySets(...groups) {
@@ -7290,7 +7755,8 @@ function isSimpleCompactLookup(searchProfile) {
     searchProfile.compact.length >= 2 &&
     !searchProfile.actionTerms.length &&
     !searchProfile.templateTerms.length &&
-    !searchProfile.anchorTerms.length
+    (!searchProfile.anchorTerms.length ||
+      searchProfile.anchorTerms.every((term) => compactText(term) === searchProfile.compact))
   );
 }
 
@@ -8316,7 +8782,7 @@ function computeSearchComputation(query = state.query) {
         : !numberMode && !dateMode && !timeQuestionMode && !timeMode
           ? getSentenceResults(sentenceSource, searchProfile, uniqueByMeaning([...generatedAssist.vocab, ...refinedVocabResults]))
           : [];
-  const allVocabResults = numberMode
+  const rawVocabResults = numberMode
     ? generated.vocab
     : dateMode
       ? generatedDate.vocab
@@ -8325,9 +8791,11 @@ function computeSearchComputation(query = state.query) {
       : timeMode
         ? generatedTime.vocab
         : uniqueByMeaning(uniqueById([...generatedAssist.vocab, ...refinedVocabResults]));
-  const vocabResults = query ? allVocabResults.slice(0, RESULT_LIMITS.vocab) : [];
-  const sentenceResults = query
-    ? (numberMode
+  const vocabResults = query
+    ? finalizeSearchEntries(rawVocabResults, searchProfile, "vocab", RESULT_LIMITS.vocab)
+    : [];
+  const rawSentenceResults = query
+    ? numberMode
         ? generated.sentences
         : dateMode
           ? generatedDate.sentences
@@ -8345,7 +8813,10 @@ function computeSearchComputation(query = state.query) {
                   ...generatedAssist.sentences,
                   ...refinedSentenceCandidates,
                 ])
-              ).slice(0, RESULT_LIMITS.sentences))
+              ).slice(0, RESULT_LIMITS.sentences)
+    : [];
+  const sentenceResults = query
+    ? finalizeSearchEntries(rawSentenceResults, searchProfile, "sentence", RESULT_LIMITS.sentences)
     : [];
   const thaiOnlySearch = isThaiOnlySearch(searchProfile);
 
