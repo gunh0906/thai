@@ -1,7 +1,7 @@
 ﻿const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
 const AI_STORAGE_KEY = "thai-pocketbook-ai-v1";
-const APP_VERSION = "20260421b";
+const APP_VERSION = "20260421c";
 const AI_ASSIST_MIN_QUERY_LENGTH = 2;
 const AI_RESULT_LIMITS = {
   vocab: 3,
@@ -12,6 +12,13 @@ const DEFAULT_AI_SETTINGS = {
   mode: "manual",
   endpoint: "",
   accessToken: "",
+};
+
+const AI_MODE_LABELS = {
+  manual: "수동 보강",
+  fallback: "결과 없을 때 자동",
+  auto: "결과 부족 시 자동",
+  "llm-only": "LLM 전용",
 };
 
 const baseData = window.BASE_DATA || {
@@ -3861,7 +3868,7 @@ function loadAiSettings() {
     const parsed = JSON.parse(raw);
     return {
       enabled: Boolean(parsed.enabled),
-      mode: parsed.mode === "auto" ? "auto" : "manual",
+      mode: normalizeAiMode(parsed.mode),
       endpoint: String(parsed.endpoint || "").trim(),
       accessToken: String(parsed.accessToken || "").trim(),
     };
@@ -3869,6 +3876,11 @@ function loadAiSettings() {
     console.error("AI 설정 로드 실패", error);
     return { ...DEFAULT_AI_SETTINGS };
   }
+}
+
+function normalizeAiMode(mode) {
+  if (mode === "auto" || mode === "fallback" || mode === "llm-only") return mode;
+  return "manual";
 }
 
 function saveCustomData() {
@@ -3949,7 +3961,7 @@ function hasConfiguredAiAssist() {
 function syncAiSettingsForm() {
   if (!elements.aiSettingsForm) return;
   if (elements.aiEnabledInput) elements.aiEnabledInput.checked = Boolean(state.aiSettings.enabled);
-  if (elements.aiModeInput) elements.aiModeInput.value = state.aiSettings.mode || "manual";
+  if (elements.aiModeInput) elements.aiModeInput.value = normalizeAiMode(state.aiSettings.mode);
   if (elements.aiEndpointInput) elements.aiEndpointInput.value = state.aiSettings.endpoint || "";
   if (elements.aiTokenInput) elements.aiTokenInput.value = state.aiSettings.accessToken || "";
 }
@@ -3957,11 +3969,8 @@ function syncAiSettingsForm() {
 function serializeAiContextEntry(entry) {
   return {
     korean: entry.korean,
-    thai: entry.thai,
     thaiScript: getThaiScriptText(entry),
-    tags: entry.tags || [],
-    note: entry.note || "",
-    source: entry.source || "",
+    tags: Array.isArray(entry.tags) ? entry.tags.slice(0, 3) : [],
   };
 }
 
@@ -4023,18 +4032,25 @@ function normalizeAiAssistResponse(payload, query) {
 }
 
 function buildAiAssistRequestPayload(context) {
+  const coverage = assessLocalSearchCoverage(context);
   return {
     query: String(context?.query || "").trim(),
     scenario: state.scenario,
-    mode: state.aiSettings.mode,
+    mode: normalizeAiMode(state.aiSettings.mode),
+    coverage: {
+      level: coverage.level,
+      vocabCount: coverage.vocabCount,
+      sentenceCount: coverage.sentenceCount,
+      hasExact: coverage.hasExact,
+    },
     searchProfile: {
-      displayTerms: (context?.searchProfile?.displayTerms || []).slice(0, 8),
-      primaryTerms: (context?.searchProfile?.primaryTerms || []).slice(0, 12),
-      tags: (context?.searchProfile?.tags || []).slice(0, 8),
+      displayTerms: (context?.searchProfile?.displayTerms || []).slice(0, 6),
+      primaryTerms: (context?.searchProfile?.primaryTerms || []).slice(0, 8),
+      tags: (context?.searchProfile?.tags || []).slice(0, 6),
     },
     localResults: {
-      vocab: (context?.vocabResults || []).slice(0, 6).map(serializeAiContextEntry),
-      sentences: (context?.sentenceResults || []).slice(0, 6).map(serializeAiContextEntry),
+      vocab: (context?.vocabResults || []).slice(0, 4).map(serializeAiContextEntry),
+      sentences: (context?.sentenceResults || []).slice(0, 4).map(serializeAiContextEntry),
     },
   };
 }
@@ -4046,14 +4062,65 @@ function isAiEligibleQuery(query) {
   return true;
 }
 
+function isAiBypassContext(context) {
+  return Boolean(context?.numberMode || context?.dateMode || context?.timeMode || context?.timeQuestionMode);
+}
+
+function assessLocalSearchCoverage(context) {
+  const vocabCount = (context?.vocabResults || []).length;
+  const sentenceCount = (context?.sentenceResults || []).length;
+  const total = vocabCount + sentenceCount;
+  const hasExact = Boolean(context?.exactVocabMatch || context?.exactSentenceMatch);
+  const missing = !hasExact && sentenceCount === 0 && vocabCount <= 1;
+  const strong = hasExact || (vocabCount >= 3 && sentenceCount >= 3);
+  const weak = !strong && !missing && (!sentenceCount || total <= 3 || (vocabCount < 2 && sentenceCount < 2));
+
+  return {
+    level: strong ? "strong" : missing ? "missing" : weak ? "weak" : "okay",
+    vocabCount,
+    sentenceCount,
+    total,
+    hasExact,
+  };
+}
+
+function isAiOnlyModeActive(context) {
+  return (
+    hasConfiguredAiAssist() &&
+    normalizeAiMode(state.aiSettings.mode) === "llm-only" &&
+    Boolean(context?.query) &&
+    isAiEligibleQuery(context.query) &&
+    !isAiBypassContext(context)
+  );
+}
+
+function getAiDisplayState(context) {
+  const sameQuery = Boolean(context?.query && state.aiAssist.query === context.query);
+  const aiResult = sameQuery && state.aiAssist.status === "done" ? state.aiAssist.result : null;
+  const aiOnly = isAiOnlyModeActive(context);
+
+  return {
+    aiOnly,
+    aiResult,
+    sameQuery,
+    loading: sameQuery && state.aiAssist.status === "loading",
+    error: sameQuery && state.aiAssist.status === "error",
+  };
+}
+
 function shouldAutoRunAiAssist(context) {
   if (!hasConfiguredAiAssist()) return false;
-  if (state.aiSettings.mode !== "auto") return false;
   if (!context || !isAiEligibleQuery(context.query)) return false;
-  if (context.numberMode || context.dateMode || context.timeMode || context.timeQuestionMode) return false;
-  if (context.exactVocabMatch || context.exactSentenceMatch) return false;
-  if ((context.vocabResults || []).length >= 3 && (context.sentenceResults || []).length >= 3) return false;
-  return true;
+  if (isAiBypassContext(context)) return false;
+
+  const mode = normalizeAiMode(state.aiSettings.mode);
+  const coverage = context.localCoverage || assessLocalSearchCoverage(context);
+
+  if (mode === "manual") return false;
+  if (mode === "llm-only") return true;
+  if (mode === "fallback") return coverage.level === "missing";
+  if (mode === "auto") return coverage.level === "missing" || coverage.level === "weak";
+  return false;
 }
 
 async function requestAiAssist(context = state.lastSearchContext, options = {}) {
@@ -4127,9 +4194,10 @@ async function requestAiAssist(context = state.lastSearchContext, options = {}) 
 function submitAiSettings(event) {
   event.preventDefault();
   const formData = new FormData(elements.aiSettingsForm);
+  const nextMode = normalizeAiMode(formData.get("mode"));
   state.aiSettings = {
     enabled: formData.get("enabled") === "on",
-    mode: formData.get("mode") === "auto" ? "auto" : "manual",
+    mode: nextMode,
     endpoint: String(formData.get("endpoint") || "").trim(),
     accessToken: String(formData.get("accessToken") || "").trim(),
   };
@@ -4137,7 +4205,7 @@ function submitAiSettings(event) {
   syncAiSettingsForm();
   if (elements.aiSettingsFeedback) {
     elements.aiSettingsFeedback.textContent = hasConfiguredAiAssist()
-      ? "AI 보강 설정을 저장했습니다."
+      ? `AI 설정을 저장했습니다. 현재 모드: ${AI_MODE_LABELS[nextMode] || "수동 보강"}`
       : "프록시 URL이 비어 있어 AI 보강은 아직 꺼진 상태입니다.";
   }
   render();
@@ -8558,13 +8626,17 @@ function renderAiAssist(context) {
 
   const query = String(context?.query || state.query || "").trim();
   const configured = hasConfiguredAiAssist();
+  const aiMode = normalizeAiMode(state.aiSettings.mode);
   const sameQuery = Boolean(query && state.aiAssist.query === query);
   const isLoading = sameQuery && state.aiAssist.status === "loading";
+  const aiOnly = isAiOnlyModeActive(context);
 
   elements.aiAssistButton.disabled = !query || isLoading;
-  elements.aiAssistButton.textContent = isLoading ? "AI 보는 중..." : "AI 보강";
+  elements.aiAssistButton.textContent = isLoading ? "AI 보는 중..." : aiMode === "manual" ? "AI 보강" : "AI 다시 보기";
   elements.aiAssistButton.title = configured
-    ? "로컬 검색이 애매할 때 AI가 뜻을 다시 풀어줍니다."
+    ? aiOnly
+      ? "LLM 전용 모드입니다. AI 결과를 메인 검색 결과로 보여줍니다."
+      : "로컬 검색이 애매하거나 비어 있을 때 AI가 뜻을 다시 풀어줍니다."
     : "메뉴에서 AI 프록시 URL을 저장하면 사용할 수 있습니다.";
 
   if (!query || (!configured && !isLoading) || (!sameQuery && state.aiAssist.status !== "loading")) {
@@ -8583,7 +8655,8 @@ function renderAiAssist(context) {
   elements.aiAssistStatus.textContent = "";
 
   if (state.aiAssist.status === "loading" && sameQuery) {
-    elements.aiAssistMeta.textContent = state.aiAssist.trigger === "auto" ? "자동 보강" : "수동 보강";
+    elements.aiAssistMeta.textContent =
+      state.aiAssist.trigger === "auto" ? AI_MODE_LABELS[aiMode] || "자동 보강" : "수동 보강";
     elements.aiAssistStatus.hidden = false;
     elements.aiAssistStatus.textContent = "AI가 검색어를 다시 해석하고 있어요.";
     return;
@@ -8606,12 +8679,18 @@ function renderAiAssist(context) {
   if (!totalCount) {
     elements.aiAssistMeta.textContent = "AI가 확실한 보강 표현을 찾지 못했습니다.";
     elements.aiAssistStatus.hidden = false;
-    elements.aiAssistStatus.textContent = "로컬 결과를 먼저 쓰고, 더 구체적인 검색어로 다시 시도해 주세요.";
+    elements.aiAssistStatus.textContent = aiOnly
+      ? "LLM 전용 모드에서는 AI 결과만 보여줍니다. 검색어를 더 구체적으로 바꾸거나 모드를 변경해 주세요."
+      : "로컬 결과를 먼저 쓰고, 더 구체적인 검색어로 다시 시도해 주세요.";
     return;
   }
 
   elements.aiAssistMeta.textContent =
-    result.model ? `${state.aiAssist.trigger === "auto" ? "자동 보강" : "수동 보강"} · ${result.model}` : state.aiAssist.trigger === "auto" ? "자동 보강" : "수동 보강";
+    result.model
+      ? `${state.aiAssist.trigger === "auto" ? AI_MODE_LABELS[aiMode] || "자동 보강" : "수동 보강"} · ${result.model}`
+      : state.aiAssist.trigger === "auto"
+        ? AI_MODE_LABELS[aiMode] || "자동 보강"
+        : "수동 보강";
   elements.aiAssistResults.appendChild(createAiSummaryCard(result, context?.searchProfile || null));
   result.vocab.forEach((entry) => {
     elements.aiAssistResults.appendChild(createEntryCard(entry, context?.searchProfile || null));
@@ -8874,6 +8953,22 @@ function render() {
       ? ` · 함께 찾은 핵심어: ${searchProfile.displayTerms.join(" / ")}`
       : "";
   const activeScenario = baseData.scenarios.find((item) => item.id === state.scenario);
+  const localSearchContext = {
+    query: state.query,
+    searchProfile,
+    vocabResults,
+    sentenceResults,
+    exactVocabMatch: Boolean(exactVocabMatch),
+    exactSentenceMatch: Boolean(safeExactSentenceMatch),
+    numberMode,
+    dateMode,
+    timeMode,
+    timeQuestionMode,
+  };
+  const localCoverage = assessLocalSearchCoverage(localSearchContext);
+  const aiDisplayState = getAiDisplayState({ ...localSearchContext, localCoverage });
+  const displayVocabResults = aiDisplayState.aiOnly ? aiDisplayState.aiResult?.vocab || [] : vocabResults;
+  const displaySentenceResults = aiDisplayState.aiOnly ? aiDisplayState.aiResult?.sentences || [] : sentenceResults;
 
   elements.searchInput.value = state.query;
   elements.datasetNote.textContent = baseData.note || "";
@@ -8881,6 +8976,8 @@ function render() {
 
   elements.searchStatus.textContent = browsing
     ? "한국어와 태국어 둘 다 검색할 수 있습니다. 한국어는 바로 쓸 태국어를, 태국어는 한국어 뜻을 먼저 보여줍니다."
+    : aiDisplayState.aiOnly
+      ? `LLM 전용 모드: AI가 검색어를 직접 해석해서 결과를 보여줍니다.${expandedHint}`
     : numberMode
       ? `숫자 변환: 읽기 ${vocabResults.length}개 · 활용 ${sentenceResults.length}개${expandedHint}`
       : dateMode
@@ -8902,7 +8999,9 @@ function render() {
 
   elements.activeSummary.textContent = browsing
     ? ""
-    : thaiOnlySearch
+    : aiDisplayState.aiOnly
+      ? `검색어 "${state.query}"를 LLM 전용 모드로 해석하고 있습니다.`
+      : thaiOnlySearch
       ? `검색어 "${state.query}"를 태국어에서 한국어 뜻 중심으로 찾고 있습니다.`
       : `검색어 "${state.query}"를 핵심 단어와 회화로 나눠서 찾고 있습니다.`;
 
@@ -8915,6 +9014,8 @@ function render() {
         ? "현재 시간을 묻는 표현과 기기 기준 현재 시각을 먼저 보여줍니다."
       : timeMode
         ? "검색한 시간을 그대로 변형해서 읽기와 시간 표현을 먼저 보여줍니다."
+      : aiDisplayState.aiOnly
+        ? "LLM 전용 모드라서 로컬 단어 매칭 대신 AI가 정리한 단어를 먼저 보여줍니다."
       : thaiOnlySearch && composedMode
         ? "태국어 문장을 분해해서 한국어 핵심 뜻을 먼저 올렸습니다."
       : thaiOnlySearch
@@ -8936,6 +9037,8 @@ function render() {
         ? "지금 몇 시인지 묻거나 답할 때 바로 보여줄 수 있게 만들었습니다."
       : timeMode
         ? "검색한 시간 그대로 문장에 넣어서 바로 보여줄 수 있게 만들었습니다."
+      : aiDisplayState.aiOnly
+        ? "LLM 전용 모드라서 AI가 직접 정리한 회화를 메인 결과로 보여줍니다."
       : thaiOnlySearch && composedMode
         ? "태국어 문장을 해석해서 바로 쓸 한국어 문장을 먼저 보여줍니다."
       : thaiOnlySearch
@@ -8946,16 +9049,8 @@ function render() {
     : "검색어를 넣으면 관련 회화가 나옵니다.";
 
   const currentSearchContext = {
-    query: state.query,
-    searchProfile,
-    vocabResults,
-    sentenceResults,
-    exactVocabMatch: Boolean(exactVocabMatch),
-    exactSentenceMatch: Boolean(safeExactSentenceMatch),
-    numberMode,
-    dateMode,
-    timeMode,
-    timeQuestionMode,
+    ...localSearchContext,
+    localCoverage,
   };
   state.lastSearchContext = currentSearchContext;
 
@@ -8966,14 +9061,26 @@ function render() {
   renderStats(merged);
   renderEntryStack(
     elements.vocabResults,
-    vocabResults,
-    "맞는 단어가 아직 없습니다. 더 짧은 핵심어로 검색해 보세요.",
+    displayVocabResults,
+    aiDisplayState.aiOnly
+      ? aiDisplayState.loading || !aiDisplayState.sameQuery
+        ? "AI가 단어를 다시 찾는 중입니다."
+        : aiDisplayState.error
+          ? "AI 보강에 실패했습니다. 프록시 설정을 확인하거나 다시 시도해 주세요."
+          : "AI가 맞는 단어를 아직 못 찾았습니다."
+      : "맞는 단어가 아직 없습니다. 더 짧은 핵심어로 검색해 보세요.",
     searchProfile
   );
   renderEntryStack(
     elements.sentenceResults,
-    sentenceResults,
-    "맞는 회화가 아직 없습니다. 다른 표현으로 검색하거나 단어를 먼저 검색해 보세요.",
+    displaySentenceResults,
+    aiDisplayState.aiOnly
+      ? aiDisplayState.loading || !aiDisplayState.sameQuery
+        ? "AI가 회화를 다시 정리하는 중입니다."
+        : aiDisplayState.error
+          ? "AI 회화 보강에 실패했습니다. 프록시 설정을 확인하거나 다시 시도해 주세요."
+          : "AI가 맞는 회화를 아직 못 찾았습니다."
+      : "맞는 회화가 아직 없습니다. 다른 표현으로 검색하거나 단어를 먼저 검색해 보세요.",
     searchProfile
   );
   renderCustomEntries();

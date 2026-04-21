@@ -245,7 +245,9 @@
                 <span>실행 방식</span>
                 <select id="aiModeInput" name="mode">
                   <option value="manual">수동 버튼</option>
-                  <option value="auto">결과 약할 때 자동</option>
+                  <option value="fallback">결과 없을 때 자동</option>
+                  <option value="auto">결과 부족 시 자동</option>
+                  <option value="llm-only">LLM 전용</option>
                 </select>
               </label>
 
@@ -293,7 +295,7 @@
       </div>
     </aside>
 
-    <script src="./data.js?v=20260421b"></script>
-    <script src="./app.js?v=20260421b"></script>
+    <script src="./data.js?v=20260421c"></script>
+    <script src="./app.js?v=20260421c"></script>
   </body>
 </html>
