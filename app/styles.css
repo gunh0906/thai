@@ -112,23 +112,29 @@ button:active {
 }
 
 .hero-top {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "copy actions";
   justify-content: space-between;
   align-items: start;
   gap: 12px;
 }
 
 .hero-copy-block {
+  grid-area: copy;
   min-width: 0;
   flex: 1 1 auto;
 }
 
 .hero-top-actions {
+  grid-area: actions;
   display: inline-flex;
   align-items: start;
   justify-content: flex-end;
   gap: 8px;
   flex: 0 0 auto;
+  justify-self: end;
+  max-width: 100%;
 }
 
 .language-switcher,
@@ -222,6 +228,8 @@ button:active {
 
 .hero h1 {
   font-size: clamp(2rem, 8vw, 3.4rem);
+  text-wrap: balance;
+  word-break: keep-all;
 }
 
 .hero-copy {
@@ -962,12 +970,27 @@ button:active {
   }
 
   .hero-top {
-    flex-direction: row;
-    align-items: start;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "actions"
+      "copy";
+    gap: 10px;
   }
 
   .hero-top-actions {
+    width: 100%;
+    justify-self: stretch;
+    justify-content: flex-end;
     gap: 6px;
+  }
+
+  .hero-copy-block {
+    width: 100%;
+  }
+
+  .hero h1 {
+    font-size: clamp(1.9rem, 10vw, 2.7rem);
+    line-height: 1.06;
   }
 
   .language-switcher,
