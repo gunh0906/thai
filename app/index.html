@@ -3,15 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta
-      name="description"
-      content="한국어로 태국어 단어와 회화 예문을 검색하는 모바일 웹 단어장"
-    />
-    <meta name="theme-color" content="#31424b" />
+    <meta name="description" content="한국어와 태국어 단어·회화를 빠르게 찾는 모바일 포켓북" />
+    <meta name="theme-color" content="#fff0de" />
     <title>태국어 포켓북</title>
-    <link rel="manifest" href="./manifest.webmanifest?v=20260422d" />
+    <link rel="manifest" href="./manifest.webmanifest?v=20260422v" />
     <link rel="icon" href="./icon.svg?v=20260416x" type="image/svg+xml" />
-    <link rel="stylesheet" href="./styles.css?v=20260422s" />
+    <link rel="stylesheet" href="./styles.css?v=20260422v" />
   </head>
   <body>
     <div class="page-shell">
@@ -20,16 +17,22 @@
           <div class="hero-copy-block">
             <div class="eyebrow">Thai Pocketbook</div>
             <h1 data-ui-key="hero.title">태국어 포켓북</h1>
-            <p class="hero-copy" data-ui-key="hero.copy">한국어로 찾으면 단어를 먼저, 바로 쓸 회화를 그 아래에 보여줍니다.</p>
+            <p class="hero-copy" data-ui-key="hero.copy">
+              한국어와 태국어로 찾으면 핵심 단어, 바로 쓸 회화, 필요할 때 AI 번역까지 한 화면에 보여줍니다.
+            </p>
           </div>
+
           <div class="hero-top-actions">
             <div id="authToolbar" class="auth-toolbar auth-toolbar-inline" hidden>
               <button id="authOpenPanelButton" class="ghost-button auth-toolbar-trigger" type="button">
                 <span class="auth-toolbar-kicker" data-ui-key="toolbar.account">계정</span>
                 <strong id="authToolbarName">계정</strong>
               </button>
-              <button id="authQuickLogoutButton" class="ghost-button auth-toolbar-logout" type="button" data-ui-key="toolbar.logout">로그아웃</button>
+              <button id="authQuickLogoutButton" class="ghost-button auth-toolbar-logout" type="button" data-ui-key="toolbar.logout">
+                로그아웃
+              </button>
             </div>
+
             <div class="language-switcher" data-language-switcher role="group" data-ui-aria-label-key="language.label">
               <button
                 class="ghost-button flag-button"
@@ -52,6 +55,7 @@
                 <span aria-hidden="true">🇹🇭</span>
               </button>
             </div>
+
             <button
               id="menuButton"
               class="ghost-button hero-menu-button icon-button"
@@ -92,7 +96,7 @@
       </header>
 
       <main class="content-stack search-first-layout">
-        <section id="quickSearchPanel" class="panel">
+        <section id="quickSearchPanel" class="panel" hidden>
           <div class="section-top">
             <div>
               <p class="section-kicker" data-ui-key="quick.kicker">빠른 검색</p>
@@ -134,6 +138,17 @@
             <p id="adminWorkspaceSummary" class="section-description"></p>
           </div>
           <div id="adminWorkspaceGrid" class="admin-workspace-grid"></div>
+        </section>
+
+        <section id="statsSection" class="panel" hidden>
+          <div class="section-top">
+            <div>
+              <p class="section-kicker">데이터</p>
+              <h2>현재 데이터 상태</h2>
+            </div>
+            <p id="datasetNote" class="section-description"></p>
+          </div>
+          <div id="statsGrid" class="guide-grid"></div>
         </section>
 
         <section id="resultStack" class="result-stack" hidden>
@@ -202,26 +217,12 @@
           <div class="form-grid">
             <label>
               <span data-ui-key="auth.username">아이디</span>
-              <input
-                id="authUsernameInput"
-                name="username"
-                type="text"
-                data-ui-placeholder-key="auth.username"
-                placeholder="아이디"
-                required
-              />
+              <input id="authUsernameInput" name="username" type="text" data-ui-placeholder-key="auth.username" placeholder="아이디" required />
             </label>
 
             <label>
               <span data-ui-key="auth.password">비밀번호</span>
-              <input
-                id="authPasswordInput"
-                name="password"
-                type="password"
-                data-ui-placeholder-key="auth.password"
-                placeholder="비밀번호"
-                required
-              />
+              <input id="authPasswordInput" name="password" type="password" data-ui-placeholder-key="auth.password" placeholder="비밀번호" required />
             </label>
           </div>
 
@@ -243,24 +244,12 @@
 
             <label>
               <span data-ui-key="auth.currentPassword">현재 비밀번호</span>
-              <input
-                id="authCurrentPasswordInput"
-                name="currentPassword"
-                type="password"
-                data-ui-placeholder-key="auth.currentPassword"
-                placeholder="현재 비밀번호"
-              />
+              <input id="authCurrentPasswordInput" name="currentPassword" type="password" data-ui-placeholder-key="auth.currentPassword" placeholder="현재 비밀번호" />
             </label>
 
             <label>
               <span data-ui-key="auth.newPassword">새 비밀번호</span>
-              <input
-                id="authNewPasswordInput"
-                name="newPassword"
-                type="password"
-                data-ui-placeholder-key="auth.newPassword"
-                placeholder="새 비밀번호"
-              />
+              <input id="authNewPasswordInput" name="newPassword" type="password" data-ui-placeholder-key="auth.newPassword" placeholder="새 비밀번호" />
             </label>
           </div>
 
@@ -338,7 +327,7 @@
               <p class="section-kicker">내 데이터</p>
               <h2>단어와 문장 추가</h2>
             </div>
-            <p class="section-description">휴대폰에서도 직접 보강할 수 있습니다.</p>
+            <p class="section-description">현재는 숨겨져 있지만 구조는 유지합니다.</p>
           </div>
 
           <form id="entryForm" class="entry-form">
@@ -353,36 +342,22 @@
 
               <label class="wide">
                 <span>태국어 발음 표기</span>
-                <input
-                  name="thai"
-                  type="text"
-                  placeholder="예: 타오라이, 체크 빈, 홍 남 유 티 나이"
-                  required
-                />
+                <input name="thai" type="text" placeholder="예: 타오라이" required />
               </label>
 
               <label class="wide">
                 <span>한국어 뜻</span>
-                <input
-                  name="korean"
-                  type="text"
-                  placeholder="예: 얼마예요 / 계산 부탁해요 / 방 바꿔주세요"
-                  required
-                />
+                <input name="korean" type="text" placeholder="예: 얼마예요" required />
               </label>
 
               <label class="wide">
                 <span>상황 태그</span>
-                <input name="tags" type="text" placeholder="예: 이동, 식당, 건강" />
+                <input name="tags" type="text" placeholder="예: 이동, 식당" />
               </label>
 
               <label class="wide">
                 <span>메모</span>
-                <textarea
-                  name="note"
-                  rows="3"
-                  placeholder="예: 호텔 프런트에서 자주 씀 / 택시 기사에게 보여주기 좋음"
-                ></textarea>
+                <textarea name="note" rows="3" placeholder="간단한 메모"></textarea>
               </label>
             </div>
 
@@ -399,13 +374,13 @@
               <p class="section-kicker">백업</p>
               <h2>내가 추가한 항목 관리</h2>
             </div>
-            <p class="section-description">JSON으로 내보내고 다시 가져올 수 있습니다.</p>
+            <p class="section-description">숨겨진 보조 기능 영역입니다.</p>
           </div>
 
           <div class="backup-actions">
             <button id="exportButton" class="ghost-button" type="button">내 데이터 내보내기</button>
             <button id="importButton" class="ghost-button" type="button">JSON 가져오기</button>
-            <button id="clearCustomButton" class="ghost-button danger" type="button">내가 추가한 항목 비우기</button>
+            <button id="clearCustomButton" class="ghost-button danger" type="button">직접 추가한 항목 비우기</button>
             <input id="importInput" type="file" accept="application/json,.json" hidden />
           </div>
 
@@ -497,7 +472,7 @@
                 <span data-ui-key="admin.ai.enabled">사용</span>
                 <span class="inline-toggle">
                   <input id="aiEnabledInput" name="enabled" type="checkbox" />
-                  <span data-ui-key="admin.ai.enabledHint">검색이 애매할 때 AI 보강 사용</span>
+                  <span data-ui-key="admin.ai.enabledHint">검색이 애매할 때 AI 번역 사용</span>
                 </span>
               </label>
 
@@ -518,7 +493,7 @@
                   name="endpoint"
                   type="url"
                   data-ui-placeholder-key="admin.ai.endpointPlaceholder"
-                  placeholder="예: https://thai-pocketbook-ai.rjsghks87.workers.dev/assist"
+                  placeholder="예: https://thai-pocketbook-ai.example.workers.dev/assist"
                 />
               </label>
             </div>
@@ -527,26 +502,11 @@
               <button class="primary-button" type="submit" data-ui-key="admin.ai.save">AI 설정 저장</button>
               <p id="aiSettingsFeedback" class="feedback-text" aria-live="polite"></p>
             </div>
-            <p class="section-description" data-ui-key="admin.ai.note">
-              OpenAI 키는 Cloudflare Worker 비밀값으로만 넣고, 이 앱에는 프록시 주소만 저장합니다. 실제 AI 사용은 로그인 세션과 계정 권한으로 확인합니다.
-            </p>
           </form>
-        </section>
-
-        <section id="statsSection" class="menu-section" hidden aria-hidden="true">
-          <div class="section-top">
-            <div>
-              <p class="section-kicker">단어장</p>
-              <h2>앱 정보</h2>
-            </div>
-          </div>
-          <div id="statsGrid" class="stats-grid compact-stats"></div>
-          <p id="datasetNote" class="section-description dataset-note"></p>
         </section>
       </div>
     </aside>
 
-    <script src="./data.js?v=20260422j"></script>
-    <script src="./app.js?v=20260422u"></script>
+    <script src="./app.js?v=20260422v"></script>
   </body>
 </html>

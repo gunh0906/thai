@@ -1,4 +1,4 @@
-const DEFAULT_MODEL = "gpt-4o-mini";
+﻿const DEFAULT_MODEL = "gpt-4o-mini";
 const DEFAULT_REASONING_EFFORT = "low";
 const AUTH_STORE_NAME = "main";
 const PASSWORD_ITERATIONS = 100000;
@@ -17,7 +17,7 @@ const AI_ENTRY_SCHEMA = {
       type: "string",
       minLength: 1,
       description:
-        "태국어 발음 표기. 한국어식 표기가 가장 좋고, 어렵다면 로마자 태국어 발음 허용. 영어 번역문과 태국 문자 금지.",
+        "태국어 발음 표기. 한국어식 표기가 가장 좋고, 어렵다면 로마자 태국어 발음 허용. 영어 번역문 금지.",
     },
     thaiScript: {
       type: "string",
@@ -251,16 +251,18 @@ function cleanThaiPronunciation(value) {
 
 function buildPrompt(payload) {
   return [
-    "한국어-태국어 포켓북 검색 보강용 JSON만 반환하세요.",
-    "검색어는 한국어, 태국 문자, 한국식 발음 표기일 수 있습니다.",
-    "검색어를 먼저 문장 전체 의미로 해석하고, 필요할 때만 단어로 나누세요.",
-    "localResults를 우선 참고하고, 로컬 결과가 약하거나 없을 때만 새 항목을 보강하세요.",
-    "normalizedQuery, intent, searchHints, caution, korean, note는 한국어만 사용하세요.",
-    "thai는 영어 번역이 아니라 태국어 발음을 적으세요.",
-    "thai는 가능하면 소문자 로마자 발음으로, 음절을 띄어 써 주세요. 예: karuna chuai baeng sing ni hai noi khrap",
-    "thaiScript에는 반드시 태국 문자를 넣으세요.",
-    "vocab<=3, sentences<=4, tags<=4, searchHints<=4, note는 짧게.",
-    "부탁, 불만, 질문, 명령 검색이면 sentence를 우선하세요.",
+    "너는 한국어-태국어 포켓북의 AI 번역 보조다. 반드시 JSON만 반환하세요.",
+    "검색어는 한국어 뜻, 태국 문자, 한국어식 발음 표기일 수 있습니다.",
+    "검색어를 먼저 문장 전체 뜻으로 해석하고, 꼭 필요할 때만 단어로 나누세요.",
+    "localResults를 먼저 참고하고, 로컬 결과가 약하거나 없을 때만 부족한 항목을 보강하세요.",
+    "normalizedQuery, intent, searchHints, caution, korean, note는 모두 한국어만 사용하세요.",
+    "thai는 영어 번역이 아니라 태국어 발음 표기입니다.",
+    "가능하면 한국어식 발음으로 적고, 어렵다면 로마자 태국어 발음으로 적으세요. 예: karuna chuai baeng sing ni hai noi khrap",
+    "thaiScript에는 반드시 태국 문자 원문을 넣으세요.",
+    "localResults 안에 같은 태국 문자나 매우 비슷한 표현이 있으면 그 발음 표기를 최대한 재사용하세요.",
+    "단일 단어 검색이면 주변 연관어로 새지 말고 가장 직접적인 번역을 먼저 주세요.",
+    "vocab<=3, sentences<=4, tags<=4, searchHints<=4, note는 짧게 작성하세요.",
+    "부탁, 불만, 질문, 명령 검색이면 sentence를 우선 채우세요.",
     "confidence가 낮으면 caution에 짧은 한국어 이유를 넣으세요.",
     "vocab와 sentences가 모두 비면 fallbackSentence에 가장 실용적인 번역 1개를 넣으세요.",
     `Context:${JSON.stringify(payload)}`,

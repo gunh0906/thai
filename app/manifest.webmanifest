@@ -1,11 +1,11 @@
 {
   "name": "태국어 포켓북",
   "short_name": "태국어북",
-  "description": "한국어 검색과 상황별 필터로 태국어 단어와 문장을 찾는 모바일 웹 단어장",
+  "description": "한국어와 태국어로 단어와 회화를 빠르게 찾는 모바일 포켓북",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#edf1f2",
-  "theme_color": "#31424b",
+  "background_color": "#fbf4ec",
+  "theme_color": "#fff0de",
   "icons": [
     {
       "src": "./icon.svg",

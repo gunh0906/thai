@@ -1,18 +1,18 @@
 :root {
-  --bg: #edf1f2;
-  --bg-strong: #f9fbfb;
-  --surface: rgba(247, 250, 249, 0.84);
-  --surface-strong: rgba(255, 255, 255, 0.96);
-  --text: #1d2932;
-  --muted: #61707a;
-  --line: rgba(29, 41, 50, 0.1);
-  --accent: #c97734;
-  --accent-strong: #8f5224;
-  --accent-soft: rgba(201, 119, 52, 0.12);
-  --green: #2f7e74;
-  --green-soft: rgba(47, 126, 116, 0.12);
+  --bg: #fbf4ec;
+  --bg-strong: #fffdfa;
+  --surface: rgba(255, 255, 255, 0.86);
+  --surface-strong: rgba(255, 255, 255, 0.98);
+  --text: #24303a;
+  --muted: #66727c;
+  --line: rgba(36, 48, 58, 0.08);
+  --accent: #ee9b47;
+  --accent-strong: #b56322;
+  --accent-soft: rgba(238, 155, 71, 0.12);
+  --green: #2f8a78;
+  --green-soft: rgba(47, 138, 120, 0.12);
   --danger: #cb4a30;
-  --shadow: 0 18px 45px rgba(34, 44, 53, 0.12);
+  --shadow: 0 18px 42px rgba(74, 66, 57, 0.1);
   --radius-xl: 28px;
   --radius-lg: 22px;
   --radius-md: 16px;
@@ -41,9 +41,9 @@ body {
   font-family: var(--font-ui);
   color: var(--text);
   background:
-    radial-gradient(circle at top left, rgba(201, 119, 52, 0.16), transparent 28rem),
-    radial-gradient(circle at top right, rgba(75, 112, 128, 0.14), transparent 26rem),
-    linear-gradient(180deg, #f7f9fa 0%, #edf1f2 48%, #e5ebee 100%);
+    radial-gradient(circle at top left, rgba(238, 155, 71, 0.18), transparent 24rem),
+    radial-gradient(circle at top right, rgba(93, 161, 146, 0.12), transparent 22rem),
+    linear-gradient(180deg, #fffaf4 0%, #fbf4ec 52%, #f4ede4 100%);
 }
 
 body.menu-open {
@@ -66,10 +66,10 @@ body::before {
   inset: 0;
   pointer-events: none;
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.22) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.22) 1px, transparent 1px);
+    linear-gradient(rgba(255, 255, 255, 0.18) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.18) 1px, transparent 1px);
   background-size: 24px 24px;
-  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.35), transparent 80%);
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.16), transparent 78%);
 }
 
 button,
@@ -101,14 +101,14 @@ button:active {
 .hero {
   margin-bottom: 16px;
   padding: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.42);
+  border: 1px solid rgba(255, 255, 255, 0.74);
   border-radius: 0 0 24px 24px;
   background:
-    radial-gradient(circle at top right, rgba(212, 156, 105, 0.18), transparent 15rem),
-    linear-gradient(135deg, rgba(45, 61, 73, 0.98), rgba(78, 97, 111, 0.9)),
-    linear-gradient(135deg, rgba(201, 119, 52, 0.12), rgba(201, 119, 52, 0.03));
-  color: #f6f5f2;
-  box-shadow: 0 18px 36px rgba(34, 44, 53, 0.22);
+    radial-gradient(circle at top right, rgba(238, 155, 71, 0.18), transparent 17rem),
+    radial-gradient(circle at top left, rgba(47, 138, 120, 0.1), transparent 16rem),
+    linear-gradient(180deg, rgba(255, 250, 243, 0.98), rgba(255, 242, 226, 0.94));
+  color: var(--text);
+  box-shadow: 0 20px 40px rgba(106, 87, 61, 0.12);
   backdrop-filter: blur(20px);
 }
 
@@ -149,13 +149,13 @@ button:active {
 .language-switcher {
   padding: 4px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.72);
   backdrop-filter: blur(14px);
 }
 
 .language-switcher-compact {
   padding: 3px;
-  background: rgba(245, 247, 248, 0.82);
+  background: rgba(255, 250, 245, 0.92);
 }
 
 .flag-button {
@@ -168,9 +168,9 @@ button:active {
   justify-content: center;
   font-size: 1.12rem;
   line-height: 1;
-  background: rgba(248, 250, 250, 0.96);
+  background: rgba(255, 255, 255, 0.98);
   color: var(--text);
-  box-shadow: 0 8px 18px rgba(39, 50, 60, 0.14);
+  box-shadow: 0 10px 18px rgba(105, 86, 62, 0.12);
 }
 
 .flag-button.active {
@@ -183,7 +183,7 @@ button:active {
 
 .hero-menu-button {
   flex: 0 0 auto;
-  background: rgba(248, 250, 250, 0.96);
+  background: rgba(255, 255, 255, 0.98);
 }
 
 .icon-button {
@@ -236,7 +236,7 @@ button:active {
 .hero-copy {
   max-width: 36rem;
   margin: 8px 0 12px;
-  color: rgba(246, 245, 242, 0.88);
+  color: var(--muted);
   line-height: 1.45;
 }
 
@@ -245,7 +245,9 @@ button:active {
   gap: 10px;
   padding: 14px;
   border-radius: var(--radius-lg);
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.74);
+  border: 1px solid rgba(236, 188, 135, 0.34);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.54);
   backdrop-filter: blur(18px);
 }
 
@@ -264,10 +266,11 @@ button:active {
   min-width: 0;
   width: 100%;
   padding: 15px 16px;
-  border: none;
+  border: 1px solid rgba(222, 191, 154, 0.4);
   border-radius: var(--radius-md);
-  background: rgba(255, 255, 255, 0.94);
+  background: rgba(255, 255, 255, 0.98);
   color: var(--text);
+  box-shadow: inset 0 1px 2px rgba(113, 88, 55, 0.06);
 }
 
 .search-panel input::placeholder {
@@ -293,7 +296,7 @@ button:active {
 .hero-note {
   padding: 9px 11px;
   border-radius: var(--radius-sm);
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.62);
   font-size: 0.88rem;
   line-height: 1.4;
 }
@@ -309,7 +312,7 @@ button:active {
 
 .panel {
   padding: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.78);
   border-radius: var(--radius-xl);
   background: var(--surface);
   box-shadow: var(--shadow);
@@ -401,7 +404,7 @@ button:active {
   padding: 10px 14px;
   border: 1px solid transparent;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.84);
+  background: rgba(255, 255, 255, 0.92);
   color: var(--text);
   transition:
     transform 180ms ease,
@@ -605,8 +608,9 @@ button:active {
 
 .ghost-button {
   padding: 11px 14px;
-  background: rgba(255, 255, 255, 0.84);
+  background: rgba(255, 255, 255, 0.92);
   color: var(--text);
+  box-shadow: inset 0 0 0 1px rgba(226, 199, 168, 0.38);
 }
 
 .ghost-button.danger {
@@ -616,10 +620,10 @@ button:active {
 
 .primary-button {
   padding: 13px 18px;
-  background: linear-gradient(135deg, var(--accent), #d79a64);
+  background: linear-gradient(135deg, #f6aa56, var(--accent));
   color: #fffdf9;
   font-weight: 700;
-  box-shadow: 0 12px 22px rgba(55, 66, 77, 0.18);
+  box-shadow: 0 14px 24px rgba(186, 117, 49, 0.24);
 }
 
 .primary-button.busy {
@@ -640,7 +644,7 @@ button:active {
 }
 
 .insight-chip {
-  background: rgba(201, 119, 52, 0.12);
+  background: rgba(238, 155, 71, 0.14);
   color: var(--accent-strong);
 }
 

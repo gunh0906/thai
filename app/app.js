@@ -3,7 +3,7 @@ const EXPORT_VERSION = 1;
 const AI_STORAGE_KEY = "thai-pocketbook-ai-v1";
 const AUTH_STORAGE_KEY = "thai-pocketbook-auth-v1";
 const UI_LANGUAGE_STORAGE_KEY = "thai-pocketbook-ui-language-v1";
-const APP_VERSION = "20260422u";
+const APP_VERSION = "20260422v";
 const DEFAULT_PROXY_ENDPOINT = "https://thai-pocketbook-ai.rjsghks87.workers.dev/assist";
 const AI_ASSIST_MIN_QUERY_LENGTH = 2;
 const AI_RESULT_LIMITS = {
@@ -33,7 +33,7 @@ const UI_TEXT = {
   ko: {
     "document.title": "태국어 포켓북",
     "hero.title": "태국어 포켓북",
-    "hero.copy": "한국어로 찾으면 단어를 먼저, 바로 쓸 회화를 그 아래에 보여줍니다.",
+    "hero.copy": "한국어와 태국어로 찾으면 핵심 단어, 바로 쓸 회화, 필요할 때 AI 번역까지 한 화면에 보여줍니다.",
     "toolbar.account": "계정",
     "toolbar.logout": "로그아웃",
     "toolbar.menu": "메뉴",
@@ -249,7 +249,7 @@ const UI_TEXT = {
   th: {
     "document.title": "สมุดพกภาษาไทย",
     "hero.title": "สมุดพกภาษาไทย",
-    "hero.copy": "ค้นหาด้วยเกาหลีหรือไทย แล้วจะแสดงคำศัพท์ก่อนและประโยคที่ใช้ได้ทันทีด้านล่าง",
+    "hero.copy": "ค้นหาด้วยเกาหลีหรือไทย แล้วจะแสดงคำหลัก ประโยคที่ใช้ได้ทันที และ AI แปลในหน้าจอเดียวเมื่อจำเป็น",
     "toolbar.account": "บัญชี",
     "toolbar.logout": "ออกจากระบบ",
     "toolbar.menu": "เมนู",
@@ -1300,6 +1300,396 @@ const SUPPLEMENTAL_DATA = {
       keywords: ["건강하다", "건강해요", "저는 건강해요", "나는 건강해요", "몸 상태가 좋아요"],
     },
   ],
+};
+
+const SUPPLEMENTAL_CATEGORY_VOCAB_GROUPS = [
+  {
+    key: "daily",
+    label: "기본회화",
+    tags: ["기본회화"],
+    items: [
+      ["understand", "이해하다", "카오 짜이", "เข้าใจ", "내용을 이해하다", ["이해", "알아듣다", "이해해요"]],
+      ["remember", "기억하다", "잠 다이", "จำได้", "기억이 나다", ["기억", "생각나다"]],
+      ["forget", "잊다", "르음", "ลืม", "기억을 잊다", ["까먹다", "잊어버리다"]],
+      ["repeat", "다시", "익 크랑", "อีกครั้ง", "한 번 더 / 다시", ["한번더", "다시 한번"]],
+      ["wait", "기다리다", "러", "รอ", "기다리다", ["잠깐 기다리다"]],
+      ["quickly", "빨리", "레우 레우", "เร็วๆ", "빠르게", ["서둘러", "빨리빨리"]],
+      ["slowly", "천천히", "차 차", "ช้าๆ", "느리게 / 천천히", ["천천히 해주세요"]],
+      ["start", "시작하다", "뢰엄", "เริ่ม", "시작하다", ["시작", "출발"]],
+      ["finish", "끝나다", "쎗", "เสร็จ", "끝나다 / 완료되다", ["끝", "완료"]],
+      ["open", "열다", "쁘읃", "เปิด", "문이나 뚜껑을 열다", ["열어", "오픈"]],
+      ["close", "닫다", "삗", "ปิด", "문이나 뚜껑을 닫다", ["닫아", "클로즈"]],
+      ["sit", "앉다", "낭", "นั่ง", "앉다", ["앉아"]],
+      ["stand", "서다", "윈", "ยืน", "서 있다", ["일어서다"]],
+      ["left", "왼쪽", "싸이", "ซ้าย", "왼편", ["좌측"]],
+      ["right", "오른쪽", "콰", "ขวา", "오른편", ["우측"]],
+      ["straight", "직진", "뜨롱 빠이", "ตรงไป", "곧장 가기", ["똑바로", "앞으로"]],
+      ["together", "같이", "두어이 깐", "ด้วยกัน", "함께 / 같이", ["함께"]],
+      ["separate", "따로", "얙 깐", "แยกกัน", "분리해서 / 따로", ["분리", "각자"]],
+      ["early", "일찍", "레우", "เร็ว", "이른 시간", ["빨리", "서둘러"]],
+      ["late", "늦다", "싸이", "สาย", "시간이 늦다", ["늦어요", "지각"]],
+    ],
+  },
+  {
+    key: "food",
+    label: "식당",
+    tags: ["식당", "쇼핑"],
+    items: [
+      ["fruit", "과일", "폰라마이", "ผลไม้", "과일 전체", ["과일류"]],
+      ["watermelon", "수박", "땡 모", "แตงโม", "수박", ["수박주스"]],
+      ["mango", "망고", "마무앙", "มะม่วง", "망고", []],
+      ["banana", "바나나", "끌루어이", "กล้วย", "바나나", []],
+      ["pineapple", "파인애플", "쌉빠롯", "สับปะรด", "파인애플", []],
+      ["orange", "오렌지", "쏨", "ส้ม", "오렌지", ["귤"]],
+      ["grape", "포도", "앙운", "องุ่น", "포도", []],
+      ["apple", "사과", "앱쁠", "แอปเปิ้ล", "사과", []],
+      ["coffee", "커피", "까패", "กาแฟ", "커피", ["아메리카노"]],
+      ["tea", "차", "차", "ชา", "차 / 티", ["티"]],
+      ["juice", "주스", "남 폰라마이", "น้ำผลไม้", "과일 주스", ["쥬스", "음료"]],
+      ["milk", "우유", "놈", "นม", "우유", []],
+      ["sugar", "설탕", "남 딴", "น้ำตาล", "설탕", ["달게"]],
+      ["ice", "얼음", "남 캥", "น้ำแข็ง", "얼음", ["차갑게"]],
+      ["water", "생수", "남 쁠라오", "น้ำเปล่า", "맹물 / 생수", ["물", "마실물"]],
+      ["hotWater", "뜨거운 물", "남 론", "น้ำร้อน", "뜨거운 물", []],
+      ["coldWater", "찬물", "남 옌", "น้ำเย็น", "차가운 물", ["시원한 물"]],
+      ["spicy", "맵다", "펫", "เผ็ด", "맵다", ["매워요"]],
+      ["lessSpicy", "덜 맵게", "마이 펫 막", "ไม่เผ็ดมาก", "많이 맵지 않게", ["안 맵게"]],
+      ["sweet", "달다", "완", "หวาน", "달다", ["달아요"]],
+      ["salty", "짜다", "켐", "เค็ม", "짜다", ["짭짤하다"]],
+      ["bitter", "쓰다", "콤", "ขม", "쓰다", []],
+      ["delicious", "맛있다", "아로이", "อร่อย", "맛있다", ["맛있어요"]],
+      ["rice", "밥", "카오", "ข้าว", "밥 / 쌀밥", []],
+      ["soup", "국", "쑵", "ซุป", "국 / 수프", ["수프"]],
+      ["noodle", "면", "센", "เส้น", "면류", ["국수", "라면", "면발"]],
+      ["friedRice", "볶음밥", "카오 팟", "ข้าวผัด", "볶음밥", []],
+      ["chicken", "닭고기", "까이", "ไก่", "닭고기", ["치킨"]],
+      ["pork", "돼지고기", "무", "หมู", "돼지고기", ["돼지"]],
+      ["beef", "소고기", "느아", "เนื้อ", "소고기", ["쇠고기"]],
+      ["fish", "생선", "쁠라", "ปลา", "생선", ["물고기"]],
+      ["egg", "계란", "카이", "ไข่", "달걀", ["달걀"]],
+    ],
+  },
+  {
+    key: "shopping",
+    label: "쇼핑",
+    tags: ["쇼핑"],
+    items: [
+      ["market", "시장", "딸랏", "ตลาด", "시장", ["재래시장"]],
+      ["convenience", "편의점", "란 싸두악 쓰", "ร้านสะดวกซื้อ", "편의점", ["편의점 가게"]],
+      ["discount", "할인", "롯 라카", "ลดราคา", "가격 할인", ["깎다", "세일"]],
+      ["cheap", "싸다", "툭", "ถูก", "가격이 싸다", ["저렴하다"]],
+      ["expensive", "비싸다", "팽", "แพง", "가격이 비싸다", []],
+      ["cash", "현금", "응언 솟", "เงินสด", "현금", ["현찰"]],
+      ["card", "카드", "밧", "บัตร", "카드", ["카드결제"]],
+      ["change", "잔돈", "응언 톤", "เงินทอน", "거스름돈", ["거스름돈"]],
+      ["coin", "동전", "리안", "เหรียญ", "동전", ["잔돈 동전"]],
+      ["receipt", "영수증", "바이 셋", "ใบเสร็จ", "영수증", ["영수증 주세요"]],
+      ["total", "총액", "욧 루엄", "ยอดรวม", "전체 금액", ["합계"]],
+      ["size", "사이즈", "카낫", "ขนาด", "크기 / 사이즈", ["크기"]],
+      ["color", "색깔", "씨", "สี", "색상", ["색"]],
+      ["tryOn", "입어보다", "롱 싸이", "ลองใส่", "옷을 입어보다", ["피팅", "시착"]],
+      ["exchange", "교환", "랙", "แลก", "물건 교환", ["바꾸기"]],
+      ["refund", "환불", "큰 응언", "คืนเงิน", "돈을 돌려받다", []],
+      ["gift", "선물", "콩 콴", "ของขวัญ", "선물", ["기념품", "선물용"]],
+      ["wrapper", "포장지", "끄라닷 허", "กระดาษห่อ", "포장용 종이", ["선물 포장지"]],
+      ["bag", "봉투", "퉁", "ถุง", "봉투 / 비닐봉지", ["비닐봉투"]],
+      ["shoppingBag", "쇼핑백", "퉁 쇼핑", "ถุงช้อปปิ้ง", "쇼핑백", ["가방"]],
+      ["bank", "은행", "타나칸", "ธนาคาร", "은행", ["뱅크"]],
+      ["account", "계좌", "반치 타나칸", "บัญชีธนาคาร", "은행 계좌", ["통장"]],
+      ["atm", "ATM", "에이티엠", "เอทีเอ็ม", "현금인출기", ["atm기계"]],
+      ["transfer", "송금", "온 응언", "โอนเงิน", "계좌 이체", ["이체", "보내다"]],
+    ],
+  },
+  {
+    key: "transport",
+    label: "이동",
+    tags: ["이동", "숫자·시간"],
+    items: [
+      ["bus", "버스", "롯 밧", "รถบัส", "버스", []],
+      ["busStop", "버스정류장", "빠이 롯 메", "ป้ายรถเมล์", "버스 정류장", ["정류장"]],
+      ["timetable", "시간표", "따랑 웨라", "ตารางเวลา", "시간표", ["스케줄", "일정표"]],
+      ["ticket", "표", "뚜아", "ตั๋ว", "표 / 티켓", ["티켓"]],
+      ["oneWay", "편도", "티여우 디여우", "เที่ยวเดียว", "편도 표", []],
+      ["roundTrip", "왕복", "빠이 끌랍", "ไปกลับ", "왕복 표", []],
+      ["departure", "출발", "옥 드은 탕", "ออกเดินทาง", "출발", []],
+      ["arrival", "도착", "등", "ถึง", "도착", []],
+      ["seat", "좌석", "티 낭", "ที่นั่ง", "좌석", ["자리"]],
+      ["station", "역", "싸타니", "สถานี", "역 / 정거장", ["정거장"]],
+      ["platform", "플랫폼", "찬 차라", "ชานชาลา", "승강장", ["승강장"]],
+      ["taxi", "택시", "택씨", "แท็กซี่", "택시", []],
+      ["motorTaxi", "오토바이 택시", "윈 모떠싸이", "วินมอเตอร์ไซค์", "오토바이 택시", ["오토바이택시"]],
+      ["map", "지도", "팬 티", "แผนที่", "지도", ["맵"]],
+      ["airport", "공항", "싸남 빈", "สนามบิน", "공항", []],
+      ["train", "기차", "롯 파이", "รถไฟ", "기차", ["열차"]],
+      ["subway", "지하철", "롯 파이 타이 딘", "รถไฟใต้ดิน", "지하철", ["메트로"]],
+      ["nextBus", "다음 버스", "롯 밧 칸 떠 빠이", "รถบัสคันต่อไป", "다음 버스", []],
+      ["late", "늦다", "싸이", "สาย", "늦다", ["늦어요"]],
+      ["near", "가깝다", "끌라이", "ใกล้", "가깝다", ["가까워요"]],
+      ["far", "멀다", "끌라이 막", "ไกลมาก", "멀다", ["멀어요"]],
+    ],
+  },
+  {
+    key: "dorm",
+    label: "생활",
+    tags: ["이동"],
+    aliases: ["기숙사", "숙소"],
+    items: [
+      ["dormitory", "기숙사", "허 팍", "หอพัก", "기숙사 / 숙소", ["숙소"]],
+      ["washingMachine", "세탁기", "크르엉 싹 파", "เครื่องซักผ้า", "세탁기", ["빨래 기계"]],
+      ["dryer", "건조기", "크르엉 옵 파", "เครื่องอบผ้า", "건조기", []],
+      ["detergent", "세제", "퐁 싹 폭", "ผงซักฟอก", "세탁 세제", ["세탁세제"]],
+      ["laundry", "빨래", "싹 파", "ซักผ้า", "빨래 / 세탁", ["세탁"]],
+      ["clothes", "옷", "쓰어 파", "เสื้อผ้า", "옷", ["의류"]],
+      ["blanket", "이불", "파 홈", "ผ้าห่ม", "이불", []],
+      ["pillow", "베개", "먼", "หมอน", "베개", []],
+      ["bed", "침대", "띠앙", "เตียง", "침대", []],
+      ["bedsheet", "침대시트", "파 뿌 띠앙", "ผ้าปูเตียง", "침대 시트", ["시트"]],
+      ["towel", "수건", "파 쳇 뚜아", "ผ้าเช็ดตัว", "수건", []],
+      ["soap", "비누", "싸부", "สบู่", "비누", []],
+      ["shampoo", "샴푸", "챔푸", "แชมพู", "샴푸", []],
+      ["toothbrush", "칫솔", "쁘랭 씨 판", "แปรงสีฟัน", "칫솔", []],
+      ["toothpaste", "치약", "야 씨 판", "ยาสีฟัน", "치약", []],
+      ["aircon", "에어컨", "에", "แอร์", "에어컨", ["냉방"]],
+      ["fan", "선풍기", "팟 롬", "พัดลม", "선풍기", []],
+      ["fridge", "냉장고", "뚜 옌", "ตู้เย็น", "냉장고", []],
+      ["outlet", "콘센트", "쁠럭 파이", "ปลั๊กไฟ", "전기 콘센트", ["플러그", "전기코드"]],
+      ["charger", "충전기", "티 찻", "ที่ชาร์จ", "충전기", ["충전선"]],
+      ["key", "열쇠", "꾼째", "กุญแจ", "열쇠", ["키"]],
+      ["cardKey", "카드키", "키 깟", "คีย์การ์ด", "카드키", ["출입카드"]],
+      ["shower", "샤워", "팍 부아", "ฝักบัว", "샤워 / 샤워기", ["샤워기"]],
+      ["hotWater", "뜨거운 물", "남 론", "น้ำร้อน", "뜨거운 물", ["온수"]],
+      ["trash", "쓰레기", "카야", "ขยะ", "쓰레기", ["휴지통"]],
+    ],
+  },
+  {
+    key: "health",
+    label: "건강",
+    tags: ["건강"],
+    items: [
+      ["hospital", "병원", "롱 파야반", "โรงพยาบาล", "병원", []],
+      ["pharmacy", "약국", "란 야", "ร้านยา", "약국", []],
+      ["doctor", "의사", "머", "หมอ", "의사", []],
+      ["nurse", "간호사", "파야반", "พยาบาล", "간호사", []],
+      ["medicine", "약", "야", "ยา", "약", ["약품"]],
+      ["painkiller", "진통제", "야 깨 뿌엇", "ยาแก้ปวด", "통증 완화 약", ["두통약"]],
+      ["cold", "감기", "왓", "หวัด", "감기", []],
+      ["cough", "기침", "아이", "ไอ", "기침", ["콜록"]],
+      ["fever", "열", "카이", "ไข้", "열 / 발열", ["고열"]],
+      ["headache", "두통", "뿌엇 후어", "ปวดหัว", "머리 통증", ["머리아픔"]],
+      ["stomachache", "복통", "뿌엇 통", "ปวดท้อง", "배 통증", ["배아픔"]],
+      ["dizzy", "어지럽다", "위안 후어", "เวียนหัว", "어지럽다", ["현기증"]],
+      ["tired", "피곤하다", "느어이", "เหนื่อย", "피곤한 상태", ["피곤해요"]],
+      ["healthy", "건강하다", "캥랭", "แข็งแรง", "건강하고 튼튼하다", ["건강해요"]],
+      ["injury", "다치다", "밧 쳅", "บาดเจ็บ", "다치다", ["부상"]],
+      ["wound", "상처", "쁠래", "แผล", "상처", ["다친곳"]],
+      ["bandage", "붕대", "파 판 쁠래", "ผ้าพันแผล", "붕대", []],
+      ["injection", "주사", "켐 칫 야", "เข็มฉีดยา", "주사", []],
+      ["allergy", "알레르기", "푸미 패", "ภูมิแพ้", "알레르기", ["알러지"]],
+      ["diarrhea", "설사", "통 씨아", "ท้องเสีย", "설사", ["배탈"]],
+      ["vomit", "토하다", "아 지안", "อาเจียน", "구토하다", ["구토"]],
+      ["toothache", "치통", "뿌엇 판", "ปวดฟัน", "치아 통증", ["이가 아프다"]],
+      ["throat", "목이 아프다", "쩹 커", "เจ็บคอ", "목 통증", ["인후통"]],
+      ["runnyNose", "콧물", "남묵 라이", "น้ำมูกไหล", "콧물이 나다", ["코감기"]],
+    ],
+  },
+  {
+    key: "work",
+    label: "일터",
+    tags: ["일터"],
+    aliases: ["공장", "작업", "업무"],
+    items: [
+      ["machine", "기계", "크르엉 짝", "เครื่องจักร", "기계", ["설비"]],
+      ["line", "라인", "라인", "ไลน์", "생산 라인", ["라인작업"]],
+      ["instruction", "작업 지시", "캄 쌍 응안", "คำสั่งงาน", "작업 지시", ["지시사항"]],
+      ["supervisor", "감독", "후어 나", "หัวหน้า", "현장 책임자", ["반장"]],
+      ["manager", "관리자", "푸 짯깐", "ผู้จัดการ", "관리자 / 매니저", ["매니저"]],
+      ["overtime", "야근", "오티", "โอที", "초과근무 / 야근", ["OT", "초과근무"]],
+      ["extraHours", "초과근무", "루앙 웨라", "ล่วงเวลา", "정해진 시간보다 더 근무함", ["연장근무"]],
+      ["shift", "교대", "까", "กะ", "근무 교대", ["교대근무"]],
+      ["dayShift", "주간근무", "까 끌랑 완", "กะกลางวัน", "낮 근무", ["주간조"]],
+      ["nightShift", "야간근무", "까 끌랑 큰", "กะกลางคืน", "밤 근무", ["야간조"]],
+      ["clockIn", "출근", "카오 응안", "เข้างาน", "출근", []],
+      ["clockOut", "퇴근", "륵 응안", "เลิกงาน", "퇴근", []],
+      ["break", "휴식", "팍", "พัก", "쉬는 시간", ["쉬다", "휴게"]],
+      ["safety", "안전", "쿠암 쁠롯파이", "ความปลอดภัย", "안전", ["안전관리"]],
+      ["gloves", "장갑", "퉁 므", "ถุงมือ", "장갑", []],
+      ["helmet", "안전모", "무악 니라파이", "หมวกนิรภัย", "안전모", ["헬멧"]],
+      ["mask", "마스크", "나 까악", "หน้ากาก", "마스크", []],
+      ["safetyShoes", "안전화", "롱 타오 니라파이", "รองเท้านิรภัย", "안전화", ["안전신발"]],
+      ["quality", "품질", "쿠나팝", "คุณภาพ", "품질", ["퀄리티"]],
+      ["defect", "불량", "콩 씨아", "ของเสีย", "불량품 / 불량 상태", ["불량품"]],
+      ["inspection", "검사", "뜨루앗 쏩", "ตรวจสอบ", "검사 / 확인", ["점검"]],
+      ["packing", "포장", "반주", "บรรจุ", "포장", ["박스포장"]],
+      ["box", "상자", "끌렁", "กล่อง", "상자 / 박스", ["박스"]],
+      ["pallet", "팔레트", "파렛", "พาเลท", "팔레트", []],
+      ["forklift", "지게차", "롯 욕", "รถยก", "지게차", ["포크리프트"]],
+      ["warehouse", "창고", "클랑 씬카", "คลังสินค้า", "창고", ["물류창고"]],
+      ["part", "부품", "친 쑤언", "ชิ้นส่วน", "부품", ["파트"]],
+      ["material", "자재", "왓싸두", "วัสดุ", "자재", ["원자재"]],
+      ["tool", "공구", "크르엉 므", "เครื่องมือ", "공구 / 도구", ["도구"]],
+    ],
+  },
+  {
+    key: "salary",
+    label: "급여·인사",
+    tags: ["일터", "숫자·시간"],
+    aliases: ["급여", "인사"],
+    items: [
+      ["salary", "급여", "응언 든", "เงินเดือน", "급여 / 월급", ["월급"]],
+      ["paySlip", "급여명세서", "슬립 응언 든", "สลิปเงินเดือน", "급여명세서", ["월급명세서"]],
+      ["wage", "임금", "카 랭", "ค่าแรง", "일한 대가", ["시급", "급여"]],
+      ["bonus", "상여금", "보낫", "โบนัส", "보너스", ["보너스"]],
+      ["deduction", "공제", "학 응언", "หักเงิน", "급여 공제", ["차감"]],
+      ["insurance", "보험", "쁘라깐", "ประกัน", "보험", []],
+      ["tax", "세금", "파 씨", "ภาษี", "세금", []],
+      ["leave", "휴가", "라", "ลา", "휴가", ["연차"]],
+      ["sickLeave", "병가", "라 뿌어이", "ลาป่วย", "병가", []],
+      ["dayOff", "휴무", "완 윳", "วันหยุด", "쉬는 날", ["쉬는날"]],
+      ["contract", "계약서", "산야", "สัญญา", "계약서", ["계약"]],
+      ["signature", "서명", "라이 센", "ลายเซ็น", "서명", ["사인"]],
+      ["passport", "여권", "낭쓰 드은 탕", "หนังสือเดินทาง", "여권", []],
+      ["idCard", "신분증", "밧 쁘라차촌", "บัตรประชาชน", "신분증", ["ID카드"]],
+      ["alienCard", "외국인등록증", "밧 땅 다오", "บัตรต่างด้าว", "외국인등록증", ["비자카드"]],
+      ["staffCard", "사원증", "밧 파낙응안", "บัตรพนักงาน", "사원증", ["출입증"]],
+      ["uniform", "유니폼", "춧 유니폼", "ชุดยูนิฟอร์ม", "근무복", ["작업복"]],
+      ["dormFee", "기숙사비", "카 허", "ค่าหอ", "기숙사 비용", ["숙소비"]],
+      ["utilityBill", "공과금", "카 남 카 파이", "ค่าน้ำค่าไฟ", "전기세와 수도세 등 공공요금", ["관리비"]],
+      ["electricBill", "전기세", "카 파이", "ค่าไฟ", "전기요금", ["전기요금"]],
+      ["waterBill", "수도세", "카 남", "ค่าน้ำ", "수도요금", ["수도요금"]],
+      ["maintenance", "관리비", "카 쑤언 끌랑", "ค่าส่วนกลาง", "관리비", []],
+      ["bank", "은행", "타나칸", "ธนาคาร", "은행", []],
+      ["account", "계좌", "반치 타나칸", "บัญชีธนาคาร", "계좌", []],
+    ],
+  },
+];
+
+const SUPPLEMENTAL_CATEGORY_SENTENCE_GROUPS = [
+  {
+    key: "daily",
+    label: "기본회화",
+    tags: ["기본회화"],
+    items: [
+      ["understand", "이해했어요", "카오 짜이 래우 캅", "เข้าใจแล้วครับ", "이해했다는 뜻", ["알겠어요"]],
+      ["dontUnderstand", "이해 못했어요", "양 마이 카오 짜이 캅", "ยังไม่เข้าใจครับ", "아직 이해하지 못했을 때", ["못 알아들었어요"]],
+      ["repeat", "다시 설명해 주세요", "츄어이 티바이 익 크랑 너이 캅", "ช่วยอธิบายอีกครั้งหน่อยครับ", "한 번 더 설명을 부탁할 때", ["다시 말해주세요"]],
+      ["wait", "잠깐 기다려 주세요", "츄어이 러 쁩 니너이 캅", "ช่วยรอสักนิดหน่อยครับ", "잠시만 기다려 달라고 할 때", ["조금만 기다려 주세요"]],
+      ["slowly", "천천히 말해 주세요", "츄어이 풋 차 차 너이 캅", "ช่วยพูดช้าๆหน่อยครับ", "말이 빠를 때", ["천천히 말씀해 주세요"]],
+      ["openDoor", "문 열어 주세요", "츄어이 쁘읃 쁘라뚜 너이 캅", "ช่วยเปิดประตูหน่อยครับ", "문을 열어 달라고 할 때", []],
+      ["closeDoor", "문 닫아 주세요", "츄어이 삗 쁘라뚜 너이 캅", "ช่วยปิดประตูหน่อยครับ", "문을 닫아 달라고 할 때", []],
+    ],
+  },
+  {
+    key: "food",
+    label: "식당",
+    tags: ["식당", "쇼핑"],
+    items: [
+      ["iceMore", "얼음 좀 더 주세요", "커 남 캥 엄 너이 캅", "ขอน้ำแข็งเพิ่มหน่อยครับ", "얼음을 더 요청할 때", ["얼음 더 주세요"]],
+      ["lessSpicy", "덜 맵게 해 주세요", "츄어이 탐 하이 마이 펫 막 너이 캅", "ช่วยทำให้ไม่เผ็ดมากหน่อยครับ", "음식 맵기를 줄이고 싶을 때", []],
+      ["watermelonJuice", "수박 주스 하나 주세요", "커 남 땡 모 능 깨우 캅", "ขอน้ำแตงโมหนึ่งแก้วครับ", "수박 주스를 주문할 때", ["수박주스 주세요"]],
+      ["takeAway", "이거 포장해 주세요", "츄어이 싸이 끌렁 하이 너이 캅", "ช่วยใส่กล่องให้หน่อยครับ", "포장을 부탁할 때", ["포장해 주세요"]],
+      ["waterBottle", "물 한 병 주세요", "커 남 쁠라오 능 쿠엇 캅", "ขอน้ำเปล่าหนึ่งขวดครับ", "생수 한 병을 부탁할 때", []],
+      ["delicious", "맛있어요", "아로이 캅", "อร่อยครับ", "음식이 맛있을 때", []],
+    ],
+  },
+  {
+    key: "transport",
+    label: "이동",
+    tags: ["이동", "숫자·시간"],
+    items: [
+      ["busTime", "버스가 몇 시에 와요?", "롯 밧 마 끼 몽 캅", "รถบัสมากี่โมงครับ", "버스 도착 시간을 물을 때", ["버스 시간"]],
+      ["nextBus", "다음 버스는 몇 시예요?", "롯 밧 칸 떠 빠이 끼 몽 캅", "รถบัสคันต่อไปกี่โมงครับ", "다음 버스 시간을 물을 때", []],
+      ["toFactory", "이 버스가 공장에 가요?", "롯 밧 칸 니 빠이 롱 응안 마이 캅", "รถบัสคันนี้ไปโรงงานไหมครับ", "공장 가는 버스인지 확인할 때", []],
+      ["showSchedule", "버스 시간표를 보여 주세요", "츄어이 보여 따랑 웨라 롯 밧 너이 캅", "ช่วยโชว์ตารางเวลารถบัสหน่อยครับ", "시간표 확인 요청", ["시간표 보여주세요"]],
+      ["callTaxi", "택시 불러 주세요", "츄어이 리악 택씨 하이 너이 캅", "ช่วยเรียกแท็กซี่ให้หน่อยครับ", "택시를 불러 달라고 할 때", []],
+      ["getOff", "여기서 내려 주세요", "종 롱 티 니 너이 캅", "จอดลงที่นี่หน่อยครับ", "여기서 내리고 싶을 때", ["여기 내려 주세요"]],
+    ],
+  },
+  {
+    key: "dorm",
+    label: "생활",
+    tags: ["이동"],
+    items: [
+      ["washingMachineWhere", "세탁기는 어디에 있어요?", "크르엉 싹 파 유 티 나이 캅", "เครื่องซักผ้าอยู่ที่ไหนครับ", "세탁기 위치를 물을 때", []],
+      ["airconBroken", "에어컨이 안 돼요", "에 마이 댕안 캅", "แอร์ไม่ทำงานครับ", "에어컨 고장", ["에어컨 고장"]],
+      ["noHotWater", "뜨거운 물이 안 나와요", "남 론 마이 옥 캅", "น้ำร้อนไม่ออกครับ", "온수가 안 나올 때", ["온수 안 나와요"]],
+      ["cardKeyBroken", "카드키가 안 돼요", "키 깟 마이 다이 캅", "คีย์การ์ดใช้ไม่ได้ครับ", "카드키 오류", ["카드키 안돼요"]],
+      ["laundryPlace", "빨래 널 곳이 있어요?", "미 티 딱 파 마이 캅", "มีที่ตากผ้าไหมครับ", "빨래를 널 공간이 있는지 물을 때", []],
+      ["dormFee", "기숙사비는 얼마예요?", "카 허 타오라이 캅", "ค่าหอเท่าไรครับ", "기숙사 요금을 물을 때", []],
+    ],
+  },
+  {
+    key: "health",
+    label: "건강",
+    tags: ["건강"],
+    items: [
+      ["headache", "머리가 아파요", "뿌엇 후어 캅", "ปวดหัวครับ", "두통이 있을 때", []],
+      ["stomachache", "배가 아파요", "뿌엇 통 캅", "ปวดท้องครับ", "복통이 있을 때", []],
+      ["fever", "열이 있어요", "미 카이 캅", "มีไข้ครับ", "열이 있을 때", []],
+      ["coldMedicine", "감기약 주세요", "커 야 왓 캅", "ขอยาหวัดครับ", "감기약을 요청할 때", []],
+      ["goHospital", "병원에 가고 싶어요", "약 빠이 롱 파야반 캅", "อยากไปโรงพยาบาลครับ", "병원에 가고 싶을 때", []],
+      ["allergy", "알레르기가 있어요", "폼 미 푸미 패 캅", "ผมมีภูมิแพ้ครับ", "알레르기가 있을 때", []],
+    ],
+  },
+  {
+    key: "work",
+    label: "일터",
+    tags: ["일터"],
+    items: [
+      ["overtime", "오늘 야근해요?", "완 니 미 오티 마이 캅", "วันนี้มีโอทีไหมครับ", "오늘 야근이 있는지 물을 때", []],
+      ["extraHours", "초과근무가 있어요?", "미 루앙 웨라 마이 캅", "มีล่วงเวลาไหมครับ", "연장근무 여부 확인", ["연장근무 있어요?"]],
+      ["instructionAgain", "작업 지시를 다시 설명해 주세요", "츄어이 티바이 캄 쌍 응안 익 크랑 너이 캅", "ช่วยอธิบายคำสั่งงานอีกครั้งหน่อยครับ", "작업 설명을 다시 듣고 싶을 때", []],
+      ["qualityCheck", "품질 검사해 주세요", "츄어이 뜨루앗 쏩 쿠나팝 너이 캅", "ช่วยตรวจสอบคุณภาพหน่อยครับ", "품질 확인 요청", []],
+      ["machineStopped", "기계가 멈췄어요", "크르엉 짝 윳 래우 캅", "เครื่องจักรหยุดแล้วครับ", "기계가 멈췄을 때", ["기계 멈춤"]],
+      ["safetyHelmet", "안전모를 써야 해요?", "똥 싸이 무악 니라파이 마이 캅", "ต้องใส่หมวกนิรภัยไหมครับ", "안전모 착용 여부", []],
+    ],
+  },
+  {
+    key: "salary",
+    label: "급여·인사",
+    tags: ["일터", "숫자·시간"],
+    items: [
+      ["showPayslip", "급여명세서를 보여 주세요", "츄어이 보여 슬립 응언 든 너이 캅", "ช่วยโชว์สลิปเงินเดือนหน่อยครับ", "급여명세서를 요청할 때", []],
+      ["salaryCorrect", "이번 달 월급이 맞아요?", "응언 든 든 니 툭 마이 캅", "เงินเดือนเดือนนี้ถูกไหมครับ", "이번 달 급여 확인", []],
+      ["vacation", "휴가를 쓰고 싶어요", "약 라 캅", "อยากลาครับ", "휴가를 신청하고 싶을 때", []],
+      ["signed", "계약서에 서명했어요", "폼 라이 센 나이 산야 래우 캅", "ผมลายเซ็นในสัญญาแล้วครับ", "서명 완료 전달", []],
+      ["passportBrought", "여권을 가져왔어요", "폼 남 낭쓰 드은 탕 마 래우 캅", "ผมนำหนังสือเดินทางมาแล้วครับ", "여권을 준비했다고 말할 때", []],
+      ["checkTime", "출근 시간을 확인해 주세요", "츄어이 체크 웨라 카오 응안 너이 캅", "ช่วยเช็กเวลาเข้างานหน่อยครับ", "출근 시간 확인 요청", []],
+    ],
+  },
+];
+
+function buildSupplementalCategoryEntries(groups, fallbackKind) {
+  return groups.flatMap((group) =>
+    (group.items || []).map((item, index) => {
+      const [key, korean, thai, thaiScript, note, keywords = []] = item;
+      return {
+        id: `supp-category-${fallbackKind}-${group.key}-${key || index + 1}`,
+        kind: fallbackKind,
+        source: "supplemental",
+        sheet: `코덱스 분류 보강 (${group.label})`,
+        thai,
+        thaiScript,
+        korean,
+        note: note || `${group.label}에서 자주 쓰는 표현`,
+        tags: unique([...(group.tags || [])]),
+        keywords: unique(
+          [
+            korean,
+            thai,
+            thaiScript,
+            ...(group.tags || []),
+            ...(group.aliases || []),
+            ...keywords,
+          ].map((entry) => normalizeText(entry))
+        ),
+      };
+    })
+  );
+}
+
+const SUPPLEMENTAL_CATEGORY_DATA = {
+  vocab: buildSupplementalCategoryEntries(SUPPLEMENTAL_CATEGORY_VOCAB_GROUPS, "vocab"),
+  sentences: buildSupplementalCategoryEntries(SUPPLEMENTAL_CATEGORY_SENTENCE_GROUPS, "sentence"),
 };
 
 const QUICK_SEARCHES = [
@@ -2605,6 +2995,27 @@ const THAI_MEANING_INTENT_RULES = [
 
 const QUERY_BUNDLES = [
   {
+    patterns: [/(기숙사|숙소|기숙사비|공과금|전기세|수도세|관리비|세탁기|건조기|카드키|에어컨|온수|뜨거운물|빨래|세제)/],
+    primary: ["기숙사", "기숙사비", "공과금", "세탁기", "카드키"],
+    related: ["기숙사비는 얼마예요?", "세탁기는 어디에 있어요?", "카드키가 안 돼요", "뜨거운 물이 안 나와요"],
+    display: ["기숙사", "기숙사비", "세탁기", "카드키"],
+    tags: ["이동"],
+  },
+  {
+    patterns: [/(급여|월급|급여명세서|임금|상여금|공제|세금|보험|휴가|병가|계약서|서명|여권|사원증|외국인등록증)/],
+    primary: ["급여", "급여명세서", "휴가", "계약서"],
+    related: ["급여명세서를 보여 주세요", "이번 달 월급이 맞아요?", "휴가를 쓰고 싶어요", "계약서에 서명했어요"],
+    display: ["급여", "급여명세서", "휴가", "계약서"],
+    tags: ["일터", "숫자·시간"],
+  },
+  {
+    patterns: [/(야근|초과근무|연장근무|교대근무|주간근무|야간근무|출근|퇴근|근무시간|작업지시|품질|검사|불량|자재|부품|창고|지게차)/],
+    primary: ["야근", "초과근무", "근무시간", "작업 지시", "품질"],
+    related: ["오늘 야근해요?", "초과근무가 있어요?", "출근 시간을 확인해 주세요", "작업 지시를 다시 설명해 주세요"],
+    display: ["야근", "초과근무", "근무시간", "작업 지시"],
+    tags: ["일터", "숫자·시간"],
+  },
+  {
     patterns: [/(방|객실|룸).*(바꿔|바꾸|변경|교체)/, /(다른|새).*(방|객실)/],
     primary: ["방", "객실", "바꾸다", "변경"],
     related: [
@@ -3507,6 +3918,10 @@ let emptySearchProfileCache = null;
 const mergedEntriesCache = {
   revision: -1,
   entries: EMPTY_RESULT_LIST,
+};
+const aiThaiPronunciationLexiconCache = {
+  revision: -1,
+  segments: EMPTY_RESULT_LIST,
 };
 
 const state = {
@@ -4809,10 +5224,10 @@ function resetAuthState(message = "") {
 
 function createHydratedBaseData() {
   return {
-    vocab: [...(baseData.vocab || []), ...(SUPPLEMENTAL_DATA.vocab || [])].map((entry) =>
+    vocab: [...(baseData.vocab || []), ...(SUPPLEMENTAL_DATA.vocab || []), ...(SUPPLEMENTAL_CATEGORY_DATA.vocab || [])].map((entry) =>
       hydrateEntry(entry, "vocab")
     ),
-    sentences: [...(baseData.sentences || []), ...(SUPPLEMENTAL_DATA.sentences || [])].map((entry) =>
+    sentences: [...(baseData.sentences || []), ...(SUPPLEMENTAL_DATA.sentences || []), ...(SUPPLEMENTAL_CATEGORY_DATA.sentences || [])].map((entry) =>
       hydrateEntry(entry, "sentence")
     ),
   };
@@ -5076,11 +5491,12 @@ function serializeAiContextEntry(entry) {
 
 function createAiAssistEntry(item, kind, query, index) {
   const korean = sanitizeAiMetaText(item.korean) || String(item.korean || "").trim();
-  const thaiScript = String(item.thaiScript || "").trim();
+  const rawThai = String(item.thai || "").trim();
+  const thaiScript = String(item.thaiScript || "").trim() || (THAI_SCRIPT_REGEX.test(rawThai) ? rawThai : "");
   const thai =
-    sanitizeAiPronunciation(item.thai) ||
+    sanitizeAiPronunciation(rawThai) ||
     approximateAiThaiScriptPronunciation(thaiScript) ||
-    approximateAiThaiScriptPronunciation(item.thai) ||
+    approximateAiThaiScriptPronunciation(rawThai) ||
     "";
   const noteParts = [sanitizeAiMetaText(item.note), t("ai.entryNote")].filter(Boolean);
   return hydrateEntry(
@@ -7955,6 +8371,13 @@ function buildSearchProfile(query, entries = []) {
     .filter((item) => item.length >= 2)
     .sort((left, right) => right.length - left.length)
     .slice(0, 14);
+  const searchProfileSeed = { normalized };
+  const resolvedDisplayTerms = cleanProfileDisplayTerms(
+    searchProfileSeed,
+    unique(displayTerms.length ? displayTerms : rawTokens)
+      .filter((item) => !blockedTerms.has(compactText(item)))
+      .slice(0, 6)
+  );
 
   return {
     query: trimmedQuery,
@@ -7970,9 +8393,7 @@ function buildSearchProfile(query, entries = []) {
     actionIds: unique(actionIds),
     templateTerms,
     anchorTerms: unique([...rawAnchorTerms, ...intentAnchorTerms, ...fallbackAnchorTerms]).slice(0, 4),
-    displayTerms: unique(displayTerms.length ? displayTerms : rawTokens)
-      .filter((item) => !blockedTerms.has(compactText(item)))
-      .slice(0, 6),
+    displayTerms: resolvedDisplayTerms.slice(0, 6),
     tags: sortTags(unique(tags)),
     preferredTags,
     avoidTags,
@@ -8920,6 +9341,59 @@ function isDormitoryBillingSearch(searchProfile) {
   );
 }
 
+function isDormitoryLifeSearch(searchProfile) {
+  return /기숙사|숙소|기숙사비|공과금|전기세|수도세|관리비|세탁기|건조기|카드키|에어컨|온수|뜨거운물|빨래|세제/.test(
+    searchProfile.normalized
+  );
+}
+
+function isPayrollSearch(searchProfile) {
+  return /급여|월급|급여명세서|임금|상여금|공제|세금|보험|휴가|병가|계약서|서명|여권|사원증|외국인등록증/.test(
+    searchProfile.normalized
+  );
+}
+
+function isWorkHoursSearch(searchProfile) {
+  return /야근|초과근무|연장근무|교대근무|주간근무|야간근무|출근|퇴근|근무시간|작업지시|품질|검사|불량|자재|부품|창고|지게차/.test(
+    searchProfile.normalized
+  );
+}
+
+function cleanProfileDisplayTerms(searchProfile, terms) {
+  const list = unique(terms).filter(Boolean);
+  if (!list.length) return list;
+
+  if (isDormitoryLifeSearch(searchProfile)) {
+    const filtered = list.filter((item) =>
+      /기숙사|숙소|기숙사비|공과금|전기세|수도세|관리비|세탁기|건조기|카드키|에어컨|온수|빨래|세제|냉장고|선풍기/.test(
+        String(item)
+      )
+    );
+    if (filtered.length) return filtered;
+  }
+
+  if (isPayrollSearch(searchProfile)) {
+    const filtered = list.filter((item) =>
+      /급여|월급|급여명세서|임금|상여금|공제|세금|보험|휴가|병가|계약서|서명|여권|사원증|외국인등록증/.test(
+        String(item)
+      )
+    );
+    if (filtered.length) return filtered;
+  }
+
+  if (isWorkHoursSearch(searchProfile)) {
+    const filtered = list.filter((item) =>
+      /야근|초과근무|연장근무|근무시간|출근|퇴근|교대근무|주간근무|야간근무|작업 지시|작업지시|품질|검사|불량|자재|부품|창고|지게차|휴무/.test(
+        String(item)
+      )
+    );
+    if (filtered.length) return filtered;
+  }
+
+  const genericFiltered = list.filter((item) => !/^(?:있다|시간|날씨)$/.test(String(item)));
+  return genericFiltered.length ? genericFiltered : list;
+}
+
 function isLanguageDisplaySearch(searchProfile) {
   return /(?:태국어|한국어|영어).*(?:보여|써|적어|번역)|(?:보여|써|적어|번역).*(?:태국어|한국어|영어)/.test(
     searchProfile.normalized
@@ -8976,6 +9450,17 @@ function isEntryHealthStateRelated(entry) {
   return matchesEntryCoreSearchTexts(entry, /건강|튼튼|아프지않|몸상태가좋|แข็งแรง|สุขภาพดี|สบายดี/);
 }
 
+function isEntryPayrollRelated(entry) {
+  return matchesEntryKoreanText(entry, /급여|월급|급여명세서|임금|상여금|공제|세금|보험|휴가|병가|계약서|서명|여권|사원증|외국인등록증/);
+}
+
+function isEntryWorkHoursRelated(entry, searchProfile) {
+  if (!/휴무|휴가|병가/.test(searchProfile.normalized) && matchesEntryKoreanText(entry, /휴무|휴가|병가/)) {
+    return false;
+  }
+  return matchesEntryKoreanText(entry, /야근|초과근무|연장근무|근무시간|출근|퇴근|교대근무|주간근무|야간근무|작업지시|작업 지시|품질|검사|불량|자재|부품|창고|지게차/);
+}
+
 function finalizeSearchEntries(entries, searchProfile, kind, limit) {
   let result = uniqueByMeaning(uniqueById(entries));
 
@@ -9011,6 +9496,18 @@ function finalizeSearchEntries(entries, searchProfile, kind, limit) {
       kind === "sentence"
         ? filterEntriesIfEnough(result, isEntryHealthStateRelated, 1)
         : filterEntriesIfEnough(result, isEntryHealthStateRelated, 1);
+  }
+  if (isPayrollSearch(searchProfile)) {
+    result =
+      kind === "sentence"
+        ? filterEntriesIfEnough(result, isEntryPayrollRelated, 1)
+        : prioritizeEntriesIfEnough(result, isEntryPayrollRelated, 1);
+  }
+  if (isWorkHoursSearch(searchProfile)) {
+    result =
+      kind === "sentence"
+        ? filterEntriesIfEnough(result, (entry) => isEntryWorkHoursRelated(entry, searchProfile), 1)
+        : prioritizeEntriesIfEnough(result, (entry) => isEntryWorkHoursRelated(entry, searchProfile), 1);
   }
 
   return result.slice(0, limit);
@@ -9736,65 +10233,139 @@ function hasDisplayPronunciation(entry) {
   return Boolean(compactText(getDisplayPronunciationText(entry)));
 }
 
-const AI_THAI_SCRIPT_PRONUNCIATION_TOKENS = [
-  [/กรุณา/g, "까루나"],
-  [/ช่วย/g, "츄어이"],
-  [/สุขภาพ/g, "쑤카팝"],
-  [/แข็งแรง/g, "캥랭"],
-  [/สบายดี/g, "사바이 디"],
-  [/ป่วย/g, "뿌어이"],
-  [/ดี/g, "디"],
-  [/ไหม/g, "마이"],
-  [/ผม/g, "폼"],
-  [/อันนี้/g, "안 니"],
-  [/อันนั้น/g, "안 난"],
-  [/สิ่งนี้/g, "씽 니"],
-  [/ห้องน้ำ/g, "홍 남"],
-  [/ที่ไหน/g, "티 나이"],
-  [/ที่อื่น/g, "티 은"],
-  [/ที่นั่ง/g, "티 낭"],
-  [/เท่าไร/g, "타오라이"],
-  [/ราคา/g, "라카"],
-  [/เปลี่ยน/g, "쁠리안"],
-  [/เป็น/g, "펜"],
-  [/แบ่ง/g, "뱅"],
-  [/ย้าย/g, "야이"],
-  [/ให้/g, "하이"],
-  [/หน่อย/g, "너이"],
-  [/ครับ/g, "캅"],
-  [/ค่ะ/g, "카"],
-  [/คะ/g, "카"],
-  [/ห้อง/g, "홍"],
-  [/น้ำ/g, "남"],
-  [/อยู่/g, "유"],
-  [/เอา/g, "아오"],
-  [/ดู/g, "두"],
-  [/ไป/g, "빠이"],
-  [/มา/g, "마"],
-  [/นี้/g, "니"],
-  [/นั้น/g, "난"],
-  [/โน้น/g, "논"],
-  [/สิ่ง/g, "씽"],
-  [/ขอ/g, "커"],
+const STATIC_AI_THAI_SCRIPT_PRONUNCIATION_SEGMENTS = [
+  ["โรงพยาบาล", "롱 파야반"],
+  ["เครื่องซักผ้า", "크르엉 싹 파"],
+  ["เครื่องอบผ้า", "크르엉 옵 파"],
+  ["เครื่องจักร", "크르엉 짝"],
+  ["ค่าน้ำค่าไฟ", "카 남 카 파이"],
+  ["เงินเดือน", "응언 든"],
+  ["น้ำผลไม้", "남 폰라마이"],
+  ["น้ำแข็ง", "남 캥"],
+  ["น้ำเปล่า", "남 쁠라오"],
+  ["น้ำร้อน", "남 론"],
+  ["น้ำเย็น", "남 옌"],
+  ["กรุณา", "까루나"],
+  ["ช่วย", "츄어이"],
+  ["สุขภาพ", "쑤카팝"],
+  ["แข็งแรง", "캥랭"],
+  ["สบายดี", "사바이 디"],
+  ["ป่วย", "뿌어이"],
+  ["อันนี้", "안 니"],
+  ["อันนั้น", "안 난"],
+  ["สิ่งนี้", "씽 니"],
+  ["ห้องน้ำ", "홍 남"],
+  ["ที่ไหน", "티 나이"],
+  ["ที่อื่น", "티 은"],
+  ["ที่นั่ง", "티 낭"],
+  ["เท่าไร", "타오라이"],
+  ["ราคา", "라카"],
+  ["เปลี่ยน", "쁠리안"],
+  ["แบ่ง", "뱅"],
+  ["ย้าย", "야이"],
+  ["หน่อย", "너이"],
+  ["ครับ", "캅"],
+  ["ค่ะ", "카"],
+  ["คะ", "카"],
+  ["ห้อง", "홍"],
+  ["น้ำ", "남"],
+  ["อยู่", "유"],
+  ["เอา", "아오"],
+  ["ดู", "두"],
+  ["ไป", "빠이"],
+  ["มา", "마"],
+  ["นี้", "니"],
+  ["นั้น", "난"],
+  ["โน้น", "논"],
+  ["สิ่ง", "씽"],
+  ["เป็น", "펜"],
+  ["ให้", "하이"],
+  ["ขอ", "커"],
+  ["ผม", "폼"],
+  ["ไหม", "마이"],
+  ["ดี", "디"],
 ];
 
-function approximateAiThaiScriptPronunciation(thaiScript) {
+function compactThaiScript(text) {
+  return String(text || "").replace(/[^\u0E00-\u0E7F]+/g, "");
+}
+
+function buildAiThaiPronunciationLexicon() {
+  const entries = getMergedEntries(getMergedData());
+  const map = new Map();
+
+  STATIC_AI_THAI_SCRIPT_PRONUNCIATION_SEGMENTS.forEach(([script, pronunciation]) => {
+    const compact = compactThaiScript(script);
+    if (compact && pronunciation) {
+      map.set(compact, normalizePronunciationForDisplay(pronunciation));
+    }
+  });
+
+  entries.forEach((entry) => {
+    const thaiScript = compactThaiScript(getThaiScriptText(entry));
+    const pronunciation = String(getDisplayPronunciationText(entry) || "").trim();
+    if (!thaiScript || thaiScript.length < 2 || !pronunciation) return;
+    if (looksLikeEnglishMeaningSentence(pronunciation) || THAI_SCRIPT_REGEX.test(pronunciation)) return;
+
+    const existing = map.get(thaiScript);
+    if (!existing || pronunciation.length < existing.length) {
+      map.set(thaiScript, pronunciation);
+    }
+  });
+
+  return Array.from(map.entries())
+    .map(([script, pronunciation]) => ({ script, pronunciation }))
+    .sort((left, right) => right.script.length - left.script.length);
+}
+
+function getAiThaiPronunciationLexicon() {
+  if (aiThaiPronunciationLexiconCache.revision === state.customRevision) {
+    return aiThaiPronunciationLexiconCache.segments;
+  }
+  aiThaiPronunciationLexiconCache.revision = state.customRevision;
+  aiThaiPronunciationLexiconCache.segments = buildAiThaiPronunciationLexicon();
+  return aiThaiPronunciationLexiconCache.segments;
+}
+
+function approximateAiThaiScriptPronunciationFallback(thaiScript) {
   const raw = String(thaiScript || "").trim();
   if (!raw) return "";
 
   let result = raw;
   let replaced = false;
-  AI_THAI_SCRIPT_PRONUNCIATION_TOKENS.forEach(([pattern, replacement]) => {
-    if (pattern.test(result)) {
-      result = result.replace(pattern, ` ${replacement} `);
+  STATIC_AI_THAI_SCRIPT_PRONUNCIATION_SEGMENTS.forEach(([script, replacement]) => {
+    if (result.includes(script)) {
+      result = result.split(script).join(` ${replacement} `);
       replaced = true;
     }
-    pattern.lastIndex = 0;
   });
 
   result = result.replace(/[ๆฯ]/g, " ").replace(/\s+/g, " ").trim();
   if (!replaced || THAI_SCRIPT_REGEX.test(result)) return "";
-  return result;
+  return normalizePronunciationForDisplay(result);
+}
+
+function approximateAiThaiScriptPronunciation(thaiScript) {
+  const compact = compactThaiScript(thaiScript);
+  if (!compact) return "";
+
+  const lexicon = getAiThaiPronunciationLexicon();
+  const pronunciations = [];
+  let remaining = compact;
+  let loopCount = 0;
+
+  while (remaining && loopCount < 128) {
+    loopCount += 1;
+    const matched = lexicon.find((segment) => remaining.startsWith(segment.script));
+    if (!matched) {
+      return approximateAiThaiScriptPronunciationFallback(thaiScript);
+    }
+    pronunciations.push(matched.pronunciation);
+    remaining = remaining.slice(matched.script.length);
+  }
+
+  const combined = normalizePronunciationForDisplay(pronunciations.join(" ").replace(/\s+/g, " ").trim());
+  return THAI_SCRIPT_REGEX.test(combined) ? approximateAiThaiScriptPronunciationFallback(thaiScript) : combined;
 }
 
 function isProbablyEnglishOnlyText(value) {
@@ -9986,7 +10557,10 @@ function renderQueryInsights(searchProfile) {
     elements.queryInsightsPanel.hidden = true;
     return;
   }
-  const insights = unique(searchProfile.displayTerms).slice(0, 6);
+  const compactQuery = compactText(searchProfile.query);
+  const insights = unique(searchProfile.displayTerms)
+    .filter((item) => compactText(item) && compactText(item) !== compactQuery)
+    .slice(0, 6);
   elements.queryInsights.innerHTML = "";
   insights.forEach((item) => {
     const chip = document.createElement("span");
@@ -9994,7 +10568,7 @@ function renderQueryInsights(searchProfile) {
     chip.textContent = item;
     elements.queryInsights.appendChild(chip);
   });
-  elements.queryInsightsPanel.hidden = !searchProfile.query || !insights.length;
+  elements.queryInsightsPanel.hidden = !searchProfile.query || insights.length < 2;
 }
 
 function escapeHtml(text) {
