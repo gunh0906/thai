@@ -355,13 +355,13 @@
           <div id="authUsersList" class="card-stack compact"></div>
         </section>
 
-        <section class="menu-section">
+        <section id="adminAiSection" class="menu-section" hidden>
           <div class="section-top">
             <div>
               <p class="section-kicker">AI 검색</p>
-              <h2>LLM 보강 연결</h2>
+              <h2>관리자 AI 연결</h2>
             </div>
-            <p class="section-description">GitHub Pages에는 OpenAI 키를 넣지 않고 프록시 주소만 저장합니다.</p>
+            <p class="section-description">관리자만 프록시 주소와 AI 모드를 바꿀 수 있습니다.</p>
           </div>
 
           <form id="aiSettingsForm" class="entry-form">
@@ -390,7 +390,7 @@
                   id="aiEndpointInput"
                   name="endpoint"
                   type="url"
-                  placeholder="예: https://thai-pocketbook-ai.example.workers.dev/assist"
+                  placeholder="예: https://thai-pocketbook-ai.rjsghks87.workers.dev/assist"
                 />
               </label>
             </div>
@@ -400,7 +400,7 @@
               <p id="aiSettingsFeedback" class="feedback-text" aria-live="polite"></p>
             </div>
             <p class="section-description">
-              OpenAI 키는 Cloudflare Worker나 Vercel 서버 비밀값으로만 넣고, 이 앱에는 프록시 주소만 저장하세요. 실제 AI 사용은 로그인 세션으로 확인합니다.
+              OpenAI 키는 Cloudflare Worker 비밀값으로만 넣고, 이 앱에는 프록시 주소만 저장합니다. 실제 AI 사용은 로그인 세션과 계정 권한으로 확인합니다.
             </p>
           </form>
         </section>
@@ -419,6 +419,6 @@
     </aside>
 
     <script src="./data.js?v=20260421d"></script>
-    <script src="./app.js?v=20260422a"></script>
+    <script src="./app.js?v=20260422b"></script>
   </body>
 </html>

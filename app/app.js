@@ -2,16 +2,17 @@
 const EXPORT_VERSION = 1;
 const AI_STORAGE_KEY = "thai-pocketbook-ai-v1";
 const AUTH_STORAGE_KEY = "thai-pocketbook-auth-v1";
-const APP_VERSION = "20260422a";
+const APP_VERSION = "20260422b";
+const DEFAULT_PROXY_ENDPOINT = "https://thai-pocketbook-ai.rjsghks87.workers.dev/assist";
 const AI_ASSIST_MIN_QUERY_LENGTH = 2;
 const AI_RESULT_LIMITS = {
   vocab: 3,
   sentences: 4,
 };
 const DEFAULT_AI_SETTINGS = {
-  enabled: false,
+  enabled: true,
   mode: "manual",
-  endpoint: "",
+  endpoint: DEFAULT_PROXY_ENDPOINT,
 };
 
 const DEFAULT_AUTH_STATE = {
@@ -2893,6 +2894,7 @@ const elements = {
   authCreateEnabledInput: document.querySelector("#authCreateEnabledInput"),
   authAdminFeedback: document.querySelector("#authAdminFeedback"),
   authUsersList: document.querySelector("#authUsersList"),
+  adminAiSection: document.querySelector("#adminAiSection"),
   aiSettingsForm: document.querySelector("#aiSettingsForm"),
   aiEnabledInput: document.querySelector("#aiEnabledInput"),
   aiModeInput: document.querySelector("#aiModeInput"),
@@ -3944,9 +3946,9 @@ function loadAiSettings() {
     if (!raw) return { ...DEFAULT_AI_SETTINGS };
     const parsed = JSON.parse(raw);
     return {
-      enabled: Boolean(parsed.enabled),
+      enabled: typeof parsed.enabled === "boolean" ? parsed.enabled : Boolean(parsed.enabled ?? DEFAULT_AI_SETTINGS.enabled),
       mode: normalizeAiMode(parsed.mode),
-      endpoint: String(parsed.endpoint || "").trim(),
+      endpoint: String(parsed.endpoint || DEFAULT_AI_SETTINGS.endpoint).trim() || DEFAULT_AI_SETTINGS.endpoint,
     };
   } catch (error) {
     console.error("AI 설정 로드 실패", error);
@@ -4151,7 +4153,7 @@ function getAuthMetaText(user) {
 async function requestWorkerJson(path, options = {}) {
   const baseUrl = options.baseUrl || getWorkerBaseUrl();
   if (!baseUrl && !/^https?:\/\//i.test(String(path || ""))) {
-    throw new Error("먼저 프록시 URL을 저장해 주세요.");
+    throw new Error("관리자 연결 설정이 아직 준비되지 않았습니다.");
   }
 
   const url = /^https?:\/\//i.test(String(path || "")) ? String(path) : `${baseUrl}${path}`;
@@ -4396,7 +4398,7 @@ async function requestAiAssist(context = state.lastSearchContext, options = {}) 
   if (!hasConfiguredAiAssist()) {
     openMenu();
     if (elements.aiSettingsFeedback) {
-      elements.aiSettingsFeedback.textContent = "AI 보강을 쓰려면 프록시 URL을 먼저 저장해 주세요.";
+      elements.aiSettingsFeedback.textContent = "관리자 메뉴에서 AI 연결 설정을 확인해 주세요.";
     }
     elements.aiEndpointInput?.focus();
     return;
@@ -4463,13 +4465,19 @@ async function requestAiAssist(context = state.lastSearchContext, options = {}) 
 
 function submitAiSettings(event) {
   event.preventDefault();
+  if (!isCurrentUserAdmin()) {
+    if (elements.aiSettingsFeedback) {
+      elements.aiSettingsFeedback.textContent = "이 설정은 관리자만 바꿀 수 있습니다.";
+    }
+    return;
+  }
   const formData = new FormData(elements.aiSettingsForm);
   const nextMode = normalizeAiMode(formData.get("mode"));
   const previousBaseUrl = getWorkerBaseUrl(state.aiSettings.endpoint);
   const nextSettings = {
     enabled: formData.get("enabled") === "on",
     mode: nextMode,
-    endpoint: String(formData.get("endpoint") || "").trim(),
+    endpoint: String(formData.get("endpoint") || "").trim() || DEFAULT_PROXY_ENDPOINT,
   };
   const validationError = getAiSettingsValidationError(nextSettings);
   if (validationError) {
@@ -4488,9 +4496,7 @@ function submitAiSettings(event) {
   if (elements.aiSettingsFeedback) {
     elements.aiSettingsFeedback.textContent = hasConfiguredAiAssist()
       ? `AI 설정을 저장했습니다. 현재 모드: ${AI_MODE_LABELS[nextMode] || "수동 보강"}`
-      : nextBaseUrl
-        ? "프록시 주소를 저장했습니다. 로그인 후 AI를 사용할 수 있습니다."
-        : "프록시 URL이 비어 있어 AI 보강은 아직 꺼진 상태입니다.";
+      : "AI 연결이 비활성화되어 있습니다.";
   }
   render();
 }
@@ -8919,7 +8925,7 @@ function renderAiAssist(context) {
   elements.aiAssistButton.disabled = !query || isLoading;
   elements.aiAssistButton.textContent = isLoading ? "AI 보는 중..." : aiMode === "manual" ? "AI 보강" : "AI 다시 보기";
   elements.aiAssistButton.title = !configured
-    ? "메뉴에서 AI 프록시 URL을 저장하면 사용할 수 있습니다."
+    ? "관리자가 AI 연결을 아직 설정하지 않았습니다."
     : !authorized
       ? "로그인한 계정에 AI 권한이 있어야 사용할 수 있습니다."
       : aiOnly
@@ -9251,14 +9257,17 @@ function renderAuthSection() {
   const hasEndpoint = hasWorkerEndpointConfigured();
   const loggedIn = isLoggedIn();
   const checking = Boolean(state.auth.checking);
+  const isAdmin = isCurrentUserAdmin();
 
   if (elements.authSummary) {
     elements.authSummary.textContent = !hasEndpoint
-      ? "먼저 아래에서 프록시 URL을 저장하면 로그인과 AI 권한 확인을 사용할 수 있습니다."
+      ? "관리자 연결 설정이 아직 준비되지 않았습니다."
       : checking
         ? "로그인 세션을 확인하고 있습니다."
         : loggedIn
-          ? `${state.auth.me?.username || "계정"}으로 로그인되어 있습니다.`
+          ? isAdmin
+            ? `${state.auth.me?.username || "계정"}으로 로그인되어 있습니다. 아래 관리자 메뉴에서 사용자와 AI 연결을 관리할 수 있습니다.`
+            : `${state.auth.me?.username || "계정"}으로 로그인되어 있습니다.`
           : "AI는 로그인한 계정만 사용할 수 있습니다.";
   }
 
@@ -9292,7 +9301,11 @@ function renderAuthSection() {
   }
 
   if (elements.authAdminSection) {
-    elements.authAdminSection.hidden = !isCurrentUserAdmin();
+    elements.authAdminSection.hidden = !isAdmin;
+  }
+
+  if (elements.adminAiSection) {
+    elements.adminAiSection.hidden = !isAdmin;
   }
 
   renderAdminUsersList();
@@ -9303,7 +9316,7 @@ async function submitAuthLogin(event) {
 
   if (!hasWorkerEndpointConfigured()) {
     if (elements.authFeedback) {
-      elements.authFeedback.textContent = "먼저 프록시 URL을 저장해 주세요.";
+      elements.authFeedback.textContent = "관리자 연결 설정이 아직 준비되지 않았습니다.";
     }
     elements.aiEndpointInput?.focus();
     return;
@@ -9748,7 +9761,7 @@ function render() {
       ? aiDisplayState.loading || !aiDisplayState.sameQuery
         ? "AI가 단어를 다시 찾는 중입니다."
         : aiDisplayState.error
-          ? "AI 보강에 실패했습니다. 로그인 상태와 프록시 주소를 확인한 뒤 다시 시도해 주세요."
+          ? "AI 보강에 실패했습니다. 로그인 상태와 관리자 연결 설정을 확인한 뒤 다시 시도해 주세요."
           : "AI가 맞는 단어를 아직 못 찾았습니다."
       : "맞는 단어가 아직 없습니다. 더 짧은 핵심어로 검색해 보세요.",
     searchProfile
@@ -9760,7 +9773,7 @@ function render() {
       ? aiDisplayState.loading || !aiDisplayState.sameQuery
         ? "AI가 회화를 다시 정리하는 중입니다."
         : aiDisplayState.error
-          ? "AI 회화 보강에 실패했습니다. 로그인 상태와 프록시 주소를 확인한 뒤 다시 시도해 주세요."
+          ? "AI 회화 보강에 실패했습니다. 로그인 상태와 관리자 연결 설정을 확인한 뒤 다시 시도해 주세요."
           : "AI가 맞는 회화를 아직 못 찾았습니다."
       : "맞는 회화가 아직 없습니다. 다른 표현으로 검색하거나 단어를 먼저 검색해 보세요.",
     searchProfile
