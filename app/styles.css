@@ -721,7 +721,8 @@ button:active {
   padding: 8px 12px;
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.88);
-  color: var(--ink);
+  color: var(--text);
+  border: 1px solid rgba(31, 47, 45, 0.08);
   box-shadow: 0 10px 20px rgba(103, 56, 9, 0.14);
 }
 
@@ -739,6 +740,7 @@ button:active {
   text-overflow: ellipsis;
   white-space: nowrap;
   font-size: 0.92rem;
+  color: var(--text);
 }
 
 .auth-toolbar-logout {
@@ -746,8 +748,13 @@ button:active {
   min-height: 42px;
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.82);
-  color: var(--ink);
+  color: var(--text);
+  border: 1px solid rgba(31, 47, 45, 0.08);
   box-shadow: 0 10px 20px rgba(103, 56, 9, 0.12);
+}
+
+.auth-toolbar-inline .ghost-button[disabled] {
+  opacity: 0.84;
 }
 
 .auth-gate {
