@@ -55,7 +55,7 @@ function corsHeaders(request, env) {
 }
 
 function jsonResponse(request, env, data, status = 200) {
-  return new Response(JSON.stringify(data, null, 2), {
+  return new Response(JSON.stringify(data), {
     status,
     headers: {
       "Content-Type": "application/json; charset=utf-8",
@@ -65,7 +65,7 @@ function jsonResponse(request, env, data, status = 200) {
 }
 
 function authStoreJsonResponse(data, status = 200) {
-  return new Response(JSON.stringify(data, null, 2), {
+  return new Response(JSON.stringify(data), {
     status,
     headers: {
       "Content-Type": "application/json; charset=utf-8",
@@ -108,65 +108,23 @@ function supportsReasoningEffort(model) {
 
 function buildPrompt(payload) {
   return [
-    "You improve Korean-Thai pocketbook search results for a mobile app.",
+    "Task: improve Korean-Thai pocketbook search for a mobile app.",
     "The user may search in Korean, Thai script, or Korean-style Thai pronunciation.",
-    "Treat payload.query as the full utterance first. Interpret the whole sentence before splitting it into keywords.",
-    "Local search results are provided. Use them as grounding first, and only invent new items when the local results are clearly noisy, missing, or wrong.",
-    "Focus on daily life, work, shopping, transport, dormitory, factory, money, timing, and short practical conversation.",
-    "Return JSON only. No markdown. No text outside the JSON object.",
-    "Schema:",
-    JSON.stringify(
-      {
-        normalizedQuery: "string",
-        intent: "short Korean explanation of the likely intent",
-        confidence: 0.0,
-        searchHints: ["keyword"],
-        caution: "optional note",
-        fallbackSentence: {
-          korean: "closest useful Korean sentence",
-          thai: "Korean-friendly pronunciation guide",
-          thaiScript: "Thai script",
-          tags: ["tag"],
-          note: "short note",
-        },
-        vocab: [
-          {
-            korean: "short Korean word or phrase",
-            thai: "Korean-friendly pronunciation guide",
-            thaiScript: "Thai script",
-            tags: ["tag"],
-            note: "short note",
-          },
-        ],
-        sentences: [
-          {
-            korean: "useful sentence in Korean",
-            thai: "Korean-friendly pronunciation guide",
-            thaiScript: "Thai script",
-            tags: ["tag"],
-            note: "short note",
-          },
-        ],
-      },
-      null,
-      2
-    ),
+    "Interpret payload.query as a full utterance first. Split into keywords only if needed.",
+    "Use localResults as grounding. Add new items only when local results are noisy, weak, or missing.",
+    "Return JSON only.",
+    'Keys: normalizedQuery, intent, confidence, searchHints, caution, fallbackSentence, vocab, sentences.',
+    "Limits: vocab<=3, sentences<=4, tags<=4, note short.",
     "Rules:",
-    "- Keep vocab to at most 3 items.",
-    "- Keep sentences to at most 4 items.",
-    "- Prefer simple spoken Thai, not textbook Thai.",
-    "- If the local results already answer the query well, keep additions minimal.",
-    "- If confidence is low, say so in caution.",
-    "- If payload.query is a natural sentence or complaint, answer it as a whole utterance first.",
-    "- Do not only split the query into separate keywords when the user typed a sentence.",
-    "- If vocab and sentences would otherwise be empty, fill fallbackSentence with the closest practical translation.",
-    "- Put the closest direct answer to the user's search first. If the user searched a sentence or request, prefer a sentence first.",
+    "- Prefer short spoken Thai for daily life, work, shopping, transport, dormitory, factory, money, and time.",
+    "- Put the closest direct answer first.",
+    "- If the query is a sentence, complaint, or request, prefer a sentence answer first.",
+    "- Always use Korean-friendly pronunciation in thai, never Latin romanization.",
     "- Always fill thaiScript when possible.",
-    "- Always make thai a Korean-friendly pronunciation guide, not Latin romanization.",
-    "- If a local result already has the same Korean meaning or the same Thai script, reuse that local pronunciation style instead of inventing a new one.",
-    "",
-    "Context JSON:",
-    JSON.stringify(payload, null, 2),
+    "- Reuse local pronunciation style when the meaning or Thai script matches a local result.",
+    "- If confidence is low, explain briefly in caution.",
+    "- If vocab and sentences would be empty, fill fallbackSentence with the closest practical translation.",
+    `Context:${JSON.stringify(payload)}`,
   ].join("\n");
 }
 
@@ -475,7 +433,7 @@ async function handleAssist(request, env) {
   const baseUrl = cleanText(env.OPENAI_BASE_URL || "https://api.openai.com/v1").replace(/\/+$/, "");
   const requestBody = {
     model,
-    max_output_tokens: 900,
+    max_output_tokens: 650,
     input: [
       {
         role: "user",

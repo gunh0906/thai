@@ -2,7 +2,7 @@
 const EXPORT_VERSION = 1;
 const AI_STORAGE_KEY = "thai-pocketbook-ai-v1";
 const AUTH_STORAGE_KEY = "thai-pocketbook-auth-v1";
-const APP_VERSION = "20260422i";
+const APP_VERSION = "20260422j";
 const DEFAULT_PROXY_ENDPOINT = "https://thai-pocketbook-ai.rjsghks87.workers.dev/assist";
 const AI_ASSIST_MIN_QUERY_LENGTH = 2;
 const AI_RESULT_LIMITS = {
@@ -2801,14 +2801,21 @@ const searchRuntimeCache = new WeakMap();
 const searchCollectionCacheIds = new WeakMap();
 const searchComputationCache = new Map();
 const thaiMeaningAnalysisCache = new Map();
+const aiAssistResponseCache = new Map();
 let searchRuntimeWarmupQueued = false;
 let searchRuntimeWarmupDone = false;
 let nextSearchCollectionCacheId = 1;
-const hydratedBaseData = createHydratedBaseData();
-const hydratedBaseMergedEntries = [...hydratedBaseData.vocab, ...hydratedBaseData.sentences];
+const EMPTY_RESULT_LIST = Object.freeze([]);
+const EMPTY_MERGED_DATA = Object.freeze({
+  vocab: EMPTY_RESULT_LIST,
+  sentences: EMPTY_RESULT_LIST,
+});
+let hydratedBaseDataCache = null;
+let hydratedBaseMergedEntriesCache = null;
+let emptySearchProfileCache = null;
 const mergedEntriesCache = {
   revision: -1,
-  entries: hydratedBaseMergedEntries,
+  entries: EMPTY_RESULT_LIST,
 };
 
 const state = {
@@ -4032,11 +4039,34 @@ function createHydratedBaseData() {
   };
 }
 
+function getHydratedBaseData() {
+  if (!hydratedBaseDataCache) {
+    hydratedBaseDataCache = createHydratedBaseData();
+  }
+  return hydratedBaseDataCache;
+}
+
+function getHydratedBaseMergedEntries() {
+  if (!hydratedBaseMergedEntriesCache) {
+    const hydrated = getHydratedBaseData();
+    hydratedBaseMergedEntriesCache = [...hydrated.vocab, ...hydrated.sentences];
+  }
+  return hydratedBaseMergedEntriesCache;
+}
+
+function getEmptySearchProfile() {
+  if (!emptySearchProfileCache) {
+    emptySearchProfileCache = buildSearchProfile("", []);
+  }
+  return emptySearchProfileCache;
+}
+
 function getMergedData() {
   if (!state.custom.vocab.length && !state.custom.sentences.length) {
-    return hydratedBaseData;
+    return getHydratedBaseData();
   }
 
+  const hydratedBaseData = getHydratedBaseData();
   return {
     vocab: [...hydratedBaseData.vocab, ...state.custom.vocab],
     sentences: [...hydratedBaseData.sentences, ...state.custom.sentences],
@@ -4045,7 +4075,7 @@ function getMergedData() {
 
 function getMergedEntries(merged) {
   if (!state.custom.vocab.length && !state.custom.sentences.length) {
-    return hydratedBaseMergedEntries;
+    return getHydratedBaseMergedEntries();
   }
   if (mergedEntriesCache.revision === state.customRevision) {
     return mergedEntriesCache.entries;
@@ -4071,6 +4101,7 @@ function getSearchCollectionCacheId(entries) {
 function clearDerivedSearchCaches() {
   searchComputationCache.clear();
   thaiMeaningAnalysisCache.clear();
+  aiAssistResponseCache.clear();
 }
 
 function buildSearchComputationCacheKey(query) {
@@ -4292,8 +4323,6 @@ function collectAiAssistReferenceEntries(context = null) {
     context?.exactSentenceEntry,
     ...(Array.isArray(context?.vocabResults) ? context.vocabResults : []),
     ...(Array.isArray(context?.sentenceResults) ? context.sentenceResults : []),
-    ...(Array.isArray(context?.allVocabEntries) ? context.allVocabEntries : []),
-    ...(Array.isArray(context?.allSentenceEntries) ? context.allSentenceEntries : []),
   ].filter(Boolean);
 
   return uniqueByMeaning(uniqueById(entries.filter((entry) => entry?.source !== "ai-assist")));
@@ -4476,6 +4505,24 @@ function buildAiAssistRequestPayload(context) {
   };
 }
 
+function buildAiAssistCacheKey(context) {
+  return [
+    normalizeAiMode(state.aiSettings.mode),
+    state.scenario,
+    state.customRevision,
+    compactText(context?.query || ""),
+  ].join("||");
+}
+
+function rememberAiAssistResult(cacheKey, result) {
+  if (!cacheKey || !result) return;
+  aiAssistResponseCache.set(cacheKey, result);
+  if (aiAssistResponseCache.size > 40) {
+    const oldestKey = aiAssistResponseCache.keys().next().value;
+    if (oldestKey) aiAssistResponseCache.delete(oldestKey);
+  }
+}
+
 function isAiEligibleQuery(query) {
   const trimmed = String(query || "").trim();
   if (trimmed.length < AI_ASSIST_MIN_QUERY_LENGTH) return false;
@@ -4580,6 +4627,19 @@ async function requestAiAssist(context = state.lastSearchContext, options = {}) 
 
   const trigger = options.trigger === "auto" ? "auto" : "manual";
   const query = String(context.query || "").trim();
+  const cacheKey = buildAiAssistCacheKey(context);
+  if (!options.force && aiAssistResponseCache.has(cacheKey)) {
+    state.aiAssist = {
+      status: "done",
+      query,
+      error: "",
+      result: aiAssistResponseCache.get(cacheKey),
+      requestId: state.aiAssist.requestId + 1,
+      trigger,
+    };
+    render();
+    return;
+  }
   const requestId = state.aiAssist.requestId + 1;
   state.aiAssist = {
     status: "loading",
@@ -4607,6 +4667,7 @@ async function requestAiAssist(context = state.lastSearchContext, options = {}) 
       requestId,
       trigger,
     };
+    rememberAiAssistResult(cacheKey, state.aiAssist.result);
   } catch (error) {
     if (requestId !== state.aiAssist.requestId) return;
     state.aiAssist = {
@@ -9832,18 +9893,36 @@ function isBrowsingState() {
 }
 
 function computeSearchComputation(query = state.query) {
+  const trimmedQuery = String(query || "").trim();
+  if (!trimmedQuery) {
+    return {
+      merged: EMPTY_MERGED_DATA,
+      searchProfile: getEmptySearchProfile(),
+      exactVocabMatch: null,
+      safeExactSentenceMatch: null,
+      numberMode: false,
+      dateMode: false,
+      timeQuestionMode: false,
+      timeMode: false,
+      composedMode: false,
+      thaiOnlySearch: false,
+      vocabResults: EMPTY_RESULT_LIST,
+      sentenceResults: EMPTY_RESULT_LIST,
+    };
+  }
+
   const merged = getMergedData();
-  const generated = buildGeneratedNumberEntries(query);
+  const generated = buildGeneratedNumberEntries(trimmedQuery);
   const numberMode = generated.vocab.length > 0;
-  const generatedDate = !numberMode ? buildGeneratedDateEntries(query) : { vocab: [], sentences: [] };
+  const generatedDate = !numberMode ? buildGeneratedDateEntries(trimmedQuery) : { vocab: [], sentences: [] };
   const dateMode = !numberMode && generatedDate.vocab.length > 0;
-  const generatedTimeQuestion = !numberMode && !dateMode ? buildGeneratedTimeQuestionEntries(query) : { vocab: [], sentences: [] };
+  const generatedTimeQuestion = !numberMode && !dateMode ? buildGeneratedTimeQuestionEntries(trimmedQuery) : { vocab: [], sentences: [] };
   const timeQuestionMode = !numberMode && !dateMode && generatedTimeQuestion.vocab.length > 0;
-  const generatedTime = !numberMode && !dateMode && !timeQuestionMode ? buildGeneratedTimeEntries(query) : { vocab: [], sentences: [] };
+  const generatedTime = !numberMode && !dateMode && !timeQuestionMode ? buildGeneratedTimeEntries(trimmedQuery) : { vocab: [], sentences: [] };
   const timeMode = !numberMode && !dateMode && !timeQuestionMode && generatedTime.vocab.length > 0;
   const vocabSource = merged.vocab;
   const sentenceSource = merged.sentences;
-  const searchProfile = buildSearchProfile(query, numberMode || dateMode || timeQuestionMode || timeMode ? [] : vocabSource);
+  const searchProfile = buildSearchProfile(trimmedQuery, numberMode || dateMode || timeQuestionMode || timeMode ? [] : vocabSource);
   const exactVocabMatch = numberMode || dateMode ? null : findExactEntry(merged.vocab, searchProfile);
   const exactSentenceMatch = numberMode || dateMode ? null : findExactEntry(merged.sentences, searchProfile, { includeTemplates: true });
   const preliminaryVocabResults =
@@ -9852,23 +9931,23 @@ function computeSearchComputation(query = state.query) {
       : uniqueById([...(exactVocabMatch ? [exactVocabMatch] : []), ...getVocabResults(vocabSource, searchProfile)]);
   const generatedComposed =
     !numberMode && !dateMode && !timeQuestionMode && !timeMode
-      ? buildGeneratedComposedEntries(query, searchProfile, vocabSource)
+      ? buildGeneratedComposedEntries(trimmedQuery, searchProfile, vocabSource)
       : { vocab: [], sentences: [], suppressFallbackSentences: false };
   const generatedWhereQuestion =
     !numberMode && !dateMode && !timeQuestionMode && !timeMode
-      ? buildGeneratedWhereQuestionEntries(query, searchProfile, vocabSource)
+      ? buildGeneratedWhereQuestionEntries(trimmedQuery, searchProfile, vocabSource)
       : { vocab: [], sentences: [], suppressFallbackSentences: false };
   const generatedWhatQuestion =
     !numberMode && !dateMode && !timeQuestionMode && !timeMode
-      ? buildGeneratedWhatQuestionEntries(query, searchProfile, vocabSource)
+      ? buildGeneratedWhatQuestionEntries(trimmedQuery, searchProfile, vocabSource)
       : { vocab: [], sentences: [], suppressFallbackSentences: false };
   const generatedPredicate =
     !numberMode && !dateMode && !timeQuestionMode && !timeMode
-      ? buildGeneratedPredicateEntries(query)
+      ? buildGeneratedPredicateEntries(trimmedQuery)
       : { vocab: [], sentences: [], suppressFallbackSentences: false };
   const generatedThaiMeaning =
     !numberMode && !dateMode && !timeQuestionMode && !timeMode
-      ? buildGeneratedThaiMeaningEntries(query, searchProfile, vocabSource)
+      ? buildGeneratedThaiMeaningEntries(trimmedQuery, searchProfile, vocabSource)
       : { vocab: [], sentences: [], suppressFallbackSentences: false };
   const generatedAssist = mergeGeneratedEntrySets(
     generatedComposed,
@@ -10005,8 +10084,6 @@ function render() {
     exactSentenceMatch: Boolean(safeExactSentenceMatch),
     exactVocabEntry: exactVocabMatch || null,
     exactSentenceEntry: safeExactSentenceMatch || null,
-    allVocabEntries: merged.vocab,
-    allSentenceEntries: merged.sentences,
     numberMode,
     dateMode,
     timeMode,
@@ -10282,7 +10359,9 @@ function scheduleSearchRuntimeWarmup() {
   const warmup = () => {
     if (searchRuntimeWarmupDone) return;
     searchRuntimeWarmupDone = true;
+    searchRuntimeWarmupQueued = false;
     try {
+      const hydratedBaseData = getHydratedBaseData();
       getSearchRuntime(hydratedBaseData.vocab);
       getSearchRuntime(hydratedBaseData.sentences);
     } catch (error) {
@@ -10290,10 +10369,15 @@ function scheduleSearchRuntimeWarmup() {
     }
   };
 
-  window.setTimeout(warmup, 40);
-  if (typeof window.requestIdleCallback === "function") {
-    window.requestIdleCallback(warmup, { timeout: 300 });
-  }
+  const scheduleIdleWarmup = () => {
+    if (typeof window.requestIdleCallback === "function") {
+      window.requestIdleCallback(warmup, { timeout: 2500 });
+      return;
+    }
+    window.setTimeout(warmup, 1800);
+  };
+
+  window.setTimeout(scheduleIdleWarmup, 900);
 }
 
 function wireEvents() {
@@ -10301,6 +10385,14 @@ function wireEvents() {
     event.preventDefault();
     queueSearch(elements.searchInput.value.trim(), { scrollResults: true });
   });
+
+  elements.searchInput.addEventListener(
+    "focus",
+    () => {
+      scheduleSearchRuntimeWarmup();
+    },
+    { once: true }
+  );
 
   elements.searchInput.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
@@ -10400,7 +10492,11 @@ function boot() {
       });
     }, 10);
   }
-  scheduleSearchRuntimeWarmup();
+  if (document.readyState === "complete") {
+    scheduleSearchRuntimeWarmup();
+  } else {
+    window.addEventListener("load", scheduleSearchRuntimeWarmup, { once: true });
+  }
   registerServiceWorker();
 }
 
