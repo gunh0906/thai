@@ -24,17 +24,19 @@ const AI_ENTRY_SCHEMA = {
 const AI_RESULT_SCHEMA = {
   type: "object",
   additionalProperties: false,
-  required: ["normalizedQuery", "intent", "searchHints", "vocab", "sentences"],
+  required: ["normalizedQuery", "intent", "confidence", "searchHints", "caution", "fallbackSentence", "vocab", "sentences"],
   properties: {
     normalizedQuery: { type: "string" },
     intent: { type: "string" },
-    confidence: { type: "number" },
+    confidence: { type: ["number", "null"] },
     searchHints: {
       type: "array",
       items: { type: "string" },
     },
-    caution: { type: "string" },
-    fallbackSentence: AI_ENTRY_SCHEMA,
+    caution: { type: ["string", "null"] },
+    fallbackSentence: {
+      anyOf: [AI_ENTRY_SCHEMA, { type: "null" }],
+    },
     vocab: {
       type: "array",
       items: AI_ENTRY_SCHEMA,
