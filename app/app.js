@@ -2,7 +2,8 @@
 const EXPORT_VERSION = 1;
 const AI_STORAGE_KEY = "thai-pocketbook-ai-v1";
 const AUTH_STORAGE_KEY = "thai-pocketbook-auth-v1";
-const APP_VERSION = "20260422k";
+const UI_LANGUAGE_STORAGE_KEY = "thai-pocketbook-ui-language-v1";
+const APP_VERSION = "20260422l";
 const DEFAULT_PROXY_ENDPOINT = "https://thai-pocketbook-ai.rjsghks87.workers.dev/assist";
 const AI_ASSIST_MIN_QUERY_LENGTH = 2;
 const AI_RESULT_LIMITS = {
@@ -26,12 +27,521 @@ const DEFAULT_AUTH_RUNTIME = {
   userListStatus: "idle",
 };
 
-const AI_MODE_LABELS = {
-  manual: "수동 보강",
-  fallback: "결과 없을 때 자동",
-  auto: "결과 부족 시 자동",
-  "llm-only": "LLM 전용",
+const DEFAULT_UI_LANGUAGE = "ko";
+
+const UI_TEXT = {
+  ko: {
+    "document.title": "태국어 포켓북",
+    "hero.title": "태국어 포켓북",
+    "hero.copy": "한국어로 찾으면 단어를 먼저, 바로 쓸 회화를 그 아래에 보여줍니다.",
+    "toolbar.account": "계정",
+    "toolbar.logout": "로그아웃",
+    "toolbar.menu": "메뉴",
+    "toolbar.menuOpen": "메뉴 열기",
+    "language.label": "화면 언어",
+    "language.ko": "한국어",
+    "language.th": "태국어",
+    "language.koAria": "한국어로 보기",
+    "language.thAria": "태국어로 보기",
+    "search.label": "검색",
+    "search.placeholder": "예: 방바꿔주세요, 얼마예요, ห้องน้ำอยู่ไหน, ราคาเท่าไหร่",
+    "search.submit": "검색",
+    "search.submitBusy": "검색 중...",
+    "search.jumpVocab": "단어",
+    "search.jumpSentence": "회화",
+    "quick.kicker": "빠른 검색",
+    "quick.title": "자주 찾는 표현",
+    "insights.kicker": "검색 해석",
+    "insights.title": "이 표현을 이렇게 풀어서 찾고 있어요",
+    "ai.panel.kicker": "AI 보강",
+    "ai.panel.title": "애매한 검색을 뜻 중심으로 다시 풀어낸 결과",
+    "ai.button.manual": "AI 보강",
+    "ai.button.retry": "AI 다시 보기",
+    "ai.button.loading": "AI 보는 중...",
+    "admin.workspace.kicker": "관리자",
+    "admin.workspace.title": "관리자 작업 공간",
+    "results.vocab.kicker": "단어",
+    "results.vocab.title": "먼저 잡아둘 핵심 단어",
+    "results.sentence.kicker": "회화",
+    "results.sentence.title": "바로 보여주거나 말할 문장",
+    "auth.kicker": "로그인",
+    "common.close": "닫기",
+    "auth.username": "아이디",
+    "auth.password": "비밀번호",
+    "auth.login": "로그인",
+    "auth.loginHint": "관리자에게 받은 계정으로 로그인해 주세요.",
+    "auth.currentLogin": "현재 로그인",
+    "auth.currentPassword": "현재 비밀번호",
+    "auth.newPassword": "새 비밀번호",
+    "auth.changePassword": "비밀번호 변경",
+    "menu.kicker": "메뉴",
+    "menu.title": "화면과 필터",
+    "menu.view.kicker": "화면",
+    "menu.view.title": "관리자 전환",
+    "menu.view.description": "관리자만 검색 화면과 관리자 작업 화면을 전환합니다.",
+    "menu.view.search": "검색 화면",
+    "menu.view.admin": "관리자 메뉴",
+    "menu.filter.kicker": "검색",
+    "menu.filter.title": "상황 필터",
+    "menu.filter.reset": "필터 초기화",
+    "admin.users.kicker": "관리자",
+    "admin.users.title": "사용자 관리",
+    "admin.users.description": "관리자만 새 아이디를 만들고 권한을 줄 수 있습니다.",
+    "admin.users.newUsername": "새 아이디",
+    "admin.users.newUsernamePlaceholder": "예: worker01",
+    "admin.users.tempPassword": "임시 비밀번호",
+    "admin.users.tempPasswordPlaceholder": "8자 이상",
+    "admin.users.role": "권한",
+    "admin.users.roleUser": "일반 사용자",
+    "admin.users.roleAdmin": "관리자",
+    "admin.users.aiUse": "AI 사용",
+    "admin.users.aiAllowed": "AI 검색 허용",
+    "admin.users.accountState": "계정 상태",
+    "admin.users.accountEnabled": "활성 계정",
+    "admin.users.add": "사용자 추가",
+    "admin.ai.kicker": "AI 검색",
+    "admin.ai.title": "관리자 AI 연결",
+    "admin.ai.description": "관리자만 프록시 주소와 AI 모드를 바꿀 수 있습니다.",
+    "admin.ai.enabled": "사용",
+    "admin.ai.enabledHint": "검색이 애매할 때 AI 보강 사용",
+    "admin.ai.mode": "실행 방식",
+    "admin.ai.endpoint": "프록시 URL",
+    "admin.ai.endpointPlaceholder": "예: https://thai-pocketbook-ai.rjsghks87.workers.dev/assist",
+    "admin.ai.save": "AI 설정 저장",
+    "admin.ai.note":
+      "OpenAI 키는 Cloudflare Worker 비밀값으로만 넣고, 이 앱에는 프록시 주소만 저장합니다. 실제 AI 사용은 로그인 세션과 계정 권한으로 확인합니다.",
+    "ai.mode.manual": "수동 버튼",
+    "ai.mode.fallback": "결과 없을 때 자동",
+    "ai.mode.auto": "결과 부족 시 자동",
+    "ai.mode.llmOnly": "LLM 전용",
+    "auth.role.admin": "관리자",
+    "auth.role.user": "일반 사용자",
+    "auth.meta.aiAllowed": "AI 사용 가능",
+    "auth.meta.aiDenied": "AI 사용 불가",
+    "auth.meta.disabled": "비활성 계정",
+    "auth.meta.mustChangePassword": "비밀번호 변경 필요",
+    "auth.meta.lastLogin": "최근 로그인 {{value}}",
+    "auth.error.endpointMissing": "관리자 연결 설정이 아직 준비되지 않았습니다.",
+    "auth.error.sessionExpired": "세션이 만료되었거나 다시 로그인이 필요합니다.",
+    "auth.error.sessionCheckFailed": "세션 확인에 실패했습니다.",
+    "auth.summary.loginFirst": "먼저 로그인해 주세요",
+    "auth.summary.changePassword": "비밀번호를 먼저 바꿔 주세요",
+    "auth.summary.settings": "계정 설정",
+    "auth.summary.noEndpoint": "관리자 연결 설정이 아직 준비되지 않았습니다.",
+    "auth.summary.checking": "로그인 세션을 확인하고 있습니다.",
+    "auth.summary.loginOnly": "로그인한 계정만 검색과 AI를 사용할 수 있습니다.",
+    "auth.summary.mustChangePassword": "처음 받은 비밀번호를 새 비밀번호로 바꾼 뒤 계속 사용할 수 있습니다.",
+    "auth.summary.loggedInAdmin": "{{username}}으로 로그인되어 있습니다. 계정 패널과 관리자 작업 공간을 사용할 수 있습니다.",
+    "auth.summary.loggedInUser": "{{username}}으로 로그인되어 있습니다.",
+    "auth.loggedOut": "로그인되지 않음",
+    "auth.login.missing": "아이디와 비밀번호를 모두 입력해 주세요.",
+    "auth.login.progress": "로그인 중입니다.",
+    "auth.login.success": "로그인했습니다.",
+    "auth.login.successChangeRequired": "로그인했습니다. 비밀번호를 바로 바꿔 주세요.",
+    "auth.login.failed": "로그인에 실패했습니다.",
+    "auth.logout.success": "로그아웃했습니다.",
+    "auth.password.missing": "현재 비밀번호와 새 비밀번호를 모두 입력해 주세요.",
+    "auth.password.progress": "비밀번호를 변경하는 중입니다.",
+    "auth.password.success": "비밀번호를 변경했습니다.",
+    "auth.password.failed": "비밀번호 변경에 실패했습니다.",
+    "auth.users.missingCreateFields": "아이디와 임시 비밀번호를 모두 입력해 주세요.",
+    "auth.users.creating": "사용자를 만드는 중입니다.",
+    "auth.users.created": "\"{{username}}\" 계정을 만들었습니다. 처음 로그인 후 비밀번호를 바꾸게 됩니다.",
+    "auth.users.createFailed": "사용자 생성에 실패했습니다.",
+    "auth.users.loading": "사용자 목록을 불러오는 중입니다.",
+    "auth.users.empty": "등록된 사용자가 아직 없습니다.",
+    "auth.users.info": "사용자 정보",
+    "auth.users.loadFailed": "사용자 목록을 불러오지 못했습니다.",
+    "auth.users.active": "활성",
+    "auth.users.inactive": "비활성",
+    "auth.users.role": "권한",
+    "auth.users.aiUse": "AI 사용",
+    "auth.users.aiAllowed": "AI 검색 허용",
+    "auth.users.accountState": "계정 상태",
+    "auth.users.accountUsable": "사용 가능",
+    "auth.users.resetPassword": "비밀번호 재설정",
+    "auth.users.resetPasswordPlaceholder": "비워두면 그대로 둡니다",
+    "auth.users.selfProtected": "현재 로그인한 관리자 계정은 권한 변경이나 비활성화를 여기서 막아 두었습니다.",
+    "auth.users.save": "저장",
+    "auth.users.saving": "\"{{username}}\" 계정을 저장하는 중입니다.",
+    "auth.users.saved": "\"{{username}}\" 계정을 저장했습니다.",
+    "auth.users.saveFailed": "계정 저장에 실패했습니다.",
+    "admin.workspace.summary": "검색창 대신 사용자 관리와 AI 연결만 크게 보여주고 있습니다.",
+    "ai.entryNote": "AI 보강 제안",
+    "ai.error.checkSettings": "관리자 메뉴에서 AI 연결 설정을 확인해 주세요.",
+    "ai.error.loginRequired": "AI 보강은 로그인 후 사용할 수 있습니다.",
+    "ai.error.notAllowed": "이 계정에는 AI 사용 권한이 없습니다. 관리자에게 권한을 받아 주세요.",
+    "ai.error.requestFailed": "AI 보강 요청에 실패했습니다.",
+    "ai.error.settingsAdminOnly": "이 설정은 관리자만 바꿀 수 있습니다.",
+    "ai.meta.manual": "수동 보강",
+    "ai.meta.failed": "AI 보강 실패",
+    "ai.meta.noResult": "AI가 확실한 보강 표현을 찾지 못했습니다.",
+    "ai.status.loading": "AI가 검색어를 다시 해석하고 있어요.",
+    "ai.status.aiOnlyEmpty": "LLM 전용 모드에서는 AI 결과만 보여줍니다. 검색어를 더 구체적으로 바꾸거나 모드를 변경해 주세요.",
+    "ai.status.defaultEmpty": "로컬 결과를 먼저 쓰고, 더 구체적인 검색어로 다시 시도해 주세요.",
+    "ai.settings.relogin": "프록시 주소가 바뀌어서 다시 로그인해 주세요.",
+    "ai.settings.saved": "AI 설정을 저장했습니다. 현재 모드: {{mode}}",
+    "ai.settings.disabled": "AI 연결이 비활성화되어 있습니다.",
+    "ai.card.titleFallback": "AI 보강",
+    "ai.card.confidence": "신뢰도 {{value}}%",
+    "ai.card.normalized": "AI 정리: {{value}}",
+    "ai.card.intent": "AI 해석: {{value}}",
+    "ai.card.hints": "확장 키워드: {{value}}",
+    "ai.card.caution": "참고: {{value}}",
+    "entry.showThai": "태국어 보기",
+    "entry.hideThai": "태국어 숨기기",
+    "entry.showToLocal": "현지인에게 보여주기",
+    "entry.noThaiScript": "태국 문자 미보강 · 위 발음 표기만 있어요",
+    "entry.externalExample": "외부 예문 보강",
+    "entry.externalDictionary": "외부 사전 보강",
+    "entry.externalGeneric": "외부 보강",
+    "search.status.expandedHint": " · 함께 찾은 핵심어: {{terms}}",
+    "search.status.admin": "관리자 작업 공간입니다. 오른쪽 메뉴에서 검색 화면으로 돌아갈 수 있습니다.",
+    "search.status.browsing": "한국어와 태국어 둘 다 검색할 수 있습니다. 한국어는 바로 쓸 태국어를, 태국어는 한국어 뜻을 먼저 보여줍니다.",
+    "search.status.aiOnly": "LLM 전용 모드: AI가 검색어를 직접 해석해서 결과를 보여줍니다.{{hint}}",
+    "search.status.number": "숫자 변환: 읽기 {{vocab}}개 · 활용 {{sentences}}개{{hint}}",
+    "search.status.date": "날짜 검색: 단어 {{vocab}}개 · 회화 {{sentences}}개{{hint}}",
+    "search.status.timeQuestion": "시간 질문: 단어 {{vocab}}개 · 회화 {{sentences}}개{{hint}}",
+    "search.status.time": "시간 검색: 단어 {{vocab}}개 · 회화 {{sentences}}개{{hint}}",
+    "search.status.thaiOnlyComposed": "태국어 해석: 단어 {{vocab}}개 · 회화 {{sentences}}개{{hint}}",
+    "search.status.composed": "검색됨: 단어 {{vocab}}개 · 회화 {{sentences}}개 · 자동 조합 적용{{hint}}",
+    "search.status.default": "검색됨: 단어 {{vocab}}개 · 회화 {{sentences}}개{{hint}}",
+    "filter.summary.admin": "현재 화면: 관리자 작업 공간",
+    "filter.summary.all": "필터: 전체 검색",
+    "filter.summary.active": "필터 적용 중: {{scenario}}만 보기",
+    "active.summary.admin": "검색창 없이 관리자 전용 설정만 메인에 표시하고 있습니다.",
+    "active.summary.aiOnly": "검색어 \"{{query}}\"를 LLM 전용 모드로 해석하고 있습니다.",
+    "active.summary.thai": "검색어 \"{{query}}\"를 태국어에서 한국어 뜻 중심으로 찾고 있습니다.",
+    "active.summary.default": "검색어 \"{{query}}\"를 핵심 단어와 회화로 나눠서 찾고 있습니다.",
+    "vocab.meta.number": "숫자는 태국어 읽기와 태국 숫자 표기를 함께 보여줍니다.",
+    "vocab.meta.date": "검색한 날짜를 태국어 날짜 표현으로 바로 보여줍니다.",
+    "vocab.meta.timeQuestion": "현재 시간을 묻는 표현과 기기 기준 현재 시각을 먼저 보여줍니다.",
+    "vocab.meta.time": "검색한 시간을 그대로 변형해서 읽기와 시간 표현을 먼저 보여줍니다.",
+    "vocab.meta.aiOnly": "LLM 전용 모드라서 로컬 단어 매칭 대신 AI가 정리한 단어를 먼저 보여줍니다.",
+    "vocab.meta.thaiComposed": "태국어 문장을 분해해서 한국어 핵심 뜻을 먼저 올렸습니다.",
+    "vocab.meta.thai": "태국어 검색이라서 한국어 뜻과 가까운 단어를 먼저 올렸습니다.",
+    "vocab.meta.composed": "핵심 단어를 먼저 잡고, 요청 문장은 자동으로 조합해 맨 위에 올렸습니다.",
+    "vocab.meta.exactSentence": "핵심 단어를 먼저 보여주고, 아래에 정확히 맞는 회화를 맨 위에 올렸습니다.",
+    "vocab.meta.objectAction": "문장형 검색이라도 먼저 잡아둘 단어를 위에 보여줍니다.",
+    "vocab.meta.default": "문장을 잘게 풀어서 먼저 잡아둘 단어부터 보여줍니다.",
+    "vocab.meta.empty": "검색어를 넣으면 관련 단어가 나옵니다.",
+    "sentence.meta.number": "가격이나 수량으로 바로 보여줄 수 있게 같이 만들었습니다.",
+    "sentence.meta.date": "약속이나 일정에 바로 쓸 날짜 문장을 같이 보여줍니다.",
+    "sentence.meta.timeQuestion": "지금 몇 시인지 묻거나 답할 때 바로 보여줄 수 있게 만들었습니다.",
+    "sentence.meta.time": "검색한 시간 그대로 문장에 넣어서 바로 보여줄 수 있게 만들었습니다.",
+    "sentence.meta.aiOnly": "LLM 전용 모드라서 AI가 직접 정리한 회화를 메인 결과로 보여줍니다.",
+    "sentence.meta.thaiComposed": "태국어 문장을 해석해서 바로 쓸 한국어 문장을 먼저 보여줍니다.",
+    "sentence.meta.thai": "태국어 검색이라서 해당 표현이 들어간 한국어 회화를 우선해서 보여줍니다.",
+    "sentence.meta.composed": "입력한 표현에서 목적어와 동사를 나눠 바로 보여줄 문장을 먼저 만들었습니다.",
+    "sentence.meta.default": "위 단어를 바탕으로 바로 보여주기 좋은 회화만 추렸습니다.",
+    "sentence.meta.empty": "검색어를 넣으면 관련 회화가 나옵니다.",
+    "results.empty.aiVocabLoading": "AI가 단어를 다시 찾는 중입니다.",
+    "results.empty.aiVocabFailed": "AI 보강에 실패했습니다. 로그인 상태와 관리자 연결 설정을 확인한 뒤 다시 시도해 주세요.",
+    "results.empty.aiVocabNone": "AI가 맞는 단어를 아직 못 찾았습니다.",
+    "results.empty.vocabDefault": "맞는 단어가 아직 없습니다. 더 짧은 핵심어로 검색해 보세요.",
+    "results.empty.aiSentenceLoading": "AI가 회화를 다시 정리하는 중입니다.",
+    "results.empty.aiSentenceFailed": "AI 회화 보강에 실패했습니다. 로그인 상태와 관리자 연결 설정을 확인한 뒤 다시 시도해 주세요.",
+    "results.empty.aiSentenceNone": "AI가 맞는 회화를 아직 못 찾았습니다.",
+    "results.empty.sentenceDefault": "맞는 회화가 아직 없습니다. 다른 표현으로 검색하거나 단어를 먼저 검색해 보세요.",
+    "boot.failed": "앱을 다시 불러오는 중 문제가 생겼습니다. 새로고침 후 다시 시도해 주세요.",
+  },
+  th: {
+    "document.title": "สมุดพกภาษาไทย",
+    "hero.title": "สมุดพกภาษาไทย",
+    "hero.copy": "ค้นหาด้วยเกาหลีหรือไทย แล้วจะแสดงคำศัพท์ก่อนและประโยคที่ใช้ได้ทันทีด้านล่าง",
+    "toolbar.account": "บัญชี",
+    "toolbar.logout": "ออกจากระบบ",
+    "toolbar.menu": "เมนู",
+    "toolbar.menuOpen": "เปิดเมนู",
+    "language.label": "ภาษาแอป",
+    "language.ko": "เกาหลี",
+    "language.th": "ไทย",
+    "language.koAria": "เปลี่ยนเป็นภาษาเกาหลี",
+    "language.thAria": "เปลี่ยนเป็นภาษาไทย",
+    "search.label": "ค้นหา",
+    "search.placeholder": "เช่น ขอเปลี่ยนห้อง ราคาเท่าไหร่ ห้องน้ำอยู่ไหน",
+    "search.submit": "ค้นหา",
+    "search.submitBusy": "กำลังค้นหา...",
+    "search.jumpVocab": "คำศัพท์",
+    "search.jumpSentence": "บทสนทนา",
+    "quick.kicker": "ค้นหาด่วน",
+    "quick.title": "คำที่ใช้บ่อย",
+    "insights.kicker": "การตีความ",
+    "insights.title": "เรากำลังแยกความหมายแบบนี้เพื่อค้นหา",
+    "ai.panel.kicker": "AI เสริม",
+    "ai.panel.title": "ผลที่ AI ตีความคำค้นใหม่ตามความหมาย",
+    "ai.button.manual": "AI เสริม",
+    "ai.button.retry": "ให้ AI ดูอีกครั้ง",
+    "ai.button.loading": "AI กำลังดู...",
+    "admin.workspace.kicker": "ผู้ดูแล",
+    "admin.workspace.title": "พื้นที่จัดการผู้ดูแล",
+    "results.vocab.kicker": "คำศัพท์",
+    "results.vocab.title": "คำหลักที่ควรรู้ก่อน",
+    "results.sentence.kicker": "บทสนทนา",
+    "results.sentence.title": "ประโยคที่พร้อมให้พูดหรือยื่นให้ดู",
+    "auth.kicker": "เข้าสู่ระบบ",
+    "common.close": "ปิด",
+    "auth.username": "ชื่อผู้ใช้",
+    "auth.password": "รหัสผ่าน",
+    "auth.login": "เข้าสู่ระบบ",
+    "auth.loginHint": "กรุณาเข้าสู่ระบบด้วยบัญชีที่ผู้ดูแลให้มา",
+    "auth.currentLogin": "บัญชีที่เข้าสู่ระบบอยู่",
+    "auth.currentPassword": "รหัสผ่านปัจจุบัน",
+    "auth.newPassword": "รหัสผ่านใหม่",
+    "auth.changePassword": "เปลี่ยนรหัสผ่าน",
+    "menu.kicker": "เมนู",
+    "menu.title": "หน้าจอและตัวกรอง",
+    "menu.view.kicker": "หน้าจอ",
+    "menu.view.title": "สลับโหมดผู้ดูแล",
+    "menu.view.description": "เฉพาะผู้ดูแลเท่านั้นที่สลับระหว่างหน้าค้นหาและหน้าจัดการได้",
+    "menu.view.search": "หน้าค้นหา",
+    "menu.view.admin": "เมนูผู้ดูแล",
+    "menu.filter.kicker": "ค้นหา",
+    "menu.filter.title": "ตัวกรองสถานการณ์",
+    "menu.filter.reset": "ล้างตัวกรอง",
+    "admin.users.kicker": "ผู้ดูแล",
+    "admin.users.title": "จัดการผู้ใช้",
+    "admin.users.description": "เฉพาะผู้ดูแลเท่านั้นที่สร้างบัญชีใหม่และกำหนดสิทธิ์ได้",
+    "admin.users.newUsername": "ชื่อผู้ใช้ใหม่",
+    "admin.users.newUsernamePlaceholder": "เช่น worker01",
+    "admin.users.tempPassword": "รหัสผ่านชั่วคราว",
+    "admin.users.tempPasswordPlaceholder": "อย่างน้อย 8 ตัวอักษร",
+    "admin.users.role": "สิทธิ์",
+    "admin.users.roleUser": "ผู้ใช้ทั่วไป",
+    "admin.users.roleAdmin": "ผู้ดูแล",
+    "admin.users.aiUse": "ใช้ AI",
+    "admin.users.aiAllowed": "อนุญาตการค้นหา AI",
+    "admin.users.accountState": "สถานะบัญชี",
+    "admin.users.accountEnabled": "บัญชีใช้งาน",
+    "admin.users.add": "เพิ่มผู้ใช้",
+    "admin.ai.kicker": "ค้นหา AI",
+    "admin.ai.title": "การเชื่อมต่อ AI ของผู้ดูแล",
+    "admin.ai.description": "เฉพาะผู้ดูแลเท่านั้นที่เปลี่ยนที่อยู่พร็อกซีและโหมด AI ได้",
+    "admin.ai.enabled": "เปิดใช้",
+    "admin.ai.enabledHint": "ใช้ AI เสริมเมื่อผลค้นหายังคลุมเครือ",
+    "admin.ai.mode": "โหมดทำงาน",
+    "admin.ai.endpoint": "พร็อกซี URL",
+    "admin.ai.endpointPlaceholder": "เช่น https://thai-pocketbook-ai.rjsghks87.workers.dev/assist",
+    "admin.ai.save": "บันทึกการตั้งค่า AI",
+    "admin.ai.note":
+      "เก็บ OpenAI key ไว้เป็น secret ของ Cloudflare Worker เท่านั้น และเก็บในแอปนี้แค่ที่อยู่พร็อกซี การใช้ AI จริงจะตรวจจากเซสชันที่ล็อกอินและสิทธิ์บัญชี",
+    "ai.mode.manual": "ปุ่มกดเอง",
+    "ai.mode.fallback": "อัตโนมัติเมื่อไม่เจอผล",
+    "ai.mode.auto": "อัตโนมัติเมื่อผลยังน้อย",
+    "ai.mode.llmOnly": "LLM เท่านั้น",
+    "auth.role.admin": "ผู้ดูแล",
+    "auth.role.user": "ผู้ใช้ทั่วไป",
+    "auth.meta.aiAllowed": "ใช้ AI ได้",
+    "auth.meta.aiDenied": "ใช้ AI ไม่ได้",
+    "auth.meta.disabled": "บัญชีถูกปิดใช้งาน",
+    "auth.meta.mustChangePassword": "ต้องเปลี่ยนรหัสผ่าน",
+    "auth.meta.lastLogin": "เข้าสู่ระบบล่าสุด {{value}}",
+    "auth.error.endpointMissing": "การเชื่อมต่อผู้ดูแลยังไม่พร้อม",
+    "auth.error.sessionExpired": "เซสชันหมดอายุหรือจำเป็นต้องเข้าสู่ระบบอีกครั้ง",
+    "auth.error.sessionCheckFailed": "ตรวจสอบเซสชันไม่สำเร็จ",
+    "auth.summary.loginFirst": "กรุณาเข้าสู่ระบบก่อน",
+    "auth.summary.changePassword": "กรุณาเปลี่ยนรหัสผ่านก่อน",
+    "auth.summary.settings": "ตั้งค่าบัญชี",
+    "auth.summary.noEndpoint": "การเชื่อมต่อผู้ดูแลยังไม่พร้อม",
+    "auth.summary.checking": "กำลังตรวจสอบเซสชันการเข้าสู่ระบบ",
+    "auth.summary.loginOnly": "เฉพาะบัญชีที่เข้าสู่ระบบแล้วเท่านั้นที่ใช้การค้นหาและ AI ได้",
+    "auth.summary.mustChangePassword": "กรุณาเปลี่ยนรหัสผ่านเริ่มต้นเป็นรหัสใหม่ก่อนใช้งานต่อ",
+    "auth.summary.loggedInAdmin": "คุณเข้าสู่ระบบด้วย {{username}} แล้ว ใช้ทั้งแผงบัญชีและพื้นที่ผู้ดูแลได้",
+    "auth.summary.loggedInUser": "คุณเข้าสู่ระบบด้วย {{username}} แล้ว",
+    "auth.loggedOut": "ยังไม่ได้เข้าสู่ระบบ",
+    "auth.login.missing": "กรอกชื่อผู้ใช้และรหัสผ่านให้ครบ",
+    "auth.login.progress": "กำลังเข้าสู่ระบบ",
+    "auth.login.success": "เข้าสู่ระบบแล้ว",
+    "auth.login.successChangeRequired": "เข้าสู่ระบบแล้ว กรุณาเปลี่ยนรหัสผ่านทันที",
+    "auth.login.failed": "เข้าสู่ระบบไม่สำเร็จ",
+    "auth.logout.success": "ออกจากระบบแล้ว",
+    "auth.password.missing": "กรอกรหัสผ่านปัจจุบันและรหัสผ่านใหม่ให้ครบ",
+    "auth.password.progress": "กำลังเปลี่ยนรหัสผ่าน",
+    "auth.password.success": "เปลี่ยนรหัสผ่านแล้ว",
+    "auth.password.failed": "เปลี่ยนรหัสผ่านไม่สำเร็จ",
+    "auth.users.missingCreateFields": "กรอกชื่อผู้ใช้และรหัสผ่านชั่วคราวให้ครบ",
+    "auth.users.creating": "กำลังสร้างผู้ใช้",
+    "auth.users.created": "สร้างบัญชี \"{{username}}\" แล้ว ผู้ใช้จะต้องเปลี่ยนรหัสผ่านหลังล็อกอินครั้งแรก",
+    "auth.users.createFailed": "สร้างผู้ใช้ไม่สำเร็จ",
+    "auth.users.loading": "กำลังโหลดรายการผู้ใช้",
+    "auth.users.empty": "ยังไม่มีผู้ใช้ที่ลงทะเบียน",
+    "auth.users.info": "ข้อมูลผู้ใช้",
+    "auth.users.loadFailed": "โหลดรายการผู้ใช้ไม่สำเร็จ",
+    "auth.users.active": "ใช้งาน",
+    "auth.users.inactive": "ปิดใช้งาน",
+    "auth.users.role": "สิทธิ์",
+    "auth.users.aiUse": "ใช้ AI",
+    "auth.users.aiAllowed": "อนุญาตค้นหา AI",
+    "auth.users.accountState": "สถานะบัญชี",
+    "auth.users.accountUsable": "ใช้งานได้",
+    "auth.users.resetPassword": "รีเซ็ตรหัสผ่าน",
+    "auth.users.resetPasswordPlaceholder": "ปล่อยว่างเพื่อคงเดิมไว้",
+    "auth.users.selfProtected": "บัญชีผู้ดูแลที่กำลังล็อกอินอยู่ถูกกันไม่ให้เปลี่ยนสิทธิ์หรือปิดใช้งานจากหน้านี้",
+    "auth.users.save": "บันทึก",
+    "auth.users.saving": "กำลังบันทึกบัญชี \"{{username}}\"",
+    "auth.users.saved": "บันทึกบัญชี \"{{username}}\" แล้ว",
+    "auth.users.saveFailed": "บันทึกบัญชีไม่สำเร็จ",
+    "admin.workspace.summary": "ขณะนี้แสดงเฉพาะการจัดการผู้ใช้และการเชื่อมต่อ AI แบบเต็มหน้าจอแทนช่องค้นหา",
+    "ai.entryNote": "คำแนะนำจาก AI",
+    "ai.error.checkSettings": "กรุณาตรวจสอบการเชื่อมต่อ AI ในเมนูผู้ดูแล",
+    "ai.error.loginRequired": "ใช้ AI เสริมได้หลังจากเข้าสู่ระบบแล้วเท่านั้น",
+    "ai.error.notAllowed": "บัญชีนี้ไม่มีสิทธิ์ใช้ AI กรุณาขอสิทธิ์จากผู้ดูแล",
+    "ai.error.requestFailed": "ส่งคำขอ AI เสริมไม่สำเร็จ",
+    "ai.error.settingsAdminOnly": "การตั้งค่านี้เปลี่ยนได้เฉพาะผู้ดูแลเท่านั้น",
+    "ai.meta.manual": "เสริมด้วยมือ",
+    "ai.meta.failed": "AI เสริมไม่สำเร็จ",
+    "ai.meta.noResult": "AI ยังหาสำนวนเสริมที่มั่นใจไม่ได้",
+    "ai.status.loading": "AI กำลังตีความคำค้นใหม่",
+    "ai.status.aiOnlyEmpty": "ในโหมด LLM เท่านั้นจะแสดงเฉพาะผลจาก AI ลองพิมพ์ให้เจาะจงขึ้นหรือเปลี่ยนโหมด",
+    "ai.status.defaultEmpty": "ลองใช้ผลจากฐานข้อมูลก่อน แล้วค่อยค้นใหม่ด้วยคำที่เจาะจงขึ้น",
+    "ai.settings.relogin": "ที่อยู่พร็อกซีเปลี่ยนแล้ว กรุณาเข้าสู่ระบบอีกครั้ง",
+    "ai.settings.saved": "บันทึกการตั้งค่า AI แล้ว โหมดปัจจุบัน: {{mode}}",
+    "ai.settings.disabled": "ปิดการเชื่อมต่อ AI อยู่",
+    "ai.card.titleFallback": "AI เสริม",
+    "ai.card.confidence": "ความมั่นใจ {{value}}%",
+    "ai.card.normalized": "AI จัดความหมาย: {{value}}",
+    "ai.card.intent": "AI ตีความ: {{value}}",
+    "ai.card.hints": "คีย์เวิร์ดที่ขยาย: {{value}}",
+    "ai.card.caution": "หมายเหตุ: {{value}}",
+    "entry.showThai": "ดูอักษรไทย",
+    "entry.hideThai": "ซ่อนอักษรไทย",
+    "entry.showToLocal": "ยื่นให้คนท้องถิ่นดู",
+    "entry.noThaiScript": "ยังไม่มีอักษรไทยเสริม มีเฉพาะคำอ่านด้านบน",
+    "entry.externalExample": "เสริมจากตัวอย่างภายนอก",
+    "entry.externalDictionary": "เสริมจากพจนานุกรมภายนอก",
+    "entry.externalGeneric": "เสริมจากข้อมูลภายนอก",
+    "search.status.expandedHint": " · คำหลักที่จับได้: {{terms}}",
+    "search.status.admin": "นี่คือพื้นที่ทำงานของผู้ดูแล คุณกลับไปหน้าค้นหาได้จากเมนูด้านขวา",
+    "search.status.browsing": "ค้นหาได้ทั้งเกาหลีและไทยฟรี ถ้าค้นหาด้วยเกาหลีจะโชว์ไทยที่ใช้ได้ทันที ส่วนถ้าค้นหาด้วยไทยฟรีจะโชว์ความหมายเกาหลีก่อน",
+    "search.status.aiOnly": "โหมด LLM เท่านั้น: AI จะตีความคำค้นและแสดงผลให้โดยตรง{{hint}}",
+    "search.status.number": "แปลงตัวเลข: การอ่าน {{vocab}} รายการ · การใช้งาน {{sentences}} รายการ{{hint}}",
+    "search.status.date": "ค้นหาวันที่: คำศัพท์ {{vocab}} รายการ · บทสนทนา {{sentences}} รายการ{{hint}}",
+    "search.status.timeQuestion": "คำถามเรื่องเวลา: คำศัพท์ {{vocab}} รายการ · บทสนทนา {{sentences}} รายการ{{hint}}",
+    "search.status.time": "ค้นหาเวลา: คำศัพท์ {{vocab}} รายการ · บทสนทนา {{sentences}} รายการ{{hint}}",
+    "search.status.thaiOnlyComposed": "ตีความภาษาไทย: คำศัพท์ {{vocab}} รายการ · บทสนทนา {{sentences}} รายการ{{hint}}",
+    "search.status.composed": "พบผล: คำศัพท์ {{vocab}} รายการ · บทสนทนา {{sentences}} รายการ · ใช้การประกอบอัตโนมัติ{{hint}}",
+    "search.status.default": "พบผล: คำศัพท์ {{vocab}} รายการ · บทสนทนา {{sentences}} รายการ{{hint}}",
+    "filter.summary.admin": "หน้าปัจจุบัน: พื้นที่ผู้ดูแล",
+    "filter.summary.all": "ตัวกรอง: ค้นหาทั้งหมด",
+    "filter.summary.active": "กำลังใช้ตัวกรอง: แสดงเฉพาะ {{scenario}}",
+    "active.summary.admin": "ตอนนี้ซ่อนช่องค้นหาและแสดงเฉพาะการตั้งค่าสำหรับผู้ดูแลบนหน้าหลัก",
+    "active.summary.aiOnly": "กำลังตีความคำค้น \"{{query}}\" ด้วยโหมด LLM เท่านั้น",
+    "active.summary.thai": "กำลังค้นหา \"{{query}}\" จากภาษาไทยโดยเน้นความหมายเกาหลี",
+    "active.summary.default": "กำลังแยก \"{{query}}\" เป็นคำหลักและบทสนทนาเพื่อค้นหา",
+    "vocab.meta.number": "แสดงทั้งคำอ่านภาษาไทยและตัวเลขไทยฟรีไปพร้อมกัน",
+    "vocab.meta.date": "แสดงวันที่ที่ค้นหาในรูปแบบวันที่ภาษาไทยทันที",
+    "vocab.meta.timeQuestion": "แสดงคำถามเรื่องเวลาและเวลาปัจจุบันของอุปกรณ์ก่อน",
+    "vocab.meta.time": "แปลงเวลาที่ค้นหาเป็นคำอ่านและรูปแบบเวลาให้ก่อน",
+    "vocab.meta.aiOnly": "อยู่ในโหมด LLM เท่านั้น จึงแสดงคำศัพท์ที่ AI จัดให้แทนการจับคู่จากฐานข้อมูล",
+    "vocab.meta.thaiComposed": "แยกประโยคภาษาไทยแล้วดันความหมายเกาหลีหลักขึ้นมาก่อน",
+    "vocab.meta.thai": "เป็นการค้นหาภาษาไทย จึงแสดงคำที่ใกล้ความหมายเกาหลีก่อน",
+    "vocab.meta.composed": "จับคำหลักก่อน แล้วดันประโยคที่ประกอบอัตโนมัติขึ้นด้านบน",
+    "vocab.meta.exactSentence": "แสดงคำหลักก่อน แล้วดันบทสนทนาที่ตรงที่สุดไว้ด้านบน",
+    "vocab.meta.objectAction": "แม้จะเป็นการค้นหาแบบประโยค ก็ยังแสดงคำที่ควรรู้ก่อนอยู่ด้านบน",
+    "vocab.meta.default": "แยกประโยคออกเป็นส่วนย่อยก่อน แล้วแสดงคำที่ควรจับไว้ก่อน",
+    "vocab.meta.empty": "เมื่อพิมพ์คำค้น จะมีคำศัพท์ที่เกี่ยวข้องแสดงที่นี่",
+    "sentence.meta.number": "สร้างประโยคให้ยื่นโชว์เรื่องราคาและจำนวนได้ทันที",
+    "sentence.meta.date": "แสดงประโยควันที่ที่หยิบไปใช้กับนัดหมายหรือกำหนดการได้ทันที",
+    "sentence.meta.timeQuestion": "ทำประโยคไว้ให้ถามหรือตอบเวลาปัจจุบันได้ทันที",
+    "sentence.meta.time": "ใส่เวลาที่ค้นหาลงในประโยคให้พร้อมใช้ทันที",
+    "sentence.meta.aiOnly": "อยู่ในโหมด LLM เท่านั้น จึงแสดงบทสนทนาที่ AI จัดให้เป็นผลหลัก",
+    "sentence.meta.thaiComposed": "แปลประโยคไทยแล้วดันประโยคเกาหลีที่พร้อมใช้ขึ้นมาก่อน",
+    "sentence.meta.thai": "เป็นการค้นหาภาษาไทย จึงให้บทสนทนาเกาหลีที่มีสำนวนนี้ขึ้นก่อน",
+    "sentence.meta.composed": "แยกกรรมกับกริยาออกจากข้อความที่พิมพ์ แล้วสร้างประโยคพร้อมใช้ขึ้นมาก่อน",
+    "sentence.meta.default": "คัดเฉพาะบทสนทนาที่หยิบไปยื่นหรือพูดได้ทันทีจากคำด้านบน",
+    "sentence.meta.empty": "เมื่อพิมพ์คำค้น จะมีบทสนทนาที่เกี่ยวข้องแสดงที่นี่",
+    "results.empty.aiVocabLoading": "AI กำลังหาคำศัพท์ใหม่",
+    "results.empty.aiVocabFailed": "AI เสริมคำศัพท์ไม่สำเร็จ กรุณาตรวจสอบสถานะล็อกอินและการเชื่อมต่อของผู้ดูแลแล้วลองใหม่",
+    "results.empty.aiVocabNone": "AI ยังหาคำที่ตรงไม่ได้",
+    "results.empty.vocabDefault": "ยังไม่มีคำที่ตรง ลองค้นหาด้วยคำหลักที่สั้นกว่านี้",
+    "results.empty.aiSentenceLoading": "AI กำลังจัดบทสนทนาใหม่",
+    "results.empty.aiSentenceFailed": "AI เสริมบทสนทนาไม่สำเร็จ กรุณาตรวจสอบสถานะล็อกอินและการเชื่อมต่อของผู้ดูแลแล้วลองใหม่",
+    "results.empty.aiSentenceNone": "AI ยังหาบทสนทนาที่ตรงไม่ได้",
+    "results.empty.sentenceDefault": "ยังไม่มีบทสนทนาที่ตรง ลองเปลี่ยนสำนวนหรือค้นหาคำหลักก่อน",
+    "boot.failed": "เกิดปัญหาระหว่างโหลดแอป กรุณารีเฟรชแล้วลองอีกครั้ง",
+  },
 };
+
+const SCENARIO_I18N = {
+  all: {
+    ko: { label: "전체", description: "모든 단어와 문장을 함께 봅니다." },
+    th: { label: "ทั้งหมด", description: "แสดงทั้งคำศัพท์และประโยคทั้งหมดพร้อมกัน" },
+  },
+  기본회화: {
+    ko: { label: "기본회화", description: "대답, 부탁, 이해 여부처럼 자주 쓰는 표현" },
+    th: { label: "พื้นฐาน", description: "สำนวนที่ใช้บ่อย เช่น ตอบรับ ขอร้อง และถามว่าฟังเข้าใจไหม" },
+  },
+  인사: {
+    ko: { label: "인사", description: "자기소개, 감사, 사과, 작별 인사" },
+    th: { label: "ทักทาย", description: "แนะนำตัว ขอบคุณ ขอโทษ และกล่าวลา" },
+  },
+  식당: {
+    ko: { label: "식당", description: "주문, 계산, 맛 표현, 포장" },
+    th: { label: "ร้านอาหาร", description: "สั่งอาหาร จ่ายเงิน รสชาติ และสั่งกลับบ้าน" },
+  },
+  이동: {
+    ko: { label: "이동", description: "길 찾기, 방향, 위치, 이동 관련 표현" },
+    th: { label: "การเดินทาง", description: "ถามทาง ทิศทาง ตำแหน่ง และการเดินทาง" },
+  },
+  쇼핑: {
+    ko: { label: "쇼핑", description: "가격, 색상, 사이즈, 결제 관련 표현" },
+    th: { label: "ช้อปปิ้ง", description: "ราคา สี ไซซ์ และการชำระเงิน" },
+  },
+  건강: {
+    ko: { label: "건강", description: "몸 상태, 약, 병원, 도움 요청" },
+    th: { label: "สุขภาพ", description: "อาการ ยา โรงพยาบาล และการขอความช่วยเหลือ" },
+  },
+  일터: {
+    ko: { label: "일터", description: "확인, 대기, 완료, 속도, 문제 상황" },
+    th: { label: "ที่ทำงาน", description: "การยืนยัน รอ งานเสร็จ ความเร็ว และสถานการณ์ปัญหา" },
+  },
+  "숫자·시간": {
+    ko: { label: "숫자·시간", description: "시간, 요일, 날짜 흐름 관련 표현" },
+    th: { label: "ตัวเลข·เวลา", description: "สำนวนเกี่ยวกับเวลา วัน และวันที่" },
+  },
+};
+
+function normalizeUiLanguage(language) {
+  return language === "th" ? "th" : DEFAULT_UI_LANGUAGE;
+}
+
+function loadUiLanguage() {
+  try {
+    return normalizeUiLanguage(localStorage.getItem(UI_LANGUAGE_STORAGE_KEY));
+  } catch (error) {
+    console.error("UI 언어 로드 실패", error);
+    return DEFAULT_UI_LANGUAGE;
+  }
+}
+
+function saveUiLanguage() {
+  localStorage.setItem(UI_LANGUAGE_STORAGE_KEY, normalizeUiLanguage(state.uiLanguage));
+}
+
+function interpolateUiText(template, params = {}) {
+  return String(template || "").replace(/\{\{(\w+)\}\}/g, (_, key) => String(params[key] ?? ""));
+}
+
+function t(key, params = {}) {
+  const language = normalizeUiLanguage(state?.uiLanguage || DEFAULT_UI_LANGUAGE);
+  const table = UI_TEXT[language] || UI_TEXT.ko;
+  return interpolateUiText(table[key] || UI_TEXT.ko[key] || key, params);
+}
+
+function getScenarioLabel(scenarioId, fallback = scenarioId) {
+  return SCENARIO_I18N[scenarioId]?.[normalizeUiLanguage(state.uiLanguage)]?.label || fallback;
+}
+
+function getScenarioDescription(scenarioId, fallback = "") {
+  return SCENARIO_I18N[scenarioId]?.[normalizeUiLanguage(state.uiLanguage)]?.description || fallback;
+}
+
+function getAiModeLabel(mode) {
+  if (mode === "fallback") return t("ai.mode.fallback");
+  if (mode === "auto") return t("ai.mode.auto");
+  if (mode === "llm-only") return t("ai.mode.llmOnly");
+  return t("ai.mode.manual");
+}
 
 const baseData = window.BASE_DATA || {
   appTitle: "태국어 포켓북",
@@ -2819,6 +3329,7 @@ const mergedEntriesCache = {
 };
 
 const state = {
+  uiLanguage: loadUiLanguage(),
   query: "",
   scenario: "all",
   currentView: "search",
@@ -2928,6 +3439,8 @@ const elements = {
   aiModeInput: document.querySelector("#aiModeInput"),
   aiEndpointInput: document.querySelector("#aiEndpointInput"),
   aiSettingsFeedback: document.querySelector("#aiSettingsFeedback"),
+  languageButtons: Array.from(document.querySelectorAll("[data-language-button]")),
+  languageSwitchers: Array.from(document.querySelectorAll("[data-language-switcher]")),
 };
 
 function readStateFromUrl() {
@@ -2944,6 +3457,66 @@ function syncUrl() {
   if (state.scenario !== "all") params.set("scenario", state.scenario);
   const nextUrl = `${window.location.pathname}${params.toString() ? `?${params.toString()}` : ""}`;
   window.history.replaceState({}, "", nextUrl);
+}
+
+function syncLanguageButtons() {
+  elements.languageButtons.forEach((button) => {
+    const active = normalizeUiLanguage(button.dataset.language) === normalizeUiLanguage(state.uiLanguage);
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", active ? "true" : "false");
+  });
+}
+
+function applyStaticTranslations() {
+  const language = normalizeUiLanguage(state.uiLanguage);
+  document.documentElement.lang = language;
+  document.body.dataset.uiLanguage = language;
+  document.title = t("document.title");
+
+  document.querySelectorAll("[data-ui-key]").forEach((element) => {
+    const key = element.dataset.uiKey;
+    if (!key) return;
+    element.textContent = t(key);
+  });
+
+  document.querySelectorAll("[data-ui-placeholder-key]").forEach((element) => {
+    const key = element.dataset.uiPlaceholderKey;
+    if (!key) return;
+    element.setAttribute("placeholder", t(key));
+  });
+
+  document.querySelectorAll("[data-ui-title-key]").forEach((element) => {
+    const key = element.dataset.uiTitleKey;
+    if (!key) return;
+    element.setAttribute("title", t(key));
+  });
+
+  document.querySelectorAll("[data-ui-aria-label-key]").forEach((element) => {
+    const key = element.dataset.uiAriaLabelKey;
+    if (!key) return;
+    element.setAttribute("aria-label", t(key));
+  });
+
+  if (elements.searchButton) {
+    const idleLabel = t("search.submit");
+    elements.searchButton.dataset.idleLabel = idleLabel;
+    if (!elements.searchButton.classList.contains("busy")) {
+      elements.searchButton.textContent = idleLabel;
+    }
+  }
+
+  syncLanguageButtons();
+}
+
+function setUiLanguage(nextLanguage) {
+  const resolved = normalizeUiLanguage(nextLanguage);
+  if (resolved === state.uiLanguage) {
+    syncLanguageButtons();
+    return;
+  }
+  state.uiLanguage = resolved;
+  saveUiLanguage();
+  render();
 }
 
 function normalizeText(text) {
@@ -4185,7 +4758,7 @@ function formatAuthDateTime(value) {
   const date = new Date(text);
   if (Number.isNaN(date.getTime())) return "";
 
-  return new Intl.DateTimeFormat("ko-KR", {
+  return new Intl.DateTimeFormat(state.uiLanguage === "th" ? "th-TH" : "ko-KR", {
     month: "numeric",
     day: "numeric",
     hour: "numeric",
@@ -4194,23 +4767,23 @@ function formatAuthDateTime(value) {
 }
 
 function formatAuthRole(role) {
-  return role === "admin" ? "관리자" : "일반 사용자";
+  return role === "admin" ? t("auth.role.admin") : t("auth.role.user");
 }
 
 function getAuthMetaText(user) {
   if (!user) return "";
-  const parts = [formatAuthRole(user.role), user.canUseAi ? "AI 사용 가능" : "AI 사용 불가"];
-  if (!user.enabled) parts.push("비활성 계정");
-  if (user.mustChangePassword) parts.push("비밀번호 변경 필요");
+  const parts = [formatAuthRole(user.role), user.canUseAi ? t("auth.meta.aiAllowed") : t("auth.meta.aiDenied")];
+  if (!user.enabled) parts.push(t("auth.meta.disabled"));
+  if (user.mustChangePassword) parts.push(t("auth.meta.mustChangePassword"));
   const lastLogin = formatAuthDateTime(user.lastLoginAt);
-  if (lastLogin) parts.push(`최근 로그인 ${lastLogin}`);
+  if (lastLogin) parts.push(t("auth.meta.lastLogin", { value: lastLogin }));
   return parts.join(" · ");
 }
 
 async function requestWorkerJson(path, options = {}) {
   const baseUrl = options.baseUrl || getWorkerBaseUrl();
   if (!baseUrl && !/^https?:\/\//i.test(String(path || ""))) {
-    throw new Error("관리자 연결 설정이 아직 준비되지 않았습니다.");
+    throw new Error(t("auth.error.endpointMissing"));
   }
 
   const url = /^https?:\/\//i.test(String(path || "")) ? String(path) : `${baseUrl}${path}`;
@@ -4237,7 +4810,7 @@ async function requestWorkerJson(path, options = {}) {
   const data = await response.json().catch(() => ({}));
   if (!response.ok) {
     if (response.status === 401 && !options.skipLogoutOnUnauthorized && state.auth.sessionToken) {
-      resetAuthState("세션이 만료되었거나 다시 로그인이 필요합니다.");
+      resetAuthState(t("auth.error.sessionExpired"));
       render();
     }
     throw new Error(String(data?.error || data?.message || `요청 실패 (${response.status})`));
@@ -4278,7 +4851,7 @@ async function refreshAuthSession(options = {}) {
     }
   } catch (error) {
     if (!options.silent && elements.authFeedback) {
-      elements.authFeedback.textContent = error instanceof Error ? error.message : "세션 확인에 실패했습니다.";
+      elements.authFeedback.textContent = error instanceof Error ? error.message : t("auth.error.sessionCheckFailed");
     }
   } finally {
     state.auth.checking = false;
@@ -4298,13 +4871,13 @@ function createAiAssistEntry(item, kind, query, index) {
   const korean = String(item.korean || "").trim();
   const thaiScript = String(item.thaiScript || "").trim();
   const thai = String(item.thai || "").trim() || thaiScript;
-  const noteParts = [String(item.note || "").trim(), "AI 보강 제안"].filter(Boolean);
+  const noteParts = [String(item.note || "").trim(), t("ai.entryNote")].filter(Boolean);
   return hydrateEntry(
     {
       id: `ai-${kind}-${compactText(query).slice(0, 48) || "query"}-${index}`,
       kind,
       source: "ai-assist",
-      sheet: "AI 보강",
+      sheet: t("ai.card.titleFallback"),
       thai,
       thaiScript,
       korean,
@@ -4604,7 +5177,7 @@ async function requestAiAssist(context = state.lastSearchContext, options = {}) 
   if (!hasConfiguredAiAssist()) {
     openMenu();
     if (elements.aiSettingsFeedback) {
-      elements.aiSettingsFeedback.textContent = "관리자 메뉴에서 AI 연결 설정을 확인해 주세요.";
+      elements.aiSettingsFeedback.textContent = t("ai.error.checkSettings");
     }
     elements.aiEndpointInput?.focus();
     return;
@@ -4612,7 +5185,7 @@ async function requestAiAssist(context = state.lastSearchContext, options = {}) 
   if (!isLoggedIn()) {
     openMenu();
     if (elements.authFeedback) {
-      elements.authFeedback.textContent = "AI 보강은 로그인 후 사용할 수 있습니다.";
+      elements.authFeedback.textContent = t("ai.error.loginRequired");
     }
     elements.authUsernameInput?.focus();
     return;
@@ -4620,7 +5193,7 @@ async function requestAiAssist(context = state.lastSearchContext, options = {}) 
   if (!canCurrentUserUseAi()) {
     openMenu();
     if (elements.authFeedback) {
-      elements.authFeedback.textContent = "이 계정에는 AI 사용 권한이 없습니다. 관리자에게 권한을 받아 주세요.";
+      elements.authFeedback.textContent = t("ai.error.notAllowed");
     }
     return;
   }
@@ -4673,7 +5246,7 @@ async function requestAiAssist(context = state.lastSearchContext, options = {}) 
     state.aiAssist = {
       status: "error",
       query,
-      error: error instanceof Error ? error.message : "AI 보강 요청에 실패했습니다.",
+      error: error instanceof Error ? error.message : t("ai.error.requestFailed"),
       result: null,
       requestId,
       trigger,
@@ -4687,7 +5260,7 @@ function submitAiSettings(event) {
   event.preventDefault();
   if (!isCurrentUserAdmin()) {
     if (elements.aiSettingsFeedback) {
-      elements.aiSettingsFeedback.textContent = "이 설정은 관리자만 바꿀 수 있습니다.";
+      elements.aiSettingsFeedback.textContent = t("ai.error.settingsAdminOnly");
     }
     return;
   }
@@ -4711,12 +5284,12 @@ function submitAiSettings(event) {
   syncAiSettingsForm();
   const nextBaseUrl = getWorkerBaseUrl(nextSettings.endpoint);
   if (previousBaseUrl && previousBaseUrl !== nextBaseUrl && state.auth.sessionToken) {
-    resetAuthState("프록시 주소가 바뀌어서 다시 로그인해 주세요.");
+    resetAuthState(t("ai.settings.relogin"));
   }
   if (elements.aiSettingsFeedback) {
     elements.aiSettingsFeedback.textContent = hasConfiguredAiAssist()
-      ? `AI 설정을 저장했습니다. 현재 모드: ${AI_MODE_LABELS[nextMode] || "수동 보강"}`
-      : "AI 연결이 비활성화되어 있습니다.";
+      ? t("ai.settings.saved", { mode: getAiModeLabel(nextMode) })
+      : t("ai.settings.disabled");
   }
   render();
 }
@@ -8387,8 +8960,8 @@ function renderScenarioChips() {
     const button = document.createElement("button");
     button.type = "button";
     button.className = `chip${state.scenario === scenario.id ? " active" : ""}`;
-    button.textContent = scenario.label;
-    button.title = scenario.description;
+    button.textContent = getScenarioLabel(scenario.id, scenario.label);
+    button.title = getScenarioDescription(scenario.id, scenario.description);
     wirePressFeedback(button);
     button.addEventListener("click", () => {
       state.scenario = scenario.id;
@@ -8421,11 +8994,11 @@ function setSearchButtonBusy(isBusy) {
   const button = elements.searchButton;
   if (!button) return;
 
-  const idleLabel = button.dataset.idleLabel || button.textContent || "검색";
+  const idleLabel = button.dataset.idleLabel || button.textContent || t("search.submit");
   button.dataset.idleLabel = idleLabel;
   button.classList.toggle("busy", isBusy);
   button.setAttribute("aria-busy", isBusy ? "true" : "false");
-  button.textContent = isBusy ? "검색 중..." : idleLabel;
+  button.textContent = isBusy ? t("search.submitBusy") : idleLabel;
 }
 
 function wirePressFeedback(button) {
@@ -8890,10 +9463,10 @@ function getDisplayNoteText(entry) {
 
   const sourceText = `${entry?.sheet || ""} ${raw}`;
   if (/tatoeba|opus/i.test(sourceText)) {
-    return "외부 예문 보강";
+    return t("entry.externalExample");
   }
   if (/wiktionary|kaikki/i.test(sourceText)) {
-    return "외부 사전 보강";
+    return t("entry.externalDictionary");
   }
 
   const simplified = withoutSource
@@ -8904,7 +9477,7 @@ function getDisplayNoteText(entry) {
     .trim();
 
   if (!simplified || /[A-Za-z]{4,}/.test(simplified) || /pivot/i.test(raw)) {
-    return "외부 보강";
+    return t("entry.externalGeneric");
   }
   return simplified;
 }
@@ -8962,10 +9535,10 @@ function setCurrentView(nextView = "search") {
 
 function hideLegacyMenuAuthSection() {
   document.querySelectorAll("#authUsernameInput").forEach((input) => {
-    input.setAttribute("placeholder", "아이디");
+    input.setAttribute("placeholder", t("auth.username"));
   });
   document.querySelectorAll("#authPasswordInput").forEach((input) => {
-    input.setAttribute("placeholder", "비밀번호");
+    input.setAttribute("placeholder", t("auth.password"));
   });
 
   const authForms = document.querySelectorAll("#authLoginForm");
@@ -9107,7 +9680,7 @@ function createEntryCard(entry, searchProfile = null) {
     const button = document.createElement("button");
     button.type = "button";
     button.className = `mini-button${state.revealedThaiIds.has(entry.id) ? " active" : ""}`;
-    button.textContent = state.revealedThaiIds.has(entry.id) ? "태국어 숨기기" : "태국어 보기";
+    button.textContent = state.revealedThaiIds.has(entry.id) ? t("entry.hideThai") : t("entry.showThai");
     wirePressFeedback(button);
 
     const panel = document.createElement("div");
@@ -9116,7 +9689,7 @@ function createEntryCard(entry, searchProfile = null) {
 
     const label = document.createElement("span");
     label.className = "thai-script-label";
-    label.textContent = "현지인에게 보여주기";
+    label.textContent = t("entry.showToLocal");
 
     const script = document.createElement("p");
     script.className = "thai-script-text";
@@ -9131,7 +9704,7 @@ function createEntryCard(entry, searchProfile = null) {
       }
       const visible = state.revealedThaiIds.has(entry.id);
       button.classList.toggle("active", visible);
-      button.textContent = visible ? "태국어 숨기기" : "태국어 보기";
+      button.textContent = visible ? t("entry.hideThai") : t("entry.showThai");
       panel.hidden = !visible;
     });
 
@@ -9141,7 +9714,7 @@ function createEntryCard(entry, searchProfile = null) {
   } else if (!thaiScriptText) {
     const missingNote = document.createElement("p");
     missingNote.className = "entry-note";
-    missingNote.textContent = "태국 문자 미보강 · 위 발음 표기만 있어요";
+    missingNote.textContent = t("entry.noThaiScript");
     card.appendChild(missingNote);
   }
 
@@ -9159,12 +9732,14 @@ function createAiSummaryCard(result, searchProfile, originalQuery = state.query)
 
   const title = document.createElement("p");
   title.className = "ai-summary-title";
-  title.textContent = queryText || result.normalizedQuery || "AI 보강";
+  title.textContent = queryText || result.normalizedQuery || t("ai.card.titleFallback");
 
   if (result.confidence !== null) {
     const badge = document.createElement("span");
     badge.className = "ai-summary-badge";
-    badge.textContent = `신뢰도 ${Math.round(Math.max(0, Math.min(1, result.confidence)) * 100)}%`;
+    badge.textContent = t("ai.card.confidence", {
+      value: Math.round(Math.max(0, Math.min(1, result.confidence)) * 100),
+    });
     title.appendChild(badge);
   }
 
@@ -9173,28 +9748,28 @@ function createAiSummaryCard(result, searchProfile, originalQuery = state.query)
   if (result.normalizedQuery && compactText(result.normalizedQuery) !== compactText(queryText)) {
     const normalized = document.createElement("p");
     normalized.className = "entry-note";
-    renderHighlightedText(normalized, `AI 정리: ${result.normalizedQuery}`, searchProfile);
+    renderHighlightedText(normalized, t("ai.card.normalized", { value: result.normalizedQuery }), searchProfile);
     card.appendChild(normalized);
   }
 
   if (result.intent) {
     const intent = document.createElement("p");
     intent.className = "entry-note";
-    renderHighlightedText(intent, `AI 해석: ${result.intent}`, searchProfile);
+    renderHighlightedText(intent, t("ai.card.intent", { value: result.intent }), searchProfile);
     card.appendChild(intent);
   }
 
   if (result.hints.length) {
     const hints = document.createElement("p");
     hints.className = "entry-note";
-    hints.textContent = `확장 키워드: ${result.hints.join(", ")}`;
+    hints.textContent = t("ai.card.hints", { value: result.hints.join(", ") });
     card.appendChild(hints);
   }
 
   if (result.caution) {
     const caution = document.createElement("p");
     caution.className = "entry-note";
-    caution.textContent = `참고: ${result.caution}`;
+    caution.textContent = t("ai.card.caution", { value: result.caution });
     card.appendChild(caution);
   }
 
@@ -9221,14 +9796,18 @@ function renderAiAssist(context) {
   const aiOnly = isAiOnlyModeActive(context);
 
   elements.aiAssistButton.disabled = !query || isLoading;
-  elements.aiAssistButton.textContent = isLoading ? "AI 보는 중..." : aiMode === "manual" ? "AI 보강" : "AI 다시 보기";
+  elements.aiAssistButton.textContent = isLoading
+    ? t("ai.button.loading")
+    : aiMode === "manual"
+      ? t("ai.button.manual")
+      : t("ai.button.retry");
   elements.aiAssistButton.title = !configured
-    ? "관리자가 AI 연결을 아직 설정하지 않았습니다."
+    ? t("auth.error.endpointMissing")
     : !authorized
-      ? "로그인한 계정에 AI 권한이 있어야 사용할 수 있습니다."
+      ? t("ai.error.notAllowed")
       : aiOnly
-        ? "LLM 전용 모드입니다. AI 결과를 메인 검색 결과로 보여줍니다."
-        : "로컬 검색이 애매하거나 비어 있을 때 AI가 뜻을 다시 풀어줍니다.";
+        ? `${getAiModeLabel(aiMode)}`
+        : t("admin.ai.enabledHint");
 
   if (!query || (!authorized && !isLoading) || (!sameQuery && state.aiAssist.status !== "loading")) {
     elements.aiAssistPanel.hidden = true;
@@ -9247,16 +9826,16 @@ function renderAiAssist(context) {
 
   if (state.aiAssist.status === "loading" && sameQuery) {
     elements.aiAssistMeta.textContent =
-      state.aiAssist.trigger === "auto" ? AI_MODE_LABELS[aiMode] || "자동 보강" : "수동 보강";
+      state.aiAssist.trigger === "auto" ? getAiModeLabel(aiMode) : t("ai.meta.manual");
     elements.aiAssistStatus.hidden = false;
-    elements.aiAssistStatus.textContent = "AI가 검색어를 다시 해석하고 있어요.";
+    elements.aiAssistStatus.textContent = t("ai.status.loading");
     return;
   }
 
   if (state.aiAssist.status === "error" && sameQuery) {
-    elements.aiAssistMeta.textContent = "AI 보강 실패";
+    elements.aiAssistMeta.textContent = t("ai.meta.failed");
     elements.aiAssistStatus.hidden = false;
-    elements.aiAssistStatus.textContent = state.aiAssist.error || "AI 보강 요청에 실패했습니다.";
+    elements.aiAssistStatus.textContent = state.aiAssist.error || t("ai.error.requestFailed");
     return;
   }
 
@@ -9268,20 +9847,20 @@ function renderAiAssist(context) {
   const result = state.aiAssist.result;
   const totalCount = result.vocab.length + result.sentences.length;
   if (!totalCount) {
-    elements.aiAssistMeta.textContent = "AI가 확실한 보강 표현을 찾지 못했습니다.";
+    elements.aiAssistMeta.textContent = t("ai.meta.noResult");
     elements.aiAssistStatus.hidden = false;
     elements.aiAssistStatus.textContent = aiOnly
-      ? "LLM 전용 모드에서는 AI 결과만 보여줍니다. 검색어를 더 구체적으로 바꾸거나 모드를 변경해 주세요."
-      : "로컬 결과를 먼저 쓰고, 더 구체적인 검색어로 다시 시도해 주세요.";
+      ? t("ai.status.aiOnlyEmpty")
+      : t("ai.status.defaultEmpty");
     return;
   }
 
   elements.aiAssistMeta.textContent =
     result.model
-      ? `${state.aiAssist.trigger === "auto" ? AI_MODE_LABELS[aiMode] || "자동 보강" : "수동 보강"} · ${result.model}`
+      ? `${state.aiAssist.trigger === "auto" ? getAiModeLabel(aiMode) : t("ai.meta.manual")} · ${result.model}`
       : state.aiAssist.trigger === "auto"
-        ? AI_MODE_LABELS[aiMode] || "자동 보강"
-        : "수동 보강";
+        ? getAiModeLabel(aiMode)
+        : t("ai.meta.manual");
   elements.aiAssistResults.appendChild(createAiSummaryCard(result, context?.searchProfile || null, query));
   (Array.isArray(result.displayEntries) && result.displayEntries.length ? result.displayEntries : [...result.sentences, ...result.vocab]).forEach((entry) => {
     elements.aiAssistResults.appendChild(createEntryCard(entry, context?.searchProfile || null));
@@ -9382,7 +9961,7 @@ async function loadAdminUsers(options = {}) {
     state.auth.users = [];
     state.auth.userListStatus = "error";
     if (!options.silent && elements.authAdminFeedback) {
-      elements.authAdminFeedback.textContent = error instanceof Error ? error.message : "사용자 목록을 불러오지 못했습니다.";
+      elements.authAdminFeedback.textContent = error instanceof Error ? error.message : t("auth.users.loadFailed");
     }
   } finally {
     if (!options.silent) render();
@@ -9398,12 +9977,12 @@ function renderAdminUsersList() {
   }
 
   if (state.auth.userListStatus === "loading") {
-    elements.authUsersList.appendChild(createEmptyState("사용자 목록을 불러오는 중입니다."));
+    elements.authUsersList.appendChild(createEmptyState(t("auth.users.loading")));
     return;
   }
 
   if (!state.auth.users.length) {
-    elements.authUsersList.appendChild(createEmptyState("등록된 사용자가 아직 없습니다."));
+    elements.authUsersList.appendChild(createEmptyState(t("auth.users.empty")));
     return;
   }
 
@@ -9419,12 +9998,12 @@ function renderAdminUsersList() {
     title.textContent = user.username;
     const description = document.createElement("p");
     description.className = "entry-note";
-    description.textContent = getAuthMetaText(user) || "사용자 정보";
+    description.textContent = getAuthMetaText(user) || t("auth.users.info");
     info.append(title, description);
 
     const stateTag = document.createElement("span");
     stateTag.className = "tag";
-    stateTag.textContent = user.enabled ? "활성" : "비활성";
+    stateTag.textContent = user.enabled ? t("auth.users.active") : t("auth.users.inactive");
     header.append(info, stateTag);
     card.appendChild(header);
 
@@ -9435,11 +10014,11 @@ function renderAdminUsersList() {
 
     const roleLabel = document.createElement("label");
     const roleTitle = document.createElement("span");
-    roleTitle.textContent = "권한";
+    roleTitle.textContent = t("auth.users.role");
     const roleInput = document.createElement("select");
     roleInput.innerHTML = `
-      <option value="user">일반 사용자</option>
-      <option value="admin">관리자</option>
+      <option value="user">${t("admin.users.roleUser")}</option>
+      <option value="admin">${t("admin.users.roleAdmin")}</option>
     `;
     roleInput.value = user.role;
     roleInput.disabled = selfUser;
@@ -9448,21 +10027,21 @@ function renderAdminUsersList() {
     const aiLabel = document.createElement("label");
     aiLabel.className = "toggle-field";
     const aiTitle = document.createElement("span");
-    aiTitle.textContent = "AI 사용";
+    aiTitle.textContent = t("auth.users.aiUse");
     const aiWrap = document.createElement("span");
     aiWrap.className = "inline-toggle";
     const aiInput = document.createElement("input");
     aiInput.type = "checkbox";
     aiInput.checked = Boolean(user.canUseAi);
     const aiText = document.createElement("span");
-    aiText.textContent = "AI 검색 허용";
+    aiText.textContent = t("auth.users.aiAllowed");
     aiWrap.append(aiInput, aiText);
     aiLabel.append(aiTitle, aiWrap);
 
     const enabledLabel = document.createElement("label");
     enabledLabel.className = "toggle-field";
     const enabledTitle = document.createElement("span");
-    enabledTitle.textContent = "계정 상태";
+    enabledTitle.textContent = t("auth.users.accountState");
     const enabledWrap = document.createElement("span");
     enabledWrap.className = "inline-toggle";
     const enabledInput = document.createElement("input");
@@ -9470,17 +10049,17 @@ function renderAdminUsersList() {
     enabledInput.checked = Boolean(user.enabled);
     enabledInput.disabled = selfUser;
     const enabledText = document.createElement("span");
-    enabledText.textContent = "사용 가능";
+    enabledText.textContent = t("auth.users.accountUsable");
     enabledWrap.append(enabledInput, enabledText);
     enabledLabel.append(enabledTitle, enabledWrap);
 
     const passwordLabel = document.createElement("label");
     passwordLabel.className = "wide";
     const passwordTitle = document.createElement("span");
-    passwordTitle.textContent = "비밀번호 재설정";
+    passwordTitle.textContent = t("auth.users.resetPassword");
     const passwordInput = document.createElement("input");
     passwordInput.type = "password";
-    passwordInput.placeholder = "비워두면 그대로 둡니다";
+    passwordInput.placeholder = t("auth.users.resetPasswordPlaceholder");
     passwordLabel.append(passwordTitle, passwordInput);
 
     grid.append(roleLabel, aiLabel, enabledLabel, passwordLabel);
@@ -9489,7 +10068,7 @@ function renderAdminUsersList() {
     if (selfUser) {
       const note = document.createElement("p");
       note.className = "entry-note";
-      note.textContent = "현재 로그인한 관리자 계정은 권한 변경이나 비활성화를 여기서 막아 두었습니다.";
+      note.textContent = t("auth.users.selfProtected");
       card.appendChild(note);
     }
 
@@ -9498,13 +10077,13 @@ function renderAdminUsersList() {
     const saveButton = document.createElement("button");
     saveButton.type = "button";
     saveButton.className = "mini-button";
-    saveButton.textContent = "저장";
+    saveButton.textContent = t("auth.users.save");
     wirePressFeedback(saveButton);
 
     saveButton.addEventListener("click", async () => {
       saveButton.disabled = true;
       if (elements.authAdminFeedback) {
-        elements.authAdminFeedback.textContent = `"${user.username}" 계정을 저장하는 중입니다.`;
+        elements.authAdminFeedback.textContent = t("auth.users.saving", { username: user.username });
       }
 
       try {
@@ -9530,12 +10109,12 @@ function renderAdminUsersList() {
         }
         passwordInput.value = "";
         if (elements.authAdminFeedback) {
-          elements.authAdminFeedback.textContent = `"${user.username}" 계정을 저장했습니다.`;
+          elements.authAdminFeedback.textContent = t("auth.users.saved", { username: user.username });
         }
         render();
       } catch (error) {
         if (elements.authAdminFeedback) {
-          elements.authAdminFeedback.textContent = error instanceof Error ? error.message : "계정 저장에 실패했습니다.";
+          elements.authAdminFeedback.textContent = error instanceof Error ? error.message : t("auth.users.saveFailed");
         }
       } finally {
         saveButton.disabled = false;
@@ -9583,25 +10162,25 @@ function renderAuthSection() {
 
   if (elements.authGateTitle) {
     elements.authGateTitle.textContent = !loggedIn
-      ? "먼저 로그인해 주세요"
+      ? t("auth.summary.loginFirst")
       : mustChangePassword
-        ? "비밀번호를 먼저 바꿔 주세요"
-        : "계정 설정";
+        ? t("auth.summary.changePassword")
+        : t("auth.summary.settings");
   }
 
   if (elements.authSummary) {
     elements.authSummary.textContent = !hasEndpoint
-      ? "관리자 연결 설정이 아직 준비되지 않았습니다."
+      ? t("auth.summary.noEndpoint")
       : checking
-        ? "로그인 세션을 확인하고 있습니다."
+        ? t("auth.summary.checking")
         : !loggedIn
-          ? "로그인한 계정만 검색과 AI를 사용할 수 있습니다."
+          ? t("auth.summary.loginOnly")
           : mustChangePassword
-            ? "처음 받은 비밀번호를 새 비밀번호로 바꾼 뒤 계속 사용할 수 있습니다."
+            ? t("auth.summary.mustChangePassword")
           : loggedIn
           ? isAdmin
-            ? `${state.auth.me?.username || "계정"}으로 로그인되어 있습니다. 계정 패널과 관리자 작업 공간을 사용할 수 있습니다.`
-            : `${state.auth.me?.username || "계정"}으로 로그인되어 있습니다.`
+            ? t("auth.summary.loggedInAdmin", { username: state.auth.me?.username || t("toolbar.account") })
+            : t("auth.summary.loggedInUser", { username: state.auth.me?.username || t("toolbar.account") })
           : "";
   }
 
@@ -9624,7 +10203,7 @@ function renderAuthSection() {
   }
 
   if (elements.authAccountName) {
-    elements.authAccountName.textContent = loggedIn ? state.auth.me.username : "로그인되지 않음";
+    elements.authAccountName.textContent = loggedIn ? state.auth.me.username : t("auth.loggedOut");
   }
 
   if (elements.authAccountMeta) {
@@ -9646,12 +10225,12 @@ function renderAuthSection() {
   if (elements.authToolbarName) {
     elements.authToolbarName.textContent = loggedIn
       ? state.auth.me.username
-      : "계정";
+      : t("toolbar.account");
   }
 
   if (elements.authOpenPanelButton) {
     elements.authOpenPanelButton.disabled = !loggedIn;
-    elements.authOpenPanelButton.title = loggedIn ? getAuthMetaText(state.auth.me) : "계정";
+    elements.authOpenPanelButton.title = loggedIn ? getAuthMetaText(state.auth.me) : t("toolbar.account");
   }
 
   if (elements.authQuickLogoutButton) {
@@ -9710,7 +10289,7 @@ function renderAuthSection() {
 
   if (elements.adminWorkspaceSummary) {
     elements.adminWorkspaceSummary.textContent = adminView
-      ? "검색창 대신 사용자 관리와 AI 연결만 크게 보여주고 있습니다."
+      ? t("admin.workspace.summary")
       : "";
   }
 
@@ -9722,7 +10301,7 @@ async function submitAuthLogin(event) {
 
   if (!hasWorkerEndpointConfigured()) {
     if (elements.authFeedback) {
-      elements.authFeedback.textContent = "관리자 연결 설정이 아직 준비되지 않았습니다.";
+      elements.authFeedback.textContent = t("auth.error.endpointMissing");
     }
     elements.aiEndpointInput?.focus();
     return;
@@ -9732,13 +10311,13 @@ async function submitAuthLogin(event) {
   const password = String(elements.authPasswordInput?.value || "").trim();
   if (!username || !password) {
     if (elements.authFeedback) {
-      elements.authFeedback.textContent = "아이디와 비밀번호를 모두 입력해 주세요.";
+      elements.authFeedback.textContent = t("auth.login.missing");
     }
     return;
   }
 
   if (elements.authFeedback) {
-    elements.authFeedback.textContent = "로그인 중입니다.";
+    elements.authFeedback.textContent = t("auth.login.progress");
   }
 
   try {
@@ -9759,8 +10338,8 @@ async function submitAuthLogin(event) {
     if (elements.authPasswordInput) elements.authPasswordInput.value = "";
     if (elements.authFeedback) {
       elements.authFeedback.textContent = state.auth.me?.mustChangePassword
-        ? "로그인했습니다. 비밀번호를 바로 바꿔 주세요."
-        : "로그인했습니다.";
+        ? t("auth.login.successChangeRequired")
+        : t("auth.login.success");
     }
 
     if (isCurrentUserAdmin()) {
@@ -9769,7 +10348,7 @@ async function submitAuthLogin(event) {
     render();
   } catch (error) {
     if (elements.authFeedback) {
-      elements.authFeedback.textContent = error instanceof Error ? error.message : "로그인에 실패했습니다.";
+      elements.authFeedback.textContent = error instanceof Error ? error.message : t("auth.login.failed");
     }
   }
 }
@@ -9785,7 +10364,7 @@ async function handleAuthLogout() {
   } catch (error) {
     console.error("로그아웃 요청 실패", error);
   } finally {
-    resetAuthState("로그아웃했습니다.");
+    resetAuthState(t("auth.logout.success"));
     render();
   }
 }
@@ -9796,13 +10375,13 @@ async function handleAuthChangePassword() {
 
   if (!currentPassword || !newPassword) {
     if (elements.authFeedback) {
-      elements.authFeedback.textContent = "현재 비밀번호와 새 비밀번호를 모두 입력해 주세요.";
+      elements.authFeedback.textContent = t("auth.password.missing");
     }
     return;
   }
 
   if (elements.authFeedback) {
-    elements.authFeedback.textContent = "비밀번호를 변경하는 중입니다.";
+    elements.authFeedback.textContent = t("auth.password.progress");
   }
 
   try {
@@ -9820,12 +10399,12 @@ async function handleAuthChangePassword() {
     if (elements.authCurrentPasswordInput) elements.authCurrentPasswordInput.value = "";
     if (elements.authNewPasswordInput) elements.authNewPasswordInput.value = "";
     if (elements.authFeedback) {
-      elements.authFeedback.textContent = "비밀번호를 변경했습니다.";
+      elements.authFeedback.textContent = t("auth.password.success");
     }
     render();
   } catch (error) {
     if (elements.authFeedback) {
-      elements.authFeedback.textContent = error instanceof Error ? error.message : "비밀번호 변경에 실패했습니다.";
+      elements.authFeedback.textContent = error instanceof Error ? error.message : t("auth.password.failed");
     }
   }
 }
@@ -9842,13 +10421,13 @@ async function submitAuthUserCreate(event) {
 
   if (!username || !password) {
     if (elements.authAdminFeedback) {
-      elements.authAdminFeedback.textContent = "아이디와 임시 비밀번호를 모두 입력해 주세요.";
+      elements.authAdminFeedback.textContent = t("auth.users.missingCreateFields");
     }
     return;
   }
 
   if (elements.authAdminFeedback) {
-    elements.authAdminFeedback.textContent = "사용자를 만드는 중입니다.";
+    elements.authAdminFeedback.textContent = t("auth.users.creating");
   }
 
   try {
@@ -9867,13 +10446,13 @@ async function submitAuthUserCreate(event) {
     if (elements.authCreateAiInput) elements.authCreateAiInput.checked = true;
     if (elements.authCreateEnabledInput) elements.authCreateEnabledInput.checked = true;
     if (elements.authAdminFeedback) {
-      elements.authAdminFeedback.textContent = `"${username}" 계정을 만들었습니다. 처음 로그인 후 비밀번호를 바꾸게 됩니다.`;
+      elements.authAdminFeedback.textContent = t("auth.users.created", { username });
     }
     await loadAdminUsers({ silent: true });
     render();
   } catch (error) {
     if (elements.authAdminFeedback) {
-      elements.authAdminFeedback.textContent = error instanceof Error ? error.message : "사용자 생성에 실패했습니다.";
+      elements.authAdminFeedback.textContent = error instanceof Error ? error.message : t("auth.users.createFailed");
     }
   }
 }
@@ -10054,6 +10633,7 @@ function getSearchComputation(query = state.query) {
 }
 
 function render() {
+  applyStaticTranslations();
   const {
     merged,
     searchProfile,
@@ -10072,7 +10652,7 @@ function render() {
   const adminView = isAdminWorkspaceView();
   const expandedHint =
     !timeQuestionMode && searchProfile.displayTerms.length
-      ? ` · 함께 찾은 핵심어: ${searchProfile.displayTerms.join(" / ")}`
+      ? t("search.status.expandedHint", { terms: searchProfile.displayTerms.join(" / ") })
       : "";
   const activeScenario = baseData.scenarios.find((item) => item.id === state.scenario);
   const localSearchContext = {
@@ -10102,88 +10682,106 @@ function render() {
   elements.resultStack.hidden = browsing || adminView;
 
   elements.searchStatus.textContent = adminView
-    ? "관리자 작업 공간입니다. 오른쪽 메뉴에서 검색 화면으로 돌아갈 수 있습니다."
+    ? t("search.status.admin")
     : browsing
-    ? "한국어와 태국어 둘 다 검색할 수 있습니다. 한국어는 바로 쓸 태국어를, 태국어는 한국어 뜻을 먼저 보여줍니다."
+    ? t("search.status.browsing")
     : aiDisplayState.aiOnly
-      ? `LLM 전용 모드: AI가 검색어를 직접 해석해서 결과를 보여줍니다.${expandedHint}`
+      ? t("search.status.aiOnly", { hint: expandedHint })
     : numberMode
-      ? `숫자 변환: 읽기 ${vocabResults.length}개 · 활용 ${sentenceResults.length}개${expandedHint}`
+      ? t("search.status.number", { vocab: vocabResults.length, sentences: sentenceResults.length, hint: expandedHint })
       : dateMode
-        ? `날짜 검색: 단어 ${vocabResults.length}개 · 회화 ${sentenceResults.length}개${expandedHint}`
+        ? t("search.status.date", { vocab: vocabResults.length, sentences: sentenceResults.length, hint: expandedHint })
       : timeQuestionMode
-        ? `시간 질문: 단어 ${vocabResults.length}개 · 회화 ${sentenceResults.length}개${expandedHint}`
+        ? t("search.status.timeQuestion", {
+            vocab: vocabResults.length,
+            sentences: sentenceResults.length,
+            hint: expandedHint,
+          })
       : timeMode
-        ? `시간 검색: 단어 ${vocabResults.length}개 · 회화 ${sentenceResults.length}개${expandedHint}`
+        ? t("search.status.time", { vocab: vocabResults.length, sentences: sentenceResults.length, hint: expandedHint })
       : thaiOnlySearch && composedMode
-        ? `태국어 해석: 단어 ${vocabResults.length}개 · 회화 ${sentenceResults.length}개${expandedHint}`
+        ? t("search.status.thaiOnlyComposed", {
+            vocab: vocabResults.length,
+            sentences: sentenceResults.length,
+            hint: expandedHint,
+          })
       : composedMode
-        ? `검색됨: 단어 ${vocabResults.length}개 · 회화 ${sentenceResults.length}개 · 자동 조합 적용${expandedHint}`
-        : `검색됨: 단어 ${vocabResults.length}개 · 회화 ${sentenceResults.length}개${expandedHint}`;
+        ? t("search.status.composed", {
+            vocab: vocabResults.length,
+            sentences: sentenceResults.length,
+            hint: expandedHint,
+          })
+        : t("search.status.default", {
+            vocab: vocabResults.length,
+            sentences: sentenceResults.length,
+            hint: expandedHint,
+          });
 
   elements.filterSummary.textContent = adminView
-    ? "현재 화면: 관리자 작업 공간"
+    ? t("filter.summary.admin")
     :
     state.scenario === "all"
-      ? "필터: 전체 검색"
-      : `필터 적용 중: ${activeScenario ? activeScenario.label : state.scenario}만 보기`;
+      ? t("filter.summary.all")
+      : t("filter.summary.active", {
+          scenario: activeScenario ? getScenarioLabel(activeScenario.id, activeScenario.label) : getScenarioLabel(state.scenario),
+        });
 
   elements.activeSummary.textContent = adminView
-    ? "검색창 없이 관리자 전용 설정만 메인에 표시하고 있습니다."
+    ? t("active.summary.admin")
     : browsing
     ? ""
     : aiDisplayState.aiOnly
-      ? `검색어 "${state.query}"를 LLM 전용 모드로 해석하고 있습니다.`
-      : thaiOnlySearch
-      ? `검색어 "${state.query}"를 태국어에서 한국어 뜻 중심으로 찾고 있습니다.`
-      : `검색어 "${state.query}"를 핵심 단어와 회화로 나눠서 찾고 있습니다.`;
+      ? t("active.summary.aiOnly", { query: state.query })
+    : thaiOnlySearch
+      ? t("active.summary.thai", { query: state.query })
+      : t("active.summary.default", { query: state.query });
 
   elements.vocabMeta.textContent = adminView
     ? ""
     : state.query
     ? numberMode
-      ? "숫자는 태국어 읽기와 태국 숫자 표기를 함께 보여줍니다."
+      ? t("vocab.meta.number")
       : dateMode
-        ? "검색한 날짜를 태국어 날짜 표현으로 바로 보여줍니다."
+        ? t("vocab.meta.date")
       : timeQuestionMode
-        ? "현재 시간을 묻는 표현과 기기 기준 현재 시각을 먼저 보여줍니다."
+        ? t("vocab.meta.timeQuestion")
       : timeMode
-        ? "검색한 시간을 그대로 변형해서 읽기와 시간 표현을 먼저 보여줍니다."
+        ? t("vocab.meta.time")
       : aiDisplayState.aiOnly
-        ? "LLM 전용 모드라서 로컬 단어 매칭 대신 AI가 정리한 단어를 먼저 보여줍니다."
+        ? t("vocab.meta.aiOnly")
       : thaiOnlySearch && composedMode
-        ? "태국어 문장을 분해해서 한국어 핵심 뜻을 먼저 올렸습니다."
+        ? t("vocab.meta.thaiComposed")
       : thaiOnlySearch
-        ? "태국어 검색이라서 한국어 뜻과 가까운 단어를 먼저 올렸습니다."
+        ? t("vocab.meta.thai")
       : composedMode
-        ? "핵심 단어를 먼저 잡고, 요청 문장은 자동으로 조합해 맨 위에 올렸습니다."
+        ? t("vocab.meta.composed")
       : safeExactSentenceMatch
-        ? "핵심 단어를 먼저 보여주고, 아래에 정확히 맞는 회화를 맨 위에 올렸습니다."
+        ? t("vocab.meta.exactSentence")
       : searchProfile.objectTerms.length && searchProfile.actionTerms.length
-        ? "문장형 검색이라도 먼저 잡아둘 단어를 위에 보여줍니다."
-      : "문장을 잘게 풀어서 먼저 잡아둘 단어부터 보여줍니다."
-    : "검색어를 넣으면 관련 단어가 나옵니다.";
+        ? t("vocab.meta.objectAction")
+      : t("vocab.meta.default")
+    : t("vocab.meta.empty");
   elements.sentenceMeta.textContent = adminView
     ? ""
     : state.query
     ? numberMode
-      ? "가격이나 수량으로 바로 보여줄 수 있게 같이 만들었습니다."
+      ? t("sentence.meta.number")
       : dateMode
-        ? "약속이나 일정에 바로 쓸 날짜 문장을 같이 보여줍니다."
+        ? t("sentence.meta.date")
       : timeQuestionMode
-        ? "지금 몇 시인지 묻거나 답할 때 바로 보여줄 수 있게 만들었습니다."
+        ? t("sentence.meta.timeQuestion")
       : timeMode
-        ? "검색한 시간 그대로 문장에 넣어서 바로 보여줄 수 있게 만들었습니다."
+        ? t("sentence.meta.time")
       : aiDisplayState.aiOnly
-        ? "LLM 전용 모드라서 AI가 직접 정리한 회화를 메인 결과로 보여줍니다."
+        ? t("sentence.meta.aiOnly")
       : thaiOnlySearch && composedMode
-        ? "태국어 문장을 해석해서 바로 쓸 한국어 문장을 먼저 보여줍니다."
+        ? t("sentence.meta.thaiComposed")
       : thaiOnlySearch
-        ? "태국어 검색이라서 해당 표현이 들어간 한국어 회화를 우선해서 보여줍니다."
+        ? t("sentence.meta.thai")
       : composedMode
-        ? "입력한 표현에서 목적어와 동사를 나눠 바로 보여줄 문장을 먼저 만들었습니다."
-      : "위 단어를 바탕으로 바로 보여주기 좋은 회화만 추렸습니다."
-    : "검색어를 넣으면 관련 회화가 나옵니다.";
+        ? t("sentence.meta.composed")
+      : t("sentence.meta.default")
+    : t("sentence.meta.empty");
 
   const currentSearchContext = {
     ...localSearchContext,
@@ -10201,11 +10799,11 @@ function render() {
     displayVocabResults,
     aiDisplayState.aiOnly
       ? aiDisplayState.loading || !aiDisplayState.sameQuery
-        ? "AI가 단어를 다시 찾는 중입니다."
+        ? t("results.empty.aiVocabLoading")
         : aiDisplayState.error
-          ? "AI 보강에 실패했습니다. 로그인 상태와 관리자 연결 설정을 확인한 뒤 다시 시도해 주세요."
-          : "AI가 맞는 단어를 아직 못 찾았습니다."
-      : "맞는 단어가 아직 없습니다. 더 짧은 핵심어로 검색해 보세요.",
+          ? t("results.empty.aiVocabFailed")
+          : t("results.empty.aiVocabNone")
+      : t("results.empty.vocabDefault"),
     searchProfile
   );
   renderEntryStack(
@@ -10213,11 +10811,11 @@ function render() {
     displaySentenceResults,
     aiDisplayState.aiOnly
       ? aiDisplayState.loading || !aiDisplayState.sameQuery
-        ? "AI가 회화를 다시 정리하는 중입니다."
+        ? t("results.empty.aiSentenceLoading")
         : aiDisplayState.error
-          ? "AI 회화 보강에 실패했습니다. 로그인 상태와 관리자 연결 설정을 확인한 뒤 다시 시도해 주세요."
-          : "AI가 맞는 회화를 아직 못 찾았습니다."
-      : "맞는 회화가 아직 없습니다. 다른 표현으로 검색하거나 단어를 먼저 검색해 보세요.",
+          ? t("results.empty.aiSentenceFailed")
+          : t("results.empty.aiSentenceNone")
+      : t("results.empty.sentenceDefault"),
     searchProfile
   );
   renderCustomEntries();
@@ -10419,7 +11017,14 @@ function wireEvents() {
     elements.authGateCloseButton,
     elements.authChangePasswordButton,
     elements.authLogoutButton,
+    ...elements.languageButtons,
   ].forEach(wirePressFeedback);
+
+  elements.languageButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      setUiLanguage(button.dataset.language);
+    });
+  });
 
   elements.jumpVocabButton.addEventListener("click", () => jumpToSection(elements.vocabSection));
   elements.jumpSentenceButton.addEventListener("click", () => jumpToSection(elements.sentenceSection));
@@ -10505,6 +11110,6 @@ try {
 } catch (error) {
   console.error("앱 초기화 실패", error);
   if (elements.searchStatus) {
-    elements.searchStatus.textContent = "앱을 다시 불러오는 중 문제가 생겼습니다. 새로고침 후 다시 시도해 주세요.";
+    elements.searchStatus.textContent = t("boot.failed");
   }
 }

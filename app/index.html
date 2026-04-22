@@ -11,7 +11,7 @@
     <title>태국어 포켓북</title>
     <link rel="manifest" href="./manifest.webmanifest?v=20260422c" />
     <link rel="icon" href="./icon.svg?v=20260416x" type="image/svg+xml" />
-    <link rel="stylesheet" href="./styles.css?v=20260422k" />
+    <link rel="stylesheet" href="./styles.css?v=20260422l" />
   </head>
   <body>
     <div class="page-shell">
@@ -19,16 +19,38 @@
         <div class="hero-top">
           <div class="hero-copy-block">
             <div class="eyebrow">Thai Pocketbook</div>
-            <h1>태국어 포켓북</h1>
-            <p class="hero-copy">한국어로 찾으면 단어를 먼저, 바로 쓸 회화를 그 아래에 보여줍니다.</p>
+            <h1 data-ui-key="hero.title">태국어 포켓북</h1>
+            <p class="hero-copy" data-ui-key="hero.copy">한국어로 찾으면 단어를 먼저, 바로 쓸 회화를 그 아래에 보여줍니다.</p>
           </div>
           <div class="hero-top-actions">
             <div id="authToolbar" class="auth-toolbar auth-toolbar-inline" hidden>
               <button id="authOpenPanelButton" class="ghost-button auth-toolbar-trigger" type="button">
-                <span class="auth-toolbar-kicker">계정</span>
+                <span class="auth-toolbar-kicker" data-ui-key="toolbar.account">계정</span>
                 <strong id="authToolbarName">계정</strong>
               </button>
-              <button id="authQuickLogoutButton" class="ghost-button auth-toolbar-logout" type="button">로그아웃</button>
+              <button id="authQuickLogoutButton" class="ghost-button auth-toolbar-logout" type="button" data-ui-key="toolbar.logout">로그아웃</button>
+            </div>
+            <div class="language-switcher" data-language-switcher role="group" data-ui-aria-label-key="language.label">
+              <button
+                class="ghost-button flag-button"
+                type="button"
+                data-language-button
+                data-language="ko"
+                data-ui-title-key="language.ko"
+                data-ui-aria-label-key="language.koAria"
+              >
+                <span aria-hidden="true">🇰🇷</span>
+              </button>
+              <button
+                class="ghost-button flag-button"
+                type="button"
+                data-language-button
+                data-language="th"
+                data-ui-title-key="language.th"
+                data-ui-aria-label-key="language.thAria"
+              >
+                <span aria-hidden="true">🇹🇭</span>
+              </button>
             </div>
             <button
               id="menuButton"
@@ -36,29 +58,30 @@
               type="button"
               aria-expanded="false"
               aria-controls="menuSheet"
-              aria-label="메뉴 열기"
+              data-ui-aria-label-key="toolbar.menuOpen"
             >
               <span aria-hidden="true">☰</span>
-              <span class="sr-only">메뉴</span>
+              <span class="sr-only" data-ui-key="toolbar.menu">메뉴</span>
             </button>
           </div>
         </div>
 
         <form id="searchForm" class="search-panel">
-          <label class="search-label" for="searchInput">검색</label>
+          <label class="search-label" for="searchInput" data-ui-key="search.label">검색</label>
           <div class="search-row">
             <input
               id="searchInput"
               type="search"
               autocomplete="off"
+              data-ui-placeholder-key="search.placeholder"
               placeholder="예: 방바꿔주세요, 얼마예요, ห้องน้ำอยู่ไหน, ราคาเท่าไหร่"
             />
-            <button id="searchButton" class="primary-button search-button" type="submit">검색</button>
+            <button id="searchButton" class="primary-button search-button" type="submit" data-ui-key="search.submit">검색</button>
           </div>
           <div class="search-actions">
-            <button id="jumpVocabButton" class="ghost-button" type="button">단어</button>
-            <button id="jumpSentenceButton" class="ghost-button" type="button">회화</button>
-            <button id="aiAssistButton" class="ghost-button" type="button">AI 보강</button>
+            <button id="jumpVocabButton" class="ghost-button" type="button" data-ui-key="search.jumpVocab">단어</button>
+            <button id="jumpSentenceButton" class="ghost-button" type="button" data-ui-key="search.jumpSentence">회화</button>
+            <button id="aiAssistButton" class="ghost-button" type="button" data-ui-key="ai.button.manual">AI 보강</button>
           </div>
         </form>
 
@@ -72,8 +95,8 @@
         <section id="quickSearchPanel" class="panel">
           <div class="section-top">
             <div>
-              <p class="section-kicker">빠른 검색</p>
-              <h2>자주 찾는 표현</h2>
+              <p class="section-kicker" data-ui-key="quick.kicker">빠른 검색</p>
+              <h2 data-ui-key="quick.title">자주 찾는 표현</h2>
             </div>
           </div>
           <div id="quickSearchChips" class="quick-search"></div>
@@ -82,8 +105,8 @@
         <section id="queryInsightsPanel" class="panel" hidden>
           <div class="section-top">
             <div>
-              <p class="section-kicker">검색 해석</p>
-              <h2>이 표현을 이렇게 풀어서 찾고 있어요</h2>
+              <p class="section-kicker" data-ui-key="insights.kicker">검색 해석</p>
+              <h2 data-ui-key="insights.title">이 표현을 이렇게 풀어서 찾고 있어요</h2>
             </div>
             <p id="activeSummary" class="section-description"></p>
           </div>
@@ -93,8 +116,8 @@
         <section id="aiAssistPanel" class="panel spotlight-panel" hidden>
           <div class="section-top">
             <div>
-              <p class="section-kicker">AI 보강</p>
-              <h2>애매한 검색을 뜻 중심으로 다시 풀어낸 결과</h2>
+              <p class="section-kicker" data-ui-key="ai.panel.kicker">AI 보강</p>
+              <h2 data-ui-key="ai.panel.title">애매한 검색을 뜻 중심으로 다시 풀어낸 결과</h2>
             </div>
             <p id="aiAssistMeta" class="section-description"></p>
           </div>
@@ -105,8 +128,8 @@
         <section id="adminWorkspacePanel" class="panel admin-workspace-panel" hidden>
           <div class="section-top">
             <div>
-              <p class="section-kicker">관리자</p>
-              <h2>관리자 작업 공간</h2>
+              <p class="section-kicker" data-ui-key="admin.workspace.kicker">관리자</p>
+              <h2 data-ui-key="admin.workspace.title">관리자 작업 공간</h2>
             </div>
             <p id="adminWorkspaceSummary" class="section-description"></p>
           </div>
@@ -117,8 +140,8 @@
           <section id="vocabSection" class="panel">
             <div class="section-top">
               <div>
-                <p class="section-kicker">단어</p>
-                <h2>먼저 잡아둘 핵심 단어</h2>
+                <p class="section-kicker" data-ui-key="results.vocab.kicker">단어</p>
+                <h2 data-ui-key="results.vocab.title">먼저 잡아둘 핵심 단어</h2>
               </div>
               <p id="vocabMeta" class="section-description"></p>
             </div>
@@ -128,8 +151,8 @@
           <section id="sentenceSection" class="panel">
             <div class="section-top">
               <div>
-                <p class="section-kicker">회화</p>
-                <h2>바로 보여주거나 말할 문장</h2>
+                <p class="section-kicker" data-ui-key="results.sentence.kicker">회화</p>
+                <h2 data-ui-key="results.sentence.title">바로 보여주거나 말할 문장</h2>
               </div>
               <p id="sentenceMeta" class="section-description"></p>
             </div>
@@ -143,10 +166,34 @@
       <div class="auth-gate-card">
         <div class="section-top auth-gate-header">
           <div>
-            <p class="section-kicker">로그인</p>
+            <p class="section-kicker" data-ui-key="auth.kicker">로그인</p>
             <h2 id="authGateTitle">먼저 로그인해 주세요</h2>
           </div>
-          <button id="authGateCloseButton" class="ghost-button" type="button">닫기</button>
+          <div class="auth-gate-actions">
+            <div class="language-switcher language-switcher-compact" data-language-switcher role="group" data-ui-aria-label-key="language.label">
+              <button
+                class="ghost-button flag-button"
+                type="button"
+                data-language-button
+                data-language="ko"
+                data-ui-title-key="language.ko"
+                data-ui-aria-label-key="language.koAria"
+              >
+                <span aria-hidden="true">🇰🇷</span>
+              </button>
+              <button
+                class="ghost-button flag-button"
+                type="button"
+                data-language-button
+                data-language="th"
+                data-ui-title-key="language.th"
+                data-ui-aria-label-key="language.thAria"
+              >
+                <span aria-hidden="true">🇹🇭</span>
+              </button>
+            </div>
+            <button id="authGateCloseButton" class="ghost-button" type="button" data-ui-key="common.close">닫기</button>
+          </div>
         </div>
 
         <p id="authSummary" class="section-description"></p>
@@ -154,56 +201,72 @@
         <form id="authLoginForm" class="entry-form">
           <div class="form-grid">
             <label>
-              <span>아이디</span>
-              <input id="authUsernameInput" name="username" type="text" placeholder="아이디" required />
+              <span data-ui-key="auth.username">아이디</span>
+              <input
+                id="authUsernameInput"
+                name="username"
+                type="text"
+                data-ui-placeholder-key="auth.username"
+                placeholder="아이디"
+                required
+              />
             </label>
 
             <label>
-              <span>비밀번호</span>
-              <input id="authPasswordInput" name="password" type="password" placeholder="비밀번호" required />
+              <span data-ui-key="auth.password">비밀번호</span>
+              <input
+                id="authPasswordInput"
+                name="password"
+                type="password"
+                data-ui-placeholder-key="auth.password"
+                placeholder="비밀번호"
+                required
+              />
             </label>
           </div>
 
           <div class="form-actions">
-            <button class="primary-button" type="submit">로그인</button>
+            <button class="primary-button" type="submit" data-ui-key="auth.login">로그인</button>
             <p id="authFeedback" class="feedback-text" aria-live="polite"></p>
           </div>
 
-          <p class="section-description">관리자에게 받은 계정으로 로그인해 주세요.</p>
+          <p class="section-description" data-ui-key="auth.loginHint">관리자에게 받은 계정으로 로그인해 주세요.</p>
         </form>
 
         <div id="authSessionPanel" class="entry-form" hidden>
           <div class="form-grid">
             <div class="wide auth-account-card">
-              <span class="auth-account-label">현재 로그인</span>
+              <span class="auth-account-label" data-ui-key="auth.currentLogin">현재 로그인</span>
               <strong id="authAccountName">로그인되지 않음</strong>
               <p id="authAccountMeta" class="section-description"></p>
             </div>
 
             <label>
-              <span>현재 비밀번호</span>
+              <span data-ui-key="auth.currentPassword">현재 비밀번호</span>
               <input
                 id="authCurrentPasswordInput"
                 name="currentPassword"
                 type="password"
+                data-ui-placeholder-key="auth.currentPassword"
                 placeholder="현재 비밀번호"
               />
             </label>
 
             <label>
-              <span>새 비밀번호</span>
+              <span data-ui-key="auth.newPassword">새 비밀번호</span>
               <input
                 id="authNewPasswordInput"
                 name="newPassword"
                 type="password"
+                data-ui-placeholder-key="auth.newPassword"
                 placeholder="새 비밀번호"
               />
             </label>
           </div>
 
           <div class="form-actions">
-            <button id="authChangePasswordButton" class="primary-button" type="button">비밀번호 변경</button>
-            <button id="authLogoutButton" class="ghost-button" type="button">로그아웃</button>
+            <button id="authChangePasswordButton" class="primary-button" type="button" data-ui-key="auth.changePassword">비밀번호 변경</button>
+            <button id="authLogoutButton" class="ghost-button" type="button" data-ui-key="toolbar.logout">로그아웃</button>
           </div>
         </div>
       </div>
@@ -214,33 +277,57 @@
       <div class="menu-sheet-inner">
         <div class="menu-header">
           <div>
-            <p class="section-kicker">메뉴</p>
-            <h2>화면과 필터</h2>
+            <p class="section-kicker" data-ui-key="menu.kicker">메뉴</p>
+            <h2 data-ui-key="menu.title">화면과 필터</h2>
           </div>
-          <button id="menuCloseButton" class="ghost-button" type="button">닫기</button>
+          <div class="menu-header-actions">
+            <div class="language-switcher language-switcher-compact" data-language-switcher role="group" data-ui-aria-label-key="language.label">
+              <button
+                class="ghost-button flag-button"
+                type="button"
+                data-language-button
+                data-language="ko"
+                data-ui-title-key="language.ko"
+                data-ui-aria-label-key="language.koAria"
+              >
+                <span aria-hidden="true">🇰🇷</span>
+              </button>
+              <button
+                class="ghost-button flag-button"
+                type="button"
+                data-language-button
+                data-language="th"
+                data-ui-title-key="language.th"
+                data-ui-aria-label-key="language.thAria"
+              >
+                <span aria-hidden="true">🇹🇭</span>
+              </button>
+            </div>
+            <button id="menuCloseButton" class="ghost-button" type="button" data-ui-key="common.close">닫기</button>
+          </div>
         </div>
 
         <section id="menuViewSection" class="menu-section" hidden>
           <div class="section-top">
             <div>
-              <p class="section-kicker">화면</p>
-              <h2>관리자 전환</h2>
+              <p class="section-kicker" data-ui-key="menu.view.kicker">화면</p>
+              <h2 data-ui-key="menu.view.title">관리자 전환</h2>
             </div>
-            <p class="section-description">관리자만 검색 화면과 관리자 작업 화면을 전환합니다.</p>
+            <p class="section-description" data-ui-key="menu.view.description">관리자만 검색 화면과 관리자 작업 화면을 전환합니다.</p>
           </div>
           <div class="menu-view-actions">
-            <button id="menuOpenSearchViewButton" class="ghost-button" type="button">검색 화면</button>
-            <button id="menuOpenAdminViewButton" class="ghost-button" type="button">관리자 메뉴</button>
+            <button id="menuOpenSearchViewButton" class="ghost-button" type="button" data-ui-key="menu.view.search">검색 화면</button>
+            <button id="menuOpenAdminViewButton" class="ghost-button" type="button" data-ui-key="menu.view.admin">관리자 메뉴</button>
           </div>
         </section>
 
         <section id="menuFilterSection" class="menu-section">
           <div class="section-top">
             <div>
-              <p class="section-kicker">검색</p>
-              <h2>상황 필터</h2>
+              <p class="section-kicker" data-ui-key="menu.filter.kicker">검색</p>
+              <h2 data-ui-key="menu.filter.title">상황 필터</h2>
             </div>
-            <button id="resetFiltersButton" class="ghost-button" type="button">필터 초기화</button>
+            <button id="resetFiltersButton" class="ghost-button" type="button" data-ui-key="menu.filter.reset">필터 초기화</button>
           </div>
           <div id="scenarioChips" class="chip-row"></div>
         </section>
@@ -329,57 +416,65 @@
         <section id="authAdminSection" class="menu-section" hidden>
           <div class="section-top">
             <div>
-              <p class="section-kicker">관리자</p>
-              <h2>사용자 관리</h2>
+              <p class="section-kicker" data-ui-key="admin.users.kicker">관리자</p>
+              <h2 data-ui-key="admin.users.title">사용자 관리</h2>
             </div>
-            <p class="section-description">관리자만 새 아이디를 만들고 권한을 줄 수 있습니다.</p>
+            <p class="section-description" data-ui-key="admin.users.description">관리자만 새 아이디를 만들고 권한을 줄 수 있습니다.</p>
           </div>
 
           <form id="authUserCreateForm" class="entry-form">
             <div class="form-grid">
               <label>
-                <span>새 아이디</span>
-                <input id="authCreateUsernameInput" name="username" type="text" placeholder="예: worker01" required />
+                <span data-ui-key="admin.users.newUsername">새 아이디</span>
+                <input
+                  id="authCreateUsernameInput"
+                  name="username"
+                  type="text"
+                  data-ui-placeholder-key="admin.users.newUsernamePlaceholder"
+                  placeholder="예: worker01"
+                  required
+                />
               </label>
 
               <label>
-                <span>임시 비밀번호</span>
+                <span data-ui-key="admin.users.tempPassword">임시 비밀번호</span>
                 <input
                   id="authCreatePasswordInput"
                   name="password"
                   type="password"
+                  data-ui-placeholder-key="admin.users.tempPasswordPlaceholder"
                   placeholder="8자 이상"
                   required
                 />
               </label>
 
               <label>
-                <span>권한</span>
+                <span data-ui-key="admin.users.role">권한</span>
                 <select id="authCreateRoleInput" name="role">
-                  <option value="user">일반 사용자</option>
-                  <option value="admin">관리자</option>
+                  <option value="user" data-ui-key="admin.users.roleUser">일반 사용자</option>
+                  <option value="admin" data-ui-key="admin.users.roleAdmin">관리자</option>
                 </select>
               </label>
 
               <label class="toggle-field">
-                <span>AI 사용</span>
+                <span data-ui-key="admin.users.aiUse">AI 사용</span>
                 <span class="inline-toggle">
                   <input id="authCreateAiInput" name="canUseAi" type="checkbox" checked />
-                  <span>AI 검색 허용</span>
+                  <span data-ui-key="admin.users.aiAllowed">AI 검색 허용</span>
                 </span>
               </label>
 
               <label class="toggle-field">
-                <span>계정 상태</span>
+                <span data-ui-key="admin.users.accountState">계정 상태</span>
                 <span class="inline-toggle">
                   <input id="authCreateEnabledInput" name="enabled" type="checkbox" checked />
-                  <span>활성 계정</span>
+                  <span data-ui-key="admin.users.accountEnabled">활성 계정</span>
                 </span>
               </label>
             </div>
 
             <div class="form-actions">
-              <button class="primary-button" type="submit">사용자 추가</button>
+              <button class="primary-button" type="submit" data-ui-key="admin.users.add">사용자 추가</button>
               <p id="authAdminFeedback" class="feedback-text" aria-live="polite"></p>
             </div>
           </form>
@@ -390,48 +485,49 @@
         <section id="adminAiSection" class="menu-section" hidden>
           <div class="section-top">
             <div>
-              <p class="section-kicker">AI 검색</p>
-              <h2>관리자 AI 연결</h2>
+              <p class="section-kicker" data-ui-key="admin.ai.kicker">AI 검색</p>
+              <h2 data-ui-key="admin.ai.title">관리자 AI 연결</h2>
             </div>
-            <p class="section-description">관리자만 프록시 주소와 AI 모드를 바꿀 수 있습니다.</p>
+            <p class="section-description" data-ui-key="admin.ai.description">관리자만 프록시 주소와 AI 모드를 바꿀 수 있습니다.</p>
           </div>
 
           <form id="aiSettingsForm" class="entry-form">
             <div class="form-grid">
               <label class="wide toggle-field">
-                <span>사용</span>
+                <span data-ui-key="admin.ai.enabled">사용</span>
                 <span class="inline-toggle">
                   <input id="aiEnabledInput" name="enabled" type="checkbox" />
-                  <span>검색이 애매할 때 AI 보강 사용</span>
+                  <span data-ui-key="admin.ai.enabledHint">검색이 애매할 때 AI 보강 사용</span>
                 </span>
               </label>
 
               <label>
-                <span>실행 방식</span>
+                <span data-ui-key="admin.ai.mode">실행 방식</span>
                 <select id="aiModeInput" name="mode">
-                  <option value="manual">수동 버튼</option>
-                  <option value="fallback">결과 없을 때 자동</option>
-                  <option value="auto">결과 부족 시 자동</option>
-                  <option value="llm-only">LLM 전용</option>
+                  <option value="manual" data-ui-key="ai.mode.manual">수동 버튼</option>
+                  <option value="fallback" data-ui-key="ai.mode.fallback">결과 없을 때 자동</option>
+                  <option value="auto" data-ui-key="ai.mode.auto">결과 부족 시 자동</option>
+                  <option value="llm-only" data-ui-key="ai.mode.llmOnly">LLM 전용</option>
                 </select>
               </label>
 
               <label class="wide">
-                <span>프록시 URL</span>
+                <span data-ui-key="admin.ai.endpoint">프록시 URL</span>
                 <input
                   id="aiEndpointInput"
                   name="endpoint"
                   type="url"
+                  data-ui-placeholder-key="admin.ai.endpointPlaceholder"
                   placeholder="예: https://thai-pocketbook-ai.rjsghks87.workers.dev/assist"
                 />
               </label>
             </div>
 
             <div class="form-actions">
-              <button class="primary-button" type="submit">AI 설정 저장</button>
+              <button class="primary-button" type="submit" data-ui-key="admin.ai.save">AI 설정 저장</button>
               <p id="aiSettingsFeedback" class="feedback-text" aria-live="polite"></p>
             </div>
-            <p class="section-description">
+            <p class="section-description" data-ui-key="admin.ai.note">
               OpenAI 키는 Cloudflare Worker 비밀값으로만 넣고, 이 앱에는 프록시 주소만 저장합니다. 실제 AI 사용은 로그인 세션과 계정 권한으로 확인합니다.
             </p>
           </form>
@@ -451,6 +547,6 @@
     </aside>
 
     <script src="./data.js?v=20260422j"></script>
-    <script src="./app.js?v=20260422k"></script>
+    <script src="./app.js?v=20260422l"></script>
   </body>
 </html>
