@@ -100,6 +100,12 @@ function limitEntries(entries, limit = 6) {
     .filter((entry) => entry.korean || entry.thai || entry.thaiScript);
 }
 
+function supportsReasoningEffort(model) {
+  const normalized = cleanText(model).toLowerCase();
+  if (!normalized) return false;
+  return /^(gpt-5|o1|o3|o4)/.test(normalized);
+}
+
 function buildPrompt(payload) {
   return [
     "You improve Korean-Thai pocketbook search results for a mobile app.",
@@ -450,28 +456,35 @@ async function handleAssist(request, env) {
 
   const model = env.OPENAI_MODEL || DEFAULT_MODEL;
   const baseUrl = cleanText(env.OPENAI_BASE_URL || "https://api.openai.com/v1").replace(/\/+$/, "");
+  const requestBody = {
+    model,
+    max_output_tokens: 900,
+    input: [
+      {
+        role: "user",
+        content: [
+          {
+            type: "input_text",
+            text: buildPrompt(requestPayload),
+          },
+        ],
+      },
+    ],
+  };
+
+  if (supportsReasoningEffort(model)) {
+    requestBody.reasoning = {
+      effort: cleanText(env.OPENAI_REASONING_EFFORT || DEFAULT_REASONING_EFFORT) || DEFAULT_REASONING_EFFORT,
+    };
+  }
+
   const openaiResponse = await fetch(`${baseUrl}/responses`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${env.OPENAI_API_KEY}`,
     },
-    body: JSON.stringify({
-      model,
-      reasoning: { effort: env.OPENAI_REASONING_EFFORT || DEFAULT_REASONING_EFFORT },
-      max_output_tokens: 900,
-      input: [
-        {
-          role: "user",
-          content: [
-            {
-              type: "input_text",
-              text: buildPrompt(requestPayload),
-            },
-          ],
-        },
-      ],
-    }),
+    body: JSON.stringify(requestBody),
   });
 
   const openaiPayload = await openaiResponse.json().catch(() => ({}));
