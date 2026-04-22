@@ -3,7 +3,7 @@ const EXPORT_VERSION = 1;
 const AI_STORAGE_KEY = "thai-pocketbook-ai-v1";
 const AUTH_STORAGE_KEY = "thai-pocketbook-auth-v1";
 const UI_LANGUAGE_STORAGE_KEY = "thai-pocketbook-ui-language-v1";
-const APP_VERSION = "20260422o";
+const APP_VERSION = "20260422p";
 const DEFAULT_PROXY_ENDPOINT = "https://thai-pocketbook-ai.rjsghks87.workers.dev/assist";
 const AI_ASSIST_MIN_QUERY_LENGTH = 2;
 const AI_RESULT_LIMITS = {
@@ -915,6 +915,18 @@ const SUPPLEMENTAL_DATA = {
       tags: ["쇼핑"],
       keywords: ["얼마예요", "얼마에요", "가격", "요금", "비용"],
     },
+    {
+      id: "supp-vocab-share",
+      kind: "vocab",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "뱅",
+      thaiScript: "แบ่ง",
+      korean: "나누다",
+      note: "나누다 / 나눠주다 / 분배하다",
+      tags: ["기본회화", "일터"],
+      keywords: ["나누다", "나눠주다", "나눠줘요", "나눠줘", "나눠주세요", "나눠 주세요", "분배", "배분"],
+    },
   ],
   sentences: [
     {
@@ -1180,6 +1192,30 @@ const SUPPLEMENTAL_DATA = {
       note: "상황을 특정하지 않고 그냥 시끄럽다고 말할 때",
       tags: ["기본회화"],
       keywords: ["시끄럽다", "시끄러워요", "너무 시끄러워요", "소음"],
+    },
+    {
+      id: "supp-sentence-share-this",
+      kind: "sentence",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "츄어이 뱅 안 니 하이 너이 캅",
+      thaiScript: "ช่วยแบ่งอันนี้ให้หน่อยครับ",
+      korean: "이것을 나눠 주세요",
+      note: "물건이나 몫을 나눠 달라고 할 때",
+      tags: ["기본회화", "일터"],
+      keywords: ["나눠주다", "나눠 주세요", "나눠줘요", "나눠줘", "나누다", "분배", "배분"],
+    },
+    {
+      id: "supp-sentence-share-many",
+      kind: "sentence",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "츄어이 뱅 하이 라이 콘 너이 캅",
+      thaiScript: "ช่วยแบ่งให้หลายคนหน่อยครับ",
+      korean: "여러 명에게 나눠 주세요",
+      note: "사람들에게 나눠 주거나 배분해 달라고 할 때",
+      tags: ["기본회화", "일터"],
+      keywords: ["나눠주다", "여러 명에게 나눠 주세요", "배분", "분배", "나누다"],
     },
   ],
 };
@@ -3161,6 +3197,7 @@ const COMPACT_QUERY_SUFFIX_RULES = [
 ];
 
 const PREDICATE_QUERY_VARIANTS = {
+  "나누다": ["나눠요", "나눠", "나눠 주세요", "나눠줘요", "나눠줘", "나눠주다", "분배", "배분"],
   "오다": ["와", "와요", "오세요", "왔어요", "언제 와요?"],
   "오르다": ["올라가요", "올라가", "오르세요", "올랐어요"],
   "내려가다": ["내려가요", "내려가", "내려가세요"],
@@ -3232,6 +3269,25 @@ const PREDICATE_QUERY_VARIANTS = {
   "현금인출기": ["atm", "atm이 어디예요?", "현금 뽑고 싶어요"],
   "세탁소": ["세탁소가 어디예요?", "빨래방이 어디예요?", "빨래 맡기고 싶어요"],
 };
+
+function expandShareVariants(item) {
+  const normalized = normalizeText(item);
+  if (!normalized) return [];
+  if (!/(나누다|나눠주다|나누어주다|나눠줘요|나눠줘|나눠주세요|나눠주세여|분배|배분)/.test(normalized)) {
+    return [];
+  }
+
+  return [
+    "나누다",
+    "나눠 주세요",
+    "나눠줘요",
+    "나눠주다",
+    "분배",
+    "배분",
+    "이것을 나눠 주세요",
+    "여러 명에게 나눠 주세요",
+  ];
+}
 
 function isLaundryShopOrMachineQuery(text) {
   return /(세탁소|빨래방|코인세탁|세탁기|건조기)/.test(normalizeText(text));
@@ -3574,6 +3630,16 @@ function normalizeText(text) {
     .replace(/모른다/g, "모르다")
     .replace(/모르겠어요/g, "모르다")
     .replace(/모르겠어/g, "모르다")
+    .replace(/나눠주세여/g, "나누다")
+    .replace(/나눠주세요/g, "나누다")
+    .replace(/나눠줘요/g, "나누다")
+    .replace(/나눠줘/g, "나누다")
+    .replace(/나누어주다/g, "나누다")
+    .replace(/나눠주다/g, "나누다")
+    .replace(/배분해요/g, "나누다")
+    .replace(/배분해/g, "나누다")
+    .replace(/분배해요/g, "나누다")
+    .replace(/분배해/g, "나누다")
     .replace(/잘몰라요/g, "모르다")
     .replace(/잘 몰라요/g, "모르다")
     .replace(/잘몰라/g, "모르다")
@@ -4126,6 +4192,7 @@ function expandQueryVariants(query, rawTokens = []) {
       }
     }
     variants.push(...expandLaundryVariants(item));
+    variants.push(...expandShareVariants(item));
     if (item.includes("주스")) variants.push(item.replace(/주스/g, "쥬스"));
     if (item.includes("먹으로")) variants.push(item.replace(/먹으로/g, "먹으러"));
     if (/선물포장/.test(item)) {
