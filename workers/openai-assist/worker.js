@@ -3,7 +3,7 @@ const DEFAULT_REASONING_EFFORT = "low";
 const DEFAULT_ADMIN_USERNAME = "admin";
 const DEFAULT_ADMIN_PASSWORD = "admin123";
 const AUTH_STORE_NAME = "main";
-const PASSWORD_ITERATIONS = 120000;
+const PASSWORD_ITERATIONS = 100000;
 const SESSION_TTL_MS = 1000 * 60 * 60 * 24 * 7;
 
 function cleanText(value) {

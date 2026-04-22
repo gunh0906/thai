@@ -2,7 +2,7 @@
 const EXPORT_VERSION = 1;
 const AI_STORAGE_KEY = "thai-pocketbook-ai-v1";
 const AUTH_STORAGE_KEY = "thai-pocketbook-auth-v1";
-const APP_VERSION = "20260422c";
+const APP_VERSION = "20260422d";
 const DEFAULT_PROXY_ENDPOINT = "https://thai-pocketbook-ai.rjsghks87.workers.dev/assist";
 const AI_ASSIST_MIN_QUERY_LENGTH = 2;
 const AI_RESULT_LIMITS = {
@@ -8737,6 +8737,13 @@ function closeAuthGate() {
 }
 
 function hideLegacyMenuAuthSection() {
+  document.querySelectorAll("#authUsernameInput").forEach((input) => {
+    input.setAttribute("placeholder", "아이디");
+  });
+  document.querySelectorAll("#authPasswordInput").forEach((input) => {
+    input.setAttribute("placeholder", "비밀번호");
+  });
+
   const authForms = document.querySelectorAll("#authLoginForm");
   const legacyAuthForm = authForms.length > 1 ? authForms[1] : null;
   const legacySection = legacyAuthForm?.closest(".menu-section");
@@ -8744,6 +8751,12 @@ function hideLegacyMenuAuthSection() {
     legacySection.hidden = true;
     legacySection.setAttribute("aria-hidden", "true");
   }
+
+  document.querySelectorAll(".section-description").forEach((node) => {
+    if (/admin\s*\/\s*admin123/i.test(String(node.textContent || ""))) {
+      node.textContent = "관리자에게 받은 계정으로 로그인해 주세요.";
+    }
+  });
 }
 
 function renderQueryInsights(searchProfile) {
