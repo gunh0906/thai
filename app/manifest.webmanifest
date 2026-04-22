@@ -4,8 +4,8 @@
   "description": "한국어 검색과 상황별 필터로 태국어 단어와 문장을 찾는 모바일 웹 단어장",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#f6efe4",
-  "theme_color": "#ff8a3d",
+  "background_color": "#edf1f2",
+  "theme_color": "#31424b",
   "icons": [
     {
       "src": "./icon.svg",
