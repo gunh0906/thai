@@ -118,6 +118,19 @@ button:active {
   gap: 12px;
 }
 
+.hero-copy-block {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.hero-top-actions {
+  display: inline-flex;
+  align-items: start;
+  justify-content: flex-end;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+
 .hero-menu-button {
   flex: 0 0 auto;
   background: rgba(255, 255, 255, 0.9);
@@ -693,22 +706,48 @@ button:active {
   flex-wrap: wrap;
 }
 
-.auth-toolbar-copy {
-  min-width: 0;
-}
-
-.auth-toolbar-copy strong {
-  display: block;
-}
-
-.auth-toolbar-actions {
-  display: flex;
-  flex-wrap: wrap;
+.auth-toolbar-inline {
+  justify-content: flex-end;
+  flex-wrap: nowrap;
   gap: 8px;
 }
 
-.auth-toolbar-actions .ghost-button {
-  padding: 9px 12px;
+.auth-toolbar-trigger {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  min-width: 0;
+  padding: 8px 12px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.88);
+  color: var(--ink);
+  box-shadow: 0 10px 20px rgba(103, 56, 9, 0.14);
+}
+
+.auth-toolbar-kicker {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+}
+
+.auth-toolbar-trigger strong {
+  display: block;
+  max-width: 106px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.92rem;
+}
+
+.auth-toolbar-logout {
+  padding: 0 12px;
+  min-height: 42px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.82);
+  color: var(--ink);
+  box-shadow: 0 10px 20px rgba(103, 56, 9, 0.12);
 }
 
 .auth-gate {
@@ -873,6 +912,10 @@ button:active {
     align-items: start;
   }
 
+  .hero-top-actions {
+    gap: 6px;
+  }
+
   .search-panel {
     gap: 8px;
   }
@@ -909,15 +952,22 @@ button:active {
   }
 
   .auth-toolbar {
-    align-items: stretch;
+    align-items: center;
   }
 
-  .auth-toolbar-actions {
-    width: 100%;
+  .auth-toolbar-trigger {
+    padding: 7px 10px;
   }
 
-  .auth-toolbar-actions .ghost-button {
-    flex: 1 1 0;
+  .auth-toolbar-trigger strong {
+    max-width: 72px;
+    font-size: 0.85rem;
+  }
+
+  .auth-toolbar-logout {
+    padding: 0 10px;
+    min-height: 40px;
+    font-size: 0.82rem;
   }
 
   .auth-gate {

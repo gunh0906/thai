@@ -11,28 +11,37 @@
     <title>태국어 포켓북</title>
     <link rel="manifest" href="./manifest.webmanifest?v=20260422c" />
     <link rel="icon" href="./icon.svg?v=20260416x" type="image/svg+xml" />
-    <link rel="stylesheet" href="./styles.css?v=20260422h" />
+    <link rel="stylesheet" href="./styles.css?v=20260422i" />
   </head>
   <body>
     <div class="page-shell">
       <header class="hero">
         <div class="hero-top">
-          <div>
+          <div class="hero-copy-block">
             <div class="eyebrow">Thai Pocketbook</div>
             <h1>태국어 포켓북</h1>
             <p class="hero-copy">한국어로 찾으면 단어를 먼저, 바로 쓸 회화를 그 아래에 보여줍니다.</p>
           </div>
-          <button
-            id="menuButton"
-            class="ghost-button hero-menu-button icon-button"
-            type="button"
-            aria-expanded="false"
-            aria-controls="menuSheet"
-            aria-label="메뉴 열기"
-          >
-            <span aria-hidden="true">☰</span>
-            <span class="sr-only">메뉴</span>
-          </button>
+          <div class="hero-top-actions">
+            <div id="authToolbar" class="auth-toolbar auth-toolbar-inline" hidden>
+              <button id="authOpenPanelButton" class="ghost-button auth-toolbar-trigger" type="button">
+                <span class="auth-toolbar-kicker">계정</span>
+                <strong id="authToolbarName">계정</strong>
+              </button>
+              <button id="authQuickLogoutButton" class="ghost-button auth-toolbar-logout" type="button">로그아웃</button>
+            </div>
+            <button
+              id="menuButton"
+              class="ghost-button hero-menu-button icon-button"
+              type="button"
+              aria-expanded="false"
+              aria-controls="menuSheet"
+              aria-label="메뉴 열기"
+            >
+              <span aria-hidden="true">☰</span>
+              <span class="sr-only">메뉴</span>
+            </button>
+          </div>
         </div>
 
         <form id="searchForm" class="search-panel">
@@ -56,15 +65,6 @@
         <div class="hero-meta">
           <div class="hero-note" id="searchStatus"></div>
           <div class="hero-note" id="filterSummary"></div>
-          <div id="authToolbar" class="hero-note auth-toolbar" hidden>
-            <div class="auth-toolbar-copy">
-              <strong id="authToolbarName">계정</strong>
-            </div>
-            <div class="auth-toolbar-actions">
-              <button id="authOpenPanelButton" class="ghost-button" type="button">계정</button>
-              <button id="authQuickLogoutButton" class="ghost-button" type="button">로그아웃</button>
-            </div>
-          </div>
         </div>
       </header>
 
@@ -451,6 +451,6 @@
     </aside>
 
     <script src="./data.js?v=20260421d"></script>
-    <script src="./app.js?v=20260422h"></script>
+    <script src="./app.js?v=20260422i"></script>
   </body>
 </html>

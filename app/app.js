@@ -2,7 +2,7 @@
 const EXPORT_VERSION = 1;
 const AI_STORAGE_KEY = "thai-pocketbook-ai-v1";
 const AUTH_STORAGE_KEY = "thai-pocketbook-auth-v1";
-const APP_VERSION = "20260422h";
+const APP_VERSION = "20260422i";
 const DEFAULT_PROXY_ENDPOINT = "https://thai-pocketbook-ai.rjsghks87.workers.dev/assist";
 const AI_ASSIST_MIN_QUERY_LENGTH = 2;
 const AI_RESULT_LIMITS = {
@@ -9584,12 +9584,13 @@ function renderAuthSection() {
 
   if (elements.authToolbarName) {
     elements.authToolbarName.textContent = loggedIn
-      ? `${state.auth.me.username} · ${formatAuthRole(state.auth.me.role)}`
+      ? state.auth.me.username
       : "계정";
   }
 
   if (elements.authOpenPanelButton) {
     elements.authOpenPanelButton.disabled = !loggedIn || checking;
+    elements.authOpenPanelButton.title = loggedIn ? getAuthMetaText(state.auth.me) : "계정";
   }
 
   if (elements.authQuickLogoutButton) {
