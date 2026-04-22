@@ -3,7 +3,7 @@ const EXPORT_VERSION = 1;
 const AI_STORAGE_KEY = "thai-pocketbook-ai-v1";
 const AUTH_STORAGE_KEY = "thai-pocketbook-auth-v1";
 const UI_LANGUAGE_STORAGE_KEY = "thai-pocketbook-ui-language-v1";
-const APP_VERSION = "20260422n";
+const APP_VERSION = "20260422o";
 const DEFAULT_PROXY_ENDPOINT = "https://thai-pocketbook-ai.rjsghks87.workers.dev/assist";
 const AI_ASSIST_MIN_QUERY_LENGTH = 2;
 const AI_RESULT_LIMITS = {
@@ -53,11 +53,11 @@ const UI_TEXT = {
     "quick.title": "자주 찾는 표현",
     "insights.kicker": "검색 해석",
     "insights.title": "이 표현을 이렇게 풀어서 찾고 있어요",
-    "ai.panel.kicker": "AI 보강",
-    "ai.panel.title": "애매한 검색을 뜻 중심으로 다시 풀어낸 결과",
-    "ai.button.manual": "AI 보강",
-    "ai.button.retry": "AI 다시 보기",
-    "ai.button.loading": "AI 보는 중...",
+    "ai.panel.kicker": "AI 번역",
+    "ai.panel.title": "입력한 표현을 AI가 바로 번역한 결과",
+    "ai.button.manual": "AI 번역",
+    "ai.button.retry": "AI 다시 번역",
+    "ai.button.loading": "AI 번역 중...",
     "admin.workspace.kicker": "관리자",
     "admin.workspace.title": "관리자 작업 공간",
     "results.vocab.kicker": "단어",
@@ -103,7 +103,7 @@ const UI_TEXT = {
     "admin.ai.title": "관리자 AI 연결",
     "admin.ai.description": "관리자만 프록시 주소와 AI 모드를 바꿀 수 있습니다.",
     "admin.ai.enabled": "사용",
-    "admin.ai.enabledHint": "검색이 애매할 때 AI 보강 사용",
+    "admin.ai.enabledHint": "검색이 애매할 때 AI 번역 사용",
     "admin.ai.mode": "실행 방식",
     "admin.ai.endpoint": "프록시 URL",
     "admin.ai.endpointPlaceholder": "예: https://thai-pocketbook-ai.rjsghks87.workers.dev/assist",
@@ -167,25 +167,25 @@ const UI_TEXT = {
     "auth.users.saved": "\"{{username}}\" 계정을 저장했습니다.",
     "auth.users.saveFailed": "계정 저장에 실패했습니다.",
     "admin.workspace.summary": "검색창 대신 사용자 관리와 AI 연결만 크게 보여주고 있습니다.",
-    "ai.entryNote": "AI 보강 제안",
+    "ai.entryNote": "AI 번역",
     "ai.error.checkSettings": "관리자 메뉴에서 AI 연결 설정을 확인해 주세요.",
-    "ai.error.loginRequired": "AI 보강은 로그인 후 사용할 수 있습니다.",
+    "ai.error.loginRequired": "AI 번역은 로그인 후 사용할 수 있습니다.",
     "ai.error.notAllowed": "이 계정에는 AI 사용 권한이 없습니다. 관리자에게 권한을 받아 주세요.",
-    "ai.error.requestFailed": "AI 보강 요청에 실패했습니다.",
+    "ai.error.requestFailed": "AI 번역 요청에 실패했습니다.",
     "ai.error.settingsAdminOnly": "이 설정은 관리자만 바꿀 수 있습니다.",
-    "ai.meta.manual": "수동 보강",
-    "ai.meta.failed": "AI 보강 실패",
-    "ai.meta.noResult": "AI가 확실한 보강 표현을 찾지 못했습니다.",
+    "ai.meta.manual": "AI 번역",
+    "ai.meta.failed": "AI 번역 실패",
+    "ai.meta.noResult": "AI가 확실한 번역 결과를 찾지 못했습니다.",
     "ai.status.loading": "AI가 검색어를 다시 해석하고 있어요.",
     "ai.status.aiOnlyEmpty": "LLM 전용 모드에서는 AI 결과만 보여줍니다. 검색어를 더 구체적으로 바꾸거나 모드를 변경해 주세요.",
     "ai.status.defaultEmpty": "로컬 결과를 먼저 쓰고, 더 구체적인 검색어로 다시 시도해 주세요.",
     "ai.settings.relogin": "프록시 주소가 바뀌어서 다시 로그인해 주세요.",
     "ai.settings.saved": "AI 설정을 저장했습니다. 현재 모드: {{mode}}",
     "ai.settings.disabled": "AI 연결이 비활성화되어 있습니다.",
-    "ai.card.titleFallback": "AI 보강",
+    "ai.card.titleFallback": "AI 번역",
     "ai.card.confidence": "신뢰도 {{value}}%",
-    "ai.card.normalized": "AI 정리: {{value}}",
-    "ai.card.intent": "AI 해석: {{value}}",
+    "ai.card.normalized": "번역 기준: {{value}}",
+    "ai.card.intent": "의도 해석: {{value}}",
     "ai.card.hints": "확장 키워드: {{value}}",
     "ai.card.caution": "참고: {{value}}",
     "entry.showThai": "태국어 보기",
@@ -269,11 +269,11 @@ const UI_TEXT = {
     "quick.title": "คำที่ใช้บ่อย",
     "insights.kicker": "การตีความ",
     "insights.title": "เรากำลังแยกความหมายแบบนี้เพื่อค้นหา",
-    "ai.panel.kicker": "AI เสริม",
-    "ai.panel.title": "ผลที่ AI ตีความคำค้นใหม่ตามความหมาย",
-    "ai.button.manual": "AI เสริม",
-    "ai.button.retry": "ให้ AI ดูอีกครั้ง",
-    "ai.button.loading": "AI กำลังดู...",
+    "ai.panel.kicker": "AI แปล",
+    "ai.panel.title": "ผลแปลที่ AI แปลจากข้อความที่พิมพ์",
+    "ai.button.manual": "AI แปล",
+    "ai.button.retry": "ให้ AI แปลอีกครั้ง",
+    "ai.button.loading": "AI กำลังแปล...",
     "admin.workspace.kicker": "ผู้ดูแล",
     "admin.workspace.title": "พื้นที่จัดการผู้ดูแล",
     "results.vocab.kicker": "คำศัพท์",
@@ -383,22 +383,22 @@ const UI_TEXT = {
     "auth.users.saved": "บันทึกบัญชี \"{{username}}\" แล้ว",
     "auth.users.saveFailed": "บันทึกบัญชีไม่สำเร็จ",
     "admin.workspace.summary": "ขณะนี้แสดงเฉพาะการจัดการผู้ใช้และการเชื่อมต่อ AI แบบเต็มหน้าจอแทนช่องค้นหา",
-    "ai.entryNote": "คำแนะนำจาก AI",
+    "ai.entryNote": "แปลโดย AI",
     "ai.error.checkSettings": "กรุณาตรวจสอบการเชื่อมต่อ AI ในเมนูผู้ดูแล",
     "ai.error.loginRequired": "ใช้ AI เสริมได้หลังจากเข้าสู่ระบบแล้วเท่านั้น",
     "ai.error.notAllowed": "บัญชีนี้ไม่มีสิทธิ์ใช้ AI กรุณาขอสิทธิ์จากผู้ดูแล",
     "ai.error.requestFailed": "ส่งคำขอ AI เสริมไม่สำเร็จ",
     "ai.error.settingsAdminOnly": "การตั้งค่านี้เปลี่ยนได้เฉพาะผู้ดูแลเท่านั้น",
-    "ai.meta.manual": "เสริมด้วยมือ",
-    "ai.meta.failed": "AI เสริมไม่สำเร็จ",
-    "ai.meta.noResult": "AI ยังหาสำนวนเสริมที่มั่นใจไม่ได้",
+    "ai.meta.manual": "AI แปล",
+    "ai.meta.failed": "AI แปลไม่สำเร็จ",
+    "ai.meta.noResult": "AI ยังหาผลแปลที่มั่นใจไม่ได้",
     "ai.status.loading": "AI กำลังตีความคำค้นใหม่",
     "ai.status.aiOnlyEmpty": "ในโหมด LLM เท่านั้นจะแสดงเฉพาะผลจาก AI ลองพิมพ์ให้เจาะจงขึ้นหรือเปลี่ยนโหมด",
     "ai.status.defaultEmpty": "ลองใช้ผลจากฐานข้อมูลก่อน แล้วค่อยค้นใหม่ด้วยคำที่เจาะจงขึ้น",
     "ai.settings.relogin": "ที่อยู่พร็อกซีเปลี่ยนแล้ว กรุณาเข้าสู่ระบบอีกครั้ง",
     "ai.settings.saved": "บันทึกการตั้งค่า AI แล้ว โหมดปัจจุบัน: {{mode}}",
     "ai.settings.disabled": "ปิดการเชื่อมต่อ AI อยู่",
-    "ai.card.titleFallback": "AI เสริม",
+    "ai.card.titleFallback": "AI แปล",
     "ai.card.confidence": "ความมั่นใจ {{value}}%",
     "ai.card.normalized": "AI จัดความหมาย: {{value}}",
     "ai.card.intent": "AI ตีความ: {{value}}",
@@ -5018,6 +5018,7 @@ function getAiAssistEntryDisplayScore(entry, query, normalizedQuery = "", search
   const compactKorean = compactText(entry?.korean || "");
   const compactQuery = compactText(query);
   const compactNormalized = compactText(normalizedQuery);
+  const hasPronunciation = Boolean(compactText(getDisplayPronunciationText(entry)));
   const searchTerms = unique([
     ...(Array.isArray(searchProfile?.displayTerms) ? searchProfile.displayTerms : []),
     ...(Array.isArray(searchProfile?.primaryTerms) ? searchProfile.primaryTerms : []),
@@ -5039,6 +5040,8 @@ function getAiAssistEntryDisplayScore(entry, query, normalizedQuery = "", search
 
   if (entry?.kind === "sentence") score += 85;
   if (getThaiScriptText(entry)) score += 24;
+  if (hasPronunciation) score += 180;
+  else score -= 140;
   if (entry?.source === "external-corpus") score -= 20;
 
   return score;
@@ -10037,7 +10040,21 @@ function renderAiAssist(context) {
       : state.aiAssist.trigger === "auto"
         ? getAiModeLabel(aiMode)
         : t("ai.meta.manual");
-  elements.aiAssistResults.appendChild(createAiSummaryCard(result, context?.searchProfile || null, query));
+  const summaryParts = [];
+  if (result.normalizedQuery && compactText(result.normalizedQuery) !== compactText(query)) {
+    summaryParts.push(t("ai.card.normalized", { value: result.normalizedQuery }));
+  }
+  if (result.intent) {
+    summaryParts.push(t("ai.card.intent", { value: result.intent }));
+  }
+  if (result.hints.length) {
+    summaryParts.push(t("ai.card.hints", { value: result.hints.join(", ") }));
+  }
+  if (result.caution) {
+    summaryParts.push(t("ai.card.caution", { value: result.caution }));
+  }
+  elements.aiAssistStatus.hidden = !summaryParts.length;
+  elements.aiAssistStatus.textContent = summaryParts.join(" · ");
   (Array.isArray(result.displayEntries) && result.displayEntries.length ? result.displayEntries : [...result.sentences, ...result.vocab]).forEach((entry) => {
     elements.aiAssistResults.appendChild(createEntryCard(entry, context?.searchProfile || null));
   });
