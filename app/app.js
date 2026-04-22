@@ -2,7 +2,7 @@
 const EXPORT_VERSION = 1;
 const AI_STORAGE_KEY = "thai-pocketbook-ai-v1";
 const AUTH_STORAGE_KEY = "thai-pocketbook-auth-v1";
-const APP_VERSION = "20260422e";
+const APP_VERSION = "20260422f";
 const DEFAULT_PROXY_ENDPOINT = "https://thai-pocketbook-ai.rjsghks87.workers.dev/assist";
 const AI_ASSIST_MIN_QUERY_LENGTH = 2;
 const AI_RESULT_LIMITS = {
@@ -4273,36 +4273,168 @@ function createAiAssistEntry(item, kind, query, index) {
   );
 }
 
-function normalizeAiAssistResponse(payload, query) {
+function collectAiAssistReferenceEntries(context = null) {
+  const entries = [
+    context?.exactVocabEntry,
+    context?.exactSentenceEntry,
+    ...(Array.isArray(context?.vocabResults) ? context.vocabResults : []),
+    ...(Array.isArray(context?.sentenceResults) ? context.sentenceResults : []),
+    ...(Array.isArray(context?.allVocabEntries) ? context.allVocabEntries : []),
+    ...(Array.isArray(context?.allSentenceEntries) ? context.allSentenceEntries : []),
+  ].filter(Boolean);
+
+  return uniqueByMeaning(uniqueById(entries.filter((entry) => entry?.source !== "ai-assist")));
+}
+
+function getAiAssistReferenceMatchScore(entry, referenceEntry) {
+  if (!entry || !referenceEntry) return -1;
+
+  const entryKorean = compactText(getEntryPrimaryKoreanText(entry) || entry.korean);
+  const referenceKorean = compactText(getEntryPrimaryKoreanText(referenceEntry) || referenceEntry.korean);
+  const entryThaiScript = compactText(getThaiScriptText(entry));
+  const referenceThaiScript = compactText(getThaiScriptText(referenceEntry));
+  const entryPron = compactText(getDisplayPronunciationText(entry));
+  const referencePron = compactText(getDisplayPronunciationText(referenceEntry));
+  let score = 0;
+
+  if (entry.kind === referenceEntry.kind) score += 28;
+  if (referenceEntry.source !== "external-corpus") score += 12;
+
+  if (entryThaiScript && referenceThaiScript === entryThaiScript) score += 420;
+  if (entryKorean && referenceKorean === entryKorean) score += 300;
+  if (entryPron && referencePron && referencePron === entryPron) score += 60;
+  if (entryThaiScript && referenceThaiScript && (entryThaiScript.includes(referenceThaiScript) || referenceThaiScript.includes(entryThaiScript))) {
+    score += 130;
+  }
+  if (entryKorean && referenceKorean && (entryKorean.includes(referenceKorean) || referenceKorean.includes(entryKorean))) {
+    score += 110;
+  }
+
+  return score;
+}
+
+function reconcileAiAssistEntry(entry, referenceEntries = []) {
+  if (!entry) return entry;
+
+  let bestEntry = null;
+  let bestScore = -1;
+  referenceEntries.forEach((referenceEntry) => {
+    const score = getAiAssistReferenceMatchScore(entry, referenceEntry);
+    if (score > bestScore) {
+      bestScore = score;
+      bestEntry = referenceEntry;
+    }
+  });
+
+  if (!bestEntry || bestScore < 300) {
+    return entry;
+  }
+
+  const nextThai = String(bestEntry.thai || "").trim() || String(entry.thai || "").trim();
+  const nextThaiScript = getThaiScriptText(bestEntry) || getThaiScriptText(entry);
+  const nextNote = unique(
+    [String(entry.note || "").trim(), String(bestEntry.note || "").trim()].filter(Boolean)
+  ).join(" · ");
+
+  return hydrateEntry(
+    {
+      ...entry,
+      thai: nextThai,
+      thaiScript: nextThaiScript,
+      note: nextNote,
+      tags: unique([...(entry.tags || []), ...(bestEntry.tags || [])]),
+      keywords: unique([...(entry.keywords || []), ...(bestEntry.keywords || []), bestEntry.korean, nextThai, nextThaiScript]),
+    },
+    entry.kind
+  );
+}
+
+function getAiAssistEntryDisplayScore(entry, query, normalizedQuery = "", searchProfile = null) {
+  const compactKorean = compactText(entry?.korean || "");
+  const compactQuery = compactText(query);
+  const compactNormalized = compactText(normalizedQuery);
+  const searchTerms = unique([
+    ...(Array.isArray(searchProfile?.displayTerms) ? searchProfile.displayTerms : []),
+    ...(Array.isArray(searchProfile?.primaryTerms) ? searchProfile.primaryTerms : []),
+  ]).map((item) => compactText(item));
+  let score = 0;
+
+  if (compactQuery && compactKorean === compactQuery) score += 820;
+  if (compactNormalized && compactKorean === compactNormalized) score += 760;
+  if (compactQuery && compactKorean && compactQuery.includes(compactKorean)) score += 260;
+  if (compactQuery && compactKorean && compactKorean.includes(compactQuery)) score += 220;
+  if (compactNormalized && compactKorean && compactNormalized.includes(compactKorean)) score += 240;
+  if (compactNormalized && compactKorean && compactKorean.includes(compactNormalized)) score += 210;
+
+  searchTerms.forEach((term) => {
+    if (!term || !compactKorean) return;
+    if (compactKorean === term) score += 120;
+    else if (compactKorean.includes(term) || term.includes(compactKorean)) score += 60;
+  });
+
+  if (entry?.kind === "sentence") score += 85;
+  if (getThaiScriptText(entry)) score += 24;
+  if (entry?.source === "external-corpus") score -= 20;
+
+  return score;
+}
+
+function rankAiAssistEntries(entries, query, normalizedQuery = "", searchProfile = null) {
+  return uniqueByMeaning(uniqueById(entries)).sort((left, right) => {
+    const scoreDiff =
+      getAiAssistEntryDisplayScore(right, query, normalizedQuery, searchProfile) -
+      getAiAssistEntryDisplayScore(left, query, normalizedQuery, searchProfile);
+    if (scoreDiff) return scoreDiff;
+    if (left.kind !== right.kind) return left.kind === "sentence" ? -1 : 1;
+    return String(left.korean || "").length - String(right.korean || "").length;
+  });
+}
+
+function normalizeAiAssistResponse(payload, query, context = null) {
   const raw = payload && typeof payload === "object" && payload.result ? payload.result : payload || {};
+  const normalizedQuery = String(raw.normalizedQuery || "").trim();
   const hints = unique(
     (Array.isArray(raw.searchHints) ? raw.searchHints : Array.isArray(raw.hints) ? raw.hints : [])
       .map((item) => String(item || "").trim())
       .filter(Boolean)
   ).slice(0, 6);
+  const referenceEntries = collectAiAssistReferenceEntries(context);
 
   const vocab = Array.isArray(raw.vocab)
     ? raw.vocab
         .map((item, index) => createAiAssistEntry(item, "vocab", query, index + 1))
+        .map((entry) => reconcileAiAssistEntry(entry, referenceEntries))
         .filter((entry) => entry.korean || entry.thai || entry.thaiScript)
+        .sort(
+          (left, right) =>
+            getAiAssistEntryDisplayScore(right, query, normalizedQuery, context?.searchProfile || null) -
+            getAiAssistEntryDisplayScore(left, query, normalizedQuery, context?.searchProfile || null)
+        )
         .slice(0, AI_RESULT_LIMITS.vocab)
     : [];
 
   const sentences = Array.isArray(raw.sentences)
     ? raw.sentences
         .map((item, index) => createAiAssistEntry(item, "sentence", query, index + 1))
+        .map((entry) => reconcileAiAssistEntry(entry, referenceEntries))
         .filter((entry) => entry.korean || entry.thai || entry.thaiScript)
+        .sort(
+          (left, right) =>
+            getAiAssistEntryDisplayScore(right, query, normalizedQuery, context?.searchProfile || null) -
+            getAiAssistEntryDisplayScore(left, query, normalizedQuery, context?.searchProfile || null)
+        )
         .slice(0, AI_RESULT_LIMITS.sentences)
     : [];
 
   return {
-    normalizedQuery: String(raw.normalizedQuery || "").trim(),
+    normalizedQuery,
     intent: String(raw.intent || "").trim(),
     caution: String(raw.caution || "").trim(),
     confidence: Number.isFinite(Number(raw.confidence)) ? Number(raw.confidence) : null,
     hints,
     vocab,
     sentences,
+    displayEntries: rankAiAssistEntries([...sentences, ...vocab], query, normalizedQuery, context?.searchProfile || null),
     model: String(payload?.model || raw.model || "").trim(),
   };
 }
@@ -4458,7 +4590,7 @@ async function requestAiAssist(context = state.lastSearchContext, options = {}) 
       status: "done",
       query,
       error: "",
-      result: normalizeAiAssistResponse(data, query),
+      result: normalizeAiAssistResponse(data, query, context),
       requestId,
       trigger,
     };
@@ -8919,13 +9051,14 @@ function createEntryCard(entry, searchProfile = null) {
   return card;
 }
 
-function createAiSummaryCard(result, searchProfile) {
+function createAiSummaryCard(result, searchProfile, originalQuery = state.query) {
   const card = document.createElement("article");
   card.className = "entry-card ai-summary-card";
+  const queryText = String(originalQuery || "").trim();
 
   const title = document.createElement("p");
   title.className = "ai-summary-title";
-  title.textContent = result.normalizedQuery || state.query || "AI 보강";
+  title.textContent = queryText || result.normalizedQuery || "AI 보강";
 
   if (result.confidence !== null) {
     const badge = document.createElement("span");
@@ -8935,6 +9068,13 @@ function createAiSummaryCard(result, searchProfile) {
   }
 
   card.appendChild(title);
+
+  if (result.normalizedQuery && compactText(result.normalizedQuery) !== compactText(queryText)) {
+    const normalized = document.createElement("p");
+    normalized.className = "entry-note";
+    renderHighlightedText(normalized, `AI 정리: ${result.normalizedQuery}`, searchProfile);
+    card.appendChild(normalized);
+  }
 
   if (result.intent) {
     const intent = document.createElement("p");
@@ -9033,11 +9173,8 @@ function renderAiAssist(context) {
       : state.aiAssist.trigger === "auto"
         ? AI_MODE_LABELS[aiMode] || "자동 보강"
         : "수동 보강";
-  elements.aiAssistResults.appendChild(createAiSummaryCard(result, context?.searchProfile || null));
-  result.vocab.forEach((entry) => {
-    elements.aiAssistResults.appendChild(createEntryCard(entry, context?.searchProfile || null));
-  });
-  result.sentences.forEach((entry) => {
+  elements.aiAssistResults.appendChild(createAiSummaryCard(result, context?.searchProfile || null, query));
+  (Array.isArray(result.displayEntries) && result.displayEntries.length ? result.displayEntries : [...result.sentences, ...result.vocab]).forEach((entry) => {
     elements.aiAssistResults.appendChild(createEntryCard(entry, context?.searchProfile || null));
   });
 }
@@ -9771,6 +9908,10 @@ function render() {
     sentenceResults,
     exactVocabMatch: Boolean(exactVocabMatch),
     exactSentenceMatch: Boolean(safeExactSentenceMatch),
+    exactVocabEntry: exactVocabMatch || null,
+    exactSentenceEntry: safeExactSentenceMatch || null,
+    allVocabEntries: merged.vocab,
+    allSentenceEntries: merged.sentences,
     numberMode,
     dateMode,
     timeMode,
