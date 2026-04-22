@@ -9,9 +9,9 @@
     />
     <meta name="theme-color" content="#ff8a3d" />
     <title>태국어 포켓북</title>
-    <link rel="manifest" href="./manifest.webmanifest?v=20260416x" />
+    <link rel="manifest" href="./manifest.webmanifest?v=20260422a" />
     <link rel="icon" href="./icon.svg?v=20260416x" type="image/svg+xml" />
-    <link rel="stylesheet" href="./styles.css?v=20260416x" />
+    <link rel="stylesheet" href="./styles.css?v=20260422a" />
   </head>
   <body>
     <div class="page-shell">
@@ -225,10 +225,143 @@
         <section class="menu-section">
           <div class="section-top">
             <div>
+              <p class="section-kicker">계정</p>
+              <h2>로그인</h2>
+            </div>
+            <p id="authSummary" class="section-description"></p>
+          </div>
+
+          <form id="authLoginForm" class="entry-form">
+            <div class="form-grid">
+              <label>
+                <span>아이디</span>
+                <input id="authUsernameInput" name="username" type="text" placeholder="예: admin" required />
+              </label>
+
+              <label>
+                <span>비밀번호</span>
+                <input
+                  id="authPasswordInput"
+                  name="password"
+                  type="password"
+                  placeholder="예: admin123"
+                  required
+                />
+              </label>
+            </div>
+
+            <div class="form-actions">
+              <button class="primary-button" type="submit">로그인</button>
+              <p id="authFeedback" class="feedback-text" aria-live="polite"></p>
+            </div>
+
+            <p class="section-description">첫 로그인은 admin / admin123 입니다. 로그인 후 바로 비밀번호를 바꾸세요.</p>
+          </form>
+
+          <div id="authSessionPanel" class="entry-form" hidden>
+            <div class="form-grid">
+              <div class="wide auth-account-card">
+                <span class="auth-account-label">현재 로그인</span>
+                <strong id="authAccountName">로그인 안 됨</strong>
+                <p id="authAccountMeta" class="section-description"></p>
+              </div>
+
+              <label>
+                <span>현재 비밀번호</span>
+                <input
+                  id="authCurrentPasswordInput"
+                  name="currentPassword"
+                  type="password"
+                  placeholder="현재 비밀번호"
+                />
+              </label>
+
+              <label>
+                <span>새 비밀번호</span>
+                <input
+                  id="authNewPasswordInput"
+                  name="newPassword"
+                  type="password"
+                  placeholder="새 비밀번호"
+                />
+              </label>
+            </div>
+
+            <div class="form-actions">
+              <button id="authChangePasswordButton" class="primary-button" type="button">비밀번호 변경</button>
+              <button id="authLogoutButton" class="ghost-button" type="button">로그아웃</button>
+            </div>
+          </div>
+        </section>
+
+        <section id="authAdminSection" class="menu-section" hidden>
+          <div class="section-top">
+            <div>
+              <p class="section-kicker">관리자</p>
+              <h2>사용자 관리</h2>
+            </div>
+            <p class="section-description">관리자만 새 아이디를 만들고 권한을 줄 수 있습니다.</p>
+          </div>
+
+          <form id="authUserCreateForm" class="entry-form">
+            <div class="form-grid">
+              <label>
+                <span>새 아이디</span>
+                <input id="authCreateUsernameInput" name="username" type="text" placeholder="예: worker01" required />
+              </label>
+
+              <label>
+                <span>임시 비밀번호</span>
+                <input
+                  id="authCreatePasswordInput"
+                  name="password"
+                  type="password"
+                  placeholder="8자 이상"
+                  required
+                />
+              </label>
+
+              <label>
+                <span>권한</span>
+                <select id="authCreateRoleInput" name="role">
+                  <option value="user">일반 사용자</option>
+                  <option value="admin">관리자</option>
+                </select>
+              </label>
+
+              <label class="toggle-field">
+                <span>AI 사용</span>
+                <span class="inline-toggle">
+                  <input id="authCreateAiInput" name="canUseAi" type="checkbox" checked />
+                  <span>AI 검색 허용</span>
+                </span>
+              </label>
+
+              <label class="toggle-field">
+                <span>계정 상태</span>
+                <span class="inline-toggle">
+                  <input id="authCreateEnabledInput" name="enabled" type="checkbox" checked />
+                  <span>활성 계정</span>
+                </span>
+              </label>
+            </div>
+
+            <div class="form-actions">
+              <button class="primary-button" type="submit">사용자 추가</button>
+              <p id="authAdminFeedback" class="feedback-text" aria-live="polite"></p>
+            </div>
+          </form>
+
+          <div id="authUsersList" class="card-stack compact"></div>
+        </section>
+
+        <section class="menu-section">
+          <div class="section-top">
+            <div>
               <p class="section-kicker">AI 검색</p>
               <h2>LLM 보강 연결</h2>
             </div>
-            <p class="section-description">GitHub Pages에는 OpenAI 키를 넣지 않고 프록시 주소와 프록시 토큰만 저장합니다.</p>
+            <p class="section-description">GitHub Pages에는 OpenAI 키를 넣지 않고 프록시 주소만 저장합니다.</p>
           </div>
 
           <form id="aiSettingsForm" class="entry-form">
@@ -260,16 +393,6 @@
                   placeholder="예: https://thai-pocketbook-ai.example.workers.dev/assist"
                 />
               </label>
-
-              <label class="wide">
-                <span>프록시 토큰</span>
-                <input
-                  id="aiTokenInput"
-                  name="accessToken"
-                  type="password"
-                  placeholder="선택 사항 · OpenAI 키 금지, 프록시 보호용 토큰만"
-                />
-              </label>
             </div>
 
             <div class="form-actions">
@@ -277,7 +400,7 @@
               <p id="aiSettingsFeedback" class="feedback-text" aria-live="polite"></p>
             </div>
             <p class="section-description">
-              OpenAI 키는 Cloudflare Worker나 Vercel 서버 비밀값으로만 넣고, 이 앱에는 프록시 주소와 프록시 토큰만 저장하세요.
+              OpenAI 키는 Cloudflare Worker나 Vercel 서버 비밀값으로만 넣고, 이 앱에는 프록시 주소만 저장하세요. 실제 AI 사용은 로그인 세션으로 확인합니다.
             </p>
           </form>
         </section>
@@ -296,6 +419,6 @@
     </aside>
 
     <script src="./data.js?v=20260421d"></script>
-    <script src="./app.js?v=20260421d"></script>
+    <script src="./app.js?v=20260422a"></script>
   </body>
 </html>

@@ -2,8 +2,16 @@ name = "thai-pocketbook-ai"
 main = "worker.js"
 compatibility_date = "2026-04-16"
 
+[[durable_objects.bindings]]
+name = "AUTH_STORE"
+class_name = "AuthStore"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["AuthStore"]
+
 [vars]
 OPENAI_MODEL = "gpt-4o-mini"
 OPENAI_REASONING_EFFORT = "low"
 ALLOWED_ORIGINS = "https://gunh0906.github.io"
-REQUIRE_SHARED_SECRET = "true"
+REQUIRE_SHARED_SECRET = "false"

@@ -1,23 +1,22 @@
 # OpenAI Assist Worker
 
-This worker is the safe bridge between the public GitHub Pages app and the private OpenAI API key.
+This worker sits between the public GitHub Pages app and the private OpenAI API key.
 
 ## Security model
 
 - The GitHub Pages site is public.
-- The OpenAI API key must live only in the worker secret store.
-- The browser must never call `api.openai.com` directly.
-- The browser should use only:
-  - the worker URL
-  - a separate proxy token (`SHARED_SECRET`)
+- The OpenAI API key lives only in the worker secret store.
+- The browser never calls `api.openai.com` directly.
+- AI requests are allowed only for logged-in users with AI permission.
+- The first built-in account is `admin / admin123`.
 
-If you paste an OpenAI key into the web app, it can leak from the browser. Do not do that.
+The default admin password should be changed immediately after the first login.
 
 ## What this worker does
 
-1. Receives a short search payload from the app.
-2. Checks the allowed origin.
-3. Checks the proxy token.
+1. Handles login and session checks.
+2. Lets an admin create users and grant AI permission.
+3. Receives a short search payload from the app.
 4. Calls the OpenAI Responses API server-side.
 5. Returns a compact JSON response for vocab and short sentences.
 
@@ -25,21 +24,32 @@ If you paste an OpenAI key into the web app, it can leak from the browser. Do no
 
 - `GET /health`
 - `POST /assist`
+- `POST /auth/login`
+- `GET /auth/me`
+- `POST /auth/logout`
+- `POST /auth/change-password`
+- `GET /auth/users`
+- `POST /auth/users`
+- `PATCH /auth/users/:username`
 
-## Required secrets
+## Required secret
 
 - `OPENAI_API_KEY`
+
+## Optional secrets / vars
+
 - `SHARED_SECRET`
-
-`SHARED_SECRET` is intentionally separate from the OpenAI key. The app stores only this proxy token.
-
-## Optional vars
-
+  - optional fallback for non-login internal use
 - `OPENAI_MODEL`
 - `OPENAI_REASONING_EFFORT`
 - `OPENAI_BASE_URL`
 - `ALLOWED_ORIGINS`
-- `REQUIRE_SHARED_SECRET`
+
+## Durable Object
+
+This worker stores users and sessions in the `AuthStore` Durable Object.
+
+The first deploy must include the migration already declared in `wrangler.toml`.
 
 ## Local development
 
@@ -63,7 +73,6 @@ Important:
 cd workers/openai-assist
 wrangler login
 wrangler secret put OPENAI_API_KEY
-wrangler secret put SHARED_SECRET
 wrangler deploy
 ```
 
@@ -71,7 +80,6 @@ Recommended vars:
 
 ```toml
 ALLOWED_ORIGINS = "https://gunh0906.github.io"
-REQUIRE_SHARED_SECRET = "true"
 OPENAI_MODEL = "gpt-4o-mini"
 OPENAI_REASONING_EFFORT = "low"
 ```
@@ -81,7 +89,9 @@ OPENAI_REASONING_EFFORT = "low"
 In the web app menu:
 
 - `프록시 URL`: `https://<your-worker>.workers.dev/assist`
-- `프록시 토큰`: the same value as `SHARED_SECRET`
+- Login with `admin / admin123`
+- Change the admin password immediately
+- Create normal users from the admin section if needed
 
 Do not enter:
 
@@ -94,9 +104,3 @@ Do not enter:
 - `결과 없을 때 자동`: lowest token usage
 - `결과 부족 시 자동`: balanced quality and cost
 - `LLM 전용`: highest cost, use only when you really want AI-first search
-
-## Recommended production usage
-
-- Keep local search as the default path.
-- Use `결과 없을 때 자동` or `결과 부족 시 자동` for daily use.
-- Skip AI for numbers, dates, and times because the app already handles those locally.

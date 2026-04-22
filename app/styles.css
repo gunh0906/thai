@@ -605,6 +605,28 @@ button:active {
   margin-bottom: 12px;
 }
 
+.auth-account-card {
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.86);
+}
+
+.auth-account-label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+
+.auth-user-card {
+  gap: 14px;
+}
+
+.auth-user-grid {
+  align-items: start;
+}
+
 .empty-state {
   padding: 18px;
   border: 1px dashed rgba(31, 47, 45, 0.18);

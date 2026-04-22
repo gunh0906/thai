@@ -1,7 +1,8 @@
 ﻿const STORAGE_KEY = "thai-pocketbook-custom-v1";
 const EXPORT_VERSION = 1;
 const AI_STORAGE_KEY = "thai-pocketbook-ai-v1";
-const APP_VERSION = "20260421d";
+const AUTH_STORAGE_KEY = "thai-pocketbook-auth-v1";
+const APP_VERSION = "20260422a";
 const AI_ASSIST_MIN_QUERY_LENGTH = 2;
 const AI_RESULT_LIMITS = {
   vocab: 3,
@@ -11,7 +12,17 @@ const DEFAULT_AI_SETTINGS = {
   enabled: false,
   mode: "manual",
   endpoint: "",
-  accessToken: "",
+};
+
+const DEFAULT_AUTH_STATE = {
+  sessionToken: "",
+  me: null,
+};
+
+const DEFAULT_AUTH_RUNTIME = {
+  users: [],
+  checking: false,
+  userListStatus: "idle",
 };
 
 const AI_MODE_LABELS = {
@@ -2808,6 +2819,7 @@ const state = {
   searchFrame: 0,
   custom: loadCustomData(),
   aiSettings: loadAiSettings(),
+  auth: createRuntimeAuthState(loadAuthState()),
   aiAssist: {
     status: "idle",
     query: "",
@@ -2860,11 +2872,31 @@ const elements = {
   clearCustomButton: document.querySelector("#clearCustomButton"),
   customSummary: document.querySelector("#customSummary"),
   customEntries: document.querySelector("#customEntries"),
+  authSummary: document.querySelector("#authSummary"),
+  authLoginForm: document.querySelector("#authLoginForm"),
+  authUsernameInput: document.querySelector("#authUsernameInput"),
+  authPasswordInput: document.querySelector("#authPasswordInput"),
+  authFeedback: document.querySelector("#authFeedback"),
+  authSessionPanel: document.querySelector("#authSessionPanel"),
+  authAccountName: document.querySelector("#authAccountName"),
+  authAccountMeta: document.querySelector("#authAccountMeta"),
+  authCurrentPasswordInput: document.querySelector("#authCurrentPasswordInput"),
+  authNewPasswordInput: document.querySelector("#authNewPasswordInput"),
+  authChangePasswordButton: document.querySelector("#authChangePasswordButton"),
+  authLogoutButton: document.querySelector("#authLogoutButton"),
+  authAdminSection: document.querySelector("#authAdminSection"),
+  authUserCreateForm: document.querySelector("#authUserCreateForm"),
+  authCreateUsernameInput: document.querySelector("#authCreateUsernameInput"),
+  authCreatePasswordInput: document.querySelector("#authCreatePasswordInput"),
+  authCreateRoleInput: document.querySelector("#authCreateRoleInput"),
+  authCreateAiInput: document.querySelector("#authCreateAiInput"),
+  authCreateEnabledInput: document.querySelector("#authCreateEnabledInput"),
+  authAdminFeedback: document.querySelector("#authAdminFeedback"),
+  authUsersList: document.querySelector("#authUsersList"),
   aiSettingsForm: document.querySelector("#aiSettingsForm"),
   aiEnabledInput: document.querySelector("#aiEnabledInput"),
   aiModeInput: document.querySelector("#aiModeInput"),
   aiEndpointInput: document.querySelector("#aiEndpointInput"),
-  aiTokenInput: document.querySelector("#aiTokenInput"),
   aiSettingsFeedback: document.querySelector("#aiSettingsFeedback"),
 };
 
@@ -3861,6 +3893,51 @@ function loadCustomData() {
   }
 }
 
+function normalizeAuthUsername(value) {
+  return String(value || "").trim().toLowerCase();
+}
+
+function sanitizeAuthUser(user) {
+  if (!user || typeof user !== "object") return null;
+  const username = normalizeAuthUsername(user.username);
+  if (!username) return null;
+
+  return {
+    username,
+    role: user.role === "admin" ? "admin" : "user",
+    canUseAi: Boolean(user.canUseAi),
+    enabled: user.enabled !== false,
+    mustChangePassword: Boolean(user.mustChangePassword),
+    createdAt: String(user.createdAt || "").trim(),
+    updatedAt: String(user.updatedAt || "").trim(),
+    lastLoginAt: String(user.lastLoginAt || "").trim(),
+  };
+}
+
+function createRuntimeAuthState(saved) {
+  const sessionToken = String(saved?.sessionToken || "").trim();
+  return {
+    ...DEFAULT_AUTH_RUNTIME,
+    sessionToken,
+    me: sessionToken ? sanitizeAuthUser(saved?.me) : null,
+  };
+}
+
+function loadAuthState() {
+  try {
+    const raw = localStorage.getItem(AUTH_STORAGE_KEY);
+    if (!raw) return { ...DEFAULT_AUTH_STATE };
+    const parsed = JSON.parse(raw);
+    return {
+      sessionToken: String(parsed?.sessionToken || "").trim(),
+      me: sanitizeAuthUser(parsed?.me),
+    };
+  } catch (error) {
+    console.error("로그인 상태 로드 실패", error);
+    return { ...DEFAULT_AUTH_STATE };
+  }
+}
+
 function loadAiSettings() {
   try {
     const raw = localStorage.getItem(AI_STORAGE_KEY);
@@ -3870,7 +3947,6 @@ function loadAiSettings() {
       enabled: Boolean(parsed.enabled),
       mode: normalizeAiMode(parsed.mode),
       endpoint: String(parsed.endpoint || "").trim(),
-      accessToken: String(parsed.accessToken || "").trim(),
     };
   } catch (error) {
     console.error("AI 설정 로드 실패", error);
@@ -3892,6 +3968,29 @@ function saveCustomData() {
 
 function saveAiSettings() {
   localStorage.setItem(AI_STORAGE_KEY, JSON.stringify(state.aiSettings));
+}
+
+function saveAuthState() {
+  localStorage.setItem(
+    AUTH_STORAGE_KEY,
+    JSON.stringify({
+      sessionToken: String(state.auth?.sessionToken || "").trim(),
+      me: sanitizeAuthUser(state.auth?.me),
+    })
+  );
+}
+
+function resetAuthState(message = "") {
+  state.auth.sessionToken = "";
+  state.auth.me = null;
+  state.auth.users = [];
+  state.auth.checking = false;
+  state.auth.userListStatus = "idle";
+  localStorage.removeItem(AUTH_STORAGE_KEY);
+
+  if (elements.authFeedback && message) {
+    elements.authFeedback.textContent = message;
+  }
 }
 
 function createHydratedBaseData() {
@@ -3950,10 +4049,6 @@ function buildSearchComputationCacheKey(query) {
   return [state.scenario, state.customRevision, compactText(query)].join("||");
 }
 
-function looksLikeOpenAiApiKey(value) {
-  return /^sk-[A-Za-z0-9_-]{16,}$/i.test(String(value || "").trim());
-}
-
 function isDirectOpenAiEndpoint(value) {
   try {
     const url = new URL(String(value || "").trim());
@@ -3965,7 +4060,6 @@ function isDirectOpenAiEndpoint(value) {
 
 function getAiSettingsValidationError(settings) {
   const endpoint = String(settings?.endpoint || "").trim();
-  const accessToken = String(settings?.accessToken || "").trim();
 
   if (endpoint && !/^https?:\/\//i.test(endpoint)) {
     return "프록시 URL은 https://로 시작하는 주소만 넣어 주세요.";
@@ -3973,20 +4067,49 @@ function getAiSettingsValidationError(settings) {
   if (endpoint && isDirectOpenAiEndpoint(endpoint)) {
     return "OpenAI API 주소를 직접 넣으면 안 됩니다. 프록시 서버 주소만 넣어 주세요.";
   }
-  if (accessToken && looksLikeOpenAiApiKey(accessToken)) {
-    return "여기에는 OpenAI API 키를 넣으면 안 됩니다. 프록시 보호용 토큰만 넣어 주세요.";
-  }
 
   return "";
 }
 
+function getWorkerBaseUrl(endpoint = state.aiSettings.endpoint) {
+  const raw = String(endpoint || "").trim();
+  if (!raw || !/^https?:\/\//i.test(raw)) return "";
+
+  try {
+    const url = new URL(raw);
+    url.hash = "";
+    url.search = "";
+    url.pathname = url.pathname.replace(/\/assist\/?$/i, "") || "/";
+    return url.toString().replace(/\/$/, "");
+  } catch {
+    return "";
+  }
+}
+
+function hasWorkerEndpointConfigured() {
+  return Boolean(getWorkerBaseUrl(state.aiSettings.endpoint));
+}
+
+function isLoggedIn() {
+  return Boolean(state.auth.sessionToken && state.auth.me?.username);
+}
+
+function isCurrentUserAdmin() {
+  return Boolean(state.auth.me?.enabled !== false && state.auth.me?.role === "admin");
+}
+
+function canCurrentUserUseAi() {
+  return Boolean(state.auth.me?.enabled !== false && state.auth.me?.canUseAi);
+}
+
 function hasConfiguredAiAssist() {
-  const endpoint = String(state.aiSettings.endpoint || "").trim();
-  if (!state.aiSettings.enabled || !endpoint) return false;
+  if (!state.aiSettings.enabled || !hasWorkerEndpointConfigured()) return false;
   if (getAiSettingsValidationError(state.aiSettings)) return false;
-  return Boolean(
-    /^https?:\/\//i.test(endpoint)
-  );
+  return true;
+}
+
+function hasAuthorizedAiAssist() {
+  return hasConfiguredAiAssist() && isLoggedIn() && canCurrentUserUseAi();
 }
 
 function syncAiSettingsForm() {
@@ -3994,7 +4117,113 @@ function syncAiSettingsForm() {
   if (elements.aiEnabledInput) elements.aiEnabledInput.checked = Boolean(state.aiSettings.enabled);
   if (elements.aiModeInput) elements.aiModeInput.value = normalizeAiMode(state.aiSettings.mode);
   if (elements.aiEndpointInput) elements.aiEndpointInput.value = state.aiSettings.endpoint || "";
-  if (elements.aiTokenInput) elements.aiTokenInput.value = state.aiSettings.accessToken || "";
+}
+
+function formatAuthDateTime(value) {
+  const text = String(value || "").trim();
+  if (!text) return "";
+
+  const date = new Date(text);
+  if (Number.isNaN(date.getTime())) return "";
+
+  return new Intl.DateTimeFormat("ko-KR", {
+    month: "numeric",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  }).format(date);
+}
+
+function formatAuthRole(role) {
+  return role === "admin" ? "관리자" : "일반 사용자";
+}
+
+function getAuthMetaText(user) {
+  if (!user) return "";
+  const parts = [formatAuthRole(user.role), user.canUseAi ? "AI 사용 가능" : "AI 사용 불가"];
+  if (!user.enabled) parts.push("비활성 계정");
+  if (user.mustChangePassword) parts.push("비밀번호 변경 필요");
+  const lastLogin = formatAuthDateTime(user.lastLoginAt);
+  if (lastLogin) parts.push(`최근 로그인 ${lastLogin}`);
+  return parts.join(" · ");
+}
+
+async function requestWorkerJson(path, options = {}) {
+  const baseUrl = options.baseUrl || getWorkerBaseUrl();
+  if (!baseUrl && !/^https?:\/\//i.test(String(path || ""))) {
+    throw new Error("먼저 프록시 URL을 저장해 주세요.");
+  }
+
+  const url = /^https?:\/\//i.test(String(path || "")) ? String(path) : `${baseUrl}${path}`;
+  const headers = {
+    ...options.headers,
+  };
+  const sessionToken =
+    options.sessionToken === undefined ? String(state.auth.sessionToken || "").trim() : String(options.sessionToken || "").trim();
+
+  if (options.body !== undefined && !headers["Content-Type"]) {
+    headers["Content-Type"] = "application/json";
+  }
+
+  if (sessionToken) {
+    headers.Authorization = `Bearer ${sessionToken}`;
+  }
+
+  const response = await fetch(url, {
+    method: options.method || (options.body !== undefined ? "POST" : "GET"),
+    headers,
+    body: options.body !== undefined ? JSON.stringify(options.body) : undefined,
+  });
+
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    if (response.status === 401 && !options.skipLogoutOnUnauthorized && state.auth.sessionToken) {
+      resetAuthState("세션이 만료되었거나 다시 로그인이 필요합니다.");
+      render();
+    }
+    throw new Error(String(data?.error || data?.message || `요청 실패 (${response.status})`));
+  }
+
+  return data;
+}
+
+async function refreshAuthSession(options = {}) {
+  if (!state.auth.sessionToken || !hasWorkerEndpointConfigured()) {
+    if (!state.auth.sessionToken) {
+      state.auth.me = null;
+      state.auth.users = [];
+      state.auth.userListStatus = "idle";
+    }
+    saveAuthState();
+    render();
+    return;
+  }
+
+  state.auth.checking = true;
+  render();
+
+  try {
+    const data = await requestWorkerJson("/auth/me", {
+      method: "GET",
+      skipLogoutOnUnauthorized: false,
+    });
+    state.auth.me = sanitizeAuthUser(data?.user);
+    saveAuthState();
+
+    if (isCurrentUserAdmin()) {
+      await loadAdminUsers({ silent: true });
+    } else {
+      state.auth.users = [];
+      state.auth.userListStatus = "idle";
+    }
+  } catch (error) {
+    if (!options.silent && elements.authFeedback) {
+      elements.authFeedback.textContent = error instanceof Error ? error.message : "세션 확인에 실패했습니다.";
+    }
+  } finally {
+    state.auth.checking = false;
+    render();
+  }
 }
 
 function serializeAiContextEntry(entry) {
@@ -4117,7 +4346,7 @@ function assessLocalSearchCoverage(context) {
 
 function isAiOnlyModeActive(context) {
   return (
-    hasConfiguredAiAssist() &&
+    hasAuthorizedAiAssist() &&
     normalizeAiMode(state.aiSettings.mode) === "llm-only" &&
     Boolean(context?.query) &&
     isAiEligibleQuery(context.query) &&
@@ -4140,7 +4369,7 @@ function getAiDisplayState(context) {
 }
 
 function shouldAutoRunAiAssist(context) {
-  if (!hasConfiguredAiAssist()) return false;
+  if (!hasAuthorizedAiAssist()) return false;
   if (!context || !isAiEligibleQuery(context.query)) return false;
   if (isAiBypassContext(context)) return false;
 
@@ -4172,6 +4401,21 @@ async function requestAiAssist(context = state.lastSearchContext, options = {}) 
     elements.aiEndpointInput?.focus();
     return;
   }
+  if (!isLoggedIn()) {
+    openMenu();
+    if (elements.authFeedback) {
+      elements.authFeedback.textContent = "AI 보강은 로그인 후 사용할 수 있습니다.";
+    }
+    elements.authUsernameInput?.focus();
+    return;
+  }
+  if (!canCurrentUserUseAi()) {
+    openMenu();
+    if (elements.authFeedback) {
+      elements.authFeedback.textContent = "이 계정에는 AI 사용 권한이 없습니다. 관리자에게 권한을 받아 주세요.";
+    }
+    return;
+  }
 
   const trigger = options.trigger === "auto" ? "auto" : "manual";
   const query = String(context.query || "").trim();
@@ -4186,24 +4430,11 @@ async function requestAiAssist(context = state.lastSearchContext, options = {}) 
   };
   render();
 
-  const headers = {
-    "Content-Type": "application/json",
-  };
-  if (state.aiSettings.accessToken) {
-    headers.Authorization = `Bearer ${state.aiSettings.accessToken}`;
-  }
-
   try {
-    const response = await fetch(state.aiSettings.endpoint, {
+    const data = await requestWorkerJson("/assist", {
       method: "POST",
-      headers,
-      body: JSON.stringify(buildAiAssistRequestPayload(context)),
+      body: buildAiAssistRequestPayload(context),
     });
-
-    const data = await response.json().catch(() => ({}));
-    if (!response.ok) {
-      throw new Error(String(data.error || data.message || `AI 요청 실패 (${response.status})`));
-    }
 
     if (requestId !== state.aiAssist.requestId) return;
 
@@ -4234,11 +4465,11 @@ function submitAiSettings(event) {
   event.preventDefault();
   const formData = new FormData(elements.aiSettingsForm);
   const nextMode = normalizeAiMode(formData.get("mode"));
+  const previousBaseUrl = getWorkerBaseUrl(state.aiSettings.endpoint);
   const nextSettings = {
     enabled: formData.get("enabled") === "on",
     mode: nextMode,
     endpoint: String(formData.get("endpoint") || "").trim(),
-    accessToken: String(formData.get("accessToken") || "").trim(),
   };
   const validationError = getAiSettingsValidationError(nextSettings);
   if (validationError) {
@@ -4250,10 +4481,16 @@ function submitAiSettings(event) {
   state.aiSettings = nextSettings;
   saveAiSettings();
   syncAiSettingsForm();
+  const nextBaseUrl = getWorkerBaseUrl(nextSettings.endpoint);
+  if (previousBaseUrl && previousBaseUrl !== nextBaseUrl && state.auth.sessionToken) {
+    resetAuthState("프록시 주소가 바뀌어서 다시 로그인해 주세요.");
+  }
   if (elements.aiSettingsFeedback) {
     elements.aiSettingsFeedback.textContent = hasConfiguredAiAssist()
       ? `AI 설정을 저장했습니다. 현재 모드: ${AI_MODE_LABELS[nextMode] || "수동 보강"}`
-      : "프록시 URL이 비어 있어 AI 보강은 아직 꺼진 상태입니다.";
+      : nextBaseUrl
+        ? "프록시 주소를 저장했습니다. 로그인 후 AI를 사용할 수 있습니다."
+        : "프록시 URL이 비어 있어 AI 보강은 아직 꺼진 상태입니다.";
   }
   render();
 }
@@ -8673,6 +8910,7 @@ function renderAiAssist(context) {
 
   const query = String(context?.query || state.query || "").trim();
   const configured = hasConfiguredAiAssist();
+  const authorized = hasAuthorizedAiAssist();
   const aiMode = normalizeAiMode(state.aiSettings.mode);
   const sameQuery = Boolean(query && state.aiAssist.query === query);
   const isLoading = sameQuery && state.aiAssist.status === "loading";
@@ -8680,13 +8918,15 @@ function renderAiAssist(context) {
 
   elements.aiAssistButton.disabled = !query || isLoading;
   elements.aiAssistButton.textContent = isLoading ? "AI 보는 중..." : aiMode === "manual" ? "AI 보강" : "AI 다시 보기";
-  elements.aiAssistButton.title = configured
-    ? aiOnly
-      ? "LLM 전용 모드입니다. AI 결과를 메인 검색 결과로 보여줍니다."
-      : "로컬 검색이 애매하거나 비어 있을 때 AI가 뜻을 다시 풀어줍니다."
-    : "메뉴에서 AI 프록시 URL을 저장하면 사용할 수 있습니다.";
+  elements.aiAssistButton.title = !configured
+    ? "메뉴에서 AI 프록시 URL을 저장하면 사용할 수 있습니다."
+    : !authorized
+      ? "로그인한 계정에 AI 권한이 있어야 사용할 수 있습니다."
+      : aiOnly
+        ? "LLM 전용 모드입니다. AI 결과를 메인 검색 결과로 보여줍니다."
+        : "로컬 검색이 애매하거나 비어 있을 때 AI가 뜻을 다시 풀어줍니다.";
 
-  if (!query || (!configured && !isLoading) || (!sameQuery && state.aiAssist.status !== "loading")) {
+  if (!query || (!authorized && !isLoading) || (!sameQuery && state.aiAssist.status !== "loading")) {
     elements.aiAssistPanel.hidden = true;
     elements.aiAssistResults.innerHTML = "";
     elements.aiAssistMeta.textContent = "";
@@ -8820,6 +9060,401 @@ function renderCustomEntries() {
     row.appendChild(wrap);
     elements.customEntries.appendChild(row);
   });
+}
+
+async function loadAdminUsers(options = {}) {
+  if (!isCurrentUserAdmin() || !hasWorkerEndpointConfigured()) {
+    state.auth.users = [];
+    state.auth.userListStatus = "idle";
+    if (!options.silent) render();
+    return;
+  }
+
+  state.auth.userListStatus = "loading";
+  if (!options.silent) render();
+
+  try {
+    const data = await requestWorkerJson("/auth/users", { method: "GET" });
+    state.auth.users = Array.isArray(data?.users) ? data.users.map((user) => sanitizeAuthUser(user)).filter(Boolean) : [];
+    state.auth.userListStatus = "ready";
+  } catch (error) {
+    state.auth.users = [];
+    state.auth.userListStatus = "error";
+    if (!options.silent && elements.authAdminFeedback) {
+      elements.authAdminFeedback.textContent = error instanceof Error ? error.message : "사용자 목록을 불러오지 못했습니다.";
+    }
+  } finally {
+    if (!options.silent) render();
+  }
+}
+
+function renderAdminUsersList() {
+  if (!elements.authUsersList) return;
+
+  elements.authUsersList.innerHTML = "";
+  if (!isCurrentUserAdmin()) {
+    return;
+  }
+
+  if (state.auth.userListStatus === "loading") {
+    elements.authUsersList.appendChild(createEmptyState("사용자 목록을 불러오는 중입니다."));
+    return;
+  }
+
+  if (!state.auth.users.length) {
+    elements.authUsersList.appendChild(createEmptyState("등록된 사용자가 아직 없습니다."));
+    return;
+  }
+
+  state.auth.users.forEach((user) => {
+    const card = document.createElement("article");
+    card.className = "entry-card auth-user-card";
+
+    const header = document.createElement("div");
+    header.className = "custom-row";
+
+    const info = document.createElement("div");
+    const title = document.createElement("strong");
+    title.textContent = user.username;
+    const description = document.createElement("p");
+    description.className = "entry-note";
+    description.textContent = getAuthMetaText(user) || "사용자 정보";
+    info.append(title, description);
+
+    const stateTag = document.createElement("span");
+    stateTag.className = "tag";
+    stateTag.textContent = user.enabled ? "활성" : "비활성";
+    header.append(info, stateTag);
+    card.appendChild(header);
+
+    const grid = document.createElement("div");
+    grid.className = "form-grid auth-user-grid";
+
+    const selfUser = user.username === state.auth.me?.username;
+
+    const roleLabel = document.createElement("label");
+    const roleTitle = document.createElement("span");
+    roleTitle.textContent = "권한";
+    const roleInput = document.createElement("select");
+    roleInput.innerHTML = `
+      <option value="user">일반 사용자</option>
+      <option value="admin">관리자</option>
+    `;
+    roleInput.value = user.role;
+    roleInput.disabled = selfUser;
+    roleLabel.append(roleTitle, roleInput);
+
+    const aiLabel = document.createElement("label");
+    aiLabel.className = "toggle-field";
+    const aiTitle = document.createElement("span");
+    aiTitle.textContent = "AI 사용";
+    const aiWrap = document.createElement("span");
+    aiWrap.className = "inline-toggle";
+    const aiInput = document.createElement("input");
+    aiInput.type = "checkbox";
+    aiInput.checked = Boolean(user.canUseAi);
+    const aiText = document.createElement("span");
+    aiText.textContent = "AI 검색 허용";
+    aiWrap.append(aiInput, aiText);
+    aiLabel.append(aiTitle, aiWrap);
+
+    const enabledLabel = document.createElement("label");
+    enabledLabel.className = "toggle-field";
+    const enabledTitle = document.createElement("span");
+    enabledTitle.textContent = "계정 상태";
+    const enabledWrap = document.createElement("span");
+    enabledWrap.className = "inline-toggle";
+    const enabledInput = document.createElement("input");
+    enabledInput.type = "checkbox";
+    enabledInput.checked = Boolean(user.enabled);
+    enabledInput.disabled = selfUser;
+    const enabledText = document.createElement("span");
+    enabledText.textContent = "사용 가능";
+    enabledWrap.append(enabledInput, enabledText);
+    enabledLabel.append(enabledTitle, enabledWrap);
+
+    const passwordLabel = document.createElement("label");
+    passwordLabel.className = "wide";
+    const passwordTitle = document.createElement("span");
+    passwordTitle.textContent = "비밀번호 재설정";
+    const passwordInput = document.createElement("input");
+    passwordInput.type = "password";
+    passwordInput.placeholder = "비워두면 그대로 둡니다";
+    passwordLabel.append(passwordTitle, passwordInput);
+
+    grid.append(roleLabel, aiLabel, enabledLabel, passwordLabel);
+    card.appendChild(grid);
+
+    if (selfUser) {
+      const note = document.createElement("p");
+      note.className = "entry-note";
+      note.textContent = "현재 로그인한 관리자 계정은 권한 변경이나 비활성화를 여기서 막아 두었습니다.";
+      card.appendChild(note);
+    }
+
+    const actions = document.createElement("div");
+    actions.className = "form-actions";
+    const saveButton = document.createElement("button");
+    saveButton.type = "button";
+    saveButton.className = "mini-button";
+    saveButton.textContent = "저장";
+    wirePressFeedback(saveButton);
+
+    saveButton.addEventListener("click", async () => {
+      saveButton.disabled = true;
+      if (elements.authAdminFeedback) {
+        elements.authAdminFeedback.textContent = `"${user.username}" 계정을 저장하는 중입니다.`;
+      }
+
+      try {
+        const payload = {
+          role: roleInput.value,
+          canUseAi: aiInput.checked,
+          enabled: enabledInput.checked,
+        };
+        if (String(passwordInput.value || "").trim()) {
+          payload.resetPassword = String(passwordInput.value || "").trim();
+        }
+
+        const data = await requestWorkerJson(`/auth/users/${encodeURIComponent(user.username)}`, {
+          method: "PATCH",
+          body: payload,
+        });
+
+        const updatedUser = sanitizeAuthUser(data?.user);
+        state.auth.users = state.auth.users.map((item) => (item?.username === updatedUser?.username ? updatedUser : item));
+        if (updatedUser?.username === state.auth.me?.username) {
+          state.auth.me = updatedUser;
+          saveAuthState();
+        }
+        passwordInput.value = "";
+        if (elements.authAdminFeedback) {
+          elements.authAdminFeedback.textContent = `"${user.username}" 계정을 저장했습니다.`;
+        }
+        render();
+      } catch (error) {
+        if (elements.authAdminFeedback) {
+          elements.authAdminFeedback.textContent = error instanceof Error ? error.message : "계정 저장에 실패했습니다.";
+        }
+      } finally {
+        saveButton.disabled = false;
+      }
+    });
+
+    actions.appendChild(saveButton);
+    card.appendChild(actions);
+    elements.authUsersList.appendChild(card);
+  });
+}
+
+function renderAuthSection() {
+  const hasEndpoint = hasWorkerEndpointConfigured();
+  const loggedIn = isLoggedIn();
+  const checking = Boolean(state.auth.checking);
+
+  if (elements.authSummary) {
+    elements.authSummary.textContent = !hasEndpoint
+      ? "먼저 아래에서 프록시 URL을 저장하면 로그인과 AI 권한 확인을 사용할 수 있습니다."
+      : checking
+        ? "로그인 세션을 확인하고 있습니다."
+        : loggedIn
+          ? `${state.auth.me?.username || "계정"}으로 로그인되어 있습니다.`
+          : "AI는 로그인한 계정만 사용할 수 있습니다.";
+  }
+
+  if (elements.authLoginForm) {
+    elements.authLoginForm.hidden = loggedIn;
+    const submitButton = elements.authLoginForm.querySelector("button[type='submit']");
+    if (submitButton) submitButton.disabled = !hasEndpoint || checking;
+  }
+
+  if (elements.authUsernameInput) elements.authUsernameInput.disabled = !hasEndpoint || checking;
+  if (elements.authPasswordInput) elements.authPasswordInput.disabled = !hasEndpoint || checking;
+
+  if (elements.authSessionPanel) {
+    elements.authSessionPanel.hidden = !loggedIn;
+  }
+
+  if (elements.authAccountName) {
+    elements.authAccountName.textContent = loggedIn ? state.auth.me.username : "로그인되지 않음";
+  }
+
+  if (elements.authAccountMeta) {
+    elements.authAccountMeta.textContent = loggedIn ? getAuthMetaText(state.auth.me) : "";
+  }
+
+  if (elements.authChangePasswordButton) {
+    elements.authChangePasswordButton.disabled = !loggedIn || checking;
+  }
+
+  if (elements.authLogoutButton) {
+    elements.authLogoutButton.disabled = !loggedIn || checking;
+  }
+
+  if (elements.authAdminSection) {
+    elements.authAdminSection.hidden = !isCurrentUserAdmin();
+  }
+
+  renderAdminUsersList();
+}
+
+async function submitAuthLogin(event) {
+  event.preventDefault();
+
+  if (!hasWorkerEndpointConfigured()) {
+    if (elements.authFeedback) {
+      elements.authFeedback.textContent = "먼저 프록시 URL을 저장해 주세요.";
+    }
+    elements.aiEndpointInput?.focus();
+    return;
+  }
+
+  const username = normalizeAuthUsername(elements.authUsernameInput?.value);
+  const password = String(elements.authPasswordInput?.value || "").trim();
+  if (!username || !password) {
+    if (elements.authFeedback) {
+      elements.authFeedback.textContent = "아이디와 비밀번호를 모두 입력해 주세요.";
+    }
+    return;
+  }
+
+  if (elements.authFeedback) {
+    elements.authFeedback.textContent = "로그인 중입니다.";
+  }
+
+  try {
+    const data = await requestWorkerJson("/auth/login", {
+      method: "POST",
+      body: { username, password },
+      sessionToken: "",
+      skipLogoutOnUnauthorized: true,
+    });
+
+    state.auth.sessionToken = String(data?.sessionToken || "").trim();
+    state.auth.me = sanitizeAuthUser(data?.user);
+    state.auth.users = [];
+    state.auth.userListStatus = "idle";
+    saveAuthState();
+
+    if (elements.authPasswordInput) elements.authPasswordInput.value = "";
+    if (elements.authFeedback) {
+      elements.authFeedback.textContent = state.auth.me?.mustChangePassword
+        ? "로그인했습니다. 비밀번호를 바로 바꿔 주세요."
+        : "로그인했습니다.";
+    }
+
+    if (isCurrentUserAdmin()) {
+      await loadAdminUsers({ silent: true });
+    }
+    render();
+  } catch (error) {
+    if (elements.authFeedback) {
+      elements.authFeedback.textContent = error instanceof Error ? error.message : "로그인에 실패했습니다.";
+    }
+  }
+}
+
+async function handleAuthLogout() {
+  try {
+    if (state.auth.sessionToken && hasWorkerEndpointConfigured()) {
+      await requestWorkerJson("/auth/logout", {
+        method: "POST",
+        skipLogoutOnUnauthorized: true,
+      });
+    }
+  } catch (error) {
+    console.error("로그아웃 요청 실패", error);
+  } finally {
+    resetAuthState("로그아웃했습니다.");
+    render();
+  }
+}
+
+async function handleAuthChangePassword() {
+  const currentPassword = String(elements.authCurrentPasswordInput?.value || "").trim();
+  const newPassword = String(elements.authNewPasswordInput?.value || "").trim();
+
+  if (!currentPassword || !newPassword) {
+    if (elements.authFeedback) {
+      elements.authFeedback.textContent = "현재 비밀번호와 새 비밀번호를 모두 입력해 주세요.";
+    }
+    return;
+  }
+
+  if (elements.authFeedback) {
+    elements.authFeedback.textContent = "비밀번호를 변경하는 중입니다.";
+  }
+
+  try {
+    const data = await requestWorkerJson("/auth/change-password", {
+      method: "POST",
+      body: {
+        currentPassword,
+        newPassword,
+      },
+    });
+
+    state.auth.me = sanitizeAuthUser(data?.user);
+    saveAuthState();
+    if (elements.authCurrentPasswordInput) elements.authCurrentPasswordInput.value = "";
+    if (elements.authNewPasswordInput) elements.authNewPasswordInput.value = "";
+    if (elements.authFeedback) {
+      elements.authFeedback.textContent = "비밀번호를 변경했습니다.";
+    }
+    render();
+  } catch (error) {
+    if (elements.authFeedback) {
+      elements.authFeedback.textContent = error instanceof Error ? error.message : "비밀번호 변경에 실패했습니다.";
+    }
+  }
+}
+
+async function submitAuthUserCreate(event) {
+  event.preventDefault();
+  if (!isCurrentUserAdmin()) return;
+
+  const username = normalizeAuthUsername(elements.authCreateUsernameInput?.value);
+  const password = String(elements.authCreatePasswordInput?.value || "").trim();
+  const role = String(elements.authCreateRoleInput?.value || "user");
+  const canUseAi = Boolean(elements.authCreateAiInput?.checked);
+  const enabled = Boolean(elements.authCreateEnabledInput?.checked);
+
+  if (!username || !password) {
+    if (elements.authAdminFeedback) {
+      elements.authAdminFeedback.textContent = "아이디와 임시 비밀번호를 모두 입력해 주세요.";
+    }
+    return;
+  }
+
+  if (elements.authAdminFeedback) {
+    elements.authAdminFeedback.textContent = "사용자를 만드는 중입니다.";
+  }
+
+  try {
+    await requestWorkerJson("/auth/users", {
+      method: "POST",
+      body: {
+        username,
+        password,
+        role,
+        canUseAi,
+        enabled,
+      },
+    });
+
+    elements.authUserCreateForm?.reset();
+    if (elements.authCreateAiInput) elements.authCreateAiInput.checked = true;
+    if (elements.authCreateEnabledInput) elements.authCreateEnabledInput.checked = true;
+    if (elements.authAdminFeedback) {
+      elements.authAdminFeedback.textContent = `"${username}" 계정을 만들었습니다. 처음 로그인 후 비밀번호를 바꾸게 됩니다.`;
+    }
+    await loadAdminUsers({ silent: true });
+    render();
+  } catch (error) {
+    if (elements.authAdminFeedback) {
+      elements.authAdminFeedback.textContent = error instanceof Error ? error.message : "사용자 생성에 실패했습니다.";
+    }
+  }
 }
 
 function removeCustomEntry(id, kind) {
@@ -9113,7 +9748,7 @@ function render() {
       ? aiDisplayState.loading || !aiDisplayState.sameQuery
         ? "AI가 단어를 다시 찾는 중입니다."
         : aiDisplayState.error
-          ? "AI 보강에 실패했습니다. 프록시 설정을 확인하거나 다시 시도해 주세요."
+          ? "AI 보강에 실패했습니다. 로그인 상태와 프록시 주소를 확인한 뒤 다시 시도해 주세요."
           : "AI가 맞는 단어를 아직 못 찾았습니다."
       : "맞는 단어가 아직 없습니다. 더 짧은 핵심어로 검색해 보세요.",
     searchProfile
@@ -9125,12 +9760,13 @@ function render() {
       ? aiDisplayState.loading || !aiDisplayState.sameQuery
         ? "AI가 회화를 다시 정리하는 중입니다."
         : aiDisplayState.error
-          ? "AI 회화 보강에 실패했습니다. 프록시 설정을 확인하거나 다시 시도해 주세요."
+          ? "AI 회화 보강에 실패했습니다. 로그인 상태와 프록시 주소를 확인한 뒤 다시 시도해 주세요."
           : "AI가 맞는 회화를 아직 못 찾았습니다."
       : "맞는 회화가 아직 없습니다. 다른 표현으로 검색하거나 단어를 먼저 검색해 보세요.",
     searchProfile
   );
   renderCustomEntries();
+  renderAuthSection();
   syncUrl();
 
   if (shouldAutoRunAiAssist(currentSearchContext)) {
@@ -9306,6 +9942,8 @@ function wireEvents() {
     elements.exportButton,
     elements.importButton,
     elements.clearCustomButton,
+    elements.authChangePasswordButton,
+    elements.authLogoutButton,
   ].forEach(wirePressFeedback);
 
   elements.jumpVocabButton.addEventListener("click", () => jumpToSection(elements.vocabSection));
@@ -9331,6 +9969,10 @@ function wireEvents() {
   });
 
   elements.entryForm.addEventListener("submit", submitEntryForm);
+  elements.authLoginForm?.addEventListener("submit", submitAuthLogin);
+  elements.authChangePasswordButton?.addEventListener("click", handleAuthChangePassword);
+  elements.authLogoutButton?.addEventListener("click", handleAuthLogout);
+  elements.authUserCreateForm?.addEventListener("submit", submitAuthUserCreate);
   elements.aiSettingsForm?.addEventListener("submit", submitAiSettings);
   elements.exportButton.addEventListener("click", exportCustomData);
   elements.importButton.addEventListener("click", () => elements.importInput.click());
@@ -9347,6 +9989,13 @@ function boot() {
   state.query = initial.query;
   state.scenario = scenarioIds.has(initial.scenario) ? initial.scenario : "all";
   render();
+  if (state.auth.sessionToken && hasWorkerEndpointConfigured()) {
+    window.setTimeout(() => {
+      refreshAuthSession({ silent: true }).catch((error) => {
+        console.error("세션 복원 실패", error);
+      });
+    }, 10);
+  }
   scheduleSearchRuntimeWarmup();
   registerServiceWorker();
 }
