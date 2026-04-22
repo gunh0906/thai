@@ -1,14 +1,14 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta
       name="description"
-      content="한국어로 태국어 단어와 회화 예문을 검색하는 모바일 웹 단어장"
+      content="?쒓뎅?대줈 ?쒓뎅???⑥뼱? ?뚰솕 ?덈Ц??寃?됲븯??紐⑤컮?????⑥뼱??
     />
     <meta name="theme-color" content="#ff8a3d" />
-    <title>태국어 포켓북</title>
+    <title>?쒓뎅???ъ폆遺?/title>
     <link rel="manifest" href="./manifest.webmanifest?v=20260422c" />
     <link rel="icon" href="./icon.svg?v=20260416x" type="image/svg+xml" />
     <link rel="stylesheet" href="./styles.css?v=20260422c" />
@@ -19,8 +19,8 @@
         <div class="hero-top">
           <div>
             <div class="eyebrow">Thai Pocketbook</div>
-            <h1>태국어 포켓북</h1>
-            <p class="hero-copy">한국어로 찾으면 단어를 먼저, 바로 쓸 회화를 그 아래에 보여줍니다.</p>
+            <h1>?쒓뎅???ъ폆遺?/h1>
+            <p class="hero-copy">?쒓뎅?대줈 李얠쑝硫??⑥뼱瑜?癒쇱?, 諛붾줈 ???뚰솕瑜?洹??꾨옒??蹂댁뿬以띾땲??</p>
           </div>
           <button
             id="menuButton"
@@ -28,28 +28,28 @@
             type="button"
             aria-expanded="false"
             aria-controls="menuSheet"
-            aria-label="메뉴 열기"
+            aria-label="硫붾돱 ?닿린"
           >
-            <span aria-hidden="true">☰</span>
-            <span class="sr-only">메뉴</span>
+            <span aria-hidden="true">??/span>
+            <span class="sr-only">硫붾돱</span>
           </button>
         </div>
 
         <form id="searchForm" class="search-panel">
-          <label class="search-label" for="searchInput">검색</label>
+          <label class="search-label" for="searchInput">寃??/label>
           <div class="search-row">
             <input
               id="searchInput"
               type="search"
               autocomplete="off"
-              placeholder="예: 방바꿔주세요, 얼마예요, ห้องน้ำอยู่ไหน, ราคาเท่าไหร่"
+              placeholder="?? 諛⑸컮轅붿＜?몄슂, ?쇰쭏?덉슂, 錫ム퉱錫?툏錫쇸퉱錫녀릎錫№많仙댽퉬錫ム툢, 錫｀림錫꾝림仙錫쀠퉰錫꿋퉬錫ム르仙?
             />
-            <button id="searchButton" class="primary-button search-button" type="submit">검색</button>
+            <button id="searchButton" class="primary-button search-button" type="submit">寃??/button>
           </div>
           <div class="search-actions">
-            <button id="jumpVocabButton" class="ghost-button" type="button">단어</button>
-            <button id="jumpSentenceButton" class="ghost-button" type="button">회화</button>
-            <button id="aiAssistButton" class="ghost-button" type="button">AI 보강</button>
+            <button id="jumpVocabButton" class="ghost-button" type="button">?⑥뼱</button>
+            <button id="jumpSentenceButton" class="ghost-button" type="button">?뚰솕</button>
+            <button id="aiAssistButton" class="ghost-button" type="button">AI 蹂닿컯</button>
           </div>
         </form>
 
@@ -58,11 +58,11 @@
           <div class="hero-note" id="filterSummary"></div>
           <div id="authToolbar" class="hero-note auth-toolbar" hidden>
             <div class="auth-toolbar-copy">
-              <strong id="authToolbarName">계정</strong>
+              <strong id="authToolbarName">怨꾩젙</strong>
             </div>
             <div class="auth-toolbar-actions">
-              <button id="authOpenPanelButton" class="ghost-button" type="button">계정</button>
-              <button id="authQuickLogoutButton" class="ghost-button" type="button">로그아웃</button>
+              <button id="authOpenPanelButton" class="ghost-button" type="button">怨꾩젙</button>
+              <button id="authQuickLogoutButton" class="ghost-button" type="button">濡쒓렇?꾩썐</button>
             </div>
           </div>
         </div>
@@ -72,8 +72,8 @@
         <section class="panel">
           <div class="section-top">
             <div>
-              <p class="section-kicker">빠른 검색</p>
-              <h2>자주 찾는 표현</h2>
+              <p class="section-kicker">鍮좊Ⅸ 寃??/p>
+              <h2>?먯＜ 李얜뒗 ?쒗쁽</h2>
             </div>
           </div>
           <div id="quickSearchChips" class="quick-search"></div>
@@ -82,8 +82,8 @@
         <section id="queryInsightsPanel" class="panel" hidden>
           <div class="section-top">
             <div>
-              <p class="section-kicker">검색 해석</p>
-              <h2>이 표현을 이렇게 풀어서 찾고 있어요</h2>
+              <p class="section-kicker">寃???댁꽍</p>
+              <h2>???쒗쁽???대젃寃???댁꽌 李얘퀬 ?덉뼱??/h2>
             </div>
             <p id="activeSummary" class="section-description"></p>
           </div>
@@ -93,8 +93,8 @@
         <section id="aiAssistPanel" class="panel spotlight-panel" hidden>
           <div class="section-top">
             <div>
-              <p class="section-kicker">AI 보강</p>
-              <h2>애매한 검색을 뜻 중심으로 다시 풀어낸 결과</h2>
+              <p class="section-kicker">AI 蹂닿컯</p>
+              <h2>?좊ℓ??寃?됱쓣 ??以묒떖?쇰줈 ?ㅼ떆 ??대궦 寃곌낵</h2>
             </div>
             <p id="aiAssistMeta" class="section-description"></p>
           </div>
@@ -106,8 +106,8 @@
           <section id="vocabSection" class="panel">
             <div class="section-top">
               <div>
-                <p class="section-kicker">단어</p>
-                <h2>먼저 잡아둘 핵심 단어</h2>
+                <p class="section-kicker">?⑥뼱</p>
+                <h2>癒쇱? ?≪븘???듭떖 ?⑥뼱</h2>
               </div>
               <p id="vocabMeta" class="section-description"></p>
             </div>
@@ -117,8 +117,8 @@
           <section id="sentenceSection" class="panel">
             <div class="section-top">
               <div>
-                <p class="section-kicker">회화</p>
-                <h2>바로 보여주거나 말할 문장</h2>
+                <p class="section-kicker">?뚰솕</p>
+                <h2>諛붾줈 蹂댁뿬二쇨굅??留먰븷 臾몄옣</h2>
               </div>
               <p id="sentenceMeta" class="section-description"></p>
             </div>
@@ -132,10 +132,10 @@
       <div class="auth-gate-card">
         <div class="section-top auth-gate-header">
           <div>
-            <p class="section-kicker">로그인</p>
-            <h2 id="authGateTitle">먼저 로그인해 주세요</h2>
+            <p class="section-kicker">濡쒓렇??/p>
+            <h2 id="authGateTitle">癒쇱? 濡쒓렇?명빐 二쇱꽭??/h2>
           </div>
-          <button id="authGateCloseButton" class="ghost-button" type="button">닫기</button>
+          <button id="authGateCloseButton" class="ghost-button" type="button">?リ린</button>
         </div>
 
         <p id="authSummary" class="section-description"></p>
@@ -143,56 +143,56 @@
         <form id="authLoginForm" class="entry-form">
           <div class="form-grid">
             <label>
-              <span>아이디</span>
-              <input id="authUsernameInput" name="username" type="text" placeholder="아이디" required />
+              <span>?꾩씠??/span>
+              <input id="authUsernameInput" name="username" type="text" placeholder="?꾩씠?? required />
             </label>
 
             <label>
-              <span>비밀번호</span>
-              <input id="authPasswordInput" name="password" type="password" placeholder="비밀번호" required />
+              <span>鍮꾨?踰덊샇</span>
+              <input id="authPasswordInput" name="password" type="password" placeholder="鍮꾨?踰덊샇" required />
             </label>
           </div>
 
           <div class="form-actions">
-            <button class="primary-button" type="submit">로그인</button>
+            <button class="primary-button" type="submit">濡쒓렇??/button>
             <p id="authFeedback" class="feedback-text" aria-live="polite"></p>
           </div>
 
-          <p class="section-description">관리자에게 받은 계정으로 로그인해 주세요.</p>
+          <p class="section-description">愿由ъ옄?먭쾶 諛쏆? 怨꾩젙?쇰줈 濡쒓렇?명빐 二쇱꽭??</p>
         </form>
 
         <div id="authSessionPanel" class="entry-form" hidden>
           <div class="form-grid">
             <div class="wide auth-account-card">
-              <span class="auth-account-label">현재 로그인</span>
-              <strong id="authAccountName">로그인되지 않음</strong>
+              <span class="auth-account-label">?꾩옱 濡쒓렇??/span>
+              <strong id="authAccountName">濡쒓렇?몃릺吏 ?딆쓬</strong>
               <p id="authAccountMeta" class="section-description"></p>
             </div>
 
             <label>
-              <span>현재 비밀번호</span>
+              <span>?꾩옱 鍮꾨?踰덊샇</span>
               <input
                 id="authCurrentPasswordInput"
                 name="currentPassword"
                 type="password"
-                placeholder="현재 비밀번호"
+                placeholder="?꾩옱 鍮꾨?踰덊샇"
               />
             </label>
 
             <label>
-              <span>새 비밀번호</span>
+              <span>??鍮꾨?踰덊샇</span>
               <input
                 id="authNewPasswordInput"
                 name="newPassword"
                 type="password"
-                placeholder="새 비밀번호"
+                placeholder="??鍮꾨?踰덊샇"
               />
             </label>
           </div>
 
           <div class="form-actions">
-            <button id="authChangePasswordButton" class="primary-button" type="button">비밀번호 변경</button>
-            <button id="authLogoutButton" class="ghost-button" type="button">로그아웃</button>
+            <button id="authChangePasswordButton" class="primary-button" type="button">鍮꾨?踰덊샇 蹂寃?/button>
+            <button id="authLogoutButton" class="ghost-button" type="button">濡쒓렇?꾩썐</button>
           </div>
         </div>
       </div>
@@ -203,19 +203,19 @@
       <div class="menu-sheet-inner">
         <div class="menu-header">
           <div>
-            <p class="section-kicker">설정</p>
-            <h2>필터와 내 데이터</h2>
+            <p class="section-kicker">?ㅼ젙</p>
+            <h2>?꾪꽣? ???곗씠??/h2>
           </div>
-          <button id="menuCloseButton" class="ghost-button" type="button">닫기</button>
+          <button id="menuCloseButton" class="ghost-button" type="button">?リ린</button>
         </div>
 
         <section class="menu-section">
           <div class="section-top">
             <div>
-              <p class="section-kicker">상황별 검색</p>
-              <h2>필터</h2>
+              <p class="section-kicker">?곹솴蹂?寃??/p>
+              <h2>?꾪꽣</h2>
             </div>
-            <button id="resetFiltersButton" class="ghost-button" type="button">필터 초기화</button>
+            <button id="resetFiltersButton" class="ghost-button" type="button">?꾪꽣 珥덇린??/button>
           </div>
           <div id="scenarioChips" class="chip-row"></div>
         </section>
@@ -223,59 +223,59 @@
         <section class="menu-section">
           <div class="section-top">
             <div>
-              <p class="section-kicker">내 데이터</p>
-              <h2>단어와 문장 추가</h2>
+              <p class="section-kicker">???곗씠??/p>
+              <h2>?⑥뼱? 臾몄옣 異붽?</h2>
             </div>
-            <p class="section-description">휴대폰에서도 직접 보강할 수 있습니다.</p>
+            <p class="section-description">?대??곗뿉?쒕룄 吏곸젒 蹂닿컯?????덉뒿?덈떎.</p>
           </div>
 
           <form id="entryForm" class="entry-form">
             <div class="form-grid">
               <label>
-                <span>구분</span>
+                <span>援щ텇</span>
                 <select name="kind">
-                  <option value="vocab">단어</option>
-                  <option value="sentence">문장</option>
+                  <option value="vocab">?⑥뼱</option>
+                  <option value="sentence">臾몄옣</option>
                 </select>
               </label>
 
               <label class="wide">
-                <span>태국어 발음 표기</span>
+                <span>?쒓뎅??諛쒖쓬 ?쒓린</span>
                 <input
                   name="thai"
                   type="text"
-                  placeholder="예: 타오라이, 체크 빈, 홍 남 유 티 나이"
+                  placeholder="?? ??ㅻ씪?? 泥댄겕 鍮? ?????????섏씠"
                   required
                 />
               </label>
 
               <label class="wide">
-                <span>한국어 뜻</span>
+                <span>?쒓뎅????/span>
                 <input
                   name="korean"
                   type="text"
-                  placeholder="예: 얼마예요 / 계산 부탁해요 / 방 바꿔주세요"
+                  placeholder="?? ?쇰쭏?덉슂 / 怨꾩궛 遺?곹빐??/ 諛?諛붽퓭二쇱꽭??
                   required
                 />
               </label>
 
               <label class="wide">
-                <span>상황 태그</span>
-                <input name="tags" type="text" placeholder="예: 이동, 식당, 건강" />
+                <span>?곹솴 ?쒓렇</span>
+                <input name="tags" type="text" placeholder="?? ?대룞, ?앸떦, 嫄닿컯" />
               </label>
 
               <label class="wide">
-                <span>메모</span>
+                <span>硫붾え</span>
                 <textarea
                   name="note"
                   rows="3"
-                  placeholder="예: 호텔 프런트에서 자주 씀 / 택시 기사에게 보여주기 좋음"
+                  placeholder="?? ?명뀛 ?꾨윴?몄뿉???먯＜ ? / ?앹떆 湲곗궗?먭쾶 蹂댁뿬二쇨린 醫뗭쓬"
                 ></textarea>
               </label>
             </div>
 
             <div class="form-actions">
-              <button class="primary-button" type="submit">저장하기</button>
+              <button class="primary-button" type="submit">??ν븯湲?/button>
               <p id="saveFeedback" class="feedback-text" aria-live="polite"></p>
             </div>
           </form>
@@ -284,16 +284,16 @@
         <section class="menu-section">
           <div class="section-top">
             <div>
-              <p class="section-kicker">백업</p>
-              <h2>내가 추가한 항목 관리</h2>
+              <p class="section-kicker">諛깆뾽</p>
+              <h2>?닿? 異붽?????ぉ 愿由?/h2>
             </div>
-            <p class="section-description">JSON으로 내보내고 다시 가져올 수 있습니다.</p>
+            <p class="section-description">JSON?쇰줈 ?대낫?닿퀬 ?ㅼ떆 媛?몄삱 ???덉뒿?덈떎.</p>
           </div>
 
           <div class="backup-actions">
-            <button id="exportButton" class="ghost-button" type="button">내 데이터 내보내기</button>
-            <button id="importButton" class="ghost-button" type="button">JSON 가져오기</button>
-            <button id="clearCustomButton" class="ghost-button danger" type="button">내가 추가한 항목 비우기</button>
+            <button id="exportButton" class="ghost-button" type="button">???곗씠???대낫?닿린</button>
+            <button id="importButton" class="ghost-button" type="button">JSON 媛?몄삤湲?/button>
+            <button id="clearCustomButton" class="ghost-button danger" type="button">?닿? 異붽?????ぉ 鍮꾩슦湲?/button>
             <input id="importInput" type="file" accept="application/json,.json" hidden />
           </div>
 
@@ -304,8 +304,8 @@
         <section class="menu-section" hidden aria-hidden="true">
           <div class="section-top">
             <div>
-              <p class="section-kicker">계정</p>
-              <h2>로그인</h2>
+              <p class="section-kicker">怨꾩젙</p>
+              <h2>濡쒓렇??/h2>
             </div>
             <p id="authSummary" class="section-description"></p>
           </div>
@@ -313,62 +313,62 @@
           <form id="authLoginForm" class="entry-form">
             <div class="form-grid">
               <label>
-                <span>아이디</span>
-                <input id="authUsernameInput" name="username" type="text" placeholder="예: admin" required />
+                <span>?꾩씠??/span>
+                <input id="authUsernameInput" name="username" type="text" placeholder="아이디" required />
               </label>
 
               <label>
-                <span>비밀번호</span>
+                <span>鍮꾨?踰덊샇</span>
                 <input
                   id="authPasswordInput"
                   name="password"
                   type="password"
-                  placeholder="예: admin123"
+                  placeholder="비밀번호"
                   required
                 />
               </label>
             </div>
 
             <div class="form-actions">
-              <button class="primary-button" type="submit">로그인</button>
+              <button class="primary-button" type="submit">濡쒓렇??/button>
               <p id="authFeedback" class="feedback-text" aria-live="polite"></p>
             </div>
 
-            <p class="section-description">첫 로그인은 admin / admin123 입니다. 로그인 후 바로 비밀번호를 바꾸세요.</p>
+            <p class="section-description">관리자에게 받은 계정으로 로그인해 주세요.</p>
           </form>
 
           <div id="authSessionPanel" class="entry-form" hidden>
             <div class="form-grid">
               <div class="wide auth-account-card">
-                <span class="auth-account-label">현재 로그인</span>
-                <strong id="authAccountName">로그인 안 됨</strong>
+                <span class="auth-account-label">?꾩옱 濡쒓렇??/span>
+                <strong id="authAccountName">濡쒓렇??????/strong>
                 <p id="authAccountMeta" class="section-description"></p>
               </div>
 
               <label>
-                <span>현재 비밀번호</span>
+                <span>?꾩옱 鍮꾨?踰덊샇</span>
                 <input
                   id="authCurrentPasswordInput"
                   name="currentPassword"
                   type="password"
-                  placeholder="현재 비밀번호"
+                  placeholder="?꾩옱 鍮꾨?踰덊샇"
                 />
               </label>
 
               <label>
-                <span>새 비밀번호</span>
+                <span>??鍮꾨?踰덊샇</span>
                 <input
                   id="authNewPasswordInput"
                   name="newPassword"
                   type="password"
-                  placeholder="새 비밀번호"
+                  placeholder="??鍮꾨?踰덊샇"
                 />
               </label>
             </div>
 
             <div class="form-actions">
-              <button id="authChangePasswordButton" class="primary-button" type="button">비밀번호 변경</button>
-              <button id="authLogoutButton" class="ghost-button" type="button">로그아웃</button>
+              <button id="authChangePasswordButton" class="primary-button" type="button">鍮꾨?踰덊샇 蹂寃?/button>
+              <button id="authLogoutButton" class="ghost-button" type="button">濡쒓렇?꾩썐</button>
             </div>
           </div>
         </section>
@@ -376,57 +376,57 @@
         <section id="authAdminSection" class="menu-section" hidden>
           <div class="section-top">
             <div>
-              <p class="section-kicker">관리자</p>
-              <h2>사용자 관리</h2>
+              <p class="section-kicker">愿由ъ옄</p>
+              <h2>?ъ슜??愿由?/h2>
             </div>
-            <p class="section-description">관리자만 새 아이디를 만들고 권한을 줄 수 있습니다.</p>
+            <p class="section-description">愿由ъ옄留????꾩씠?붾? 留뚮뱾怨?沅뚰븳??以????덉뒿?덈떎.</p>
           </div>
 
           <form id="authUserCreateForm" class="entry-form">
             <div class="form-grid">
               <label>
-                <span>새 아이디</span>
-                <input id="authCreateUsernameInput" name="username" type="text" placeholder="예: worker01" required />
+                <span>???꾩씠??/span>
+                <input id="authCreateUsernameInput" name="username" type="text" placeholder="?? worker01" required />
               </label>
 
               <label>
-                <span>임시 비밀번호</span>
+                <span>?꾩떆 鍮꾨?踰덊샇</span>
                 <input
                   id="authCreatePasswordInput"
                   name="password"
                   type="password"
-                  placeholder="8자 이상"
+                  placeholder="8???댁긽"
                   required
                 />
               </label>
 
               <label>
-                <span>권한</span>
+                <span>沅뚰븳</span>
                 <select id="authCreateRoleInput" name="role">
-                  <option value="user">일반 사용자</option>
-                  <option value="admin">관리자</option>
+                  <option value="user">?쇰컲 ?ъ슜??/option>
+                  <option value="admin">愿由ъ옄</option>
                 </select>
               </label>
 
               <label class="toggle-field">
-                <span>AI 사용</span>
+                <span>AI ?ъ슜</span>
                 <span class="inline-toggle">
                   <input id="authCreateAiInput" name="canUseAi" type="checkbox" checked />
-                  <span>AI 검색 허용</span>
+                  <span>AI 寃???덉슜</span>
                 </span>
               </label>
 
               <label class="toggle-field">
-                <span>계정 상태</span>
+                <span>怨꾩젙 ?곹깭</span>
                 <span class="inline-toggle">
                   <input id="authCreateEnabledInput" name="enabled" type="checkbox" checked />
-                  <span>활성 계정</span>
+                  <span>?쒖꽦 怨꾩젙</span>
                 </span>
               </label>
             </div>
 
             <div class="form-actions">
-              <button class="primary-button" type="submit">사용자 추가</button>
+              <button class="primary-button" type="submit">?ъ슜??異붽?</button>
               <p id="authAdminFeedback" class="feedback-text" aria-live="polite"></p>
             </div>
           </form>
@@ -437,49 +437,49 @@
         <section id="adminAiSection" class="menu-section" hidden>
           <div class="section-top">
             <div>
-              <p class="section-kicker">AI 검색</p>
-              <h2>관리자 AI 연결</h2>
+              <p class="section-kicker">AI 寃??/p>
+              <h2>愿由ъ옄 AI ?곌껐</h2>
             </div>
-            <p class="section-description">관리자만 프록시 주소와 AI 모드를 바꿀 수 있습니다.</p>
+            <p class="section-description">愿由ъ옄留??꾨줉??二쇱냼? AI 紐⑤뱶瑜?諛붽? ???덉뒿?덈떎.</p>
           </div>
 
           <form id="aiSettingsForm" class="entry-form">
             <div class="form-grid">
               <label class="wide toggle-field">
-                <span>사용</span>
+                <span>?ъ슜</span>
                 <span class="inline-toggle">
                   <input id="aiEnabledInput" name="enabled" type="checkbox" />
-                  <span>검색이 애매할 때 AI 보강 사용</span>
+                  <span>寃?됱씠 ?좊ℓ????AI 蹂닿컯 ?ъ슜</span>
                 </span>
               </label>
 
               <label>
-                <span>실행 방식</span>
+                <span>?ㅽ뻾 諛⑹떇</span>
                 <select id="aiModeInput" name="mode">
-                  <option value="manual">수동 버튼</option>
-                  <option value="fallback">결과 없을 때 자동</option>
-                  <option value="auto">결과 부족 시 자동</option>
-                  <option value="llm-only">LLM 전용</option>
+                  <option value="manual">?섎룞 踰꾪듉</option>
+                  <option value="fallback">寃곌낵 ?놁쓣 ???먮룞</option>
+                  <option value="auto">寃곌낵 遺議????먮룞</option>
+                  <option value="llm-only">LLM ?꾩슜</option>
                 </select>
               </label>
 
               <label class="wide">
-                <span>프록시 URL</span>
+                <span>?꾨줉??URL</span>
                 <input
                   id="aiEndpointInput"
                   name="endpoint"
                   type="url"
-                  placeholder="예: https://thai-pocketbook-ai.rjsghks87.workers.dev/assist"
+                  placeholder="?? https://thai-pocketbook-ai.rjsghks87.workers.dev/assist"
                 />
               </label>
             </div>
 
             <div class="form-actions">
-              <button class="primary-button" type="submit">AI 설정 저장</button>
+              <button class="primary-button" type="submit">AI ?ㅼ젙 ???/button>
               <p id="aiSettingsFeedback" class="feedback-text" aria-live="polite"></p>
             </div>
             <p class="section-description">
-              OpenAI 키는 Cloudflare Worker 비밀값으로만 넣고, 이 앱에는 프록시 주소만 저장합니다. 실제 AI 사용은 로그인 세션과 계정 권한으로 확인합니다.
+              OpenAI ?ㅻ뒗 Cloudflare Worker 鍮꾨?媛믪쑝濡쒕쭔 ?ｊ퀬, ???깆뿉???꾨줉??二쇱냼留???ν빀?덈떎. ?ㅼ젣 AI ?ъ슜? 濡쒓렇???몄뀡怨?怨꾩젙 沅뚰븳?쇰줈 ?뺤씤?⑸땲??
             </p>
           </form>
         </section>
@@ -487,8 +487,8 @@
         <section class="menu-section">
           <div class="section-top">
             <div>
-              <p class="section-kicker">단어장</p>
-              <h2>앱 정보</h2>
+              <p class="section-kicker">?⑥뼱??/p>
+              <h2>???뺣낫</h2>
             </div>
           </div>
           <div id="statsGrid" class="stats-grid compact-stats"></div>
@@ -501,3 +501,4 @@
     <script src="./app.js?v=20260422e"></script>
   </body>
 </html>
+
