@@ -486,6 +486,10 @@ button:active {
   line-height: 1.5;
 }
 
+.entry-thai.is-placeholder {
+  color: rgba(93, 106, 103, 0.74);
+}
+
 .entry-korean {
   margin: 0;
   color: var(--text);

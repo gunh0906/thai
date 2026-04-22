@@ -10,14 +10,31 @@ const AI_ENTRY_SCHEMA = {
   additionalProperties: false,
   required: ["korean", "thai", "thaiScript", "tags", "note"],
   properties: {
-    korean: { type: "string" },
-    thai: { type: "string" },
-    thaiScript: { type: "string" },
+    korean: {
+      type: "string",
+      minLength: 1,
+      description: "한국어 뜻 또는 바로 보여줄 한국어 문장. 영어 금지.",
+    },
+    thai: {
+      type: "string",
+      minLength: 1,
+      description:
+        "태국어 발음 표기. 한국어식 표기가 가장 좋고, 어렵다면 로마자 태국어 발음 허용. 영어 번역문과 태국 문자 금지.",
+    },
+    thaiScript: {
+      type: "string",
+      minLength: 1,
+      description: "태국 문자 원문.",
+    },
     tags: {
       type: "array",
       items: { type: "string" },
     },
-    note: { type: "string" },
+    note: {
+      type: "string",
+      minLength: 1,
+      description: "짧은 한국어 메모. 영어 금지.",
+    },
   },
 };
 
@@ -26,8 +43,8 @@ const AI_RESULT_SCHEMA = {
   additionalProperties: false,
   required: ["normalizedQuery", "intent", "confidence", "searchHints", "caution", "fallbackSentence", "vocab", "sentences"],
   properties: {
-    normalizedQuery: { type: "string" },
-    intent: { type: "string" },
+    normalizedQuery: { type: "string", minLength: 1, description: "한국어 기준으로 다시 풀어쓴 검색어." },
+    intent: { type: "string", minLength: 1, description: "검색 의도를 짧은 한국어로 설명." },
     confidence: { type: ["number", "null"] },
     searchHints: {
       type: "array",
@@ -47,6 +64,42 @@ const AI_RESULT_SCHEMA = {
     },
   },
 };
+
+const ENGLISH_STOP_WORDS = new Set([
+  "a",
+  "an",
+  "and",
+  "are",
+  "be",
+  "context",
+  "different",
+  "divide",
+  "do",
+  "expression",
+  "find",
+  "found",
+  "help",
+  "i",
+  "is",
+  "it",
+  "many",
+  "need",
+  "no",
+  "not",
+  "of",
+  "or",
+  "people",
+  "please",
+  "relevant",
+  "result",
+  "results",
+  "share",
+  "the",
+  "this",
+  "to",
+  "try",
+  "with",
+]);
 
 function cleanText(value) {
   return String(value || "").replace(/\s+/g, " ").trim();
@@ -148,24 +201,63 @@ function supportsReasoningEffort(model) {
   return /^(gpt-5|o1|o3|o4)/.test(normalized);
 }
 
+function containsHangul(text) {
+  return /[가-힣]/.test(String(text || ""));
+}
+
+function containsThai(text) {
+  return /[\u0E00-\u0E7F]/.test(String(text || ""));
+}
+
+function getLatinWords(text) {
+  return String(text || "").match(/[A-Za-z]+/g) || [];
+}
+
+function looksEnglishSentence(text) {
+  const value = cleanText(text);
+  if (!value || containsHangul(value) || containsThai(value)) return false;
+  const words = getLatinWords(value).map((word) => word.toLowerCase());
+  if (!words.length) return false;
+  const hits = words.filter((word) => ENGLISH_STOP_WORDS.has(word)).length;
+  return hits >= 1 && (hits >= Math.ceil(words.length / 4) || words.length >= 3);
+}
+
+function cleanKoreanMetaText(value, fallback = "") {
+  const cleaned = cleanText(value);
+  if (!cleaned) return fallback;
+  if (containsHangul(cleaned)) return cleaned;
+  if (containsThai(cleaned)) return fallback;
+  if (/[A-Za-z]/.test(cleaned)) return fallback;
+  return cleaned;
+}
+
+function cleanThaiPronunciation(value) {
+  const cleaned = cleanText(value);
+  if (!cleaned) return "";
+  if (containsThai(cleaned)) return "";
+  if (looksEnglishSentence(cleaned)) return "";
+  return cleaned;
+}
+
 function buildPrompt(payload) {
   return [
-    "Task: improve Korean-Thai pocketbook search for a mobile app.",
-    "The user may search in Korean, Thai script, or Korean-style Thai pronunciation.",
-    "Interpret payload.query as a full utterance first. Split into keywords only if needed.",
-    "Use localResults as grounding. Add new items only when local results are noisy, weak, or missing.",
-    "Return JSON only.",
-    'Keys: normalizedQuery, intent, confidence, searchHints, caution, fallbackSentence, vocab, sentences.',
-    "Limits: vocab<=3, sentences<=4, tags<=4, note short.",
-    "Rules:",
-    "- Prefer short spoken Thai for daily life, work, shopping, transport, dormitory, factory, money, and time.",
-    "- Put the closest direct answer first.",
-    "- If the query is a sentence, complaint, or request, prefer a sentence answer first.",
-    "- Always use Korean-friendly pronunciation in thai, never Latin romanization.",
-    "- Always fill thaiScript when possible.",
-    "- Reuse local pronunciation style when the meaning or Thai script matches a local result.",
-    "- If confidence is low, explain briefly in caution.",
-    "- If vocab and sentences would be empty, fill fallbackSentence with the closest practical translation.",
+    "작업: 한국어-태국어 포켓북 검색을 보강하는 JSON만 반환하세요.",
+    "사용자 검색은 한국어, 태국 문자, 한국식 태국어 발음 표기일 수 있습니다.",
+    "검색어를 먼저 '문장 전체 의미'로 해석하고, 필요할 때만 단어로 나누세요.",
+    "localResults를 우선 참고하고, 로컬 결과가 약하거나 없을 때만 새 항목을 보강하세요.",
+    "반드시 JSON만 반환하세요.",
+    "키: normalizedQuery, intent, confidence, searchHints, caution, fallbackSentence, vocab, sentences.",
+    "제한: vocab<=3, sentences<=4, tags<=4, note는 짧게.",
+    "중요 규칙:",
+    "- korean, normalizedQuery, intent, searchHints, caution, note는 한국어로 쓰세요. 영어 설명 금지.",
+    "- thai는 한국어식 발음 표기가 가장 좋습니다. 어렵다면 태국어 로마자 발음도 허용합니다. 영어 번역문 금지, 태국 문자 금지.",
+    "- thaiScript에는 태국 문자를 넣으세요.",
+    "- 가장 직접적으로 쓸 수 있는 답을 먼저 두세요.",
+    "- 검색어가 부탁, 불만, 질문, 명령이면 sentence를 우선하세요.",
+    "- localResults와 같은 의미나 같은 thaiScript가 있으면 그 발음 스타일을 최대한 맞추세요.",
+    "- confidence가 낮으면 caution에 한국어로 짧게 이유를 쓰세요.",
+    "- vocab와 sentences가 모두 비면 fallbackSentence에 가장 실용적인 번역 1개를 넣으세요.",
+    '예시 entry: {"korean":"이것을 나눠 주세요","thai":"karuna chuai baeng sing ni hai noi khrap","thaiScript":"กรุณาช่วยแบ่งสิ่งนี้ให้หน่อย","tags":["기본회화"],"note":"정중하게 부탁할 때"}',
     `Context:${JSON.stringify(payload)}`,
   ].join("\n");
 }
@@ -290,11 +382,11 @@ function normalizeAiEntries(entries, limit) {
   return entries
     .slice(0, limit)
     .map((entry) => ({
-      korean: cleanText(entry.korean),
-      thai: cleanText(entry.thai),
+      korean: cleanKoreanMetaText(entry.korean),
+      thai: cleanThaiPronunciation(entry.thai),
       thaiScript: cleanText(entry.thaiScript),
       tags: Array.isArray(entry.tags) ? entry.tags.map((item) => cleanText(item)).filter(Boolean).slice(0, 5) : [],
-      note: cleanText(entry.note),
+      note: cleanKoreanMetaText(entry.note),
     }))
     .filter((entry) => entry.korean || entry.thai || entry.thaiScript);
 }
@@ -306,13 +398,13 @@ function normalizeResult(payload, model) {
 
   return {
     model,
-    normalizedQuery: cleanText(payload?.normalizedQuery),
-    intent: cleanText(payload?.intent),
+    normalizedQuery: cleanKoreanMetaText(payload?.normalizedQuery),
+    intent: cleanKoreanMetaText(payload?.intent),
     confidence: Number.isFinite(Number(payload?.confidence)) ? Number(payload.confidence) : null,
     searchHints: Array.isArray(payload?.searchHints)
-      ? payload.searchHints.map((item) => cleanText(item)).filter(Boolean).slice(0, 6)
+      ? payload.searchHints.map((item) => cleanKoreanMetaText(item)).filter(Boolean).slice(0, 6)
       : [],
-    caution: cleanText(payload?.caution),
+    caution: cleanKoreanMetaText(payload?.caution),
     vocab,
     sentences: sentences.length ? sentences : fallbackSentence,
   };

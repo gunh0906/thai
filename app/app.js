@@ -3,7 +3,7 @@ const EXPORT_VERSION = 1;
 const AI_STORAGE_KEY = "thai-pocketbook-ai-v1";
 const AUTH_STORAGE_KEY = "thai-pocketbook-auth-v1";
 const UI_LANGUAGE_STORAGE_KEY = "thai-pocketbook-ui-language-v1";
-const APP_VERSION = "20260422l";
+const APP_VERSION = "20260422m";
 const DEFAULT_PROXY_ENDPOINT = "https://thai-pocketbook-ai.rjsghks87.workers.dev/assist";
 const AI_ASSIST_MIN_QUERY_LENGTH = 2;
 const AI_RESULT_LIMITS = {
@@ -191,6 +191,7 @@ const UI_TEXT = {
     "entry.showThai": "태국어 보기",
     "entry.hideThai": "태국어 숨기기",
     "entry.showToLocal": "현지인에게 보여주기",
+    "entry.noPronunciation": "한국어 발음 미보강",
     "entry.noThaiScript": "태국 문자 미보강 · 위 발음 표기만 있어요",
     "entry.externalExample": "외부 예문 보강",
     "entry.externalDictionary": "외부 사전 보강",
@@ -406,6 +407,7 @@ const UI_TEXT = {
     "entry.showThai": "ดูอักษรไทย",
     "entry.hideThai": "ซ่อนอักษรไทย",
     "entry.showToLocal": "ยื่นให้คนท้องถิ่นดู",
+    "entry.noPronunciation": "ยังไม่มีคำอ่านเกาหลี",
     "entry.noThaiScript": "ยังไม่มีอักษรไทยเสริม มีเฉพาะคำอ่านด้านบน",
     "entry.externalExample": "เสริมจากตัวอย่างภายนอก",
     "entry.externalDictionary": "เสริมจากพจนานุกรมภายนอก",
@@ -4868,10 +4870,10 @@ function serializeAiContextEntry(entry) {
 }
 
 function createAiAssistEntry(item, kind, query, index) {
-  const korean = String(item.korean || "").trim();
+  const korean = sanitizeAiMetaText(item.korean) || String(item.korean || "").trim();
   const thaiScript = String(item.thaiScript || "").trim();
-  const thai = String(item.thai || "").trim() || thaiScript;
-  const noteParts = [String(item.note || "").trim(), t("ai.entryNote")].filter(Boolean);
+  const thai = sanitizeAiPronunciation(item.thai) || approximateAiThaiScriptPronunciation(thaiScript) || "";
+  const noteParts = [sanitizeAiMetaText(item.note), t("ai.entryNote")].filter(Boolean);
   return hydrateEntry(
     {
       id: `ai-${kind}-${compactText(query).slice(0, 48) || "query"}-${index}`,
@@ -4899,6 +4901,42 @@ function collectAiAssistReferenceEntries(context = null) {
   ].filter(Boolean);
 
   return uniqueByMeaning(uniqueById(entries.filter((entry) => entry?.source !== "ai-assist")));
+}
+
+function findAiAssistGlobalReferenceEntry(entry) {
+  if (!entry) return null;
+
+  const entryKorean = compactText(getEntryPrimaryKoreanText(entry) || entry.korean);
+  const entryThaiScript = compactText(getThaiScriptText(entry));
+  if (!entryKorean && !entryThaiScript) return null;
+
+  let bestEntry = null;
+  let bestScore = -1;
+  getMergedEntries(getMergedData()).forEach((referenceEntry) => {
+    if (!referenceEntry || referenceEntry.source === "ai-assist") return;
+
+    const referenceKorean = compactText(getEntryPrimaryKoreanText(referenceEntry) || referenceEntry.korean);
+    const referenceThaiScript = compactText(getThaiScriptText(referenceEntry));
+    const matchesThaiScript =
+      entryThaiScript &&
+      referenceThaiScript &&
+      (referenceThaiScript === entryThaiScript ||
+        referenceThaiScript.includes(entryThaiScript) ||
+        entryThaiScript.includes(referenceThaiScript));
+    const matchesKorean =
+      entryKorean &&
+      referenceKorean &&
+      (referenceKorean === entryKorean || referenceKorean.includes(entryKorean) || entryKorean.includes(referenceKorean));
+    if (!matchesThaiScript && !matchesKorean) return;
+
+    const score = getAiAssistReferenceMatchScore(entry, referenceEntry);
+    if (score > bestScore) {
+      bestScore = score;
+      bestEntry = referenceEntry;
+    }
+  });
+
+  return bestScore >= 260 ? bestEntry : null;
 }
 
 function getAiAssistReferenceMatchScore(entry, referenceEntry) {
@@ -4942,6 +4980,17 @@ function reconcileAiAssistEntry(entry, referenceEntries = []) {
   });
 
   if (!bestEntry || bestScore < 300) {
+    const globalReferenceEntry = findAiAssistGlobalReferenceEntry(entry);
+    if (globalReferenceEntry) {
+      const globalScore = getAiAssistReferenceMatchScore(entry, globalReferenceEntry);
+      if (globalScore > bestScore) {
+        bestScore = globalScore;
+        bestEntry = globalReferenceEntry;
+      }
+    }
+  }
+
+  if (!bestEntry || bestScore < 260) {
     return entry;
   }
 
@@ -5007,10 +5056,10 @@ function rankAiAssistEntries(entries, query, normalizedQuery = "", searchProfile
 
 function normalizeAiAssistResponse(payload, query, context = null) {
   const raw = payload && typeof payload === "object" && payload.result ? payload.result : payload || {};
-  const normalizedQuery = String(raw.normalizedQuery || "").trim();
+  const normalizedQuery = sanitizeAiMetaText(raw.normalizedQuery);
   const hints = unique(
     (Array.isArray(raw.searchHints) ? raw.searchHints : Array.isArray(raw.hints) ? raw.hints : [])
-      .map((item) => String(item || "").trim())
+      .map((item) => sanitizeAiMetaText(item))
       .filter(Boolean)
   ).slice(0, 6);
   const referenceEntries = collectAiAssistReferenceEntries(context);
@@ -5043,8 +5092,8 @@ function normalizeAiAssistResponse(payload, query, context = null) {
 
   return {
     normalizedQuery,
-    intent: String(raw.intent || "").trim(),
-    caution: String(raw.caution || "").trim(),
+    intent: sanitizeAiMetaText(raw.intent),
+    caution: sanitizeAiMetaText(raw.caution),
     confidence: Number.isFinite(Number(raw.confidence)) ? Number(raw.confidence) : null,
     hints,
     vocab,
@@ -9121,6 +9170,7 @@ const LATIN_PRONUNCIATION_OVERRIDES = {
   duai: "두아이",
   grab: "그랩",
   hongnam: "홍남",
+  karuna: "까루나",
   kap: "캅",
   khanom: "카놈",
   khrap: "캅",
@@ -9143,11 +9193,16 @@ const LATIN_PRONUNCIATION_OVERRIDES = {
   pom: "폼",
   sawatdee: "사왓디",
   sawatdi: "사왓디",
+  singni: "씽 니",
   swatdi: "사왓디",
   suksan: "숙산",
   thuk: "툭",
   thukwan: "툭완",
   tonbai: "톤바이",
+  chuai: "츄어이",
+  chuay: "츄어이",
+  chuoi: "츄어이",
+  chuoy: "츄어이",
   wai: "와이",
   wan: "완",
   wifi: "와이파이",
@@ -9448,6 +9503,75 @@ function getDisplayPronunciationText(entry) {
   return normalizePronunciationForDisplay(String(entry?.thai || "").trim());
 }
 
+const AI_THAI_SCRIPT_PRONUNCIATION_TOKENS = [
+  [/กรุณา/g, "까루나"],
+  [/ช่วย/g, "츄어이"],
+  [/สิ่งนี้/g, "씽 니"],
+  [/ห้องน้ำ/g, "홍 남"],
+  [/ที่ไหน/g, "티 나이"],
+  [/เท่าไร/g, "타오라이"],
+  [/ราคา/g, "라카"],
+  [/เปลี่ยน/g, "쁠리안"],
+  [/เป็น/g, "펜"],
+  [/แบ่ง/g, "뱅"],
+  [/ให้/g, "하이"],
+  [/หน่อย/g, "너이"],
+  [/ครับ/g, "캅"],
+  [/ค่ะ/g, "카"],
+  [/คะ/g, "카"],
+  [/ห้อง/g, "홍"],
+  [/น้ำ/g, "남"],
+  [/อยู่/g, "유"],
+  [/เอา/g, "아오"],
+  [/ดู/g, "두"],
+  [/ไป/g, "빠이"],
+  [/มา/g, "마"],
+  [/นี้/g, "니"],
+  [/นั้น/g, "난"],
+  [/โน้น/g, "논"],
+  [/สิ่ง/g, "씽"],
+  [/ขอ/g, "커"],
+];
+
+function approximateAiThaiScriptPronunciation(thaiScript) {
+  const raw = String(thaiScript || "").trim();
+  if (!raw) return "";
+
+  let result = raw;
+  let replaced = false;
+  AI_THAI_SCRIPT_PRONUNCIATION_TOKENS.forEach(([pattern, replacement]) => {
+    if (pattern.test(result)) {
+      result = result.replace(pattern, ` ${replacement} `);
+      replaced = true;
+    }
+    pattern.lastIndex = 0;
+  });
+
+  result = result.replace(/[ๆฯ]/g, " ").replace(/\s+/g, " ").trim();
+  if (!replaced || THAI_SCRIPT_REGEX.test(result)) return "";
+  return result;
+}
+
+function isProbablyEnglishOnlyText(value) {
+  const text = String(value || "").trim();
+  if (!text) return false;
+  if (/[가-힣]/.test(text) || THAI_SCRIPT_REGEX.test(text)) return false;
+  return /[A-Za-z]/.test(text);
+}
+
+function sanitizeAiMetaText(value) {
+  const text = String(value || "").trim();
+  if (!text) return "";
+  return isProbablyEnglishOnlyText(text) ? "" : text;
+}
+
+function sanitizeAiPronunciation(value) {
+  const text = String(value || "").trim();
+  if (!text) return "";
+  if (THAI_SCRIPT_REGEX.test(text)) return "";
+  return text;
+}
+
 function isExternalCorpusEntry(entry) {
   return entry?.source === "external-corpus" || /외부 코퍼스/i.test(String(entry?.sheet || ""));
 }
@@ -9659,7 +9783,9 @@ function createEntryCard(entry, searchProfile = null) {
 
   const thai = document.createElement("p");
   thai.className = "entry-thai";
-  thai.textContent = getDisplayPronunciationText(entry) || entry.thai;
+  const pronunciationText = getDisplayPronunciationText(entry);
+  thai.textContent = pronunciationText || t("entry.noPronunciation");
+  thai.classList.toggle("is-placeholder", !pronunciationText);
 
   card.append(korean, thai);
 
@@ -9734,7 +9860,7 @@ function createAiSummaryCard(result, searchProfile, originalQuery = state.query)
   title.className = "ai-summary-title";
   title.textContent = queryText || result.normalizedQuery || t("ai.card.titleFallback");
 
-  if (result.confidence !== null) {
+  if (result.confidence !== null && result.confidence > 0) {
     const badge = document.createElement("span");
     badge.className = "ai-summary-badge";
     badge.textContent = t("ai.card.confidence", {
