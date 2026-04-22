@@ -10,6 +10,10 @@ function cleanText(value) {
   return String(value || "").replace(/\s+/g, " ").trim();
 }
 
+function redactSensitiveText(value) {
+  return cleanText(value).replace(/sk-[A-Za-z0-9_-]+/g, "sk-***");
+}
+
 function normalizeUsername(value) {
   return cleanText(value).toLowerCase();
 }
@@ -472,13 +476,52 @@ async function handleAssist(request, env) {
 
   const openaiPayload = await openaiResponse.json().catch(() => ({}));
   if (!openaiResponse.ok) {
+    const providerMessage = redactSensitiveText(openaiPayload?.error?.message || "");
+    console.error("OpenAI request failed", {
+      status: openaiResponse.status,
+      message: providerMessage || "OpenAI request failed.",
+    });
+
+    if (openaiResponse.status === 401 || openaiResponse.status === 403) {
+      return jsonResponse(
+        request,
+        env,
+        {
+          error: "AI 서버의 OpenAI 키가 올바르지 않거나 권한이 없습니다. 관리자에게 OpenAI 키를 다시 등록해 달라고 해 주세요.",
+        },
+        502
+      );
+    }
+
+    if (openaiResponse.status === 429) {
+      return jsonResponse(
+        request,
+        env,
+        {
+          error: "AI 서버 호출이 잠시 많습니다. 조금 뒤에 다시 시도해 주세요.",
+        },
+        429
+      );
+    }
+
+    if (openaiResponse.status >= 500) {
+      return jsonResponse(
+        request,
+        env,
+        {
+          error: "AI 서버가 잠시 불안정합니다. 잠시 뒤에 다시 시도해 주세요.",
+        },
+        502
+      );
+    }
+
     return jsonResponse(
       request,
       env,
       {
-        error: openaiPayload?.error?.message || "OpenAI request failed.",
+        error: providerMessage || "OpenAI request failed.",
       },
-      openaiResponse.status
+      502
     );
   }
 
