@@ -5,6 +5,46 @@ const DEFAULT_ADMIN_PASSWORD = "admin123";
 const AUTH_STORE_NAME = "main";
 const PASSWORD_ITERATIONS = 100000;
 const SESSION_TTL_MS = 1000 * 60 * 60 * 24 * 7;
+const AI_ENTRY_SCHEMA = {
+  type: "object",
+  additionalProperties: false,
+  required: ["korean", "thai", "thaiScript", "tags", "note"],
+  properties: {
+    korean: { type: "string" },
+    thai: { type: "string" },
+    thaiScript: { type: "string" },
+    tags: {
+      type: "array",
+      items: { type: "string" },
+    },
+    note: { type: "string" },
+  },
+};
+
+const AI_RESULT_SCHEMA = {
+  type: "object",
+  additionalProperties: false,
+  required: ["normalizedQuery", "intent", "searchHints", "vocab", "sentences"],
+  properties: {
+    normalizedQuery: { type: "string" },
+    intent: { type: "string" },
+    confidence: { type: "number" },
+    searchHints: {
+      type: "array",
+      items: { type: "string" },
+    },
+    caution: { type: "string" },
+    fallbackSentence: AI_ENTRY_SCHEMA,
+    vocab: {
+      type: "array",
+      items: AI_ENTRY_SCHEMA,
+    },
+    sentences: {
+      type: "array",
+      items: AI_ENTRY_SCHEMA,
+    },
+  },
+};
 
 function cleanText(value) {
   return String(value || "").replace(/\s+/g, " ").trim();
@@ -145,19 +185,100 @@ function extractOutputText(payload) {
   return texts.join("\n").trim();
 }
 
+function extractStructuredPayload(payload) {
+  if (payload?.output_parsed && typeof payload.output_parsed === "object") {
+    return payload.output_parsed;
+  }
+
+  for (const item of payload?.output || []) {
+    for (const content of item?.content || []) {
+      if (content?.parsed && typeof content.parsed === "object") {
+        return content.parsed;
+      }
+    }
+  }
+
+  return null;
+}
+
+function stripMarkdownCodeFence(text) {
+  const raw = String(text || "").trim();
+  if (!raw) return "";
+
+  const fenced = raw.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/i);
+  return fenced ? String(fenced[1] || "").trim() : raw;
+}
+
+function extractJsonCandidate(text) {
+  const raw = String(text || "");
+  if (!raw) return "";
+
+  let start = -1;
+  let depth = 0;
+  let inString = false;
+  let escaped = false;
+
+  for (let index = 0; index < raw.length; index += 1) {
+    const char = raw[index];
+
+    if (start === -1) {
+      if (char === "{") {
+        start = index;
+        depth = 1;
+      }
+      continue;
+    }
+
+    if (inString) {
+      if (escaped) {
+        escaped = false;
+      } else if (char === "\\") {
+        escaped = true;
+      } else if (char === '"') {
+        inString = false;
+      }
+      continue;
+    }
+
+    if (char === '"') {
+      inString = true;
+      continue;
+    }
+
+    if (char === "{") {
+      depth += 1;
+      continue;
+    }
+
+    if (char === "}") {
+      depth -= 1;
+      if (depth === 0) {
+        return raw.slice(start, index + 1).trim();
+      }
+    }
+  }
+
+  return "";
+}
+
 function parseJsonSafely(text) {
-  const trimmed = cleanText(text);
+  const trimmed = String(text || "").trim();
   if (!trimmed) return null;
 
   try {
     return JSON.parse(trimmed);
   } catch {
-    const match = trimmed.match(/\{[\s\S]*\}$/);
-    if (!match) return null;
+    const unfenced = stripMarkdownCodeFence(trimmed);
     try {
-      return JSON.parse(match[0]);
+      return JSON.parse(unfenced);
     } catch {
-      return null;
+      const candidate = extractJsonCandidate(unfenced);
+      if (!candidate) return null;
+      try {
+        return JSON.parse(candidate);
+      } catch {
+        return null;
+      }
     }
   }
 }
@@ -434,6 +555,14 @@ async function handleAssist(request, env) {
   const requestBody = {
     model,
     max_output_tokens: 650,
+    text: {
+      format: {
+        type: "json_schema",
+        name: "thai_pocketbook_assist",
+        strict: true,
+        schema: AI_RESULT_SCHEMA,
+      },
+    },
     input: [
       {
         role: "user",
@@ -513,15 +642,19 @@ async function handleAssist(request, env) {
     );
   }
 
+  const structuredPayload = extractStructuredPayload(openaiPayload);
   const outputText = extractOutputText(openaiPayload);
-  const parsed = parseJsonSafely(outputText);
+  const parsed = structuredPayload || parseJsonSafely(outputText);
   if (!parsed) {
+    console.error("Structured AI output parse failed", {
+      status: cleanText(openaiPayload?.status || ""),
+      textPreview: redactSensitiveText(String(outputText || "").slice(0, 600)),
+    });
     return jsonResponse(
       request,
       env,
       {
-        error: "Model output was not valid JSON.",
-        raw: outputText,
+        error: "AI 응답 형식이 잠시 깨졌습니다. 다시 한 번 시도해 주세요.",
       },
       502
     );
