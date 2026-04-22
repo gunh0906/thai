@@ -3,7 +3,7 @@ const EXPORT_VERSION = 1;
 const AI_STORAGE_KEY = "thai-pocketbook-ai-v1";
 const AUTH_STORAGE_KEY = "thai-pocketbook-auth-v1";
 const UI_LANGUAGE_STORAGE_KEY = "thai-pocketbook-ui-language-v1";
-const APP_VERSION = "20260422p";
+const APP_VERSION = "20260422q";
 const DEFAULT_PROXY_ENDPOINT = "https://thai-pocketbook-ai.rjsghks87.workers.dev/assist";
 const AI_ASSIST_MIN_QUERY_LENGTH = 2;
 const AI_RESULT_LIMITS = {
@@ -927,6 +927,28 @@ const SUPPLEMENTAL_DATA = {
       tags: ["기본회화", "일터"],
       keywords: ["나누다", "나눠주다", "나눠줘요", "나눠줘", "나눠주세요", "나눠 주세요", "분배", "배분"],
     },
+    {
+      id: "supp-vocab-move",
+      kind: "vocab",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "야이",
+      thaiScript: "ย้าย",
+      korean: "옮기다",
+      note: "물건, 자리, 위치를 다른 곳으로 옮기다",
+      tags: ["기본회화", "이동", "일터"],
+      keywords: [
+        "옮기다",
+        "옴기다",
+        "옮겨요",
+        "옮겨",
+        "옮겨줘요",
+        "옮겨줘",
+        "옮겨주세요",
+        "옮겨 주세요",
+        "위치 이동",
+      ],
+    },
   ],
   sentences: [
     {
@@ -1216,6 +1238,30 @@ const SUPPLEMENTAL_DATA = {
       note: "사람들에게 나눠 주거나 배분해 달라고 할 때",
       tags: ["기본회화", "일터"],
       keywords: ["나눠주다", "여러 명에게 나눠 주세요", "배분", "분배", "나누다"],
+    },
+    {
+      id: "supp-sentence-move-this",
+      kind: "sentence",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "츄어이 야이 안 니 너이 캅",
+      thaiScript: "ช่วยย้ายอันนี้หน่อยครับ",
+      korean: "이거 좀 옮겨 주세요",
+      note: "눈앞의 물건이나 짐을 옮겨 달라고 할 때",
+      tags: ["기본회화", "이동", "일터"],
+      keywords: ["옮기다", "옴기다", "이거 옮겨 주세요", "저거 옮겨 주세요", "물건 옮기다", "짐 옮기다"],
+    },
+    {
+      id: "supp-sentence-move-elsewhere",
+      kind: "sentence",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "츄어이 야이 빠이 티 은 너이 캅",
+      thaiScript: "ช่วยย้ายไปที่อื่นหน่อยครับ",
+      korean: "다른 곳으로 옮겨 주세요",
+      note: "자리나 물건의 위치를 다른 곳으로 바꿔 달라고 할 때",
+      tags: ["기본회화", "이동", "일터"],
+      keywords: ["옮기다", "옴기다", "위치를 옮겨 주세요", "자리를 옮겨 주세요", "다른 곳으로 옮겨 주세요"],
     },
   ],
 };
@@ -3198,6 +3244,7 @@ const COMPACT_QUERY_SUFFIX_RULES = [
 
 const PREDICATE_QUERY_VARIANTS = {
   "나누다": ["나눠요", "나눠", "나눠 주세요", "나눠줘요", "나눠줘", "나눠주다", "분배", "배분"],
+  "옮기다": ["옮겨요", "옮겨", "옮겨 주세요", "옮겨줘요", "옮겨줘", "옮겨주다", "옴기다", "옴겨", "위치를 옮겨 주세요", "다른 곳으로 옮겨 주세요"],
   "오다": ["와", "와요", "오세요", "왔어요", "언제 와요?"],
   "오르다": ["올라가요", "올라가", "오르세요", "올랐어요"],
   "내려가다": ["내려가요", "내려가", "내려가세요"],
@@ -3286,6 +3333,30 @@ function expandShareVariants(item) {
     "배분",
     "이것을 나눠 주세요",
     "여러 명에게 나눠 주세요",
+  ];
+}
+
+function expandMoveVariants(item) {
+  const normalized = normalizeText(item);
+  if (!normalized) return [];
+  if (
+    !/(옮기다|옮겨요|옮겨|옮겨주다|옮겨줘요|옮겨줘|위치옮기|자리옮기|다른곳으로옮기|이거옮기|저거옮기)/.test(
+      compactText(normalized)
+    )
+  ) {
+    return [];
+  }
+
+  return [
+    "옮기다",
+    "옮겨 주세요",
+    "옮겨줘요",
+    "옮겨주다",
+    "이거 좀 옮겨 주세요",
+    "저거 좀 옮겨 주세요",
+    "위치를 옮겨 주세요",
+    "다른 곳으로 옮겨 주세요",
+    "자리를 옮겨 주세요",
   ];
 }
 
@@ -3630,6 +3701,8 @@ function normalizeText(text) {
     .replace(/모른다/g, "모르다")
     .replace(/모르겠어요/g, "모르다")
     .replace(/모르겠어/g, "모르다")
+    .replace(/옴기/g, "옮기")
+    .replace(/옴겨/g, "옮겨")
     .replace(/나눠주세여/g, "나누다")
     .replace(/나눠주세요/g, "나누다")
     .replace(/나눠줘요/g, "나누다")
@@ -3640,6 +3713,13 @@ function normalizeText(text) {
     .replace(/배분해/g, "나누다")
     .replace(/분배해요/g, "나누다")
     .replace(/분배해/g, "나누다")
+    .replace(/옮겨주세여/g, "옮기다")
+    .replace(/옮겨주세요/g, "옮기다")
+    .replace(/옮겨줘요/g, "옮기다")
+    .replace(/옮겨줘/g, "옮기다")
+    .replace(/옮겨주다/g, "옮기다")
+    .replace(/옮겨요/g, "옮기다")
+    .replace(/(^|\s)옮겨(?=$|\s)/g, "$1옮기다")
     .replace(/잘몰라요/g, "모르다")
     .replace(/잘 몰라요/g, "모르다")
     .replace(/잘몰라/g, "모르다")
@@ -4193,6 +4273,7 @@ function expandQueryVariants(query, rawTokens = []) {
     }
     variants.push(...expandLaundryVariants(item));
     variants.push(...expandShareVariants(item));
+    variants.push(...expandMoveVariants(item));
     if (item.includes("주스")) variants.push(item.replace(/주스/g, "쥬스"));
     if (item.includes("먹으로")) variants.push(item.replace(/먹으로/g, "먹으러"));
     if (/선물포장/.test(item)) {
@@ -4940,7 +5021,11 @@ function serializeAiContextEntry(entry) {
 function createAiAssistEntry(item, kind, query, index) {
   const korean = sanitizeAiMetaText(item.korean) || String(item.korean || "").trim();
   const thaiScript = String(item.thaiScript || "").trim();
-  const thai = sanitizeAiPronunciation(item.thai) || approximateAiThaiScriptPronunciation(thaiScript) || "";
+  const thai =
+    sanitizeAiPronunciation(item.thai) ||
+    approximateAiThaiScriptPronunciation(thaiScript) ||
+    approximateAiThaiScriptPronunciation(item.thai) ||
+    "";
   const noteParts = [sanitizeAiMetaText(item.note), t("ai.entryNote")].filter(Boolean);
   return hydrateEntry(
     {
@@ -5085,7 +5170,7 @@ function getAiAssistEntryDisplayScore(entry, query, normalizedQuery = "", search
   const compactKorean = compactText(entry?.korean || "");
   const compactQuery = compactText(query);
   const compactNormalized = compactText(normalizedQuery);
-  const hasPronunciation = Boolean(compactText(getDisplayPronunciationText(entry)));
+  const hasPronunciation = hasDisplayPronunciation(entry);
   const searchTerms = unique([
     ...(Array.isArray(searchProfile?.displayTerms) ? searchProfile.displayTerms : []),
     ...(Array.isArray(searchProfile?.primaryTerms) ? searchProfile.primaryTerms : []),
@@ -5116,6 +5201,11 @@ function getAiAssistEntryDisplayScore(entry, query, normalizedQuery = "", search
 
 function rankAiAssistEntries(entries, query, normalizedQuery = "", searchProfile = null) {
   return uniqueByMeaning(uniqueById(entries)).sort((left, right) => {
+    const rightHasPronunciation = hasDisplayPronunciation(right);
+    const leftHasPronunciation = hasDisplayPronunciation(left);
+    if (rightHasPronunciation !== leftHasPronunciation) {
+      return Number(rightHasPronunciation) - Number(leftHasPronunciation);
+    }
     const scoreDiff =
       getAiAssistEntryDisplayScore(right, query, normalizedQuery, searchProfile) -
       getAiAssistEntryDisplayScore(left, query, normalizedQuery, searchProfile);
@@ -9572,17 +9662,26 @@ function getDisplayPronunciationText(entry) {
   return normalizePronunciationForDisplay(String(entry?.thai || "").trim());
 }
 
+function hasDisplayPronunciation(entry) {
+  return Boolean(compactText(getDisplayPronunciationText(entry)));
+}
+
 const AI_THAI_SCRIPT_PRONUNCIATION_TOKENS = [
   [/กรุณา/g, "까루나"],
   [/ช่วย/g, "츄어이"],
+  [/อันนี้/g, "안 니"],
+  [/อันนั้น/g, "안 난"],
   [/สิ่งนี้/g, "씽 니"],
   [/ห้องน้ำ/g, "홍 남"],
   [/ที่ไหน/g, "티 나이"],
+  [/ที่อื่น/g, "티 은"],
+  [/ที่นั่ง/g, "티 낭"],
   [/เท่าไร/g, "타오라이"],
   [/ราคา/g, "라카"],
   [/เปลี่ยน/g, "쁠리안"],
   [/เป็น/g, "펜"],
   [/แบ่ง/g, "뱅"],
+  [/ย้าย/g, "야이"],
   [/ให้/g, "하이"],
   [/หน่อย/g, "너이"],
   [/ครับ/g, "캅"],

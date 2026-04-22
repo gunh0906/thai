@@ -386,13 +386,17 @@ function normalizeAiEntries(entries, limit) {
   if (!Array.isArray(entries)) return [];
   return entries
     .slice(0, limit)
-    .map((entry) => ({
-      korean: cleanKoreanMetaText(entry.korean),
-      thai: cleanThaiPronunciation(entry.thai),
-      thaiScript: cleanText(entry.thaiScript),
-      tags: Array.isArray(entry.tags) ? entry.tags.map((item) => cleanText(item)).filter(Boolean).slice(0, 5) : [],
-      note: cleanKoreanMetaText(entry.note),
-    }))
+    .map((entry) => {
+      const rawThai = cleanText(entry?.thai);
+      const rawThaiScript = cleanText(entry?.thaiScript);
+      return {
+        korean: cleanKoreanMetaText(entry.korean),
+        thai: cleanThaiPronunciation(rawThai),
+        thaiScript: rawThaiScript || (containsThai(rawThai) ? rawThai : ""),
+        tags: Array.isArray(entry.tags) ? entry.tags.map((item) => cleanText(item)).filter(Boolean).slice(0, 5) : [],
+        note: cleanKoreanMetaText(entry.note),
+      };
+    })
     .filter((entry) => entry.korean || entry.thai || entry.thaiScript);
 }
 
