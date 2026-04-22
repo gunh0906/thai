@@ -110,6 +110,7 @@ function buildPrompt(payload) {
   return [
     "You improve Korean-Thai pocketbook search results for a mobile app.",
     "The user may search in Korean, Thai script, or Korean-style Thai pronunciation.",
+    "Treat payload.query as the full utterance first. Interpret the whole sentence before splitting it into keywords.",
     "Local search results are provided. Use them as grounding first, and only invent new items when the local results are clearly noisy, missing, or wrong.",
     "Focus on daily life, work, shopping, transport, dormitory, factory, money, timing, and short practical conversation.",
     "Return JSON only. No markdown. No text outside the JSON object.",
@@ -121,6 +122,13 @@ function buildPrompt(payload) {
         confidence: 0.0,
         searchHints: ["keyword"],
         caution: "optional note",
+        fallbackSentence: {
+          korean: "closest useful Korean sentence",
+          thai: "Korean-friendly pronunciation guide",
+          thaiScript: "Thai script",
+          tags: ["tag"],
+          note: "short note",
+        },
         vocab: [
           {
             korean: "short Korean word or phrase",
@@ -149,6 +157,9 @@ function buildPrompt(payload) {
     "- Prefer simple spoken Thai, not textbook Thai.",
     "- If the local results already answer the query well, keep additions minimal.",
     "- If confidence is low, say so in caution.",
+    "- If payload.query is a natural sentence or complaint, answer it as a whole utterance first.",
+    "- Do not only split the query into separate keywords when the user typed a sentence.",
+    "- If vocab and sentences would otherwise be empty, fill fallbackSentence with the closest practical translation.",
     "- Put the closest direct answer to the user's search first. If the user searched a sentence or request, prefer a sentence first.",
     "- Always fill thaiScript when possible.",
     "- Always make thai a Korean-friendly pronunciation guide, not Latin romanization.",
@@ -208,6 +219,10 @@ function normalizeAiEntries(entries, limit) {
 }
 
 function normalizeResult(payload, model) {
+  const fallbackSentence = normalizeAiEntries(payload?.fallbackSentence ? [payload.fallbackSentence] : [], 1);
+  const vocab = normalizeAiEntries(payload?.vocab, 3);
+  const sentences = normalizeAiEntries(payload?.sentences, 4);
+
   return {
     model,
     normalizedQuery: cleanText(payload?.normalizedQuery),
@@ -217,8 +232,8 @@ function normalizeResult(payload, model) {
       ? payload.searchHints.map((item) => cleanText(item)).filter(Boolean).slice(0, 6)
       : [],
     caution: cleanText(payload?.caution),
-    vocab: normalizeAiEntries(payload?.vocab, 3),
-    sentences: normalizeAiEntries(payload?.sentences, 4),
+    vocab,
+    sentences: sentences.length ? sentences : fallbackSentence,
   };
 }
 

@@ -2,7 +2,7 @@
 const EXPORT_VERSION = 1;
 const AI_STORAGE_KEY = "thai-pocketbook-ai-v1";
 const AUTH_STORAGE_KEY = "thai-pocketbook-auth-v1";
-const APP_VERSION = "20260422f";
+const APP_VERSION = "20260422g";
 const DEFAULT_PROXY_ENDPOINT = "https://thai-pocketbook-ai.rjsghks87.workers.dev/assist";
 const AI_ASSIST_MIN_QUERY_LENGTH = 2;
 const AI_RESULT_LIMITS = {
@@ -2851,6 +2851,7 @@ const elements = {
   aiAssistButton: document.querySelector("#aiAssistButton"),
   resetFiltersButton: document.querySelector("#resetFiltersButton"),
   scenarioChips: document.querySelector("#scenarioChips"),
+  quickSearchPanel: document.querySelector("#quickSearchPanel"),
   quickSearchChips: document.querySelector("#quickSearchChips"),
   activeSummary: document.querySelector("#activeSummary"),
   searchStatus: document.querySelector("#searchStatus"),
@@ -2904,6 +2905,9 @@ const elements = {
   authAdminFeedback: document.querySelector("#authAdminFeedback"),
   authUsersList: document.querySelector("#authUsersList"),
   adminAiSection: document.querySelector("#adminAiSection"),
+  adminWorkspacePanel: document.querySelector("#adminWorkspacePanel"),
+  adminWorkspaceGrid: document.querySelector("#adminWorkspaceGrid"),
+  adminWorkspaceSummary: document.querySelector("#adminWorkspaceSummary"),
   aiSettingsForm: document.querySelector("#aiSettingsForm"),
   aiEnabledInput: document.querySelector("#aiEnabledInput"),
   aiModeInput: document.querySelector("#aiModeInput"),
@@ -8415,6 +8419,14 @@ function jumpToSection(section) {
 }
 
 function renderQuickSearches() {
+  if (elements.quickSearchPanel) {
+    elements.quickSearchPanel.hidden = true;
+  }
+  if (elements.quickSearchChips) {
+    elements.quickSearchChips.innerHTML = "";
+  }
+  return;
+
   elements.quickSearchChips.innerHTML = "";
   QUICK_SEARCHES.forEach((query) => {
     const button = document.createElement("button");
@@ -8841,7 +8853,7 @@ function isTimeFocusedEntry(entry) {
 }
 
 function openMenu() {
-  if (!isCurrentUserAdmin()) return;
+  if (!isLoggedIn()) return;
   state.menuOpen = true;
   document.body.classList.add("menu-open");
   elements.menuSheet.hidden = false;
@@ -8887,6 +8899,16 @@ function hideLegacyMenuAuthSection() {
   document.querySelectorAll(".section-description").forEach((node) => {
     if (/admin\s*\/\s*admin123/i.test(String(node.textContent || ""))) {
       node.textContent = "관리자에게 받은 계정으로 로그인해 주세요.";
+    }
+  });
+}
+
+function mountAdminWorkspaceSections() {
+  if (!elements.adminWorkspaceGrid) return;
+  [elements.adminAiSection, elements.authAdminSection].forEach((section) => {
+    if (!section) return;
+    if (section.parentElement !== elements.adminWorkspaceGrid) {
+      elements.adminWorkspaceGrid.appendChild(section);
     }
   });
 }
@@ -9441,6 +9463,7 @@ function renderAdminUsersList() {
 
 function renderAuthSection() {
   hideLegacyMenuAuthSection();
+  mountAdminWorkspaceSections();
   const hasEndpoint = hasWorkerEndpointConfigured();
   const loggedIn = isLoggedIn();
   const checking = Boolean(state.auth.checking);
@@ -9449,8 +9472,6 @@ function renderAuthSection() {
   const gateVisible = !loggedIn || mustChangePassword || state.authGateOpen;
 
   if (gateVisible && state.menuOpen) {
-    closeMenu();
-  } else if (!isAdmin && state.menuOpen) {
     closeMenu();
   }
 
@@ -9488,7 +9509,7 @@ function renderAuthSection() {
             ? "처음 받은 비밀번호를 새 비밀번호로 바꾼 뒤 계속 사용할 수 있습니다."
           : loggedIn
           ? isAdmin
-            ? `${state.auth.me?.username || "계정"}으로 로그인되어 있습니다. 계정 패널과 관리자 메뉴를 모두 사용할 수 있습니다.`
+            ? `${state.auth.me?.username || "계정"}으로 로그인되어 있습니다. 계정 패널과 관리자 작업 공간을 사용할 수 있습니다.`
             : `${state.auth.me?.username || "계정"}으로 로그인되어 있습니다.`
           : "";
   }
@@ -9546,9 +9567,9 @@ function renderAuthSection() {
   }
 
   if (elements.menuButton) {
-    elements.menuButton.hidden = !isAdmin;
-    elements.menuButton.disabled = !isAdmin;
-    elements.menuButton.setAttribute("aria-hidden", isAdmin ? "false" : "true");
+    elements.menuButton.hidden = !loggedIn;
+    elements.menuButton.disabled = !loggedIn;
+    elements.menuButton.setAttribute("aria-hidden", loggedIn ? "false" : "true");
   }
 
   if (elements.authAdminSection) {
@@ -9557,6 +9578,16 @@ function renderAuthSection() {
 
   if (elements.adminAiSection) {
     elements.adminAiSection.hidden = !isAdmin;
+  }
+
+  if (elements.adminWorkspacePanel) {
+    elements.adminWorkspacePanel.hidden = !isAdmin;
+  }
+
+  if (elements.adminWorkspaceSummary) {
+    elements.adminWorkspaceSummary.textContent = isAdmin
+      ? "AI 연결과 사용자 권한을 메인 화면에서 바로 관리할 수 있습니다."
+      : "";
   }
 
   renderAdminUsersList();
@@ -10221,7 +10252,13 @@ function wireEvents() {
 
   elements.jumpVocabButton.addEventListener("click", () => jumpToSection(elements.vocabSection));
   elements.jumpSentenceButton.addEventListener("click", () => jumpToSection(elements.sentenceSection));
-  elements.aiAssistButton.addEventListener("click", () => requestAiAssist(state.lastSearchContext, { trigger: "manual" }));
+  elements.aiAssistButton.addEventListener("click", () => {
+    const currentInputQuery = String(elements.searchInput?.value || "").trim();
+    if (currentInputQuery && currentInputQuery !== state.query) {
+      performSearch(currentInputQuery);
+    }
+    requestAiAssist(state.lastSearchContext, { trigger: "manual" });
+  });
 
   elements.resetFiltersButton.addEventListener("click", () => {
     state.scenario = "all";
@@ -10257,6 +10294,7 @@ function wireEvents() {
 }
 
 function boot() {
+  mountAdminWorkspaceSections();
   wireEvents();
   hideLegacyMenuAuthSection();
   syncAiSettingsForm();
