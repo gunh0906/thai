@@ -11,7 +11,7 @@
     <title>태국어 포켓북</title>
     <link rel="manifest" href="./manifest.webmanifest?v=20260422c" />
     <link rel="icon" href="./icon.svg?v=20260416x" type="image/svg+xml" />
-    <link rel="stylesheet" href="./styles.css?v=20260422c" />
+    <link rel="stylesheet" href="./styles.css?v=20260422h" />
   </head>
   <body>
     <div class="page-shell">
@@ -214,24 +214,38 @@
       <div class="menu-sheet-inner">
         <div class="menu-header">
           <div>
-            <p class="section-kicker">설정</p>
-            <h2>필터와 내 데이터</h2>
+            <p class="section-kicker">메뉴</p>
+            <h2>화면과 필터</h2>
           </div>
           <button id="menuCloseButton" class="ghost-button" type="button">닫기</button>
         </div>
 
-        <section class="menu-section">
+        <section id="menuViewSection" class="menu-section" hidden>
           <div class="section-top">
             <div>
-              <p class="section-kicker">상황별 검색</p>
-              <h2>필터</h2>
+              <p class="section-kicker">화면</p>
+              <h2>관리자 전환</h2>
+            </div>
+            <p class="section-description">관리자만 검색 화면과 관리자 작업 화면을 전환합니다.</p>
+          </div>
+          <div class="menu-view-actions">
+            <button id="menuOpenSearchViewButton" class="ghost-button" type="button">검색 화면</button>
+            <button id="menuOpenAdminViewButton" class="ghost-button" type="button">관리자 메뉴</button>
+          </div>
+        </section>
+
+        <section id="menuFilterSection" class="menu-section">
+          <div class="section-top">
+            <div>
+              <p class="section-kicker">검색</p>
+              <h2>상황 필터</h2>
             </div>
             <button id="resetFiltersButton" class="ghost-button" type="button">필터 초기화</button>
           </div>
           <div id="scenarioChips" class="chip-row"></div>
         </section>
 
-        <section class="menu-section">
+        <section id="customDataSection" class="menu-section" hidden aria-hidden="true">
           <div class="section-top">
             <div>
               <p class="section-kicker">내 데이터</p>
@@ -292,7 +306,7 @@
           </form>
         </section>
 
-        <section class="menu-section">
+        <section id="backupSection" class="menu-section" hidden aria-hidden="true">
           <div class="section-top">
             <div>
               <p class="section-kicker">백업</p>
@@ -310,78 +324,6 @@
 
           <div id="customSummary" class="active-summary"></div>
           <div id="customEntries" class="card-stack compact"></div>
-        </section>
-
-        <section class="menu-section" hidden aria-hidden="true">
-          <div class="section-top">
-            <div>
-              <p class="section-kicker">계정</p>
-              <h2>로그인</h2>
-            </div>
-            <p id="authSummary" class="section-description"></p>
-          </div>
-
-          <form id="authLoginForm" class="entry-form">
-            <div class="form-grid">
-              <label>
-                <span>아이디</span>
-                <input id="authUsernameInput" name="username" type="text" placeholder="예: admin" required />
-              </label>
-
-              <label>
-                <span>비밀번호</span>
-                <input
-                  id="authPasswordInput"
-                  name="password"
-                  type="password"
-                  placeholder="예: admin123"
-                  required
-                />
-              </label>
-            </div>
-
-            <div class="form-actions">
-              <button class="primary-button" type="submit">로그인</button>
-              <p id="authFeedback" class="feedback-text" aria-live="polite"></p>
-            </div>
-
-            <p class="section-description">첫 로그인은 admin / admin123 입니다. 로그인 후 바로 비밀번호를 바꾸세요.</p>
-          </form>
-
-          <div id="authSessionPanel" class="entry-form" hidden>
-            <div class="form-grid">
-              <div class="wide auth-account-card">
-                <span class="auth-account-label">현재 로그인</span>
-                <strong id="authAccountName">로그인 안 됨</strong>
-                <p id="authAccountMeta" class="section-description"></p>
-              </div>
-
-              <label>
-                <span>현재 비밀번호</span>
-                <input
-                  id="authCurrentPasswordInput"
-                  name="currentPassword"
-                  type="password"
-                  placeholder="현재 비밀번호"
-                />
-              </label>
-
-              <label>
-                <span>새 비밀번호</span>
-                <input
-                  id="authNewPasswordInput"
-                  name="newPassword"
-                  type="password"
-                  placeholder="새 비밀번호"
-                />
-              </label>
-            </div>
-
-            <div class="form-actions">
-              <button id="authChangePasswordButton" class="primary-button" type="button">비밀번호 변경</button>
-              <button id="authLogoutButton" class="ghost-button" type="button">로그아웃</button>
-            </div>
-          </div>
         </section>
 
         <section id="authAdminSection" class="menu-section" hidden>
@@ -495,7 +437,7 @@
           </form>
         </section>
 
-        <section class="menu-section">
+        <section id="statsSection" class="menu-section" hidden aria-hidden="true">
           <div class="section-top">
             <div>
               <p class="section-kicker">단어장</p>
@@ -509,6 +451,6 @@
     </aside>
 
     <script src="./data.js?v=20260421d"></script>
-    <script src="./app.js?v=20260422g"></script>
+    <script src="./app.js?v=20260422h"></script>
   </body>
 </html>

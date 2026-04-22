@@ -2,7 +2,7 @@
 const EXPORT_VERSION = 1;
 const AI_STORAGE_KEY = "thai-pocketbook-ai-v1";
 const AUTH_STORAGE_KEY = "thai-pocketbook-auth-v1";
-const APP_VERSION = "20260422g";
+const APP_VERSION = "20260422h";
 const DEFAULT_PROXY_ENDPOINT = "https://thai-pocketbook-ai.rjsghks87.workers.dev/assist";
 const AI_ASSIST_MIN_QUERY_LENGTH = 2;
 const AI_RESULT_LIMITS = {
@@ -2814,6 +2814,7 @@ const mergedEntriesCache = {
 const state = {
   query: "",
   scenario: "all",
+  currentView: "search",
   selectedVocabId: null,
   revealedThaiIds: new Set(),
   menuOpen: false,
@@ -2840,6 +2841,10 @@ const elements = {
   menuCloseButton: document.querySelector("#menuCloseButton"),
   menuOverlay: document.querySelector("#menuOverlay"),
   menuSheet: document.querySelector("#menuSheet"),
+  menuViewSection: document.querySelector("#menuViewSection"),
+  menuFilterSection: document.querySelector("#menuFilterSection"),
+  menuOpenSearchViewButton: document.querySelector("#menuOpenSearchViewButton"),
+  menuOpenAdminViewButton: document.querySelector("#menuOpenAdminViewButton"),
   authGate: document.querySelector("#authGate"),
   authGateTitle: document.querySelector("#authGateTitle"),
   authGateCloseButton: document.querySelector("#authGateCloseButton"),
@@ -2871,11 +2876,13 @@ const elements = {
   sentenceResults: document.querySelector("#sentenceResults"),
   vocabMeta: document.querySelector("#vocabMeta"),
   sentenceMeta: document.querySelector("#sentenceMeta"),
+  customDataSection: document.querySelector("#customDataSection"),
   entryForm: document.querySelector("#entryForm"),
   saveFeedback: document.querySelector("#saveFeedback"),
   exportButton: document.querySelector("#exportButton"),
   importButton: document.querySelector("#importButton"),
   importInput: document.querySelector("#importInput"),
+  backupSection: document.querySelector("#backupSection"),
   clearCustomButton: document.querySelector("#clearCustomButton"),
   customSummary: document.querySelector("#customSummary"),
   customEntries: document.querySelector("#customEntries"),
@@ -2908,6 +2915,7 @@ const elements = {
   adminWorkspacePanel: document.querySelector("#adminWorkspacePanel"),
   adminWorkspaceGrid: document.querySelector("#adminWorkspaceGrid"),
   adminWorkspaceSummary: document.querySelector("#adminWorkspaceSummary"),
+  statsSection: document.querySelector("#statsSection"),
   aiSettingsForm: document.querySelector("#aiSettingsForm"),
   aiEnabledInput: document.querySelector("#aiEnabledInput"),
   aiModeInput: document.querySelector("#aiModeInput"),
@@ -4001,6 +4009,7 @@ function resetAuthState(message = "") {
   state.auth.users = [];
   state.auth.checking = false;
   state.auth.userListStatus = "idle";
+  state.currentView = "search";
   state.authGateOpen = true;
   if (state.menuOpen) {
     closeMenu();
@@ -8880,6 +8889,16 @@ function closeAuthGate() {
   render();
 }
 
+function isAdminWorkspaceView() {
+  return state.currentView === "admin" && isCurrentUserAdmin();
+}
+
+function setCurrentView(nextView = "search") {
+  const resolved = nextView === "admin" && isCurrentUserAdmin() ? "admin" : "search";
+  state.currentView = resolved;
+  render();
+}
+
 function hideLegacyMenuAuthSection() {
   document.querySelectorAll("#authUsernameInput").forEach((input) => {
     input.setAttribute("placeholder", "아이디");
@@ -8895,12 +8914,6 @@ function hideLegacyMenuAuthSection() {
     legacySection.hidden = true;
     legacySection.setAttribute("aria-hidden", "true");
   }
-
-  document.querySelectorAll(".section-description").forEach((node) => {
-    if (/admin\s*\/\s*admin123/i.test(String(node.textContent || ""))) {
-      node.textContent = "관리자에게 받은 계정으로 로그인해 주세요.";
-    }
-  });
 }
 
 function mountAdminWorkspaceSections() {
@@ -8914,6 +8927,11 @@ function mountAdminWorkspaceSections() {
 }
 
 function renderQueryInsights(searchProfile) {
+  if (isAdminWorkspaceView()) {
+    elements.queryInsights.innerHTML = "";
+    elements.queryInsightsPanel.hidden = true;
+    return;
+  }
   const insights = unique(searchProfile.displayTerms).slice(0, 6);
   elements.queryInsights.innerHTML = "";
   insights.forEach((item) => {
@@ -9124,6 +9142,14 @@ function createAiSummaryCard(result, searchProfile, originalQuery = state.query)
 
 function renderAiAssist(context) {
   if (!elements.aiAssistButton || !elements.aiAssistPanel) return;
+  if (isAdminWorkspaceView()) {
+    elements.aiAssistPanel.hidden = true;
+    elements.aiAssistResults.innerHTML = "";
+    elements.aiAssistMeta.textContent = "";
+    elements.aiAssistStatus.hidden = true;
+    elements.aiAssistStatus.textContent = "";
+    return;
+  }
 
   const query = String(context?.query || state.query || "").trim();
   const configured = hasConfiguredAiAssist();
@@ -9468,6 +9494,10 @@ function renderAuthSection() {
   const loggedIn = isLoggedIn();
   const checking = Boolean(state.auth.checking);
   const isAdmin = isCurrentUserAdmin();
+  if (!isAdmin && state.currentView === "admin") {
+    state.currentView = "search";
+  }
+  const adminView = isAdminWorkspaceView();
   const mustChangePassword = Boolean(state.auth.me?.mustChangePassword);
   const gateVisible = !loggedIn || mustChangePassword || state.authGateOpen;
 
@@ -9572,6 +9602,38 @@ function renderAuthSection() {
     elements.menuButton.setAttribute("aria-hidden", loggedIn ? "false" : "true");
   }
 
+  if (elements.menuViewSection) {
+    elements.menuViewSection.hidden = !isAdmin;
+  }
+
+  if (elements.menuFilterSection) {
+    elements.menuFilterSection.hidden = adminView;
+    elements.menuFilterSection.setAttribute("aria-hidden", adminView ? "true" : "false");
+  }
+
+  if (elements.menuOpenSearchViewButton) {
+    elements.menuOpenSearchViewButton.disabled = !loggedIn || state.currentView === "search";
+    elements.menuOpenSearchViewButton.classList.toggle("active-view", state.currentView === "search");
+  }
+
+  if (elements.menuOpenAdminViewButton) {
+    elements.menuOpenAdminViewButton.hidden = !isAdmin;
+    elements.menuOpenAdminViewButton.disabled = !isAdmin || adminView;
+    elements.menuOpenAdminViewButton.classList.toggle("active-view", adminView);
+  }
+
+  if (elements.customDataSection) {
+    elements.customDataSection.hidden = true;
+  }
+
+  if (elements.backupSection) {
+    elements.backupSection.hidden = true;
+  }
+
+  if (elements.statsSection) {
+    elements.statsSection.hidden = true;
+  }
+
   if (elements.authAdminSection) {
     elements.authAdminSection.hidden = !isAdmin;
   }
@@ -9581,12 +9643,12 @@ function renderAuthSection() {
   }
 
   if (elements.adminWorkspacePanel) {
-    elements.adminWorkspacePanel.hidden = !isAdmin;
+    elements.adminWorkspacePanel.hidden = !isAdmin || !adminView;
   }
 
   if (elements.adminWorkspaceSummary) {
-    elements.adminWorkspaceSummary.textContent = isAdmin
-      ? "AI 연결과 사용자 권한을 메인 화면에서 바로 관리할 수 있습니다."
+    elements.adminWorkspaceSummary.textContent = adminView
+      ? "검색창 대신 사용자 관리와 AI 연결만 크게 보여주고 있습니다."
       : "";
   }
 
@@ -9927,6 +9989,7 @@ function render() {
     sentenceResults,
   } = getSearchComputation(state.query);
   const browsing = isBrowsingState();
+  const adminView = isAdminWorkspaceView();
   const expandedHint =
     !timeQuestionMode && searchProfile.displayTerms.length
       ? ` · 함께 찾은 핵심어: ${searchProfile.displayTerms.join(" / ")}`
@@ -9955,9 +10018,14 @@ function render() {
 
   elements.searchInput.value = state.query;
   elements.datasetNote.textContent = baseData.note || "";
-  elements.resultStack.hidden = browsing;
+  if (elements.searchForm) {
+    elements.searchForm.hidden = adminView;
+  }
+  elements.resultStack.hidden = browsing || adminView;
 
-  elements.searchStatus.textContent = browsing
+  elements.searchStatus.textContent = adminView
+    ? "관리자 작업 공간입니다. 오른쪽 메뉴에서 검색 화면으로 돌아갈 수 있습니다."
+    : browsing
     ? "한국어와 태국어 둘 다 검색할 수 있습니다. 한국어는 바로 쓸 태국어를, 태국어는 한국어 뜻을 먼저 보여줍니다."
     : aiDisplayState.aiOnly
       ? `LLM 전용 모드: AI가 검색어를 직접 해석해서 결과를 보여줍니다.${expandedHint}`
@@ -9975,12 +10043,16 @@ function render() {
         ? `검색됨: 단어 ${vocabResults.length}개 · 회화 ${sentenceResults.length}개 · 자동 조합 적용${expandedHint}`
         : `검색됨: 단어 ${vocabResults.length}개 · 회화 ${sentenceResults.length}개${expandedHint}`;
 
-  elements.filterSummary.textContent =
+  elements.filterSummary.textContent = adminView
+    ? "현재 화면: 관리자 작업 공간"
+    :
     state.scenario === "all"
       ? "필터: 전체 검색"
       : `필터 적용 중: ${activeScenario ? activeScenario.label : state.scenario}만 보기`;
 
-  elements.activeSummary.textContent = browsing
+  elements.activeSummary.textContent = adminView
+    ? "검색창 없이 관리자 전용 설정만 메인에 표시하고 있습니다."
+    : browsing
     ? ""
     : aiDisplayState.aiOnly
       ? `검색어 "${state.query}"를 LLM 전용 모드로 해석하고 있습니다.`
@@ -9988,7 +10060,9 @@ function render() {
       ? `검색어 "${state.query}"를 태국어에서 한국어 뜻 중심으로 찾고 있습니다.`
       : `검색어 "${state.query}"를 핵심 단어와 회화로 나눠서 찾고 있습니다.`;
 
-  elements.vocabMeta.textContent = state.query
+  elements.vocabMeta.textContent = adminView
+    ? ""
+    : state.query
     ? numberMode
       ? "숫자는 태국어 읽기와 태국 숫자 표기를 함께 보여줍니다."
       : dateMode
@@ -10011,7 +10085,9 @@ function render() {
         ? "문장형 검색이라도 먼저 잡아둘 단어를 위에 보여줍니다."
       : "문장을 잘게 풀어서 먼저 잡아둘 단어부터 보여줍니다."
     : "검색어를 넣으면 관련 단어가 나옵니다.";
-  elements.sentenceMeta.textContent = state.query
+  elements.sentenceMeta.textContent = adminView
+    ? ""
+    : state.query
     ? numberMode
       ? "가격이나 수량으로 바로 보여줄 수 있게 같이 만들었습니다."
       : dateMode
@@ -10070,7 +10146,7 @@ function render() {
   renderAuthSection();
   syncUrl();
 
-  if (shouldAutoRunAiAssist(currentSearchContext)) {
+  if (!adminView && shouldAutoRunAiAssist(currentSearchContext)) {
     const alreadyRequested =
       state.aiAssist.query === currentSearchContext.query &&
       (state.aiAssist.status === "loading" || state.aiAssist.status === "done");
@@ -10240,6 +10316,8 @@ function wireEvents() {
     elements.resetFiltersButton,
     elements.menuButton,
     elements.menuCloseButton,
+    elements.menuOpenSearchViewButton,
+    elements.menuOpenAdminViewButton,
     elements.exportButton,
     elements.importButton,
     elements.clearCustomButton,
@@ -10270,6 +10348,16 @@ function wireEvents() {
     else openMenu();
   });
 
+  elements.menuOpenSearchViewButton?.addEventListener("click", () => {
+    setCurrentView("search");
+    closeMenu();
+  });
+
+  elements.menuOpenAdminViewButton?.addEventListener("click", () => {
+    setCurrentView("admin");
+    closeMenu();
+  });
+
   elements.menuCloseButton.addEventListener("click", closeMenu);
   elements.menuOverlay.addEventListener("click", closeMenu);
   window.addEventListener("keydown", (event) => {
@@ -10278,7 +10366,7 @@ function wireEvents() {
     }
   });
 
-  elements.entryForm.addEventListener("submit", submitEntryForm);
+  elements.entryForm?.addEventListener("submit", submitEntryForm);
   elements.authLoginForm?.addEventListener("submit", submitAuthLogin);
   elements.authOpenPanelButton?.addEventListener("click", openAuthGate);
   elements.authGateCloseButton?.addEventListener("click", closeAuthGate);
@@ -10287,10 +10375,10 @@ function wireEvents() {
   elements.authLogoutButton?.addEventListener("click", handleAuthLogout);
   elements.authUserCreateForm?.addEventListener("submit", submitAuthUserCreate);
   elements.aiSettingsForm?.addEventListener("submit", submitAiSettings);
-  elements.exportButton.addEventListener("click", exportCustomData);
-  elements.importButton.addEventListener("click", () => elements.importInput.click());
-  elements.importInput.addEventListener("change", importCustomData);
-  elements.clearCustomButton.addEventListener("click", clearCustomEntries);
+  elements.exportButton?.addEventListener("click", exportCustomData);
+  elements.importButton?.addEventListener("click", () => elements.importInput?.click());
+  elements.importInput?.addEventListener("change", importCustomData);
+  elements.clearCustomButton?.addEventListener("click", clearCustomEntries);
 }
 
 function boot() {

@@ -284,6 +284,24 @@ button:active {
   margin-top: 12px;
 }
 
+.menu-view-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.menu-view-actions .ghost-button {
+  flex: 1 1 140px;
+  justify-content: center;
+  min-height: 52px;
+}
+
+.menu-view-actions .ghost-button.active-view {
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  box-shadow: inset 0 0 0 1px rgba(212, 91, 16, 0.18);
+}
+
 .admin-workspace-panel {
   background:
     linear-gradient(180deg, rgba(255, 248, 241, 0.98), rgba(255, 252, 248, 0.96)),
