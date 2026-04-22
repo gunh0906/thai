@@ -3,7 +3,7 @@ const EXPORT_VERSION = 1;
 const AI_STORAGE_KEY = "thai-pocketbook-ai-v1";
 const AUTH_STORAGE_KEY = "thai-pocketbook-auth-v1";
 const UI_LANGUAGE_STORAGE_KEY = "thai-pocketbook-ui-language-v1";
-const APP_VERSION = "20260422q";
+const APP_VERSION = "20260422u";
 const DEFAULT_PROXY_ENDPOINT = "https://thai-pocketbook-ai.rjsghks87.workers.dev/assist";
 const AI_ASSIST_MIN_QUERY_LENGTH = 2;
 const AI_RESULT_LIMITS = {
@@ -949,6 +949,18 @@ const SUPPLEMENTAL_DATA = {
         "위치 이동",
       ],
     },
+    {
+      id: "supp-vocab-healthy",
+      kind: "vocab",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "캥랭",
+      thaiScript: "แข็งแรง",
+      korean: "건강하다",
+      note: "몸 상태가 좋고 튼튼하다",
+      tags: ["기본회화", "건강"],
+      keywords: ["건강", "건강하다", "건강해요", "건강해", "튼튼하다", "아프지 않다"],
+    },
   ],
   sentences: [
     {
@@ -1262,6 +1274,30 @@ const SUPPLEMENTAL_DATA = {
       note: "자리나 물건의 위치를 다른 곳으로 바꿔 달라고 할 때",
       tags: ["기본회화", "이동", "일터"],
       keywords: ["옮기다", "옴기다", "위치를 옮겨 주세요", "자리를 옮겨 주세요", "다른 곳으로 옮겨 주세요"],
+    },
+    {
+      id: "supp-sentence-healthy-question",
+      kind: "sentence",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "캥랭 마이 캅",
+      thaiScript: "แข็งแรงไหมครับ",
+      korean: "건강하세요?",
+      note: "상대방의 건강 상태를 물을 때",
+      tags: ["기본회화", "건강"],
+      keywords: ["건강하다", "건강해요", "건강하세요", "건강하세요?", "몸 상태", "아프지 않아요"],
+    },
+    {
+      id: "supp-sentence-healthy-self",
+      kind: "sentence",
+      source: "supplemental",
+      sheet: "코덱스 보강",
+      thai: "폼 캥랭 디 캅",
+      thaiScript: "ผมแข็งแรงดีครับ",
+      korean: "저는 건강해요",
+      note: "내가 건강하다고 말할 때",
+      tags: ["기본회화", "건강"],
+      keywords: ["건강하다", "건강해요", "저는 건강해요", "나는 건강해요", "몸 상태가 좋아요"],
     },
   ],
 };
@@ -2486,6 +2522,21 @@ const PREDICATE_QUERY_FAMILIES = [
     ],
   },
   {
+    id: "healthy",
+    patterns: [/건강하|건강해|건강한상태|튼튼하|멀쩡하/],
+    primary: ["건강하다", "건강"],
+    display: ["건강하다"],
+    tags: ["기본회화", "건강"],
+    vocab: [{ korean: "건강하다", thaiKo: "캥랭", thaiScript: "แข็งแรง", note: "건강하고 튼튼한 상태" }],
+    genericSentences: [
+      { korean: "건강해요", thaiKo: "캥랭 디 캅", thaiScript: "แข็งแรงดีครับ" },
+      { korean: "건강하세요?", thaiKo: "캥랭 마이 캅", thaiScript: "แข็งแรงไหมครับ" },
+    ],
+    selfSentences: [
+      { korean: "저는 건강해요", thaiKo: "폼 캥랭 디 캅", thaiScript: "ผมแข็งแรงดีครับ" },
+    ],
+  },
+  {
     id: "problem",
     patterns: [/문제야|문제가있|이상해|이상하다|고장났/],
     primary: ["문제", "이상하다"],
@@ -3243,6 +3294,7 @@ const COMPACT_QUERY_SUFFIX_RULES = [
 ];
 
 const PREDICATE_QUERY_VARIANTS = {
+  "건강하다": ["건강해요", "건강해", "건강합니다", "건강하세요?", "저는 건강해요", "건강한 상태"],
   "나누다": ["나눠요", "나눠", "나눠 주세요", "나눠줘요", "나눠줘", "나눠주다", "분배", "배분"],
   "옮기다": ["옮겨요", "옮겨", "옮겨 주세요", "옮겨줘요", "옮겨줘", "옮겨주다", "옴기다", "옴겨", "위치를 옮겨 주세요", "다른 곳으로 옮겨 주세요"],
   "오다": ["와", "와요", "오세요", "왔어요", "언제 와요?"],
@@ -3701,6 +3753,10 @@ function normalizeText(text) {
     .replace(/모른다/g, "모르다")
     .replace(/모르겠어요/g, "모르다")
     .replace(/모르겠어/g, "모르다")
+    .replace(/건강해요/g, "건강하다")
+    .replace(/건강해/g, "건강하다")
+    .replace(/건강합니다/g, "건강하다")
+    .replace(/건강한상태/g, "건강하다")
     .replace(/옴기/g, "옮기")
     .replace(/옴겨/g, "옮겨")
     .replace(/나눠주세여/g, "나누다")
@@ -8874,6 +8930,10 @@ function isGenericNoiseSearch(searchProfile) {
   return /시끄럽|소음/.test(searchProfile.normalized) && !/(기계|장비|설비|라인|공장|방|객실|룸)/.test(searchProfile.normalized);
 }
 
+function isHealthStateSearch(searchProfile) {
+  return /건강하|건강해|건강한상태|튼튼하|멀쩡하/.test(searchProfile.normalized);
+}
+
 function isEntryUnknownRelated(entry) {
   return matchesEntryKoreanText(entry, /모르|몰라|모르겠|이해못|이해안/);
 }
@@ -8912,6 +8972,10 @@ function isEntryGenericNoiseRelated(entry) {
   );
 }
 
+function isEntryHealthStateRelated(entry) {
+  return matchesEntryCoreSearchTexts(entry, /건강|튼튼|아프지않|몸상태가좋|แข็งแรง|สุขภาพดี|สบายดี/);
+}
+
 function finalizeSearchEntries(entries, searchProfile, kind, limit) {
   let result = uniqueByMeaning(uniqueById(entries));
 
@@ -8941,6 +9005,12 @@ function finalizeSearchEntries(entries, searchProfile, kind, limit) {
       kind === "sentence"
         ? filterEntriesIfEnough(result, isEntryGenericNoiseRelated, 2)
         : prioritizeEntriesIfEnough(result, isEntryGenericNoiseRelated, 1);
+  }
+  if (isHealthStateSearch(searchProfile)) {
+    result =
+      kind === "sentence"
+        ? filterEntriesIfEnough(result, isEntryHealthStateRelated, 1)
+        : filterEntriesIfEnough(result, isEntryHealthStateRelated, 1);
   }
 
   return result.slice(0, limit);
@@ -9669,6 +9739,13 @@ function hasDisplayPronunciation(entry) {
 const AI_THAI_SCRIPT_PRONUNCIATION_TOKENS = [
   [/กรุณา/g, "까루나"],
   [/ช่วย/g, "츄어이"],
+  [/สุขภาพ/g, "쑤카팝"],
+  [/แข็งแรง/g, "캥랭"],
+  [/สบายดี/g, "사바이 디"],
+  [/ป่วย/g, "뿌어이"],
+  [/ดี/g, "디"],
+  [/ไหม/g, "마이"],
+  [/ผม/g, "폼"],
   [/อันนี้/g, "안 니"],
   [/อันนั้น/g, "안 난"],
   [/สิ่งนี้/g, "씽 니"],
