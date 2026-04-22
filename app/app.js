@@ -2,7 +2,7 @@
 const EXPORT_VERSION = 1;
 const AI_STORAGE_KEY = "thai-pocketbook-ai-v1";
 const AUTH_STORAGE_KEY = "thai-pocketbook-auth-v1";
-const APP_VERSION = "20260422b";
+const APP_VERSION = "20260422c";
 const DEFAULT_PROXY_ENDPOINT = "https://thai-pocketbook-ai.rjsghks87.workers.dev/assist";
 const AI_ASSIST_MIN_QUERY_LENGTH = 2;
 const AI_RESULT_LIMITS = {
@@ -2817,6 +2817,7 @@ const state = {
   selectedVocabId: null,
   revealedThaiIds: new Set(),
   menuOpen: false,
+  authGateOpen: false,
   searchFrame: 0,
   custom: loadCustomData(),
   aiSettings: loadAiSettings(),
@@ -2834,10 +2835,14 @@ const state = {
 };
 
 const elements = {
+  pageShell: document.querySelector(".page-shell"),
   menuButton: document.querySelector("#menuButton"),
   menuCloseButton: document.querySelector("#menuCloseButton"),
   menuOverlay: document.querySelector("#menuOverlay"),
   menuSheet: document.querySelector("#menuSheet"),
+  authGate: document.querySelector("#authGate"),
+  authGateTitle: document.querySelector("#authGateTitle"),
+  authGateCloseButton: document.querySelector("#authGateCloseButton"),
   searchForm: document.querySelector("#searchForm"),
   searchInput: document.querySelector("#searchInput"),
   searchButton: document.querySelector("#searchButton"),
@@ -2873,6 +2878,10 @@ const elements = {
   clearCustomButton: document.querySelector("#clearCustomButton"),
   customSummary: document.querySelector("#customSummary"),
   customEntries: document.querySelector("#customEntries"),
+  authToolbar: document.querySelector("#authToolbar"),
+  authToolbarName: document.querySelector("#authToolbarName"),
+  authOpenPanelButton: document.querySelector("#authOpenPanelButton"),
+  authQuickLogoutButton: document.querySelector("#authQuickLogoutButton"),
   authSummary: document.querySelector("#authSummary"),
   authLoginForm: document.querySelector("#authLoginForm"),
   authUsernameInput: document.querySelector("#authUsernameInput"),
@@ -3988,6 +3997,10 @@ function resetAuthState(message = "") {
   state.auth.users = [];
   state.auth.checking = false;
   state.auth.userListStatus = "idle";
+  state.authGateOpen = true;
+  if (state.menuOpen) {
+    closeMenu();
+  }
   localStorage.removeItem(AUTH_STORAGE_KEY);
 
   if (elements.authFeedback && message) {
@@ -4195,6 +4208,7 @@ async function refreshAuthSession(options = {}) {
       state.auth.me = null;
       state.auth.users = [];
       state.auth.userListStatus = "idle";
+      state.authGateOpen = true;
     }
     saveAuthState();
     render();
@@ -8695,6 +8709,7 @@ function isTimeFocusedEntry(entry) {
 }
 
 function openMenu() {
+  if (!isCurrentUserAdmin()) return;
   state.menuOpen = true;
   document.body.classList.add("menu-open");
   elements.menuSheet.hidden = false;
@@ -8708,6 +8723,27 @@ function closeMenu() {
   elements.menuSheet.hidden = true;
   elements.menuOverlay.hidden = true;
   elements.menuButton.setAttribute("aria-expanded", "false");
+}
+
+function openAuthGate() {
+  state.authGateOpen = true;
+  render();
+}
+
+function closeAuthGate() {
+  if (!isLoggedIn() || state.auth.me?.mustChangePassword) return;
+  state.authGateOpen = false;
+  render();
+}
+
+function hideLegacyMenuAuthSection() {
+  const authForms = document.querySelectorAll("#authLoginForm");
+  const legacyAuthForm = authForms.length > 1 ? authForms[1] : null;
+  const legacySection = legacyAuthForm?.closest(".menu-section");
+  if (legacySection) {
+    legacySection.hidden = true;
+    legacySection.setAttribute("aria-hidden", "true");
+  }
 }
 
 function renderQueryInsights(searchProfile) {
@@ -9254,21 +9290,57 @@ function renderAdminUsersList() {
 }
 
 function renderAuthSection() {
+  hideLegacyMenuAuthSection();
   const hasEndpoint = hasWorkerEndpointConfigured();
   const loggedIn = isLoggedIn();
   const checking = Boolean(state.auth.checking);
   const isAdmin = isCurrentUserAdmin();
+  const mustChangePassword = Boolean(state.auth.me?.mustChangePassword);
+  const gateVisible = !loggedIn || mustChangePassword || state.authGateOpen;
+
+  if (gateVisible && state.menuOpen) {
+    closeMenu();
+  } else if (!isAdmin && state.menuOpen) {
+    closeMenu();
+  }
+
+  document.body.classList.toggle("auth-locked", gateVisible);
+  if (elements.pageShell) {
+    if (gateVisible) {
+      elements.pageShell.setAttribute("inert", "");
+      elements.pageShell.setAttribute("aria-hidden", "true");
+    } else {
+      elements.pageShell.removeAttribute("inert");
+      elements.pageShell.setAttribute("aria-hidden", "false");
+    }
+  }
+
+  if (elements.authGate) {
+    elements.authGate.hidden = !gateVisible;
+  }
+
+  if (elements.authGateTitle) {
+    elements.authGateTitle.textContent = !loggedIn
+      ? "먼저 로그인해 주세요"
+      : mustChangePassword
+        ? "비밀번호를 먼저 바꿔 주세요"
+        : "계정 설정";
+  }
 
   if (elements.authSummary) {
     elements.authSummary.textContent = !hasEndpoint
       ? "관리자 연결 설정이 아직 준비되지 않았습니다."
       : checking
         ? "로그인 세션을 확인하고 있습니다."
-        : loggedIn
+        : !loggedIn
+          ? "로그인한 계정만 검색과 AI를 사용할 수 있습니다."
+          : mustChangePassword
+            ? "처음 받은 비밀번호를 새 비밀번호로 바꾼 뒤 계속 사용할 수 있습니다."
+          : loggedIn
           ? isAdmin
-            ? `${state.auth.me?.username || "계정"}으로 로그인되어 있습니다. 아래 관리자 메뉴에서 사용자와 AI 연결을 관리할 수 있습니다.`
+            ? `${state.auth.me?.username || "계정"}으로 로그인되어 있습니다. 계정 패널과 관리자 메뉴를 모두 사용할 수 있습니다.`
             : `${state.auth.me?.username || "계정"}으로 로그인되어 있습니다.`
-          : "AI는 로그인한 계정만 사용할 수 있습니다.";
+          : "";
   }
 
   if (elements.authLoginForm) {
@@ -9282,6 +9354,11 @@ function renderAuthSection() {
 
   if (elements.authSessionPanel) {
     elements.authSessionPanel.hidden = !loggedIn;
+  }
+
+  if (elements.authGateCloseButton) {
+    elements.authGateCloseButton.hidden = !loggedIn || mustChangePassword;
+    elements.authGateCloseButton.disabled = checking;
   }
 
   if (elements.authAccountName) {
@@ -9298,6 +9375,30 @@ function renderAuthSection() {
 
   if (elements.authLogoutButton) {
     elements.authLogoutButton.disabled = !loggedIn || checking;
+  }
+
+  if (elements.authToolbar) {
+    elements.authToolbar.hidden = !loggedIn;
+  }
+
+  if (elements.authToolbarName) {
+    elements.authToolbarName.textContent = loggedIn
+      ? `${state.auth.me.username} · ${formatAuthRole(state.auth.me.role)}`
+      : "계정";
+  }
+
+  if (elements.authOpenPanelButton) {
+    elements.authOpenPanelButton.disabled = !loggedIn || checking;
+  }
+
+  if (elements.authQuickLogoutButton) {
+    elements.authQuickLogoutButton.disabled = !loggedIn || checking;
+  }
+
+  if (elements.menuButton) {
+    elements.menuButton.hidden = !isAdmin;
+    elements.menuButton.disabled = !isAdmin;
+    elements.menuButton.setAttribute("aria-hidden", isAdmin ? "false" : "true");
   }
 
   if (elements.authAdminSection) {
@@ -9347,6 +9448,7 @@ async function submitAuthLogin(event) {
     state.auth.me = sanitizeAuthUser(data?.user);
     state.auth.users = [];
     state.auth.userListStatus = "idle";
+    state.authGateOpen = Boolean(state.auth.me?.mustChangePassword);
     saveAuthState();
 
     if (elements.authPasswordInput) elements.authPasswordInput.value = "";
@@ -9408,6 +9510,7 @@ async function handleAuthChangePassword() {
     });
 
     state.auth.me = sanitizeAuthUser(data?.user);
+    state.authGateOpen = false;
     saveAuthState();
     if (elements.authCurrentPasswordInput) elements.authCurrentPasswordInput.value = "";
     if (elements.authNewPasswordInput) elements.authNewPasswordInput.value = "";
@@ -9955,6 +10058,9 @@ function wireEvents() {
     elements.exportButton,
     elements.importButton,
     elements.clearCustomButton,
+    elements.authOpenPanelButton,
+    elements.authQuickLogoutButton,
+    elements.authGateCloseButton,
     elements.authChangePasswordButton,
     elements.authLogoutButton,
   ].forEach(wirePressFeedback);
@@ -9983,6 +10089,9 @@ function wireEvents() {
 
   elements.entryForm.addEventListener("submit", submitEntryForm);
   elements.authLoginForm?.addEventListener("submit", submitAuthLogin);
+  elements.authOpenPanelButton?.addEventListener("click", openAuthGate);
+  elements.authGateCloseButton?.addEventListener("click", closeAuthGate);
+  elements.authQuickLogoutButton?.addEventListener("click", handleAuthLogout);
   elements.authChangePasswordButton?.addEventListener("click", handleAuthChangePassword);
   elements.authLogoutButton?.addEventListener("click", handleAuthLogout);
   elements.authUserCreateForm?.addEventListener("submit", submitAuthUserCreate);
@@ -9995,6 +10104,7 @@ function wireEvents() {
 
 function boot() {
   wireEvents();
+  hideLegacyMenuAuthSection();
   syncAiSettingsForm();
   setSearchButtonBusy(false);
   const initial = readStateFromUrl();

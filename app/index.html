@@ -9,9 +9,9 @@
     />
     <meta name="theme-color" content="#ff8a3d" />
     <title>태국어 포켓북</title>
-    <link rel="manifest" href="./manifest.webmanifest?v=20260422a" />
+    <link rel="manifest" href="./manifest.webmanifest?v=20260422c" />
     <link rel="icon" href="./icon.svg?v=20260416x" type="image/svg+xml" />
-    <link rel="stylesheet" href="./styles.css?v=20260422a" />
+    <link rel="stylesheet" href="./styles.css?v=20260422c" />
   </head>
   <body>
     <div class="page-shell">
@@ -56,6 +56,15 @@
         <div class="hero-meta">
           <div class="hero-note" id="searchStatus"></div>
           <div class="hero-note" id="filterSummary"></div>
+          <div id="authToolbar" class="hero-note auth-toolbar" hidden>
+            <div class="auth-toolbar-copy">
+              <strong id="authToolbarName">계정</strong>
+            </div>
+            <div class="auth-toolbar-actions">
+              <button id="authOpenPanelButton" class="ghost-button" type="button">계정</button>
+              <button id="authQuickLogoutButton" class="ghost-button" type="button">로그아웃</button>
+            </div>
+          </div>
         </div>
       </header>
 
@@ -118,6 +127,76 @@
         </section>
       </main>
     </div>
+
+    <section id="authGate" class="auth-gate" hidden>
+      <div class="auth-gate-card">
+        <div class="section-top auth-gate-header">
+          <div>
+            <p class="section-kicker">로그인</p>
+            <h2 id="authGateTitle">먼저 로그인해 주세요</h2>
+          </div>
+          <button id="authGateCloseButton" class="ghost-button" type="button">닫기</button>
+        </div>
+
+        <p id="authSummary" class="section-description"></p>
+
+        <form id="authLoginForm" class="entry-form">
+          <div class="form-grid">
+            <label>
+              <span>아이디</span>
+              <input id="authUsernameInput" name="username" type="text" placeholder="예: admin" required />
+            </label>
+
+            <label>
+              <span>비밀번호</span>
+              <input id="authPasswordInput" name="password" type="password" placeholder="예: admin123" required />
+            </label>
+          </div>
+
+          <div class="form-actions">
+            <button class="primary-button" type="submit">로그인</button>
+            <p id="authFeedback" class="feedback-text" aria-live="polite"></p>
+          </div>
+
+          <p class="section-description">첫 로그인은 admin / admin123 입니다. 로그인 후 바로 비밀번호를 바꾸세요.</p>
+        </form>
+
+        <div id="authSessionPanel" class="entry-form" hidden>
+          <div class="form-grid">
+            <div class="wide auth-account-card">
+              <span class="auth-account-label">현재 로그인</span>
+              <strong id="authAccountName">로그인되지 않음</strong>
+              <p id="authAccountMeta" class="section-description"></p>
+            </div>
+
+            <label>
+              <span>현재 비밀번호</span>
+              <input
+                id="authCurrentPasswordInput"
+                name="currentPassword"
+                type="password"
+                placeholder="현재 비밀번호"
+              />
+            </label>
+
+            <label>
+              <span>새 비밀번호</span>
+              <input
+                id="authNewPasswordInput"
+                name="newPassword"
+                type="password"
+                placeholder="새 비밀번호"
+              />
+            </label>
+          </div>
+
+          <div class="form-actions">
+            <button id="authChangePasswordButton" class="primary-button" type="button">비밀번호 변경</button>
+            <button id="authLogoutButton" class="ghost-button" type="button">로그아웃</button>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <div id="menuOverlay" class="menu-overlay" hidden></div>
     <aside id="menuSheet" class="menu-sheet" hidden>
@@ -419,6 +498,6 @@
     </aside>
 
     <script src="./data.js?v=20260421d"></script>
-    <script src="./app.js?v=20260422b"></script>
+    <script src="./app.js?v=20260422c"></script>
   </body>
 </html>
