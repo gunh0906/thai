@@ -8,9 +8,7 @@ This worker sits between the public GitHub Pages app and the private OpenAI API 
 - The OpenAI API key lives only in the worker secret store.
 - The browser never calls `api.openai.com` directly.
 - AI requests are allowed only for logged-in users with AI permission.
-- The first built-in account is `admin / admin123`.
-
-The default admin password should be changed immediately after the first login.
+- A first admin can be created only from worker bootstrap env values, not from hardcoded credentials.
 
 ## What this worker does
 
@@ -38,6 +36,10 @@ The default admin password should be changed immediately after the first login.
 
 ## Optional secrets / vars
 
+- `BOOTSTRAP_ADMIN_USERNAME`
+- `BOOTSTRAP_ADMIN_PASSWORD`
+  - used only when the user store is empty
+  - no built-in default account exists anymore
 - `SHARED_SECRET`
   - optional fallback for non-login internal use
 - `OPENAI_MODEL`
@@ -73,6 +75,7 @@ Important:
 cd workers/openai-assist
 wrangler login
 wrangler secret put OPENAI_API_KEY
+wrangler secret put BOOTSTRAP_ADMIN_PASSWORD
 wrangler deploy
 ```
 
@@ -82,6 +85,7 @@ Recommended vars:
 ALLOWED_ORIGINS = "https://gunh0906.github.io"
 OPENAI_MODEL = "gpt-4o-mini"
 OPENAI_REASONING_EFFORT = "low"
+BOOTSTRAP_ADMIN_USERNAME = "admin"
 ```
 
 ## What to enter in the phone app
@@ -89,8 +93,9 @@ OPENAI_REASONING_EFFORT = "low"
 In the web app menu:
 
 - `프록시 URL`: `https://<your-worker>.workers.dev/assist`
-- Login with `admin / admin123`
-- Change the admin password immediately
+- first deploy only: set `BOOTSTRAP_ADMIN_USERNAME` and `BOOTSTRAP_ADMIN_PASSWORD`
+- log in with that bootstrap admin account once
+- change the admin password immediately if needed
 - Create normal users from the admin section if needed
 
 Do not enter:

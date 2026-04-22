@@ -3,7 +3,7 @@ const EXPORT_VERSION = 1;
 const AI_STORAGE_KEY = "thai-pocketbook-ai-v1";
 const AUTH_STORAGE_KEY = "thai-pocketbook-auth-v1";
 const UI_LANGUAGE_STORAGE_KEY = "thai-pocketbook-ui-language-v1";
-const APP_VERSION = "20260422m";
+const APP_VERSION = "20260422n";
 const DEFAULT_PROXY_ENDPOINT = "https://thai-pocketbook-ai.rjsghks87.workers.dev/assist";
 const AI_ASSIST_MIN_QUERY_LENGTH = 2;
 const AI_RESULT_LIMITS = {
@@ -4864,6 +4864,7 @@ async function refreshAuthSession(options = {}) {
 function serializeAiContextEntry(entry) {
   return {
     korean: entry.korean,
+    thai: getDisplayPronunciationText(entry),
     thaiScript: getThaiScriptText(entry),
     tags: Array.isArray(entry.tags) ? entry.tags.slice(0, 3) : [],
   };
@@ -5061,7 +5062,7 @@ function normalizeAiAssistResponse(payload, query, context = null) {
     (Array.isArray(raw.searchHints) ? raw.searchHints : Array.isArray(raw.hints) ? raw.hints : [])
       .map((item) => sanitizeAiMetaText(item))
       .filter(Boolean)
-  ).slice(0, 6);
+  ).slice(0, 4);
   const referenceEntries = collectAiAssistReferenceEntries(context);
 
   const vocab = Array.isArray(raw.vocab)
@@ -5111,18 +5112,16 @@ function buildAiAssistRequestPayload(context) {
     mode: normalizeAiMode(state.aiSettings.mode),
     coverage: {
       level: coverage.level,
-      vocabCount: coverage.vocabCount,
-      sentenceCount: coverage.sentenceCount,
       hasExact: coverage.hasExact,
     },
     searchProfile: {
-      displayTerms: (context?.searchProfile?.displayTerms || []).slice(0, 6),
-      primaryTerms: (context?.searchProfile?.primaryTerms || []).slice(0, 8),
-      tags: (context?.searchProfile?.tags || []).slice(0, 6),
+      displayTerms: (context?.searchProfile?.displayTerms || []).slice(0, 4),
+      primaryTerms: (context?.searchProfile?.primaryTerms || []).slice(0, 5),
+      tags: (context?.searchProfile?.tags || []).slice(0, 4),
     },
     localResults: {
-      vocab: (context?.vocabResults || []).slice(0, 4).map(serializeAiContextEntry),
-      sentences: (context?.sentenceResults || []).slice(0, 4).map(serializeAiContextEntry),
+      vocab: (context?.vocabResults || []).slice(0, 3).map(serializeAiContextEntry),
+      sentences: (context?.sentenceResults || []).slice(0, 3).map(serializeAiContextEntry),
     },
   };
 }
@@ -9565,10 +9564,61 @@ function sanitizeAiMetaText(value) {
   return isProbablyEnglishOnlyText(text) ? "" : text;
 }
 
+const AI_PRONUNCIATION_ENGLISH_STOP_WORDS = new Set([
+  "a",
+  "an",
+  "and",
+  "are",
+  "be",
+  "bring",
+  "change",
+  "different",
+  "divide",
+  "do",
+  "find",
+  "go",
+  "how",
+  "i",
+  "is",
+  "it",
+  "many",
+  "need",
+  "no",
+  "not",
+  "of",
+  "or",
+  "please",
+  "price",
+  "share",
+  "show",
+  "switch",
+  "take",
+  "that",
+  "the",
+  "this",
+  "to",
+  "understand",
+  "what",
+  "where",
+  "why",
+  "with",
+]);
+
+function looksLikeEnglishMeaningSentence(value) {
+  const text = String(value || "").trim();
+  if (!text) return false;
+  if (/[가-힣]/.test(text) || THAI_SCRIPT_REGEX.test(text)) return false;
+  const words = text.match(/[A-Za-z]+/g) || [];
+  if (!words.length) return false;
+  const hits = words.map((word) => word.toLowerCase()).filter((word) => AI_PRONUNCIATION_ENGLISH_STOP_WORDS.has(word)).length;
+  return hits >= 1 && (hits >= Math.ceil(words.length / 4) || words.length >= 3);
+}
+
 function sanitizeAiPronunciation(value) {
   const text = String(value || "").trim();
   if (!text) return "";
   if (THAI_SCRIPT_REGEX.test(text)) return "";
+  if (looksLikeEnglishMeaningSentence(text)) return "";
   return text;
 }
 

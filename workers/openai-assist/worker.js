@@ -1,7 +1,5 @@
 const DEFAULT_MODEL = "gpt-4o-mini";
 const DEFAULT_REASONING_EFFORT = "low";
-const DEFAULT_ADMIN_USERNAME = "admin";
-const DEFAULT_ADMIN_PASSWORD = "admin123";
 const AUTH_STORE_NAME = "main";
 const PASSWORD_ITERATIONS = 100000;
 const SESSION_TTL_MS = 1000 * 60 * 60 * 24 * 7;
@@ -111,6 +109,18 @@ function redactSensitiveText(value) {
 
 function normalizeUsername(value) {
   return cleanText(value).toLowerCase();
+}
+
+function getBootstrapAdminUsername(env) {
+  return normalizeUsername(env.BOOTSTRAP_ADMIN_USERNAME || "");
+}
+
+function getBootstrapAdminPassword(env) {
+  return String(env.BOOTSTRAP_ADMIN_PASSWORD || "").trim();
+}
+
+function hasBootstrapAdminCredentials(env) {
+  return Boolean(validateUsername(getBootstrapAdminUsername(env)) && validatePassword(getBootstrapAdminPassword(env)));
 }
 
 function getAllowedOrigins(env) {
@@ -241,23 +251,18 @@ function cleanThaiPronunciation(value) {
 
 function buildPrompt(payload) {
   return [
-    "작업: 한국어-태국어 포켓북 검색을 보강하는 JSON만 반환하세요.",
-    "사용자 검색은 한국어, 태국 문자, 한국식 태국어 발음 표기일 수 있습니다.",
-    "검색어를 먼저 '문장 전체 의미'로 해석하고, 필요할 때만 단어로 나누세요.",
+    "한국어-태국어 포켓북 검색 보강용 JSON만 반환하세요.",
+    "검색어는 한국어, 태국 문자, 한국식 발음 표기일 수 있습니다.",
+    "검색어를 먼저 문장 전체 의미로 해석하고, 필요할 때만 단어로 나누세요.",
     "localResults를 우선 참고하고, 로컬 결과가 약하거나 없을 때만 새 항목을 보강하세요.",
-    "반드시 JSON만 반환하세요.",
-    "키: normalizedQuery, intent, confidence, searchHints, caution, fallbackSentence, vocab, sentences.",
-    "제한: vocab<=3, sentences<=4, tags<=4, note는 짧게.",
-    "중요 규칙:",
-    "- korean, normalizedQuery, intent, searchHints, caution, note는 한국어로 쓰세요. 영어 설명 금지.",
-    "- thai는 한국어식 발음 표기가 가장 좋습니다. 어렵다면 태국어 로마자 발음도 허용합니다. 영어 번역문 금지, 태국 문자 금지.",
-    "- thaiScript에는 태국 문자를 넣으세요.",
-    "- 가장 직접적으로 쓸 수 있는 답을 먼저 두세요.",
-    "- 검색어가 부탁, 불만, 질문, 명령이면 sentence를 우선하세요.",
-    "- localResults와 같은 의미나 같은 thaiScript가 있으면 그 발음 스타일을 최대한 맞추세요.",
-    "- confidence가 낮으면 caution에 한국어로 짧게 이유를 쓰세요.",
-    "- vocab와 sentences가 모두 비면 fallbackSentence에 가장 실용적인 번역 1개를 넣으세요.",
-    '예시 entry: {"korean":"이것을 나눠 주세요","thai":"karuna chuai baeng sing ni hai noi khrap","thaiScript":"กรุณาช่วยแบ่งสิ่งนี้ให้หน่อย","tags":["기본회화"],"note":"정중하게 부탁할 때"}',
+    "normalizedQuery, intent, searchHints, caution, korean, note는 한국어만 사용하세요.",
+    "thai는 영어 번역이 아니라 태국어 발음을 적으세요.",
+    "thai는 가능하면 소문자 로마자 발음으로, 음절을 띄어 써 주세요. 예: karuna chuai baeng sing ni hai noi khrap",
+    "thaiScript에는 반드시 태국 문자를 넣으세요.",
+    "vocab<=3, sentences<=4, tags<=4, searchHints<=4, note는 짧게.",
+    "부탁, 불만, 질문, 명령 검색이면 sentence를 우선하세요.",
+    "confidence가 낮으면 caution에 짧은 한국어 이유를 넣으세요.",
+    "vocab와 sentences가 모두 비면 fallbackSentence에 가장 실용적인 번역 1개를 넣으세요.",
     `Context:${JSON.stringify(payload)}`,
   ].join("\n");
 }
@@ -402,7 +407,7 @@ function normalizeResult(payload, model) {
     intent: cleanKoreanMetaText(payload?.intent),
     confidence: Number.isFinite(Number(payload?.confidence)) ? Number(payload.confidence) : null,
     searchHints: Array.isArray(payload?.searchHints)
-      ? payload.searchHints.map((item) => cleanKoreanMetaText(item)).filter(Boolean).slice(0, 6)
+      ? payload.searchHints.map((item) => cleanKoreanMetaText(item)).filter(Boolean).slice(0, 4)
       : [],
     caution: cleanKoreanMetaText(payload?.caution),
     vocab,
@@ -621,26 +626,22 @@ async function handleAssist(request, env) {
     mode: cleanText(payload?.mode),
     coverage: {
       level: cleanText(payload?.coverage?.level),
-      vocabCount: Number.isFinite(Number(payload?.coverage?.vocabCount)) ? Number(payload.coverage.vocabCount) : null,
-      sentenceCount: Number.isFinite(Number(payload?.coverage?.sentenceCount))
-        ? Number(payload.coverage.sentenceCount)
-        : null,
       hasExact: Boolean(payload?.coverage?.hasExact),
     },
     searchProfile: {
       displayTerms: Array.isArray(payload?.searchProfile?.displayTerms)
-        ? payload.searchProfile.displayTerms.map((item) => cleanText(item)).filter(Boolean).slice(0, 6)
+        ? payload.searchProfile.displayTerms.map((item) => cleanText(item)).filter(Boolean).slice(0, 4)
         : [],
       primaryTerms: Array.isArray(payload?.searchProfile?.primaryTerms)
-        ? payload.searchProfile.primaryTerms.map((item) => cleanText(item)).filter(Boolean).slice(0, 8)
+        ? payload.searchProfile.primaryTerms.map((item) => cleanText(item)).filter(Boolean).slice(0, 5)
         : [],
       tags: Array.isArray(payload?.searchProfile?.tags)
-        ? payload.searchProfile.tags.map((item) => cleanText(item)).filter(Boolean).slice(0, 6)
+        ? payload.searchProfile.tags.map((item) => cleanText(item)).filter(Boolean).slice(0, 4)
         : [],
     },
     localResults: {
-      vocab: limitEntries(payload?.localResults?.vocab, 4),
-      sentences: limitEntries(payload?.localResults?.sentences, 4),
+      vocab: limitEntries(payload?.localResults?.vocab, 3),
+      sentences: limitEntries(payload?.localResults?.sentences, 3),
     },
   };
 
@@ -648,7 +649,7 @@ async function handleAssist(request, env) {
   const baseUrl = cleanText(env.OPENAI_BASE_URL || "https://api.openai.com/v1").replace(/\/+$/, "");
   const requestBody = {
     model,
-    max_output_tokens: 650,
+    max_output_tokens: 500,
     text: {
       format: {
         type: "json_schema",
@@ -774,11 +775,13 @@ export class AuthStore {
       const users = (await this.state.storage.get("users")) || {};
       const sessions = (await this.state.storage.get("sessions")) || {};
 
-      if (!Object.keys(users).length) {
+      if (!Object.keys(users).length && hasBootstrapAdminCredentials(this.env)) {
         const now = new Date().toISOString();
-        const password = await buildPasswordRecord(DEFAULT_ADMIN_PASSWORD);
-        users[DEFAULT_ADMIN_USERNAME] = {
-          username: DEFAULT_ADMIN_USERNAME,
+        const bootstrapUsername = getBootstrapAdminUsername(this.env);
+        const bootstrapPassword = getBootstrapAdminPassword(this.env);
+        const password = await buildPasswordRecord(bootstrapPassword);
+        users[bootstrapUsername] = {
+          username: bootstrapUsername,
           role: "admin",
           canUseAi: true,
           enabled: true,
@@ -875,6 +878,9 @@ export class AuthStore {
     }
 
     const users = await this.loadUsers();
+    if (!Object.keys(users).length) {
+      return authStoreJsonResponse({ error: "관리자 초기 계정이 아직 설정되지 않았습니다." }, 503);
+    }
     const user = users[username];
     if (!user || user.enabled === false) {
       return authStoreJsonResponse({ error: "아이디 또는 비밀번호가 맞지 않습니다." }, 401);
