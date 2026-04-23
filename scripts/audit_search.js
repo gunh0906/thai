@@ -47,10 +47,14 @@ function buildAppContext(rootDir) {
       if (!queryMap.has(selector)) queryMap.set(selector, makeElement());
       return queryMap.get(selector);
     },
+    querySelectorAll() {
+      return [];
+    },
     createElement() {
       return makeElement();
     },
     body: makeElement(),
+    documentElement: makeElement(),
     addEventListener() {},
   };
 

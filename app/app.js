@@ -3,7 +3,7 @@ const EXPORT_VERSION = 1;
 const AI_STORAGE_KEY = "thai-pocketbook-ai-v1";
 const AUTH_STORAGE_KEY = "thai-pocketbook-auth-v1";
 const UI_LANGUAGE_STORAGE_KEY = "thai-pocketbook-ui-language-v1";
-const APP_VERSION = "20260422v";
+const APP_VERSION = "20260423a";
 const DEFAULT_PROXY_ENDPOINT = "https://thai-pocketbook-ai.rjsghks87.workers.dev/assist";
 const AI_ASSIST_MIN_QUERY_LENGTH = 2;
 const AI_RESULT_LIMITS = {
@@ -1596,6 +1596,10 @@ const SUPPLEMENTAL_CATEGORY_SENTENCE_GROUPS = [
     label: "이동",
     tags: ["이동", "숫자·시간"],
     items: [
+      ["howToGo", "어떻게 가요?", "빠이 양 응아이 캅", "ไปยังไงครับ", "길이나 방법을 물을 때 가장 기본적으로 쓰는 표현", ["가는 방법", "어떻게 가야 해요", "어떻게 가면 돼요"]],
+      ["howShouldGo", "어떻게 가야 해요?", "똥 빠이 양 응아이 캅", "ต้องไปยังไงครับ", "어떤 방법으로 가야 하는지 물을 때", ["어떻게 가요", "어떻게 가면 돼요"]],
+      ["howToCome", "어떻게 와요?", "마 양 응아이 캅", "มายังไงครับ", "오는 방법을 물을 때 가장 기본적으로 쓰는 표현", ["오는 방법", "어떻게 와야 해요", "어떻게 오면 돼요"]],
+      ["howShouldCome", "어떻게 와야 해요?", "똥 마 양 응아이 캅", "ต้องมายังไงครับ", "어떤 방법으로 와야 하는지 물을 때", ["어떻게 와요", "어떻게 오면 돼요"]],
       ["busTime", "버스가 몇 시에 와요?", "롯 밧 마 끼 몽 캅", "รถบัสมากี่โมงครับ", "버스 도착 시간을 물을 때", ["버스 시간"]],
       ["nextBus", "다음 버스는 몇 시예요?", "롯 밧 칸 떠 빠이 끼 몽 캅", "รถบัสคันต่อไปกี่โมงครับ", "다음 버스 시간을 물을 때", []],
       ["toFactory", "이 버스가 공장에 가요?", "롯 밧 칸 니 빠이 롱 응안 마이 캅", "รถบัสคันนี้ไปโรงงานไหมครับ", "공장 가는 버스인지 확인할 때", []],
@@ -5738,10 +5742,18 @@ function normalizeAiAssistResponse(payload, query, context = null) {
 
 function buildAiAssistRequestPayload(context) {
   const coverage = assessLocalSearchCoverage(context);
+  const directTranslationOnly = isGenericDirectionQuestionSearch(context?.searchProfile);
+  const localVocabResults = directTranslationOnly
+    ? (context?.vocabResults || []).filter((entry) => isEntryGenericDirectionRelated(entry, context?.searchProfile))
+    : context?.vocabResults || [];
+  const localSentenceResults = directTranslationOnly
+    ? (context?.sentenceResults || []).filter((entry) => isEntryGenericDirectionRelated(entry, context?.searchProfile))
+    : context?.sentenceResults || [];
   return {
     query: String(context?.query || "").trim(),
     scenario: state.scenario,
     mode: normalizeAiMode(state.aiSettings.mode),
+    directTranslationOnly,
     coverage: {
       level: coverage.level,
       hasExact: coverage.hasExact,
@@ -5752,8 +5764,8 @@ function buildAiAssistRequestPayload(context) {
       tags: (context?.searchProfile?.tags || []).slice(0, 4),
     },
     localResults: {
-      vocab: (context?.vocabResults || []).slice(0, 3).map(serializeAiContextEntry),
-      sentences: (context?.sentenceResults || []).slice(0, 3).map(serializeAiContextEntry),
+      vocab: localVocabResults.slice(0, 3).map(serializeAiContextEntry),
+      sentences: localSentenceResults.slice(0, 3).map(serializeAiContextEntry),
     },
   };
 }
@@ -9359,9 +9371,40 @@ function isWorkHoursSearch(searchProfile) {
   );
 }
 
+function isGenericDirectionQuestionSearch(searchProfile) {
+  const normalized = String(searchProfile?.normalized || "");
+  if (!normalized) return false;
+  if (searchProfile?.objectTerms?.length) return false;
+  if (/(버스|택시|지하철|기차|공장|회사|기숙사|숙소|호텔|식당|화장실|병원|약국|시장|역|정류장|매표소|공항)/.test(normalized)) {
+    return false;
+  }
+  return /(?:어떻게\s*(?:가|오|와)|(?:가는|오는)\s*방법|어떻게\s*(?:가야|와야|오면|가면))/.test(normalized);
+}
+
+function getGenericDirectionMode(searchProfile) {
+  const normalized = String(searchProfile?.normalized || "");
+  if (/(?:어떻게\s*(?:오|와)|오는\s*방법|어떻게\s*(?:와야|오면))/.test(normalized)) {
+    return "come";
+  }
+  if (/(?:어떻게\s*가|가는\s*방법|어떻게\s*(?:가야|가면))/.test(normalized)) {
+    return "go";
+  }
+  return "";
+}
+
 function cleanProfileDisplayTerms(searchProfile, terms) {
   const list = unique(terms).filter(Boolean);
   if (!list.length) return list;
+
+  if (isGenericDirectionQuestionSearch(searchProfile)) {
+    const filtered = list.filter((item) =>
+      /(?:어떻게가요|어떻게가야해요|어떻게가면돼요|가는방법|어떻게와요|어떻게와야해요|어떻게오면돼요|오는방법)/.test(
+        compactText(item)
+      )
+    );
+    if (filtered.length) return filtered;
+    return /오/.test(searchProfile.normalized) ? ["어떻게 와요", "오는 방법"] : ["어떻게 가요", "가는 방법"];
+  }
 
   if (isDormitoryLifeSearch(searchProfile)) {
     const filtered = list.filter((item) =>
@@ -9461,6 +9504,29 @@ function isEntryWorkHoursRelated(entry, searchProfile) {
   return matchesEntryKoreanText(entry, /야근|초과근무|연장근무|근무시간|출근|퇴근|교대근무|주간근무|야간근무|작업지시|작업 지시|품질|검사|불량|자재|부품|창고|지게차/);
 }
 
+function isEntryGenericDirectionRelated(entry, searchProfile = null) {
+  if (
+    matchesEntryKoreanText(entry, /버스|택시|지하철|기차|공장|회사|기숙사|숙소|호텔|식당|화장실|병원|약국|시장|역|정류장|매표소|공항/)
+  ) {
+    return false;
+  }
+  const baseMatch = matchesEntryCoreSearchTexts(
+    entry,
+    /어떻게가요|어떻게가야해요|어떻게가면돼요|가는방법|어떻게와요|어떻게와야해요|어떻게오면돼요|오는방법|ไปยังไง|ต้องไปยังไง|มายังไง|ต้องมายังไง/
+  );
+  if (!baseMatch) return false;
+
+  const directionMode = getGenericDirectionMode(searchProfile);
+  if (!directionMode) return true;
+  if (directionMode === "go") {
+    return !matchesEntryCoreSearchTexts(entry, /어떻게와요|어떻게와야해요|어떻게오면돼요|오는방법|มายังไง|ต้องมายังไง/);
+  }
+  if (directionMode === "come") {
+    return !matchesEntryCoreSearchTexts(entry, /어떻게가요|어떻게가야해요|어떻게가면돼요|가는방법|ไปยังไง|ต้องไปยังไง/);
+  }
+  return true;
+}
+
 function finalizeSearchEntries(entries, searchProfile, kind, limit) {
   let result = uniqueByMeaning(uniqueById(entries));
 
@@ -9508,6 +9574,12 @@ function finalizeSearchEntries(entries, searchProfile, kind, limit) {
       kind === "sentence"
         ? filterEntriesIfEnough(result, (entry) => isEntryWorkHoursRelated(entry, searchProfile), 1)
         : prioritizeEntriesIfEnough(result, (entry) => isEntryWorkHoursRelated(entry, searchProfile), 1);
+  }
+  if (isGenericDirectionQuestionSearch(searchProfile)) {
+    result =
+      kind === "sentence"
+        ? filterEntriesIfEnough(result, (entry) => isEntryGenericDirectionRelated(entry, searchProfile), 1)
+        : prioritizeEntriesIfEnough(result, (entry) => isEntryGenericDirectionRelated(entry, searchProfile), 1);
   }
 
   return result.slice(0, limit);

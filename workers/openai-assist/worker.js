@@ -253,6 +253,8 @@ function buildPrompt(payload) {
   return [
     "너는 한국어-태국어 포켓북의 AI 번역 보조다. 반드시 JSON만 반환하세요.",
     "검색어는 한국어 뜻, 태국 문자, 한국어식 발음 표기일 수 있습니다.",
+    "가장 중요한 규칙: 사용자가 검색창에 입력한 표현 자체를 첫 결과로 직접 번역하세요.",
+    "query에 없는 장소, 사물, 사람, 상황을 임의로 추가하지 마세요.",
     "검색어를 먼저 문장 전체 뜻으로 해석하고, 꼭 필요할 때만 단어로 나누세요.",
     "localResults를 먼저 참고하고, 로컬 결과가 약하거나 없을 때만 부족한 항목을 보강하세요.",
     "normalizedQuery, intent, searchHints, caution, korean, note는 모두 한국어만 사용하세요.",
@@ -265,6 +267,9 @@ function buildPrompt(payload) {
     "부탁, 불만, 질문, 명령 검색이면 sentence를 우선 채우세요.",
     "confidence가 낮으면 caution에 짧은 한국어 이유를 넣으세요.",
     "vocab와 sentences가 모두 비면 fallbackSentence에 가장 실용적인 번역 1개를 넣으세요.",
+    payload?.directTranslationOnly
+      ? "이번 요청은 직접 번역 우선 모드입니다. localResults가 어색하거나 query와 다르면 따르지 말고 query 문장 그대로 번역하세요."
+      : "",
     `Context:${JSON.stringify(payload)}`,
   ].join("\n");
 }
@@ -630,6 +635,7 @@ async function handleAssist(request, env) {
     query,
     scenario: cleanText(payload?.scenario),
     mode: cleanText(payload?.mode),
+    directTranslationOnly: Boolean(payload?.directTranslationOnly),
     coverage: {
       level: cleanText(payload?.coverage?.level),
       hasExact: Boolean(payload?.coverage?.hasExact),
