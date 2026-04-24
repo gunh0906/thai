@@ -64,6 +64,25 @@
   - first visible result: 721 ms
   - final full data: `12985` vocab, `8196` sentences
 
+## Live GitHub Pages Probe
+
+- URL: `https://gunh0906.github.io/thai/?probe=live-focus-warmup-*`
+- Deployed app: `app.js?v=20260424i`
+- Verified assets:
+  - `app.js?v=20260424i`: `APP_VERSION` matched
+  - `ui/render-app.js?v=20260424i`: focused input guard matched
+- Input: `금형`
+- Result:
+  - page load: 3627 ms
+  - initial 3 second idle before focus: 0 data requests
+  - after focus warmup: input stayed `금형`
+  - warmup requests: `data-index.js` 1, `core-basic.js` 1, legacy `data-core.js` 0
+  - search requests: `core-work.js` 1, full `data.js` 1 in background
+  - first visible result: 949 ms
+  - final loaded shards: `basic`, `work`
+  - final full data: `12985` vocab, `8196` sentences
+  - result cards: 8 vocab, 5 sentences
+
 ## Next Start Point
 
 - If weak mobile networks still feel slow, reduce `data-index.js` further by replacing token-level routing with a smaller hand-authored domain keyword manifest.
