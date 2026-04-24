@@ -1,7 +1,7 @@
 ﻿const STORAGE_KEY = "thai-pocketbook-custom-v1";
 import { createAiAssistRequester } from "./ai/request-ai-assist.js";
 import { createRenderAiAssist } from "./ai/render-ai-assist.js";
-import { createRenderAdminUsersList } from "./admin/render-admin-users.js";
+import { createRenderAdminUsersList } from "./admin/render-admin-users.js?v=20260424e";
 import { createRenderAuthSection } from "./auth/render-auth.js";
 import { createBoot, bootstrapApp } from "./core/boot.js";
 import { createWireEvents } from "./core/wire-events.js";
@@ -25,7 +25,7 @@ const EXPORT_VERSION = 1;
 const AI_STORAGE_KEY = "thai-pocketbook-ai-v1";
 const AUTH_STORAGE_KEY = "thai-pocketbook-auth-v1";
 const UI_LANGUAGE_STORAGE_KEY = "thai-pocketbook-ui-language-v1";
-const APP_VERSION = "20260424d";
+const APP_VERSION = "20260424e";
 const INITIAL_AUTH_PASSWORD = "1234";
 const DEFAULT_PROXY_ENDPOINT = "https://thai-pocketbook-ai.rjsghks87.workers.dev/assist";
 const AI_ASSIST_MIN_QUERY_LENGTH = 2;

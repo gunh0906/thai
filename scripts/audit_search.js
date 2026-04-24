@@ -44,6 +44,10 @@ function readTextFile(filePath) {
   return fs.readFileSync(filePath, "utf8").replace(/^\uFEFF/, "");
 }
 
+function stripImportSuffix(specifier) {
+  return String(specifier || "").replace(/[?#].*$/, "");
+}
+
 function collectModuleFiles(entryFile, seen = new Set(), ordered = []) {
   const resolved = path.resolve(entryFile);
   if (seen.has(resolved)) return ordered;
@@ -55,7 +59,7 @@ function collectModuleFiles(entryFile, seen = new Set(), ordered = []) {
   while ((match = importPattern.exec(source)) !== null) {
     const specifier = String(match[1] || "");
     if (!specifier.startsWith(".")) continue;
-    collectModuleFiles(path.resolve(path.dirname(resolved), specifier), seen, ordered);
+    collectModuleFiles(path.resolve(path.dirname(resolved), stripImportSuffix(specifier)), seen, ordered);
   }
 
   ordered.push(resolved);
