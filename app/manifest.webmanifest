@@ -4,8 +4,8 @@
   "description": "한국어와 태국어로 단어와 회화를 빠르게 찾는 모바일 포켓북",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#fbf4ec",
-  "theme_color": "#fff0de",
+  "background_color": "#f6f8fc",
+  "theme_color": "#243A8F",
   "icons": [
     {
       "src": "./icon.svg",
