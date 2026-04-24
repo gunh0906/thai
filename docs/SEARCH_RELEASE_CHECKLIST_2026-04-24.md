@@ -91,3 +91,16 @@
 - Deploy check still required
   - After push, live HTML must return `app.js?v=20260424b`.
   - Authenticated live AI card proof remains required for `/assist`.
+
+## 8. Post-push verification - 20260424b
+
+- Git
+  - `629f875 Expand worksite search and verify secret handling`
+  - pushed to `origin/main`
+- Live Pages
+  - `https://gunh0906.github.io/thai/?v=20260424b` -> `app.js?v=20260424b`
+  - `https://gunh0906.github.io/thai/app.js?v=20260424b` -> contains `APP_VERSION = "20260424b"`
+  - live JS contains `productionPlanWork`
+  - live JS has no `sk-...` key pattern
+- Remaining live gap
+  - Authenticated `/assist` card proof still requires a valid session token.

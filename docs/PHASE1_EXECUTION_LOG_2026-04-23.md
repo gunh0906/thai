@@ -1276,3 +1276,26 @@
 1. Commit and push the `20260424b` static/search update.
 2. Verify live HTML returns `app.js?v=20260424b`.
 3. In an authenticated browser session, spot-check `이건 폐기해야 해요`, `조치 완료했어요`, and one AI `/assist` card.
+
+## 28. Post-push Live Verification - 2026-04-24
+
+### Completed in this cycle
+
+- Git
+  - committed `629f875 Expand worksite search and verify secret handling`
+  - pushed `main` to `origin/main`
+- Live Pages
+  - `https://gunh0906.github.io/thai/?v=20260424b` returns `app.js?v=20260424b`
+  - live `app.js?v=20260424b` contains `APP_VERSION = "20260424b"`
+  - live `app.js?v=20260424b` contains the new `productionPlanWork` search rule
+  - live `app.js?v=20260424b` has no `sk-...` API key pattern
+
+### Still unverified
+
+- Authenticated live `/assist` card proof is still pending because it requires a valid user session token.
+
+### Immediate next start
+
+1. On the phone or authenticated browser, hard refresh the app and search `이건 폐기해야 해요`.
+2. Confirm vocab top result is `폐기` and sentence top result is `이건 폐기해야 해요?`.
+3. Run one authenticated AI assist query and confirm no `한국어 발음 미보강` fallback appears when local pronunciation exists.
