@@ -249,6 +249,94 @@ function cleanThaiPronunciation(value) {
   return cleaned;
 }
 
+function compactLookupKey(value) {
+  return cleanText(value).replace(/[^0-9a-zA-Z가-힣\u0E00-\u0E7F]+/g, "");
+}
+
+function buildLocalResultLookup(localResults) {
+  const koreanMap = new Map();
+  const thaiScriptMap = new Map();
+  [localResults?.vocab, localResults?.sentences].forEach((entries) => {
+    if (!Array.isArray(entries)) return;
+    entries.forEach((entry) => {
+      const korean = cleanKoreanMetaText(entry?.korean);
+      const rawThai = cleanText(entry?.thai);
+      const rawThaiScript = cleanText(entry?.thaiScript);
+      const fallback = {
+        thai: cleanThaiPronunciation(rawThai),
+        thaiScript: rawThaiScript || (containsThai(rawThai) ? rawThai : ""),
+      };
+      const koreanKey = compactLookupKey(korean);
+      if (koreanKey && !koreanMap.has(koreanKey)) {
+        koreanMap.set(koreanKey, fallback);
+      }
+      const thaiScriptKey = compactLookupKey(fallback.thaiScript);
+      if (thaiScriptKey && !thaiScriptMap.has(thaiScriptKey)) {
+        thaiScriptMap.set(thaiScriptKey, fallback);
+      }
+    });
+  });
+  return { koreanMap, thaiScriptMap };
+}
+
+function findLocalResultFallback(localResultLookup, korean, thaiScript = "") {
+  const koreanKey = compactLookupKey(korean);
+  if (koreanKey) {
+    const koreanFallback = localResultLookup?.koreanMap?.get(koreanKey);
+    if (koreanFallback) return koreanFallback;
+  }
+  const thaiScriptKey = compactLookupKey(thaiScript);
+  if (thaiScriptKey) {
+    return localResultLookup?.thaiScriptMap?.get(thaiScriptKey) || null;
+  }
+  return null;
+}
+
+function summarizePromptEntry(entry) {
+  const korean = cleanKoreanMetaText(entry?.korean);
+  const thai = cleanThaiPronunciation(entry?.thai);
+  const thaiScript = cleanText(entry?.thaiScript) || (containsThai(entry?.thai) ? cleanText(entry?.thai) : "");
+  const note = cleanKoreanMetaText(entry?.note);
+  return {
+    k: korean,
+    t: thai,
+    s: thaiScript,
+    n: note,
+  };
+}
+
+function buildPromptContext(payload) {
+  return {
+    q: cleanText(payload?.query),
+    m: cleanText(payload?.mode),
+    d: Boolean(payload?.directTranslationOnly),
+    c: {
+      l: cleanText(payload?.coverage?.level),
+      e: Boolean(payload?.coverage?.hasExact),
+    },
+    h: {
+      d: Array.isArray(payload?.searchProfile?.displayTerms)
+        ? payload.searchProfile.displayTerms.map((item) => cleanKoreanMetaText(item)).filter(Boolean).slice(0, 4)
+        : [],
+      p: Array.isArray(payload?.searchProfile?.primaryTerms)
+        ? payload.searchProfile.primaryTerms.map((item) => cleanKoreanMetaText(item)).filter(Boolean).slice(0, 5)
+        : [],
+      t: Array.isArray(payload?.searchProfile?.tags)
+        ? payload.searchProfile.tags.map((item) => cleanKoreanMetaText(item)).filter(Boolean).slice(0, 4)
+        : [],
+    },
+    lv: Array.isArray(payload?.localResults?.vocab)
+      ? payload.localResults.vocab.map((entry) => summarizePromptEntry(entry)).filter((entry) => entry.k || entry.t || entry.s).slice(0, 3)
+      : [],
+    ls: Array.isArray(payload?.localResults?.sentences)
+      ? payload.localResults.sentences
+          .map((entry) => summarizePromptEntry(entry))
+          .filter((entry) => entry.k || entry.t || entry.s)
+          .slice(0, 3)
+      : [],
+  };
+}
+
 function buildPrompt(payload) {
   return [
     "너는 한국어-태국어 포켓북의 AI 번역 보조다. 반드시 JSON만 반환하세요.",
@@ -268,9 +356,9 @@ function buildPrompt(payload) {
     "confidence가 낮으면 caution에 짧은 한국어 이유를 넣으세요.",
     "vocab와 sentences가 모두 비면 fallbackSentence에 가장 실용적인 번역 1개를 넣으세요.",
     payload?.directTranslationOnly
-      ? "이번 요청은 직접 번역 우선 모드입니다. localResults가 어색하거나 query와 다르면 따르지 말고 query 문장 그대로 번역하세요."
+      ? "이번 요청은 직접 번역 우선 모드입니다. localResults가 어색하거나 query와 다르면 따르지 말고 query 문장 그대로 번역하세요. 이 모드에서는 sentences[0] 또는 fallbackSentence가 반드시 query 자체의 직접 번역이어야 합니다."
       : "",
-    `Context:${JSON.stringify(payload)}`,
+    `Context:${JSON.stringify(buildPromptContext(payload))}`,
   ].join("\n");
 }
 
@@ -389,28 +477,50 @@ function parseJsonSafely(text) {
   }
 }
 
-function normalizeAiEntries(entries, limit) {
+function dedupeAiEntries(entries, limit) {
+  const seen = new Set();
+  return entries.filter((entry) => {
+    const key = [compactLookupKey(entry?.korean), compactLookupKey(entry?.thaiScript || entry?.thai)].join("::");
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  }).slice(0, limit);
+}
+
+function normalizeAiEntries(entries, limit, localResultLookup = { koreanMap: new Map(), thaiScriptMap: new Map() }) {
   if (!Array.isArray(entries)) return [];
-  return entries
-    .slice(0, limit)
-    .map((entry) => {
+  return dedupeAiEntries(
+    entries.map((entry) => {
+      const korean = cleanKoreanMetaText(entry.korean);
       const rawThai = cleanText(entry?.thai);
       const rawThaiScript = cleanText(entry?.thaiScript);
+      const normalizedThaiScript = rawThaiScript || (containsThai(rawThai) ? rawThai : "");
+      const fallback = findLocalResultFallback(localResultLookup, korean, normalizedThaiScript);
       return {
-        korean: cleanKoreanMetaText(entry.korean),
-        thai: cleanThaiPronunciation(rawThai),
-        thaiScript: rawThaiScript || (containsThai(rawThai) ? rawThai : ""),
+        korean,
+        thai: cleanThaiPronunciation(rawThai) || fallback?.thai || "",
+        thaiScript: normalizedThaiScript || fallback?.thaiScript || "",
         tags: Array.isArray(entry.tags) ? entry.tags.map((item) => cleanText(item)).filter(Boolean).slice(0, 5) : [],
         note: cleanKoreanMetaText(entry.note),
       };
     })
-    .filter((entry) => entry.korean || entry.thai || entry.thaiScript);
+      .filter((entry) => entry.korean || entry.thai || entry.thaiScript),
+    limit
+  );
 }
 
-function normalizeResult(payload, model) {
-  const fallbackSentence = normalizeAiEntries(payload?.fallbackSentence ? [payload.fallbackSentence] : [], 1);
-  const vocab = normalizeAiEntries(payload?.vocab, 3);
-  const sentences = normalizeAiEntries(payload?.sentences, 4);
+function normalizeResult(payload, model, requestPayload = null) {
+  const localResultLookup = buildLocalResultLookup(requestPayload?.localResults);
+  const fallbackSentence = normalizeAiEntries(payload?.fallbackSentence ? [payload.fallbackSentence] : [], 1, localResultLookup);
+  const vocab = normalizeAiEntries(payload?.vocab, 3, localResultLookup);
+  const sentences = normalizeAiEntries(payload?.sentences, 4, localResultLookup);
+  const directTranslationOnly = Boolean(requestPayload?.directTranslationOnly);
+  const resolvedSentences =
+    directTranslationOnly && fallbackSentence.length
+      ? dedupeAiEntries([...fallbackSentence, ...sentences], 4)
+      : sentences.length
+        ? sentences
+        : fallbackSentence;
 
   return {
     model,
@@ -422,7 +532,7 @@ function normalizeResult(payload, model) {
       : [],
     caution: cleanKoreanMetaText(payload?.caution),
     vocab,
-    sentences: sentences.length ? sentences : fallbackSentence,
+    sentences: resolvedSentences,
   };
 }
 
@@ -767,7 +877,7 @@ async function handleAssist(request, env) {
     );
   }
 
-  return jsonResponse(request, env, normalizeResult(parsed, model));
+    return jsonResponse(request, env, normalizeResult(parsed, model, requestPayload));
 }
 
 export class AuthStore {

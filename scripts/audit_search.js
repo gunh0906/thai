@@ -40,6 +40,41 @@ function makeElement() {
   };
 }
 
+function readTextFile(filePath) {
+  return fs.readFileSync(filePath, "utf8").replace(/^\uFEFF/, "");
+}
+
+function collectModuleFiles(entryFile, seen = new Set(), ordered = []) {
+  const resolved = path.resolve(entryFile);
+  if (seen.has(resolved)) return ordered;
+  seen.add(resolved);
+
+  const source = readTextFile(resolved);
+  const importPattern = /^\s*import\b[\s\S]*?\bfrom\s+["'](.+?)["'];?\s*$/gm;
+  let match = null;
+  while ((match = importPattern.exec(source)) !== null) {
+    const specifier = String(match[1] || "");
+    if (!specifier.startsWith(".")) continue;
+    collectModuleFiles(path.resolve(path.dirname(resolved), specifier), seen, ordered);
+  }
+
+  ordered.push(resolved);
+  return ordered;
+}
+
+function transpileModuleToScript(source) {
+  return String(source || "")
+    .replace(/^\uFEFF/, "")
+    .replace(/^\s*import\b[\s\S]*?;\s*$/gm, "")
+    .replace(/^\s*export\s+\{[^}]+\};?\s*$/gm, "")
+    .replace(/\bexport\s+(?=(function|const|let|class))/g, "");
+}
+
+function runModuleLikeScript(context, filePath) {
+  const code = transpileModuleToScript(readTextFile(filePath));
+  vm.runInContext(code, context, { filename: path.basename(filePath) });
+}
+
 function buildAppContext(rootDir) {
   const queryMap = new Map();
   const document = {
@@ -106,7 +141,9 @@ function buildAppContext(rootDir) {
 
   vm.createContext(context);
   vm.runInContext(fs.readFileSync(path.join(rootDir, "app", "data.js"), "utf8"), context, { filename: "data.js" });
-  vm.runInContext(fs.readFileSync(path.join(rootDir, "app", "app.js"), "utf8"), context, { filename: "app.js" });
+  collectModuleFiles(path.join(rootDir, "app", "app.js")).forEach((filePath) => {
+    runModuleLikeScript(context, filePath);
+  });
   vm.runInContext(
     `
       globalThis.__searchAuditApi = {
@@ -124,11 +161,11 @@ function buildAppContext(rootDir) {
         buildGeneratedPredicateEntries,
         buildGeneratedThaiMeaningEntries,
         findExactEntry,
-        getVocabResults,
-        getSentenceResults,
+        shouldKeepExactSentenceMatch,
+        getVocabResults: (...args) => searchEngine.getVocabResults(...args),
+        getSentenceResults: (...args) => searchEngine.getSentenceResults(...args),
         uniqueById,
         uniqueByMeaning,
-        uniqueByCompactKorean,
         mergeGeneratedEntrySets,
         finalizeSearchEntries,
         isSentenceLikeVocabEntry,
@@ -190,8 +227,12 @@ function createSearchRunner(context) {
     );
     const exactSentence = numberMode || dateMode ? null : api.findExactEntry(merged.sentences, profile, { includeTemplates: true });
     const strictPhraseMode = Boolean(profile.templateTerms.length || (profile.objectTerms.length && profile.actionTerms.length));
+    const exactSentenceIsExactQuery = exactSentence && api.compactText(exactSentence.korean) === api.compactText(query);
     const safeExactSentence =
-      (strictPhraseMode && exactSentence?.source === "generated-bulk") || generatedWhereQuestion.suppressFallbackSentences
+      exactSentence &&
+      ((strictPhraseMode && exactSentence.source === "generated-bulk") ||
+        (generatedWhereQuestion.suppressFallbackSentences && !exactSentenceIsExactQuery) ||
+        !api.shouldKeepExactSentenceMatch(exactSentence, profile))
         ? null
         : exactSentence;
     const refinedVocab =
@@ -377,9 +418,174 @@ function inspectQueries(rootDir, queries) {
   });
 }
 
+function hasCompactExact(runner, texts, expected) {
+  const target = runner.compact(expected);
+  return Boolean(target) && texts.some((text) => runner.compact(text) === target);
+}
+
+function hasCompactIncludes(runner, texts, expected) {
+  const target = runner.compact(expected);
+  return Boolean(target) && texts.some((text) => runner.compact(text).includes(target));
+}
+
+function anyCompactExact(runner, texts, expectedList) {
+  return (expectedList || []).some((expected) => hasCompactExact(runner, texts, expected));
+}
+
+function anyCompactIncludes(runner, texts, expectedList) {
+  return (expectedList || []).some((expected) => hasCompactIncludes(runner, texts, expected));
+}
+
+function evaluateRegressionCase(runner, testCase) {
+  const query = String(testCase?.query || "").trim();
+  const expect = testCase?.expect || {};
+  const result = runner.search(query);
+  const vocabTexts = result.vocab.map((entry) => String(entry.korean || "").trim());
+  const sentenceTexts = result.sentences.map((entry) => String(entry.korean || "").trim());
+  const topVocab = vocabTexts.slice(0, 3);
+  const topSentences = sentenceTexts.slice(0, 3);
+  const failures = [];
+
+  if (expect.vocabTop1 && !hasCompactExact(runner, topVocab.slice(0, 1), expect.vocabTop1)) {
+    failures.push(`vocab top1 mismatch: expected "${expect.vocabTop1}"`);
+  }
+  if (expect.vocabTop1Includes && !hasCompactIncludes(runner, topVocab.slice(0, 1), expect.vocabTop1Includes)) {
+    failures.push(`vocab top1 should include "${expect.vocabTop1Includes}"`);
+  }
+  if (Array.isArray(expect.vocabTop3Includes)) {
+    expect.vocabTop3Includes.forEach((expected) => {
+      if (!hasCompactExact(runner, topVocab, expected)) {
+        failures.push(`vocab top3 missing "${expected}"`);
+      }
+    });
+  }
+  if (Array.isArray(expect.vocabTop3IncludesAny) && expect.vocabTop3IncludesAny.length) {
+    if (!anyCompactExact(runner, topVocab, expect.vocabTop3IncludesAny)) {
+      failures.push(`vocab top3 missing any of [${expect.vocabTop3IncludesAny.join(", ")}]`);
+    }
+  }
+  if (Array.isArray(expect.forbidVocabTop1)) {
+    expect.forbidVocabTop1.forEach((forbidden) => {
+      if (hasCompactIncludes(runner, topVocab.slice(0, 1), forbidden)) {
+        failures.push(`vocab top1 should not include "${forbidden}"`);
+      }
+    });
+  }
+
+  if (expect.sentenceTop1 && !hasCompactExact(runner, topSentences.slice(0, 1), expect.sentenceTop1)) {
+    failures.push(`sentence top1 mismatch: expected "${expect.sentenceTop1}"`);
+  }
+  if (expect.sentenceTop1Includes && !hasCompactIncludes(runner, topSentences.slice(0, 1), expect.sentenceTop1Includes)) {
+    failures.push(`sentence top1 should include "${expect.sentenceTop1Includes}"`);
+  }
+  if (Array.isArray(expect.sentenceTop3Includes)) {
+    expect.sentenceTop3Includes.forEach((expected) => {
+      if (!hasCompactExact(runner, topSentences, expected)) {
+        failures.push(`sentence top3 missing "${expected}"`);
+      }
+    });
+  }
+  if (Array.isArray(expect.sentenceTop3IncludesAny) && expect.sentenceTop3IncludesAny.length) {
+    if (!anyCompactExact(runner, topSentences, expect.sentenceTop3IncludesAny)) {
+      failures.push(`sentence top3 missing any of [${expect.sentenceTop3IncludesAny.join(", ")}]`);
+    }
+  }
+  if (Array.isArray(expect.sentenceTop3IncludesAnyText) && expect.sentenceTop3IncludesAnyText.length) {
+    if (!anyCompactIncludes(runner, topSentences, expect.sentenceTop3IncludesAnyText)) {
+      failures.push(`sentence top3 missing any text of [${expect.sentenceTop3IncludesAnyText.join(", ")}]`);
+    }
+  }
+  if (Array.isArray(expect.forbidSentenceTop1)) {
+    expect.forbidSentenceTop1.forEach((forbidden) => {
+      if (hasCompactIncludes(runner, topSentences.slice(0, 1), forbidden)) {
+        failures.push(`sentence top1 should not include "${forbidden}"`);
+      }
+    });
+  }
+
+  return {
+    query,
+    category: String(testCase?.category || "").trim(),
+    passed: failures.length === 0,
+    failures,
+    topVocab,
+    topSentences,
+  };
+}
+
+function summarizeRegressionCategories(results) {
+  const counts = new Map();
+  results.forEach((result) => {
+    const key = String(result.category || "uncategorized").trim() || "uncategorized";
+    const current = counts.get(key) || { total: 0, passed: 0, failed: 0 };
+    current.total += 1;
+    if (result.passed) {
+      current.passed += 1;
+    } else {
+      current.failed += 1;
+    }
+    counts.set(key, current);
+  });
+  return Object.fromEntries(
+    [...counts.entries()]
+      .sort((left, right) => left[0].localeCompare(right[0], "ko"))
+      .map(([category, summary]) => [category, summary])
+  );
+}
+
+function runRegressionSuite(rootDir, casesPath, options = {}) {
+  const context = buildAppContext(rootDir);
+  const runner = createSearchRunner(context);
+  const resolvedPath = path.resolve(rootDir, casesPath || path.join("scripts", "search_regression_cases.json"));
+  const categoryFilter = String(options?.category || "").trim();
+  const cases = JSON.parse(readTextFile(resolvedPath)).filter((testCase) => {
+    if (!categoryFilter) return true;
+    return String(testCase?.category || "").trim() === categoryFilter;
+  });
+  const results = cases.map((testCase) => evaluateRegressionCase(runner, testCase));
+  const failed = results.filter((item) => !item.passed);
+  return {
+    generatedAt: new Date().toISOString(),
+    casesPath: resolvedPath,
+    categoryFilter,
+    summary: {
+      total: results.length,
+      passed: results.length - failed.length,
+      failed: failed.length,
+    },
+    categorySummary: summarizeRegressionCategories(results),
+    failedCases: failed,
+  };
+}
+
 function main() {
   const rootDir = path.resolve(__dirname, "..");
   const args = process.argv.slice(2);
+  if (args[0] === "--regression" || args[0] === "--regression-category") {
+    let casesPath = null;
+    let category = "";
+    if (args[0] === "--regression-category") {
+      category = String(args[1] || "").trim();
+      casesPath = args[2] || null;
+    } else {
+      for (let index = 1; index < args.length; index += 1) {
+        if (args[index] === "--category") {
+          category = String(args[index + 1] || "").trim();
+          index += 1;
+          continue;
+        }
+        if (!casesPath) {
+          casesPath = args[index];
+        }
+      }
+    }
+    const report = runRegressionSuite(rootDir, casesPath, { category });
+    console.log(JSON.stringify(report, null, 2));
+    if (report.summary.failed) {
+      process.exitCode = 1;
+    }
+    return;
+  }
   if (args.length) {
     console.log(JSON.stringify(inspectQueries(rootDir, args), null, 2));
     return;

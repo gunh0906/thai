@@ -1,0 +1,1206 @@
+[
+  {
+    "category": "core-vocab",
+    "query": "화장실",
+    "expect": {
+      "vocabTop1": "화장실",
+      "sentenceTop3IncludesAnyText": ["화장실"]
+    }
+  },
+  {
+    "category": "core-sentence",
+    "query": "어떻게 가요",
+    "expect": {
+      "sentenceTop1": "어떻게 가요?"
+    }
+  },
+  {
+    "category": "core-sentence",
+    "query": "방 바꿔주세요",
+    "expect": {
+      "sentenceTop1": "방 바꿔주세요"
+    }
+  },
+  {
+    "category": "core-sentence",
+    "query": "건강하세요?",
+    "expect": {
+      "sentenceTop1": "건강하세요?"
+    }
+  },
+  {
+    "category": "work-admin",
+    "query": "급여명세서 보여 주세요",
+    "expect": {
+      "sentenceTop1": "급여명세서 보여 주세요"
+    }
+  },
+  {
+    "category": "typo-inflection",
+    "query": "옴기다",
+    "expect": {
+      "vocabTop1": "옮기다"
+    }
+  },
+  {
+    "category": "typo-inflection",
+    "query": "급해",
+    "expect": {
+      "vocabTop3Includes": ["급하다."]
+    }
+  },
+  {
+    "category": "typo-inflection",
+    "query": "나눠줘",
+    "expect": {
+      "vocabTop1": "나누다"
+    }
+  },
+  {
+    "category": "core-sentence",
+    "query": "괜찮아요?",
+    "expect": {
+      "sentenceTop3IncludesAnyText": ["괜찮아요"]
+    }
+  },
+  {
+    "category": "laundry-where",
+    "query": "세탁기 어디에 있어요",
+    "expect": {
+      "vocabTop1": "세탁기",
+      "sentenceTop1Includes": "세탁기",
+      "forbidVocabTop1": ["건조기"],
+      "forbidSentenceTop1": ["건조기"]
+    }
+  },
+  {
+    "category": "laundry-where",
+    "query": "세탁기 어디예요",
+    "expect": {
+      "vocabTop1": "세탁기",
+      "sentenceTop1Includes": "세탁기",
+      "forbidVocabTop1": ["건조기"],
+      "forbidSentenceTop1": ["건조기"]
+    }
+  },
+  {
+    "category": "laundry-where",
+    "query": "건조기 어디에 있어요",
+    "expect": {
+      "vocabTop1": "건조기",
+      "sentenceTop1Includes": "건조기",
+      "forbidVocabTop1": ["세탁기"],
+      "forbidSentenceTop1": ["세탁기"]
+    }
+  },
+  {
+    "category": "documents",
+    "query": "이 서류 복사해 주세요",
+    "expect": {
+      "sentenceTop1": "이 서류 복사해 주세요"
+    }
+  },
+  {
+    "category": "documents",
+    "query": "프린트해 주세요",
+    "expect": {
+      "sentenceTop1": "프린트해 주세요"
+    }
+  },
+  {
+    "category": "dorm-life",
+    "query": "화장지가 없어요",
+    "expect": {
+      "sentenceTop1": "화장지가 없어요"
+    }
+  },
+  {
+    "category": "repair",
+    "query": "문이 안 열려요",
+    "expect": {
+      "sentenceTop1": "문이 안 열려요"
+    }
+  },
+  {
+    "category": "repair",
+    "query": "변기가 막혔어요",
+    "expect": {
+      "sentenceTop1": "변기가 막혔어요"
+    }
+  },
+  {
+    "category": "repair",
+    "query": "전등이 안 켜져요",
+    "expect": {
+      "sentenceTop1": "전등이 안 켜져요"
+    }
+  },
+  {
+    "category": "emergency",
+    "query": "경찰서가 어디예요",
+    "expect": {
+      "sentenceTop1": "경찰서가 어디예요?",
+      "vocabTop3Includes": ["경찰서"]
+    }
+  },
+  {
+    "category": "emergency",
+    "query": "응급실이 어디예요",
+    "expect": {
+      "sentenceTop1": "응급실이 어디예요?",
+      "vocabTop3Includes": ["응급실"]
+    }
+  },
+  {
+    "category": "emergency",
+    "query": "분실 신고하고 싶어요",
+    "expect": {
+      "sentenceTop1": "분실 신고하고 싶어요"
+    }
+  },
+  {
+    "category": "restaurant",
+    "query": "메뉴판 보여 주세요",
+    "expect": {
+      "sentenceTop1": "메뉴판 보여 주세요",
+      "vocabTop1": "메뉴판"
+    }
+  },
+  {
+    "category": "restaurant",
+    "query": "채식 메뉴 있어요?",
+    "expect": {
+      "sentenceTop1": "채식 메뉴 있어요?"
+    }
+  },
+  {
+    "category": "restaurant",
+    "query": "비건 메뉴 있어요?",
+    "expect": {
+      "sentenceTop1": "비건 메뉴 있어요?"
+    }
+  },
+  {
+    "category": "restaurant",
+    "query": "고수 빼 주세요",
+    "expect": {
+      "sentenceTop1": "고수 빼 주세요"
+    }
+  },
+  {
+    "category": "restaurant",
+    "query": "얼음 빼 주세요",
+    "expect": {
+      "sentenceTop1": "얼음 빼 주세요"
+    }
+  },
+  {
+    "category": "shopping",
+    "query": "카드 돼요?",
+    "expect": {
+      "sentenceTop1": "카드 돼요?"
+    }
+  },
+  {
+    "category": "shopping",
+    "query": "영수증 주세요",
+    "expect": {
+      "sentenceTop1": "영수증 주세요"
+    }
+  },
+  {
+    "category": "shopping",
+    "query": "QR 결제 돼요?",
+    "expect": {
+      "sentenceTop1": "QR 결제 돼요?"
+    }
+  },
+  {
+    "category": "shopping",
+    "query": "환전 어디서 해요",
+    "expect": {
+      "vocabTop1": "환전소",
+      "sentenceTop1Includes": "환전 어디서 해요"
+    }
+  },
+  {
+    "category": "shopping",
+    "query": "ATM이 어디예요",
+    "expect": {
+      "sentenceTop1": "ATM이 어디예요?",
+      "vocabTop1": "ATM"
+    }
+  },
+  {
+    "category": "transport",
+    "query": "표 어디서 사요",
+    "expect": {
+      "vocabTop1": "매표소",
+      "sentenceTop1Includes": "매표소"
+    }
+  },
+  {
+    "category": "transport",
+    "query": "버스표는 어디서 사요?",
+    "expect": {
+      "vocabTop1": "매표소",
+      "sentenceTop1Includes": "버스표는 어디서 사요"
+    }
+  },
+  {
+    "category": "transport",
+    "query": "기차표는 어디서 사요?",
+    "expect": {
+      "vocabTop1": "매표소",
+      "sentenceTop1Includes": "기차표는 어디서 사요"
+    }
+  },
+  {
+    "category": "transport",
+    "query": "버스 정류장이 어디예요",
+    "expect": {
+      "sentenceTop1Includes": "버스 정류장"
+    }
+  },
+  {
+    "category": "transport",
+    "query": "주소 보여 주세요",
+    "expect": {
+      "sentenceTop1": "주소 보여 주세요"
+    }
+  },
+  {
+    "category": "health",
+    "query": "병원이 어디예요",
+    "expect": {
+      "sentenceTop1": "병원이 어디예요?",
+      "vocabTop3Includes": ["병원"]
+    }
+  },
+  {
+    "category": "health",
+    "query": "약국이 어디예요",
+    "expect": {
+      "sentenceTop1": "약국이 어디예요?",
+      "vocabTop3Includes": ["약국"]
+    }
+  },
+  {
+    "category": "health",
+    "query": "진통제 주세요",
+    "expect": {
+      "vocabTop1": "진통제",
+      "sentenceTop1": "진통제 주세요"
+    }
+  },
+  {
+    "category": "health",
+    "query": "감기약 주세요",
+    "expect": {
+      "vocabTop1": "감기약",
+      "sentenceTop1": "감기약 주세요"
+    }
+  },
+  {
+    "category": "health",
+    "query": "진료받고 싶어요",
+    "expect": {
+      "sentenceTop1": "진료받고 싶어요",
+      "vocabTop3IncludesAny": ["병원", "의사"]
+    }
+  },
+  {
+    "category": "health",
+    "query": "처방전 필요해요",
+    "expect": {
+      "vocabTop1": "처방전",
+      "sentenceTop1": "처방전 필요해요"
+    }
+  },
+  {
+    "category": "billing",
+    "query": "공과금 어디서 내요",
+    "expect": {
+      "vocabTop1": "공과금",
+      "sentenceTop1Includes": "공과금"
+    }
+  },
+  {
+    "category": "billing",
+    "query": "전기세 어디서 내요",
+    "expect": {
+      "vocabTop1": "전기세",
+      "sentenceTop1Includes": "전기세"
+    }
+  },
+  {
+    "category": "billing",
+    "query": "수도세 어디서 내요",
+    "expect": {
+      "vocabTop1": "수도세",
+      "sentenceTop1Includes": "수도세"
+    }
+  },
+  {
+    "category": "billing",
+    "query": "관리비 얼마예요",
+    "expect": {
+      "vocabTop1": "관리비",
+      "sentenceTop1Includes": "관리비"
+    }
+  },
+  {
+    "category": "billing",
+    "query": "기숙사비 얼마예요",
+    "expect": {
+      "vocabTop1": "기숙사비",
+      "sentenceTop1Includes": "기숙사비"
+    }
+  },
+  {
+    "category": "billing",
+    "query": "전기세가 너무 많이 나왔어요",
+    "expect": {
+      "vocabTop1": "전기세",
+      "sentenceTop1": "전기세가 너무 많이 나왔어요"
+    }
+  },
+  {
+    "category": "services",
+    "query": "은행이 어디예요",
+    "expect": {
+      "vocabTop1": "은행",
+      "sentenceTop1Includes": "은행"
+    }
+  },
+  {
+    "category": "services",
+    "query": "송금하고 싶어요",
+    "expect": {
+      "vocabTop1": "송금",
+      "sentenceTop1": "송금하고 싶어요"
+    }
+  },
+  {
+    "category": "services",
+    "query": "계좌를 만들고 싶어요",
+    "expect": {
+      "sentenceTop1": "계좌를 만들고 싶어요",
+      "vocabTop3IncludesAny": ["은행", "계좌"]
+    }
+  },
+  {
+    "category": "services",
+    "query": "우체국이 어디예요",
+    "expect": {
+      "vocabTop1": "우체국",
+      "sentenceTop1Includes": "우체국"
+    }
+  },
+  {
+    "category": "services",
+    "query": "택배 보내고 싶어요",
+    "expect": {
+      "sentenceTop1": "택배 보내고 싶어요"
+    }
+  },
+  {
+    "category": "services",
+    "query": "유심카드 있어요?",
+    "expect": {
+      "vocabTop1": "유심카드",
+      "sentenceTop1": "유심카드 있어요?"
+    }
+  },
+  {
+    "category": "services",
+    "query": "휴대폰 충전하고 싶어요",
+    "expect": {
+      "sentenceTop1": "휴대폰 충전하고 싶어요"
+    }
+  },
+  {
+    "category": "services",
+    "query": "데이터가 없어요",
+    "expect": {
+      "sentenceTop1": "데이터가 없어요"
+    }
+  },
+  {
+    "category": "internet",
+    "query": "와이파이 비밀번호가 뭐예요",
+    "expect": {
+      "sentenceTop1": "와이파이 비밀번호가 뭐예요?"
+    }
+  },
+  {
+    "category": "internet",
+    "query": "인터넷이 안 돼요",
+    "expect": {
+      "sentenceTop1": "인터넷이 안 돼요"
+    }
+  },
+  {
+    "category": "internet",
+    "query": "와이파이가 너무 느려요",
+    "expect": {
+      "sentenceTop1": "와이파이가 너무 느려요"
+    }
+  },
+  {
+    "category": "services",
+    "query": "휴대폰 충전할 수 있어요?",
+    "expect": {
+      "sentenceTop1": "휴대폰 충전할 수 있어요?"
+    }
+  }
+  ,
+  {
+    "category": "lifestyle-services",
+    "query": "미용실이 어디예요",
+    "expect": {
+      "vocabTop1": "미용실",
+      "sentenceTop1Includes": "미용실"
+    }
+  },
+  {
+    "category": "lifestyle-services",
+    "query": "머리 자르고 싶어요",
+    "expect": {
+      "vocabTop1": "머리 자르기",
+      "sentenceTop1": "머리 자르고 싶어요"
+    }
+  },
+  {
+    "category": "lifestyle-services",
+    "query": "이발소가 어디예요",
+    "expect": {
+      "vocabTop1": "이발소",
+      "sentenceTop1Includes": "이발소"
+    }
+  },
+  {
+    "category": "lifestyle-services",
+    "query": "예약하고 싶어요",
+    "expect": {
+      "sentenceTop1": "예약하고 싶어요",
+      "vocabTop3IncludesAny": ["예약"]
+    }
+  },
+  {
+    "category": "lifestyle-services",
+    "query": "예약을 변경하고 싶어요",
+    "expect": {
+      "sentenceTop1": "예약을 변경하고 싶어요"
+    }
+  },
+  {
+    "category": "lifestyle-services",
+    "query": "예약을 확인하고 싶어요",
+    "expect": {
+      "sentenceTop1": "예약을 확인하고 싶어요"
+    }
+  },
+  {
+    "category": "lifestyle-services",
+    "query": "배송 조회하고 싶어요",
+    "expect": {
+      "sentenceTop1": "배송 조회하고 싶어요",
+      "vocabTop3IncludesAny": ["배송 조회", "송장번호"],
+      "forbidSentenceTop1": ["우체국이 어디예요?"]
+    }
+  },
+  {
+    "category": "lifestyle-services",
+    "query": "택배가 어디쯤 왔어요",
+    "expect": {
+      "sentenceTop1": "택배가 어디쯤 왔어요?",
+      "vocabTop3IncludesAny": ["배송 조회", "송장번호"],
+      "forbidSentenceTop1": ["우체국이 어디예요?"]
+    }
+  },
+  {
+    "category": "lifestyle-services",
+    "query": "송장번호가 있어요",
+    "expect": {
+      "vocabTop1": "송장번호",
+      "sentenceTop1": "송장번호가 있어요"
+    }
+  }
+  ,
+  {
+    "category": "lifestyle-services",
+    "query": "염색하고 싶어요",
+    "expect": {
+      "sentenceTop1": "염색하고 싶어요",
+      "vocabTop3IncludesAny": ["염색", "미용실", "머리 자르기"]
+    }
+  },
+  {
+    "category": "lifestyle-services",
+    "query": "택배 조회하고 싶어요",
+    "expect": {
+      "sentenceTop1": "배송 조회하고 싶어요",
+      "vocabTop3IncludesAny": ["배송 조회", "송장번호"],
+      "forbidSentenceTop1": ["우체국이 어디예요?"]
+    }
+  },
+  {
+    "category": "lifestyle-services",
+    "query": "운송장번호가 있어요",
+    "expect": {
+      "vocabTop1": "송장번호",
+      "sentenceTop1": "운송장번호가 있어요"
+    }
+  },
+  {
+    "category": "lifestyle-services",
+    "query": "택배 찾으러 왔어요",
+    "expect": {
+      "vocabTop1": "택배 수령",
+      "sentenceTop1": "택배 찾으러 왔어요",
+      "forbidSentenceTop1": ["우체국이 어디예요?"]
+    }
+  },
+  {
+    "category": "lifestyle-services",
+    "query": "택배 수령하고 싶어요",
+    "expect": {
+      "vocabTop1": "택배 수령",
+      "sentenceTop1": "택배 수령하고 싶어요",
+      "forbidSentenceTop1": ["우체국이 어디예요?"]
+    }
+  },
+  {
+    "category": "lifestyle-services",
+    "query": "반품하고 싶어요",
+    "expect": {
+      "vocabTop1": "반품",
+      "sentenceTop1": "반품하고 싶어요"
+    }
+  },
+  {
+    "category": "lifestyle-services",
+    "query": "반품 어디서 해요",
+    "expect": {
+      "vocabTop1": "반품",
+      "sentenceTop1": "반품 어디서 해요?"
+    }
+  },
+  {
+    "category": "lifestyle-services",
+    "query": "환불하고 싶어요",
+    "expect": {
+      "vocabTop1": "환불",
+      "sentenceTop1": "환불하고 싶어요"
+    }
+  },
+  {
+    "category": "lifestyle-services",
+    "query": "환불 가능해요",
+    "expect": {
+      "vocabTop1": "환불",
+      "sentenceTop1": "환불 가능해요?"
+    }
+  },
+  {
+    "category": "lifestyle-services",
+    "query": "배송이 늦어요",
+    "expect": {
+      "vocabTop1": "배송 지연",
+      "sentenceTop1": "배송이 늦어요",
+      "forbidSentenceTop1": ["우체국이 어디예요?"]
+    }
+  },
+  {
+    "category": "lifestyle-services",
+    "query": "배송이 안 왔어요",
+    "expect": {
+      "vocabTop1": "배송 지연",
+      "sentenceTop1": "배송이 안 왔어요",
+      "forbidSentenceTop1": ["우체국이 어디예요?"]
+    }
+  },
+  {
+    "category": "lifestyle-services",
+    "query": "택배 보관함이 어디예요",
+    "expect": {
+      "vocabTop1": "택배 보관함",
+      "sentenceTop1Includes": "택배 보관함이 어디예요",
+      "forbidSentenceTop1": ["우체국이 어디예요?"]
+    }
+  },
+  {
+    "category": "lifestyle-services",
+    "query": "픽업 데스크가 어디예요",
+    "expect": {
+      "vocabTop1": "픽업 데스크",
+      "sentenceTop1Includes": "픽업 데스크가 어디예요",
+      "forbidSentenceTop1": ["우체국이 어디예요?"]
+    }
+  },
+  {
+    "category": "lifestyle-services",
+    "query": "교환하고 싶어요",
+    "expect": {
+      "vocabTop1": "교환",
+      "sentenceTop1": "교환하고 싶어요"
+    }
+  },
+  {
+    "category": "lifestyle-services",
+    "query": "교환 가능해요",
+    "expect": {
+      "vocabTop1": "교환",
+      "sentenceTop1": "교환 가능해요?"
+    }
+  },
+  {
+    "category": "lifestyle-services",
+    "query": "예약을 취소하고 싶어요",
+    "expect": {
+      "vocabTop1": "취소",
+      "sentenceTop1": "예약을 취소하고 싶어요",
+      "vocabTop3IncludesAny": ["취소", "예약"]
+    }
+  },
+  {
+    "category": "lifestyle-services",
+    "query": "예약 취소 가능해요",
+    "expect": {
+      "vocabTop1": "취소",
+      "sentenceTop1": "예약 취소 가능해요?"
+    }
+  },
+  {
+    "category": "lifestyle-services",
+    "query": "취소 가능해요",
+    "expect": {
+      "vocabTop1": "취소",
+      "sentenceTop1": "취소 가능해요?"
+    }
+  },
+  {
+    "category": "lifestyle-services",
+    "query": "택배가 분실됐어요",
+    "expect": {
+      "vocabTop1": "배송 분실",
+      "sentenceTop1": "택배가 분실됐어요",
+      "forbidSentenceTop1": ["경찰서가 어디예요?"]
+    }
+  },
+  {
+    "category": "lifestyle-services",
+    "query": "택배를 잃어버렸어요",
+    "expect": {
+      "vocabTop1": "배송 분실",
+      "sentenceTop1": "택배를 잃어버렸어요",
+      "forbidSentenceTop1": ["경찰서가 어디예요?"]
+    }
+  },
+  {
+    "category": "lifestyle-services",
+    "query": "배송 분실 신고하고 싶어요",
+    "expect": {
+      "vocabTop1": "배송 분실",
+      "sentenceTop1": "배송 분실 신고하고 싶어요",
+      "forbidSentenceTop1": ["경찰서가 어디예요?"]
+    }
+  },
+  {
+    "category": "lifestyle-services",
+    "query": "픽업 코드가 왔어요",
+    "expect": {
+      "vocabTop1": "픽업 코드",
+      "sentenceTop1": "픽업 코드가 왔어요"
+    }
+  },
+  {
+    "category": "lifestyle-services",
+    "query": "배송 완료됐어요",
+    "expect": {
+      "vocabTop1": "배송 완료",
+      "sentenceTop1": "배송 완료됐어요"
+    }
+  },
+  {
+    "category": "lifestyle-services",
+    "query": "배송이 완료됐어요",
+    "expect": {
+      "vocabTop1": "배송 완료",
+      "sentenceTop1": "배송이 완료됐어요"
+    }
+  },
+  {
+    "category": "lifestyle-services",
+    "query": "잘못 온 택배예요",
+    "expect": {
+      "sentenceTop1": "잘못 온 택배예요",
+      "vocabTop3IncludesAny": ["오배송"]
+    }
+  },
+  {
+    "category": "lifestyle-services",
+    "query": "오배송됐어요",
+    "expect": {
+      "vocabTop1": "오배송",
+      "sentenceTop1": "오배송됐어요"
+    }
+  },
+  {
+    "category": "lifestyle-services",
+    "query": "택배가 파손됐어요",
+    "expect": {
+      "vocabTop1": "배송 파손",
+      "sentenceTop1": "택배가 파손됐어요",
+      "forbidSentenceTop1": ["경찰서가 어디예요?"]
+    }
+  },
+  {
+    "category": "lifestyle-services",
+    "query": "문앞에 놔 주세요",
+    "expect": {
+      "vocabTop1": "문앞 배송",
+      "sentenceTop1": "문앞에 놔 주세요"
+    }
+  },
+  {
+    "category": "lifestyle-services",
+    "query": "문 앞 배송해 주세요",
+    "expect": {
+      "vocabTop1": "문앞 배송",
+      "sentenceTop1": "문 앞 배송해 주세요"
+    }
+  },
+  {
+    "category": "lifestyle-services",
+    "query": "경비실에 맡겨 주세요",
+    "expect": {
+      "vocabTop1": "경비실 보관",
+      "sentenceTop1": "경비실에 맡겨 주세요",
+      "forbidSentenceTop1": ["문앞에 놔 주세요"]
+    }
+  },
+  {
+    "category": "lifestyle-services",
+    "query": "택배를 경비실에 맡겨 주세요",
+    "expect": {
+      "vocabTop1": "경비실 보관",
+      "sentenceTop1": "택배를 경비실에 맡겨 주세요",
+      "forbidSentenceTop1": ["문앞에 놔 주세요"]
+    }
+  },
+  {
+    "category": "lifestyle-services",
+    "query": "재배송해 주세요",
+    "expect": {
+      "vocabTop1": "재배송",
+      "sentenceTop1": "재배송해 주세요",
+      "forbidSentenceTop1": ["배송 조회하고 싶어요"]
+    }
+  },
+  {
+    "category": "lifestyle-services",
+    "query": "다시 배송해 주세요",
+    "expect": {
+      "vocabTop1": "재배송",
+      "sentenceTop1": "다시 배송해 주세요",
+      "forbidSentenceTop1": ["문 앞 배송해 주세요"]
+    }
+  },
+  {
+    "category": "lifestyle-services",
+    "query": "수령 장소를 바꾸고 싶어요",
+    "expect": {
+      "vocabTop1": "수령 장소 변경",
+      "sentenceTop1": "수령 장소를 바꾸고 싶어요",
+      "forbidSentenceTop1": ["예약을 변경하고 싶어요"]
+    }
+  },
+  {
+    "category": "lifestyle-services",
+    "query": "배송 장소를 바꿔 주세요",
+    "expect": {
+      "vocabTop1": "수령 장소 변경",
+      "sentenceTop1": "배송 장소를 바꿔 주세요",
+      "forbidSentenceTop1": ["문 앞 배송해 주세요"]
+    }
+  },
+  {
+    "category": "worksite",
+    "query": "창고가 어디예요",
+    "expect": {
+      "vocabTop1": "창고",
+      "sentenceTop1Includes": "창고가 어디예요",
+      "forbidSentenceTop1": ["화장실이 어디예요?"]
+    }
+  },
+  {
+    "category": "worksite",
+    "query": "휴게실이 어디예요",
+    "expect": {
+      "vocabTop1": "휴게실",
+      "sentenceTop1Includes": "휴게실이 어디예요",
+      "forbidSentenceTop1": ["화장실이 어디예요?"]
+    }
+  },
+  {
+    "category": "worksite",
+    "query": "탈의실이 어디예요",
+    "expect": {
+      "vocabTop1": "탈의실",
+      "sentenceTop1Includes": "탈의실이 어디예요"
+    }
+  },
+  {
+    "category": "worksite",
+    "query": "장갑이 필요해요",
+    "expect": {
+      "vocabTop1": "장갑",
+      "sentenceTop1": "장갑이 필요해요"
+    }
+  },
+  {
+    "category": "worksite",
+    "query": "바코드 스캔이 안 돼요",
+    "expect": {
+      "vocabTop1": "바코드 스캐너",
+      "sentenceTop1": "바코드 스캔이 안 돼요"
+    }
+  },
+  {
+    "category": "worksite",
+    "query": "자재가 부족해요",
+    "expect": {
+      "vocabTop1": "자재",
+      "sentenceTop1": "자재가 부족해요"
+    }
+  },
+  {
+    "category": "worksite",
+    "query": "팔레트가 필요해요",
+    "expect": {
+      "vocabTop1": "팔레트",
+      "sentenceTop1": "팔레트가 필요해요"
+    }
+  },
+  {
+    "category": "worksite",
+    "query": "지게차 불러 주세요",
+    "expect": {
+      "vocabTop1": "지게차",
+      "sentenceTop1": "지게차 불러 주세요"
+    }
+  },
+  {
+    "category": "worksite",
+    "query": "라인을 멈춰 주세요",
+    "expect": {
+      "sentenceTop1": "라인을 멈춰 주세요",
+      "vocabTop3IncludesAny": ["라인", "비상정지 버튼"]
+    }
+  },
+  {
+    "category": "worksite",
+    "query": "비상정지 버튼 눌러 주세요",
+    "expect": {
+      "vocabTop1": "비상정지 버튼",
+      "sentenceTop1": "비상정지 버튼 눌러 주세요"
+    }
+  },
+  {
+    "category": "worksite",
+    "query": "불량이 나왔어요",
+    "expect": {
+      "vocabTop1": "불량",
+      "sentenceTop1": "불량이 나왔어요"
+    }
+  },
+  {
+    "category": "worksite",
+    "query": "반장님 불러 주세요",
+    "expect": {
+      "vocabTop1": "반장",
+      "sentenceTop1": "반장님 불러 주세요"
+    }
+  },
+  {
+    "category": "worksite",
+    "query": "작업복 갈아입어야 해요",
+    "expect": {
+      "vocabTop1": "작업복",
+      "sentenceTop1": "작업복 갈아입어야 해요"
+    }
+  },
+  {
+    "category": "worksite",
+    "query": "보안경 써야 해요",
+    "expect": {
+      "vocabTop1": "보안경",
+      "sentenceTop1": "보안경 써야 해요?"
+    }
+  },
+  {
+    "category": "worksite",
+    "query": "안전조끼 입어야 해요",
+    "expect": {
+      "vocabTop1": "안전조끼",
+      "sentenceTop1": "안전조끼 입어야 해요?"
+    }
+  },
+  {
+    "category": "worksite",
+    "query": "바코드가 안 읽혀요",
+    "expect": {
+      "vocabTop1": "바코드 스캐너",
+      "sentenceTop1": "바코드가 안 읽혀요"
+    }
+  },
+  {
+    "category": "worksite",
+    "query": "라벨 다시 출력해 주세요",
+    "expect": {
+      "vocabTop1": "라벨",
+      "sentenceTop1": "라벨 다시 출력해 주세요"
+    }
+  },
+  {
+    "category": "worksite",
+    "query": "체크리스트에 서명해 주세요",
+    "expect": {
+      "vocabTop1": "체크리스트",
+      "sentenceTop1": "체크리스트에 서명해 주세요"
+    }
+  },
+  {
+    "category": "worksite",
+    "query": "부품이 부족해요",
+    "expect": {
+      "vocabTop1": "부품",
+      "sentenceTop1": "부품이 부족해요"
+    }
+  },
+  {
+    "category": "worksite",
+    "query": "상차 도와 주세요",
+    "expect": {
+      "vocabTop1": "상차",
+      "sentenceTop1": "상차 도와 주세요"
+    }
+  },
+  {
+    "category": "worksite",
+    "query": "하차 도와 주세요",
+    "expect": {
+      "vocabTop1": "하차",
+      "sentenceTop1": "하차 도와 주세요"
+    }
+  },
+  {
+    "category": "worksite",
+    "query": "검사 먼저 해 주세요",
+    "expect": {
+      "vocabTop1": "검사",
+      "sentenceTop1": "검사 먼저 해 주세요"
+    }
+  },
+  {
+    "category": "worksite",
+    "query": "출하 준비됐어요",
+    "expect": {
+      "vocabTop1": "출하",
+      "sentenceTop1": "출하 준비됐어요"
+    }
+  },
+  {
+    "category": "mold",
+    "query": "금형실이 어디예요",
+    "expect": {
+      "vocabTop1": "금형실",
+      "sentenceTop1Includes": "금형실이 어디예요"
+    }
+  },
+  {
+    "category": "mold",
+    "query": "금형 교체해 주세요",
+    "expect": {
+      "vocabTop1": "금형 교체",
+      "sentenceTop1": "금형 교체해 주세요"
+    }
+  },
+  {
+    "category": "mold",
+    "query": "금형 수리해 주세요",
+    "expect": {
+      "vocabTop1": "금형 수리",
+      "sentenceTop1": "금형 수리해 주세요"
+    }
+  },
+  {
+    "category": "mold",
+    "query": "금형 청소해 주세요",
+    "expect": {
+      "vocabTop1": "금형 청소",
+      "sentenceTop1": "금형 청소해 주세요"
+    }
+  },
+  {
+    "category": "mold",
+    "query": "금형이 깨졌어요",
+    "expect": {
+      "vocabTop1": "금형",
+      "sentenceTop1": "금형이 깨졌어요"
+    }
+  },
+  {
+    "category": "mold",
+    "query": "사출기가 멈췄어요",
+    "expect": {
+      "vocabTop1": "사출기",
+      "sentenceTop1": "사출기가 멈췄어요"
+    }
+  },
+  {
+    "category": "mold",
+    "query": "프레스가 멈췄어요",
+    "expect": {
+      "vocabTop1": "프레스",
+      "sentenceTop1": "프레스가 멈췄어요"
+    }
+  },
+  {
+    "category": "mold",
+    "query": "코어를 확인해 주세요",
+    "expect": {
+      "vocabTop1": "코어",
+      "sentenceTop1": "코어를 확인해 주세요"
+    }
+  },
+  {
+    "category": "mold",
+    "query": "캐비티를 확인해 주세요",
+    "expect": {
+      "vocabTop1": "캐비티",
+      "sentenceTop1": "캐비티를 확인해 주세요"
+    }
+  },
+  {
+    "category": "mold",
+    "query": "시사품 확인해 주세요",
+    "expect": {
+      "vocabTop1": "시사품",
+      "sentenceTop1": "시사품 확인해 주세요"
+    }
+  },
+  {
+    "category": "company-life",
+    "query": "회의실이 어디예요",
+    "expect": {
+      "vocabTop1": "회의실",
+      "sentenceTop1Includes": "회의실이 어디예요"
+    }
+  },
+  {
+    "category": "company-life",
+    "query": "보고 드릴게요",
+    "expect": {
+      "vocabTop1": "보고",
+      "sentenceTop1": "보고 드릴게요"
+    }
+  },
+  {
+    "category": "company-life",
+    "query": "보고서 올렸어요",
+    "expect": {
+      "vocabTop1": "보고서",
+      "sentenceTop1": "보고서 올렸어요"
+    }
+  },
+  {
+    "category": "company-life",
+    "query": "결재 올렸어요",
+    "expect": {
+      "vocabTop1": "결재",
+      "sentenceTop1": "결재 올렸어요"
+    }
+  },
+  {
+    "category": "company-life",
+    "query": "인수인계해 주세요",
+    "expect": {
+      "vocabTop1": "인수인계",
+      "sentenceTop1": "인수인계해 주세요"
+    }
+  },
+  {
+    "category": "company-life",
+    "query": "지각할 것 같아요",
+    "expect": {
+      "vocabTop1": "지각",
+      "sentenceTop1": "지각할 것 같아요"
+    }
+  },
+  {
+    "category": "company-life",
+    "query": "연차 쓰고 싶어요",
+    "expect": {
+      "vocabTop1": "연차",
+      "sentenceTop1": "연차 쓰고 싶어요"
+    }
+  },
+  {
+    "category": "company-life",
+    "query": "휴가계 올렸어요",
+    "expect": {
+      "vocabTop1": "휴가계",
+      "sentenceTop1": "휴가계 올렸어요"
+    }
+  },
+  {
+    "category": "company-life",
+    "query": "사직서를 제출하고 싶어요",
+    "expect": {
+      "vocabTop1": "사직서",
+      "sentenceTop1": "사직서를 제출하고 싶어요"
+    }
+  },
+  {
+    "category": "company-life",
+    "query": "출장 가야 해요",
+    "expect": {
+      "vocabTop1": "출장",
+      "sentenceTop1": "출장 가야 해요?"
+    }
+  },
+  {
+    "category": "company-life",
+    "query": "결재해 주세요",
+    "expect": {
+      "vocabTop1": "결재",
+      "sentenceTop1": "결재해 주세요"
+    }
+  },
+  {
+    "category": "company-life",
+    "query": "인수인계 받았어요",
+    "expect": {
+      "vocabTop1": "인수인계",
+      "sentenceTop1": "인수인계 받았어요"
+    }
+  },
+  {
+    "category": "company-life",
+    "query": "회의 들어가야 해요",
+    "expect": {
+      "sentenceTop1": "회의 들어가야 해요"
+    }
+  },
+  {
+    "category": "worksite",
+    "query": "반장님 어디 계세요",
+    "expect": {
+      "vocabTop1": "반장",
+      "sentenceTop1": "반장님 어디 계세요?"
+    }
+  }
+]
