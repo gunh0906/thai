@@ -25,7 +25,8 @@ const EXPORT_VERSION = 1;
 const AI_STORAGE_KEY = "thai-pocketbook-ai-v1";
 const AUTH_STORAGE_KEY = "thai-pocketbook-auth-v1";
 const UI_LANGUAGE_STORAGE_KEY = "thai-pocketbook-ui-language-v1";
-const APP_VERSION = "20260424g";
+const APP_VERSION = "20260424h";
+const DATA_INDEX_SCRIPT_SRC = "./data-index.js?v=20260424h";
 const DATA_CORE_SCRIPT_SRC = "./data-core.js?v=20260424g";
 const DATA_SCRIPT_SRC = "./data.js?v=20260422a";
 const INITIAL_AUTH_PASSWORD = "1234";
@@ -626,10 +627,13 @@ function hasBaseDataEntries(rawData) {
   return Boolean((rawData?.vocab || []).length || (rawData?.sentences || []).length);
 }
 
-let baseData = normalizeBaseData(window.BASE_DATA || window.BASE_DATA_CORE);
+let baseData = normalizeBaseData(window.BASE_DATA || window.BASE_DATA_CORE || window.BASE_DATA_INDEX);
 let baseDataLoadStage = hasBaseDataEntries(window.BASE_DATA) ? "full" : hasBaseDataEntries(window.BASE_DATA_CORE) ? "core" : "empty";
+let baseDataIndexLoadPromise = null;
 let baseDataLoadPromise = null;
 let baseDataFullLoadPromise = null;
+const baseDataShardLoadPromises = new Map();
+const loadedBaseDataShardIds = new Set();
 let baseDataLoadError = "";
 let baseDataFullLoadError = "";
 
@@ -7182,6 +7186,12 @@ function hasLoadedFullBaseData() {
   return baseDataLoadStage === "full" && hasLoadedBaseData();
 }
 
+function resetBaseDataCachesAfterLoad() {
+  hydratedBaseDataCache = null;
+  hydratedBaseMergedEntriesCache = null;
+  clearDerivedSearchCaches();
+}
+
 function markBaseDataLoaded(rawData, options = {}) {
   const nextBaseData = normalizeBaseData(rawData);
   Object.keys(baseData).forEach((key) => {
@@ -7189,17 +7199,210 @@ function markBaseDataLoaded(rawData, options = {}) {
   });
   Object.assign(baseData, nextBaseData);
   baseDataLoadStage = options.stage || "core";
-  hydratedBaseDataCache = null;
-  hydratedBaseMergedEntriesCache = null;
-  clearDerivedSearchCaches();
+  resetBaseDataCachesAfterLoad();
   baseDataLoadError = "";
   if (baseDataLoadStage === "full") {
     baseDataFullLoadError = "";
   }
 }
 
+function markBaseDataMetadataLoaded(rawData) {
+  const nextBaseData = normalizeBaseData({
+    ...(rawData || {}),
+    vocab: baseData.vocab || [],
+    sentences: baseData.sentences || [],
+  });
+  Object.keys(baseData).forEach((key) => {
+    delete baseData[key];
+  });
+  Object.assign(baseData, nextBaseData);
+}
+
+function mergeBaseDataShard(rawShard, shardId) {
+  const existingVocabIds = new Set((baseData.vocab || []).map((entry) => entry.id));
+  const existingSentenceIds = new Set((baseData.sentences || []).map((entry) => entry.id));
+  baseData.vocab = [
+    ...(baseData.vocab || []),
+    ...(Array.isArray(rawShard?.vocab) ? rawShard.vocab.filter((entry) => !existingVocabIds.has(entry.id)) : []),
+  ];
+  baseData.sentences = [
+    ...(baseData.sentences || []),
+    ...(Array.isArray(rawShard?.sentences) ? rawShard.sentences.filter((entry) => !existingSentenceIds.has(entry.id)) : []),
+  ];
+  loadedBaseDataShardIds.add(String(shardId || rawShard?.shard || ""));
+  baseDataLoadStage = hasLoadedFullBaseData() ? "full" : "partial";
+  resetBaseDataCachesAfterLoad();
+  baseDataLoadError = "";
+}
+
+function appendScriptOnce(selector, src, onLoad, onError, dataset = {}) {
+  const existingScript = document.querySelector(selector);
+  const script = existingScript || document.createElement("script");
+  Object.entries(dataset).forEach(([key, value]) => {
+    script.dataset[key] = value;
+  });
+  script.async = true;
+  script.src = src;
+  script.onload = onLoad;
+  script.onerror = onError;
+  if (!existingScript) {
+    (document.head || document.body || document.documentElement).appendChild(script);
+  }
+}
+
+function ensureBaseDataIndexLoaded() {
+  if (window.BASE_DATA_INDEX) {
+    markBaseDataMetadataLoaded(window.BASE_DATA_INDEX);
+    return Promise.resolve(window.BASE_DATA_INDEX);
+  }
+  if (baseDataIndexLoadPromise) return baseDataIndexLoadPromise;
+
+  baseDataIndexLoadPromise = new Promise((resolve, reject) => {
+    appendScriptOnce(
+      `script[data-data-index-loader="true"]`,
+      DATA_INDEX_SCRIPT_SRC,
+      () => {
+        if (!window.BASE_DATA_INDEX) {
+          baseDataIndexLoadPromise = null;
+          reject(new Error("검색 인덱스가 비어 있습니다. 새로고침 후 다시 시도해 주세요."));
+          return;
+        }
+        markBaseDataMetadataLoaded(window.BASE_DATA_INDEX);
+        resolve(window.BASE_DATA_INDEX);
+      },
+      () => {
+        baseDataIndexLoadPromise = null;
+        reject(new Error("검색 인덱스를 불러오지 못했습니다."));
+      },
+      { dataIndexLoader: "true" }
+    );
+  });
+
+  return baseDataIndexLoadPromise;
+}
+
+function getQueryShardTokens(query) {
+  const normalized = normalizeText(query);
+  const tokens = new Set();
+  [normalized, compactText(normalized)].forEach((value) => {
+    const token = compactText(value);
+    if (token.length >= 2) tokens.add(token);
+  });
+  normalized.split(/\s+/).forEach((part) => {
+    const token = compactText(part);
+    if (token.length >= 2) tokens.add(token);
+  });
+  return [...tokens];
+}
+
+function decodeShardBits(bits, shardBits) {
+  return Object.entries(shardBits || {})
+    .filter(([, bit]) => Number(bits || 0) & Number(bit || 0))
+    .map(([shardId]) => shardId);
+}
+
+function selectCoreShardIdsForQuery(query, indexData) {
+  const scores = new Map();
+  const tokenToShardBits = indexData?.tokenToShardBits || {};
+  const shardBits = indexData?.shardBits || {};
+  getQueryShardTokens(query).forEach((token) => {
+    decodeShardBits(tokenToShardBits[token], shardBits).forEach((shardId) => {
+      scores.set(shardId, (scores.get(shardId) || 0) + 1);
+    });
+  });
+
+  const selected = [...scores.entries()]
+    .sort((left, right) => right[1] - left[1] || left[0].localeCompare(right[0]))
+    .slice(0, Number(indexData?.maxQueryShards || 3))
+    .map(([shardId]) => shardId);
+
+  if (!selected.length) {
+    selected.push(...(indexData?.defaultShards || ["basic"]));
+  }
+  return unique(selected);
+}
+
+function ensureBaseDataShardLoaded(shardId, options = {}) {
+  const normalizedShardId = String(shardId || "").trim();
+  if (!normalizedShardId || loadedBaseDataShardIds.has(normalizedShardId)) {
+    return Promise.resolve(baseData);
+  }
+  if (window.BASE_DATA_SHARDS?.[normalizedShardId]) {
+    mergeBaseDataShard(window.BASE_DATA_SHARDS[normalizedShardId], normalizedShardId);
+    return Promise.resolve(baseData);
+  }
+  if (baseDataShardLoadPromises.has(normalizedShardId)) {
+    return baseDataShardLoadPromises.get(normalizedShardId);
+  }
+
+  const shardMeta = window.BASE_DATA_INDEX?.shards?.[normalizedShardId];
+  if (!shardMeta?.src) {
+    return Promise.reject(new Error(`검색 shard를 찾지 못했습니다: ${normalizedShardId}`));
+  }
+
+  const loadPromise = new Promise((resolve, reject) => {
+    appendScriptOnce(
+      `script[data-core-shard-loader="${normalizedShardId}"]`,
+      shardMeta.src,
+      () => {
+        const shard = window.BASE_DATA_SHARDS?.[normalizedShardId];
+        if (!hasBaseDataEntries(shard)) {
+          baseDataShardLoadPromises.delete(normalizedShardId);
+          reject(new Error(`검색 shard가 비어 있습니다: ${normalizedShardId}`));
+          return;
+        }
+        mergeBaseDataShard(shard, normalizedShardId);
+        if (options.renderAfter !== false) {
+          render();
+        }
+        resolve(baseData);
+      },
+      () => {
+        baseDataShardLoadPromises.delete(normalizedShardId);
+        reject(new Error(`검색 shard를 불러오지 못했습니다: ${normalizedShardId}`));
+      },
+      { coreShardLoader: normalizedShardId }
+    );
+  });
+
+  baseDataShardLoadPromises.set(normalizedShardId, loadPromise);
+  return loadPromise;
+}
+
+function ensureLegacyCoreDataLoaded(options = {}) {
+  if (baseDataLoadPromise) return baseDataLoadPromise;
+  baseDataLoadPromise = new Promise((resolve, reject) => {
+    appendScriptOnce(
+      `script[data-core-data-loader="true"]`,
+      DATA_CORE_SCRIPT_SRC,
+      () => {
+        if (!hasBaseDataEntries(window.BASE_DATA_CORE)) {
+          baseDataLoadError = "핵심 검색 데이터가 비어 있습니다. 새로고침 후 다시 시도해 주세요.";
+          baseDataLoadPromise = null;
+          reject(new Error(baseDataLoadError));
+          return;
+        }
+        markBaseDataLoaded(window.BASE_DATA_CORE, { stage: "core" });
+        if (options.renderAfter !== false) {
+          render();
+        }
+        resolve(baseData);
+      },
+      () => {
+        baseDataLoadError = "핵심 검색 데이터를 불러오지 못했습니다. 네트워크를 확인한 뒤 다시 시도해 주세요.";
+        baseDataLoadPromise = null;
+        reject(new Error(baseDataLoadError));
+      },
+      { coreDataLoader: "true" }
+    );
+  });
+
+  return baseDataLoadPromise;
+}
+
 function ensureBaseDataLoaded(options = {}) {
-  if (hasLoadedBaseData()) {
+  const query = options.query || state.query || "";
+  if (hasLoadedFullBaseData()) {
     return Promise.resolve(baseData);
   }
   if (hasBaseDataEntries(window.BASE_DATA)) {
@@ -7210,38 +7413,27 @@ function ensureBaseDataLoaded(options = {}) {
     markBaseDataLoaded(window.BASE_DATA_CORE, { stage: "core" });
     return Promise.resolve(baseData);
   }
-  if (baseDataLoadPromise) return baseDataLoadPromise;
 
-  baseDataLoadPromise = new Promise((resolve, reject) => {
-    const existingScript = document.querySelector(`script[data-core-data-loader="true"]`);
-    const script = existingScript || document.createElement("script");
-    script.dataset.coreDataLoader = "true";
-    script.async = true;
-    script.src = DATA_CORE_SCRIPT_SRC;
-    script.onload = () => {
-      if (!hasBaseDataEntries(window.BASE_DATA_CORE)) {
-        baseDataLoadError = "핵심 검색 데이터가 비어 있습니다. 새로고침 후 다시 시도해 주세요.";
-        baseDataLoadPromise = null;
-        reject(new Error(baseDataLoadError));
-        return;
+  return ensureBaseDataIndexLoaded()
+    .then((indexData) =>
+      Promise.all(selectCoreShardIdsForQuery(query, indexData).map((shardId) => ensureBaseDataShardLoaded(shardId, options)))
+    )
+    .then(() => {
+      if (!hasLoadedBaseData()) {
+        throw new Error("검색할 핵심 데이터가 아직 없습니다.");
       }
-      markBaseDataLoaded(window.BASE_DATA_CORE, { stage: "core" });
-      if (options.renderAfter !== false) {
-        render();
-      }
-      resolve(baseData);
-    };
-    script.onerror = () => {
-      baseDataLoadError = "핵심 검색 데이터를 불러오지 못했습니다. 네트워크를 확인한 뒤 다시 시도해 주세요.";
-      baseDataLoadPromise = null;
-      reject(new Error(baseDataLoadError));
-    };
-    if (!existingScript) {
-      (document.head || document.body || document.documentElement).appendChild(script);
-    }
-  });
+      return baseData;
+    })
+    .catch((error) => {
+      console.error("shard 검색 데이터 로드 실패", error);
+      return ensureLegacyCoreDataLoaded(options);
+    });
+}
 
-  return baseDataLoadPromise;
+function ensureAllCoreShardsLoaded(options = {}) {
+  return ensureBaseDataIndexLoaded().then((indexData) =>
+    Promise.all(Object.keys(indexData?.shards || {}).map((shardId) => ensureBaseDataShardLoaded(shardId, options))).then(() => baseData)
+  );
 }
 
 function ensureFullBaseDataLoaded(options = {}) {
@@ -10772,7 +10964,7 @@ function computeSearchComputation(query = state.query) {
   }
 
   if (!hasLoadedBaseData()) {
-    ensureBaseDataLoaded().catch((error) => {
+    ensureBaseDataLoaded({ query: trimmedQuery }).catch((error) => {
       baseDataLoadError = error instanceof Error ? error.message : String(error || "");
       render();
     });

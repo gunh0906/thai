@@ -12,7 +12,7 @@ export function createSearchActions({
 }) {
   async function prepareSearchData(query) {
     if (String(query || "").trim() && typeof ensureBaseDataLoaded === "function") {
-      await ensureBaseDataLoaded({ renderAfter: false });
+      await ensureBaseDataLoaded({ query, renderAfter: false });
     }
   }
 
