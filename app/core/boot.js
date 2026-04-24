@@ -10,10 +10,8 @@ export function createBoot({
   render,
   hasWorkerEndpointConfigured,
   refreshAuthSession,
-  scheduleSearchRuntimeWarmup,
   registerServiceWorker,
   windowRef = window,
-  documentRef = document,
   consoleRef = console,
 }) {
   return function boot() {
@@ -33,11 +31,6 @@ export function createBoot({
           consoleRef.error("세션 복원 실패", error);
         });
       }, 10);
-    }
-    if (documentRef.readyState === "complete") {
-      scheduleSearchRuntimeWarmup();
-    } else {
-      windowRef.addEventListener("load", scheduleSearchRuntimeWarmup, { once: true });
     }
     registerServiceWorker();
   };

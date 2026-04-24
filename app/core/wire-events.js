@@ -75,10 +75,15 @@ export function createWireEvents({
 
     elements.jumpVocabButton.addEventListener("click", () => jumpToSection(elements.vocabSection));
     elements.jumpSentenceButton.addEventListener("click", () => jumpToSection(elements.sentenceSection));
-    elements.aiAssistButton.addEventListener("click", () => {
+    elements.aiAssistButton.addEventListener("click", async () => {
       const currentInputQuery = String(elements.searchInput?.value || "").trim();
       if (currentInputQuery && currentInputQuery !== state.query) {
-        performSearch(currentInputQuery);
+        try {
+          await performSearch(currentInputQuery);
+        } catch (error) {
+          console.error("AI 요청 전 검색 준비 실패", error);
+          return;
+        }
       }
       const requestAiAssist = getRequestAiAssist();
       requestAiAssist?.(state.lastSearchContext, { trigger: "manual" });

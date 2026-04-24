@@ -38,6 +38,8 @@ export function createRenderer({
       thaiOnlySearch,
       vocabResults,
       sentenceResults,
+      dataLoading,
+      dataLoadError,
     } = getSearchComputation(state.query);
     const browsing = isBrowsingState();
     const adminView = isAdminWorkspaceView();
@@ -76,6 +78,10 @@ export function createRenderer({
       ? t("search.status.admin")
       : browsing
       ? t("search.status.browsing")
+      : dataLoadError
+        ? dataLoadError
+      : dataLoading
+        ? t("search.status.loadingData")
       : aiDisplayState.aiOnly
         ? t("search.status.aiOnly", { hint: expandedHint })
       : numberMode

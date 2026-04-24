@@ -25,7 +25,8 @@ const EXPORT_VERSION = 1;
 const AI_STORAGE_KEY = "thai-pocketbook-ai-v1";
 const AUTH_STORAGE_KEY = "thai-pocketbook-auth-v1";
 const UI_LANGUAGE_STORAGE_KEY = "thai-pocketbook-ui-language-v1";
-const APP_VERSION = "20260424e";
+const APP_VERSION = "20260424f";
+const DATA_SCRIPT_SRC = "./data.js?v=20260422a";
 const INITIAL_AUTH_PASSWORD = "1234";
 const DEFAULT_PROXY_ENDPOINT = "https://thai-pocketbook-ai.rjsghks87.workers.dev/assist";
 const AI_ASSIST_MIN_QUERY_LENGTH = 2;
@@ -231,6 +232,7 @@ const UI_TEXT = {
     "search.status.expandedHint": " · 함께 찾은 핵심어: {{terms}}",
     "search.status.admin": "관리자 작업 공간입니다. 오른쪽 메뉴에서 검색 화면으로 돌아갈 수 있습니다.",
     "search.status.browsing": "한국어와 태국어 둘 다 검색할 수 있습니다. 한국어는 바로 쓸 태국어를, 태국어는 한국어 뜻을 먼저 보여줍니다.",
+    "search.status.loadingData": "처음 검색 데이터를 불러오는 중입니다. 잠시만 기다려 주세요.",
     "search.status.aiOnly": "LLM 전용 모드: AI가 검색어를 직접 해석해서 결과를 보여줍니다.{{hint}}",
     "search.status.number": "숫자 변환: 읽기 {{vocab}}개 · 활용 {{sentences}}개{{hint}}",
     "search.status.date": "날짜 검색: 단어 {{vocab}}개 · 회화 {{sentences}}개{{hint}}",
@@ -456,6 +458,7 @@ const UI_TEXT = {
     "search.status.expandedHint": " · คำหลักที่จับได้: {{terms}}",
     "search.status.admin": "นี่คือพื้นที่ทำงานของผู้ดูแล คุณกลับไปหน้าค้นหาได้จากเมนูด้านขวา",
     "search.status.browsing": "ค้นหาได้ทั้งเกาหลีและไทยฟรี ถ้าค้นหาด้วยเกาหลีจะโชว์ไทยที่ใช้ได้ทันที ส่วนถ้าค้นหาด้วยไทยฟรีจะโชว์ความหมายเกาหลีก่อน",
+    "search.status.loadingData": "กำลังโหลดข้อมูลค้นหาครั้งแรก กรุณารอสักครู่",
     "search.status.aiOnly": "โหมด LLM เท่านั้น: AI จะตีความคำค้นและแสดงผลให้โดยตรง{{hint}}",
     "search.status.number": "แปลงตัวเลข: การอ่าน {{vocab}} รายการ · การใช้งาน {{sentences}} รายการ{{hint}}",
     "search.status.date": "ค้นหาวันที่: คำศัพท์ {{vocab}} รายการ · บทสนทนา {{sentences}} รายการ{{hint}}",
@@ -586,14 +589,41 @@ function getAiModeLabel(mode) {
   return t("ai.mode.manual");
 }
 
-const baseData = window.BASE_DATA || {
-  appTitle: "태국어 포켓북",
-  note: "",
-  scenarios: [],
-  vocab: [],
-  sentences: [],
-  stats: {},
-};
+function createFallbackScenarios() {
+  return Object.entries(SCENARIO_I18N).map(([id, labels]) => ({
+    id,
+    label: labels.ko?.label || id,
+    description: labels.ko?.description || "",
+  }));
+}
+
+function createEmptyBaseData() {
+  return {
+    appTitle: "태국어 포켓북",
+    note: "",
+    scenarios: createFallbackScenarios(),
+    vocab: [],
+    sentences: [],
+    stats: {},
+  };
+}
+
+function normalizeBaseData(rawData) {
+  const fallback = createEmptyBaseData();
+  const raw = rawData || {};
+  return {
+    appTitle: String(raw.appTitle || fallback.appTitle),
+    note: String(raw.note || ""),
+    scenarios: Array.isArray(raw.scenarios) && raw.scenarios.length ? raw.scenarios : fallback.scenarios,
+    vocab: Array.isArray(raw.vocab) ? raw.vocab : [],
+    sentences: Array.isArray(raw.sentences) ? raw.sentences : [],
+    stats: raw.stats && typeof raw.stats === "object" ? raw.stats : {},
+  };
+}
+
+let baseData = normalizeBaseData(window.BASE_DATA);
+let baseDataLoadPromise = null;
+let baseDataLoadError = "";
 
 const THAI_SCRIPT_OVERRIDE_PAIRS = [
   ["저는", "ผม"],
@@ -6009,6 +6039,20 @@ const EMPTY_MERGED_DATA = Object.freeze({
   vocab: EMPTY_RESULT_LIST,
   sentences: EMPTY_RESULT_LIST,
 });
+const EMPTY_SEARCH_COMPUTATION = Object.freeze({
+  merged: EMPTY_MERGED_DATA,
+  searchProfile: null,
+  exactVocabMatch: null,
+  safeExactSentenceMatch: null,
+  numberMode: false,
+  dateMode: false,
+  timeQuestionMode: false,
+  timeMode: false,
+  composedMode: false,
+  thaiOnlySearch: false,
+  vocabResults: EMPTY_RESULT_LIST,
+  sentenceResults: EMPTY_RESULT_LIST,
+});
 let hydratedBaseDataCache = null;
 let hydratedBaseMergedEntriesCache = null;
 let emptySearchProfileCache = null;
@@ -7120,6 +7164,58 @@ function clearDerivedSearchCaches() {
   searchComputationCache.clear();
   clearGeneratedAssistCaches();
   aiAssistResponseCache.clear();
+}
+
+function hasLoadedBaseData() {
+  return Boolean((baseData.vocab && baseData.vocab.length) || (baseData.sentences && baseData.sentences.length));
+}
+
+function markBaseDataLoaded(rawData) {
+  const nextBaseData = normalizeBaseData(rawData);
+  Object.keys(baseData).forEach((key) => {
+    delete baseData[key];
+  });
+  Object.assign(baseData, nextBaseData);
+  hydratedBaseDataCache = null;
+  hydratedBaseMergedEntriesCache = null;
+  clearDerivedSearchCaches();
+  baseDataLoadError = "";
+}
+
+function ensureBaseDataLoaded(options = {}) {
+  if (hasLoadedBaseData()) {
+    return Promise.resolve(baseData);
+  }
+  if (window.BASE_DATA && ((window.BASE_DATA.vocab || []).length || (window.BASE_DATA.sentences || []).length)) {
+    markBaseDataLoaded(window.BASE_DATA);
+    return Promise.resolve(baseData);
+  }
+  if (baseDataLoadPromise) return baseDataLoadPromise;
+
+  baseDataLoadPromise = new Promise((resolve, reject) => {
+    const existingScript = document.querySelector(`script[data-base-data-loader="true"]`);
+    const script = existingScript || document.createElement("script");
+    script.dataset.baseDataLoader = "true";
+    script.async = true;
+    script.src = DATA_SCRIPT_SRC;
+    script.onload = () => {
+      markBaseDataLoaded(window.BASE_DATA);
+      if (options.renderAfter !== false) {
+        render();
+      }
+      resolve(baseData);
+    };
+    script.onerror = () => {
+      baseDataLoadError = "데이터 파일을 불러오지 못했습니다. 네트워크를 확인한 뒤 다시 시도해 주세요.";
+      baseDataLoadPromise = null;
+      reject(new Error(baseDataLoadError));
+    };
+    if (!existingScript) {
+      document.head.appendChild(script);
+    }
+  });
+
+  return baseDataLoadPromise;
 }
 
 function buildSearchComputationCacheKey(query) {
@@ -10607,6 +10703,19 @@ function computeSearchComputation(query = state.query) {
     };
   }
 
+  if (!hasLoadedBaseData()) {
+    ensureBaseDataLoaded().catch((error) => {
+      baseDataLoadError = error instanceof Error ? error.message : String(error || "");
+      render();
+    });
+    return {
+      ...EMPTY_SEARCH_COMPUTATION,
+      searchProfile: buildSearchProfile(trimmedQuery, []),
+      dataLoading: !baseDataLoadError,
+      dataLoadError: baseDataLoadError,
+    };
+  }
+
   const merged = getMergedData();
   const generated = buildGeneratedNumberEntries(trimmedQuery);
   const numberMode = generated.vocab.length > 0;
@@ -10792,6 +10901,7 @@ const { performSearch, queueSearch, applyQuickSearch, jumpToSection } = createSe
   elements,
   render,
   isBrowsingState,
+  ensureBaseDataLoaded,
   setSearchButtonBusy,
   cancelNextFrame,
   requestNextFrame,
@@ -10855,7 +10965,6 @@ const boot = createBoot({
   render,
   hasWorkerEndpointConfigured,
   refreshAuthSession,
-  scheduleSearchRuntimeWarmup,
   registerServiceWorker,
 });
 
@@ -10979,15 +11088,19 @@ function scheduleSearchRuntimeWarmup() {
 
   const warmup = () => {
     if (searchRuntimeWarmupDone) return;
-    searchRuntimeWarmupDone = true;
-    searchRuntimeWarmupQueued = false;
-    try {
-      const hydratedBaseData = getHydratedBaseData();
-      getSearchRuntime(hydratedBaseData.vocab);
-      getSearchRuntime(hydratedBaseData.sentences);
-    } catch (error) {
-      console.error("검색 런타임 준비 실패", error);
-    }
+    ensureBaseDataLoaded({ renderAfter: true })
+      .then(() => {
+        if (searchRuntimeWarmupDone) return;
+        searchRuntimeWarmupDone = true;
+        searchRuntimeWarmupQueued = false;
+        const hydratedBaseData = getHydratedBaseData();
+        getSearchRuntime(hydratedBaseData.vocab);
+        getSearchRuntime(hydratedBaseData.sentences);
+      })
+      .catch((error) => {
+        searchRuntimeWarmupQueued = false;
+        console.error("검색 런타임 준비 실패", error);
+      });
   };
 
   const scheduleIdleWarmup = () => {

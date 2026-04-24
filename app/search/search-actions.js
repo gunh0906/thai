@@ -3,18 +3,39 @@ export function createSearchActions({
   elements,
   render,
   isBrowsingState,
+  ensureBaseDataLoaded,
   setSearchButtonBusy,
   cancelNextFrame,
   requestNextFrame,
   windowRef = window,
 }) {
-  function performSearch(nextQuery = elements.searchInput.value.trim(), options = {}) {
-    state.query = nextQuery;
-    state.selectedVocabId = null;
-    state.revealedThaiIds = new Set();
-    render();
-    if (options.scrollResults && !isBrowsingState()) {
-      elements.resultStack.scrollIntoView({ behavior: "smooth", block: "start" });
+  async function prepareSearchData(query) {
+    if (String(query || "").trim() && typeof ensureBaseDataLoaded === "function") {
+      await ensureBaseDataLoaded({ renderAfter: false });
+    }
+  }
+
+  async function performSearch(nextQuery = elements.searchInput.value.trim(), options = {}) {
+    const query = String(nextQuery || "").trim();
+    elements.searchInput.value = query;
+    try {
+      if (query) {
+        setSearchButtonBusy(true);
+        try {
+          await prepareSearchData(query);
+        } catch (error) {
+          console.error("검색 데이터 준비 실패", error);
+        }
+      }
+      state.query = query;
+      state.selectedVocabId = null;
+      state.revealedThaiIds = new Set();
+      render();
+      if (options.scrollResults && !isBrowsingState()) {
+        elements.resultStack.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    } finally {
+      setSearchButtonBusy(false);
     }
   }
 
@@ -27,10 +48,10 @@ export function createSearchActions({
     }
 
     setSearchButtonBusy(true);
-    state.searchFrame = requestNextFrame(() => {
+    state.searchFrame = requestNextFrame(async () => {
       state.searchFrame = 0;
       try {
-        performSearch(query, options);
+        await performSearch(query, options);
       } finally {
         setSearchButtonBusy(false);
       }
@@ -43,14 +64,20 @@ export function createSearchActions({
   }
 
   function jumpToSection(section) {
-    if (!state.query) {
-      performSearch(elements.searchInput.value.trim(), { scrollResults: true });
-    }
+    const searchReady = !state.query
+      ? performSearch(elements.searchInput.value.trim(), { scrollResults: false })
+      : Promise.resolve();
 
-    windowRef.setTimeout(() => {
-      if (!section) return;
-      section.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 40);
+    searchReady
+      .catch((error) => {
+        console.error("검색 후 이동 준비 실패", error);
+      })
+      .finally(() => {
+        windowRef.setTimeout(() => {
+          if (!section) return;
+          section.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 40);
+      });
   }
 
   return {
