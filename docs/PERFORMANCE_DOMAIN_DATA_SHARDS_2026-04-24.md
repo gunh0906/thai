@@ -98,6 +98,16 @@
   - `급여명세서 보여주세요`: first card showed `급여명세서` + `สลิปเงินเดือน`
   - `화장실 어디예요`: first card showed `화장실` + `ห้องน้ำ`
   - `얼마예요`: first card showed `얼마예요` + `เท่าไร`
+- Live GitHub Pages final:
+  - deployed app: `app.js?v=20260424j`
+  - initial data requests after 3 seconds: 0
+  - requested `data-index.js`: 1
+  - requested legacy `data-core.js`: 0
+  - requested domain core shard: 1
+  - requested full `data.js`: 1, after search warmup
+  - Korean -> Thai checks: `금형`, `기계가 멈췄습니다`, `급여명세서 보여주세요`, `화장실 어디예요`, `얼마예요`
+  - Thai -> Korean checks: `แม่พิมพ์`, `ห้องน้ำอยู่ที่ไหนครับ`, `ราคาเท่าไหร่`, `เครื่องจักรหยุดแล้วครับ`
+  - passed: `9 / 9`
 
 ## Next Start Point
 
