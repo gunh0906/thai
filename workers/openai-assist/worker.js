@@ -3,6 +3,7 @@ const DEFAULT_REASONING_EFFORT = "low";
 const AUTH_STORE_NAME = "main";
 const PASSWORD_ITERATIONS = 100000;
 const SESSION_TTL_MS = 1000 * 60 * 60 * 24 * 7;
+const INITIAL_AUTH_PASSWORD = "1234";
 const AI_ENTRY_SCHEMA = {
   type: "object",
   additionalProperties: false,
@@ -625,6 +626,14 @@ function validatePassword(value) {
   return String(value || "").length >= 8;
 }
 
+function isInitialAuthPassword(value) {
+  return String(value || "") === INITIAL_AUTH_PASSWORD;
+}
+
+function validateTemporaryPassword(value) {
+  return validatePassword(value) || isInitialAuthPassword(value);
+}
+
 function sanitizeUser(user) {
   if (!user) return null;
   return {
@@ -1090,7 +1099,7 @@ export class AuthStore {
 
     const body = await readJsonBody(request);
     const username = normalizeUsername(body?.username);
-    const password = String(body?.password || "");
+    const password = INITIAL_AUTH_PASSWORD;
     const role = cleanText(body?.role) === "admin" ? "admin" : "user";
     const canUseAi = Boolean(body?.canUseAi);
     const enabled = body?.enabled !== false;
@@ -1098,8 +1107,8 @@ export class AuthStore {
     if (!validateUsername(username)) {
       return authStoreJsonResponse({ error: "아이디는 영문, 숫자, 점, 밑줄, 하이픈만 3~32자로 만들어 주세요." }, 400);
     }
-    if (!validatePassword(password)) {
-      return authStoreJsonResponse({ error: "비밀번호는 8자 이상이어야 합니다." }, 400);
+    if (!validateTemporaryPassword(password)) {
+      return authStoreJsonResponse({ error: "초기 비밀번호는 1234여야 합니다." }, 400);
     }
     if (auth.users[username]) {
       return authStoreJsonResponse({ error: "이미 있는 아이디입니다." }, 409);
@@ -1163,8 +1172,8 @@ export class AuthStore {
     user.canUseAi = nextCanUseAi;
 
     if (resetPassword) {
-      if (!validatePassword(resetPassword)) {
-        return authStoreJsonResponse({ error: "재설정 비밀번호는 8자 이상이어야 합니다." }, 400);
+      if (!validateTemporaryPassword(resetPassword)) {
+        return authStoreJsonResponse({ error: "재설정 비밀번호는 1234 또는 8자 이상이어야 합니다." }, 400);
       }
       user.password = await buildPasswordRecord(resetPassword);
       user.mustChangePassword = true;

@@ -420,11 +420,15 @@
                 <input
                   id="authCreatePasswordInput"
                   name="password"
-                  type="password"
+                  type="text"
                   data-ui-placeholder-key="admin.users.tempPasswordPlaceholder"
-                  placeholder="8자 이상"
-                  required
+                  value="1234"
+                  readonly
+                  aria-describedby="authCreatePasswordHint"
                 />
+                <small id="authCreatePasswordHint" class="entry-note" data-ui-key="admin.users.initialPasswordHint">
+                  새 사용자는 1234로 처음 로그인한 뒤 비밀번호를 바로 변경해야 합니다.
+                </small>
               </label>
 
               <label>
@@ -512,6 +516,6 @@
     </aside>
 
     <script src="./data.js?v=20260422a"></script>
-    <script type="module" src="./app.js?v=20260424b"></script>
+    <script type="module" src="./app.js?v=20260424c"></script>
   </body>
 </html>

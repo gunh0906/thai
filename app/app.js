@@ -25,7 +25,8 @@ const EXPORT_VERSION = 1;
 const AI_STORAGE_KEY = "thai-pocketbook-ai-v1";
 const AUTH_STORAGE_KEY = "thai-pocketbook-auth-v1";
 const UI_LANGUAGE_STORAGE_KEY = "thai-pocketbook-ui-language-v1";
-const APP_VERSION = "20260424b";
+const APP_VERSION = "20260424c";
+const INITIAL_AUTH_PASSWORD = "1234";
 const DEFAULT_PROXY_ENDPOINT = "https://thai-pocketbook-ai.rjsghks87.workers.dev/assist";
 const AI_ASSIST_MIN_QUERY_LENGTH = 2;
 const AI_RESULT_LIMITS = {
@@ -111,8 +112,9 @@ const UI_TEXT = {
     "admin.users.description": "관리자만 새 아이디를 만들고 권한을 줄 수 있습니다.",
     "admin.users.newUsername": "새 아이디",
     "admin.users.newUsernamePlaceholder": "예: worker01",
-    "admin.users.tempPassword": "임시 비밀번호",
-    "admin.users.tempPasswordPlaceholder": "8자 이상",
+    "admin.users.tempPassword": "초기 비밀번호",
+    "admin.users.tempPasswordPlaceholder": "1234 고정",
+    "admin.users.initialPasswordHint": "새 사용자는 1234로 처음 로그인한 뒤 비밀번호를 바로 변경해야 합니다.",
     "admin.users.role": "권한",
     "admin.users.roleUser": "일반 사용자",
     "admin.users.roleAdmin": "관리자",
@@ -166,9 +168,9 @@ const UI_TEXT = {
     "auth.password.progress": "비밀번호를 변경하는 중입니다.",
     "auth.password.success": "비밀번호를 변경했습니다.",
     "auth.password.failed": "비밀번호 변경에 실패했습니다.",
-    "auth.users.missingCreateFields": "아이디와 임시 비밀번호를 모두 입력해 주세요.",
+    "auth.users.missingCreateFields": "아이디를 입력해 주세요.",
     "auth.users.creating": "사용자를 만드는 중입니다.",
-    "auth.users.created": "\"{{username}}\" 계정을 만들었습니다. 처음 로그인 후 비밀번호를 바꾸게 됩니다.",
+    "auth.users.created": "\"{{username}}\" 계정을 만들었습니다. 초기 비밀번호는 1234이며, 처음 로그인 후 바로 바꾸게 됩니다.",
     "auth.users.createFailed": "사용자 생성에 실패했습니다.",
     "auth.users.loading": "사용자 목록을 불러오는 중입니다.",
     "auth.users.empty": "등록된 사용자가 아직 없습니다.",
@@ -327,8 +329,9 @@ const UI_TEXT = {
     "admin.users.description": "เฉพาะผู้ดูแลเท่านั้นที่สร้างบัญชีใหม่และกำหนดสิทธิ์ได้",
     "admin.users.newUsername": "ชื่อผู้ใช้ใหม่",
     "admin.users.newUsernamePlaceholder": "เช่น worker01",
-    "admin.users.tempPassword": "รหัสผ่านชั่วคราว",
-    "admin.users.tempPasswordPlaceholder": "อย่างน้อย 8 ตัวอักษร",
+    "admin.users.tempPassword": "รหัสผ่านเริ่มต้น",
+    "admin.users.tempPasswordPlaceholder": "กำหนดเป็น 1234",
+    "admin.users.initialPasswordHint": "ผู้ใช้ใหม่จะเข้าสู่ระบบครั้งแรกด้วย 1234 แล้วต้องเปลี่ยนรหัสผ่านทันที",
     "admin.users.role": "สิทธิ์",
     "admin.users.roleUser": "ผู้ใช้ทั่วไป",
     "admin.users.roleAdmin": "ผู้ดูแล",
@@ -382,9 +385,9 @@ const UI_TEXT = {
     "auth.password.progress": "กำลังเปลี่ยนรหัสผ่าน",
     "auth.password.success": "เปลี่ยนรหัสผ่านแล้ว",
     "auth.password.failed": "เปลี่ยนรหัสผ่านไม่สำเร็จ",
-    "auth.users.missingCreateFields": "กรอกชื่อผู้ใช้และรหัสผ่านชั่วคราวให้ครบ",
+    "auth.users.missingCreateFields": "กรอกชื่อผู้ใช้",
     "auth.users.creating": "กำลังสร้างผู้ใช้",
-    "auth.users.created": "สร้างบัญชี \"{{username}}\" แล้ว ผู้ใช้จะต้องเปลี่ยนรหัสผ่านหลังล็อกอินครั้งแรก",
+    "auth.users.created": "สร้างบัญชี \"{{username}}\" แล้ว รหัสผ่านเริ่มต้นคือ 1234 และผู้ใช้ต้องเปลี่ยนหลังล็อกอินครั้งแรก",
     "auth.users.createFailed": "สร้างผู้ใช้ไม่สำเร็จ",
     "auth.users.loading": "กำลังโหลดรายการผู้ใช้",
     "auth.users.empty": "ยังไม่มีผู้ใช้ที่ลงทะเบียน",
@@ -10343,12 +10346,12 @@ async function submitAuthUserCreate(event) {
   if (!isCurrentUserAdmin()) return;
 
   const username = normalizeAuthUsername(elements.authCreateUsernameInput?.value);
-  const password = String(elements.authCreatePasswordInput?.value || "").trim();
+  const password = INITIAL_AUTH_PASSWORD;
   const role = String(elements.authCreateRoleInput?.value || "user");
   const canUseAi = Boolean(elements.authCreateAiInput?.checked);
   const enabled = Boolean(elements.authCreateEnabledInput?.checked);
 
-  if (!username || !password) {
+  if (!username) {
     if (elements.authAdminFeedback) {
       elements.authAdminFeedback.textContent = t("auth.users.missingCreateFields");
     }
@@ -10372,6 +10375,7 @@ async function submitAuthUserCreate(event) {
     });
 
     elements.authUserCreateForm?.reset();
+    if (elements.authCreatePasswordInput) elements.authCreatePasswordInput.value = INITIAL_AUTH_PASSWORD;
     if (elements.authCreateAiInput) elements.authCreateAiInput.checked = true;
     if (elements.authCreateEnabledInput) elements.authCreateEnabledInput.checked = true;
     if (elements.authAdminFeedback) {

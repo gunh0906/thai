@@ -14,6 +14,8 @@ This worker sits between the public GitHub Pages app and the private OpenAI API 
 
 1. Handles login and session checks.
 2. Lets an admin create users and grant AI permission.
+   - Admin-created users always start with the temporary password `1234`.
+   - The first login keeps `mustChangePassword` enabled until the user sets a new password.
 3. Receives a short search payload from the app.
 4. Calls the OpenAI Responses API server-side.
 5. Returns a compact JSON response for vocab and short sentences.
@@ -29,6 +31,12 @@ This worker sits between the public GitHub Pages app and the private OpenAI API 
 - `GET /auth/users`
 - `POST /auth/users`
 - `PATCH /auth/users/:username`
+
+Admin user creation note:
+
+- `POST /auth/users` ignores any submitted password and creates the account with `1234`.
+- `PATCH /auth/users/:username` can reset a user to `1234` or to another password of at least 8 characters.
+- `POST /auth/change-password` still requires the user's new password to be at least 8 characters.
 
 ## Required secret
 
