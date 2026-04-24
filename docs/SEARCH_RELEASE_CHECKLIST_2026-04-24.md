@@ -104,3 +104,7 @@
   - live JS has no `sk-...` key pattern
 - Remaining live gap
   - Authenticated `/assist` card proof still requires a valid session token.
+- Local environment warning
+  - Windows User environment currently has `NODE_TLS_REJECT_UNAUTHORIZED=0`.
+  - This does not expose the API key, but it disables TLS certificate verification for Node tools.
+  - It was intentionally left unchanged because removing it is a global user-level environment change.

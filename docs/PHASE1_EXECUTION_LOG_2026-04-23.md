@@ -1293,6 +1293,10 @@
 ### Still unverified
 
 - Authenticated live `/assist` card proof is still pending because it requires a valid user session token.
+- Local Windows user environment has `NODE_TLS_REJECT_UNAUTHORIZED=0`.
+  - This is not a repository secret leak and does not expose the OpenAI API key.
+  - It disables TLS certificate verification for Node-based tools in future user sessions.
+  - It was not changed in this cycle because it is a global user-level environment setting and may affect unrelated Node/proxy workflows.
 
 ### Immediate next start
 
