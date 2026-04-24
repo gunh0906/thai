@@ -41,6 +41,32 @@
   - full data: `12985` vocab, `8196` sentences
   - result cards remain valid: 8 vocab, 5 sentences
 
+## Post-Push Verification
+
+- Git commit: `0933cc3 Load core search data before full dataset`
+- Pushed to `origin/main`
+- Live HTML: `https://gunh0906.github.io/thai/`
+  - contains `app.js?v=20260424g`
+  - no blocking `data.js` script tag
+- Live app JS:
+  - contains `APP_VERSION = "20260424g"`
+  - contains `DATA_CORE_SCRIPT_SRC = "./data-core.js?v=20260424g"`
+  - contains full data background warmer
+- Live core shard:
+  - `https://gunh0906.github.io/thai/data-core.js?v=20260424g`
+  - status `200`
+  - starts with `window.BASE_DATA_CORE=`
+- Live browser probe:
+  - `DOMContentLoaded`: 3691 ms
+  - `load`: 4357 ms
+  - requests after 3 seconds idle: `data-core.js` 0, `data.js` 0
+  - `data-core.js` requested by search: yes
+  - full `data.js` requested after core path starts: yes
+  - first visible result after search: 1452 ms
+  - first result state: core loaded yes, full loaded no
+  - `금형` first result: 8 vocab cards, 5 sentence cards
+  - after full data loaded: `12985` vocab, `8196` sentences
+
 ## Next Start Point
 
 - If first search still feels slow on weak mobile networks, split `data-core.js` again by query domain or prebuild a compact token-to-entry index.
