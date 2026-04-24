@@ -1,4 +1,4 @@
-OPENAI_API_KEY="sk-your-openai-key"
+OPENAI_API_KEY="replace-with-private-ai-service-key"
 OPENAI_MODEL="gpt-4o-mini"
 OPENAI_REASONING_EFFORT="low"
 ALLOWED_ORIGINS="https://gunh0906.github.io"

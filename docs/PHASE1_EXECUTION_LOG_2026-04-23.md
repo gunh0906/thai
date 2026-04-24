@@ -1182,8 +1182,8 @@
   - `main`에 `28a03b5 Refactor search runtime and ship AI assist fallback` 커밋을 만들고 `origin/main`으로 푸시했다.
   - GitHub Pages live HTML이 새 자산 버전을 가리키는 것까지 확인했다.
 - Cloudflare Worker
-  - `npx wrangler deploy`로 `thai-pocketbook-ai`를 재배포했다.
-  - live worker version id: `555e512c-588a-4c9a-bc82-2a9cf8152b12`
+  - 관리형 AI 연결 런타임을 재배포했다.
+  - live worker 식별자는 문서에 기록하지 않는다.
 
 ### Verification performed
 
@@ -1211,7 +1211,7 @@
     - local vocab pronunciation fallback 복구
 - live deployment signals
   - `https://gunh0906.github.io/thai/` HTML이 `manifest/styles/app.js` 모두 `20260424a`를 가리킴
-  - `https://thai-pocketbook-ai.rjsghks87.workers.dev/health` -> `{ ok: true, service: "thai-pocketbook-ai", auth: "session" }`
+  - 관리형 AI 연결 health check 통과; 실제 endpoint와 service identifier는 문서에 기록하지 않는다.
 
 ### Still unverified
 
@@ -1231,7 +1231,7 @@
 ### Completed in this cycle
 
 - API key exposure check
-  - Cloudflare Worker secret list shows `OPENAI_API_KEY` only as `secret_text`.
+  - 서버 측 AI key 저장소가 secret-only 상태임을 확인했다. 실제 secret name/value는 문서에 기록하지 않는다.
   - `workers/openai-assist/.dev.vars` is absent locally.
   - `.gitignore` keeps `workers/openai-assist/.dev.vars` and `workers/openai-assist/.wrangler/` ignored.
   - Git-tracked secret-related files are limited to `workers/openai-assist/.dev.vars.example`.

@@ -11,8 +11,8 @@
 - App version
   - `app/app.js` -> `APP_VERSION = "20260424a"`
 - Worker
-  - `thai-pocketbook-ai`
-  - version id: `555e512c-588a-4c9a-bc82-2a9cf8152b12`
+  - 관리형 AI 연결 런타임
+  - runtime identifier: 문서 기록 제외
 
 ## 2. Pre-deploy verification
 
@@ -46,8 +46,8 @@
   - live `https://gunh0906.github.io/thai/` HTML이 `app.js?v=20260424a` 반환
 - Cloudflare Worker
   - `npx wrangler deploy` 완료
-  - `https://thai-pocketbook-ai.rjsghks87.workers.dev/health`
-    - response: `{ ok: true, service: "thai-pocketbook-ai", auth: "session" }`
+  - 관리형 AI 연결 health check 통과
+    - response shape verified without recording endpoint or service identifiers.
 
 ## 5. Remaining live gap
 
@@ -70,7 +70,7 @@
   - Static app/search update only.
   - Worker secret/config remains unchanged.
 - Security checkpoint
-  - `npx wrangler secret list` shows `OPENAI_API_KEY` as `secret_text`.
+  - 서버 측 AI key 저장소가 secret-only 상태임을 확인했다. 실제 secret name/value는 문서에 기록하지 않는다.
   - `workers/openai-assist/.dev.vars` is absent.
   - `git ls-files workers/openai-assist/.wrangler workers/openai-assist/.dev.vars workers/openai-assist/.dev.vars.example` tracks only `.dev.vars.example`.
   - Full git history key-pattern scan: `MATCH_COUNT=0`.

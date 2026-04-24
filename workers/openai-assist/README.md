@@ -8,13 +8,13 @@ This worker sits between the public GitHub Pages app and the private OpenAI API 
 - The OpenAI API key lives only in the worker secret store.
 - The browser never calls `api.openai.com` directly.
 - AI requests are allowed only for logged-in users with AI permission.
-- A first admin can be created only from worker bootstrap env values, not from hardcoded credentials.
+- A first admin can be created only from private worker bootstrap settings, not from hardcoded credentials.
 
 ## What this worker does
 
 1. Handles login and session checks.
 2. Lets an admin create users and grant AI permission.
-   - Admin-created users always start with the temporary password `1234`.
+   - Admin-created users start with a private temporary password policy.
    - The first login keeps `mustChangePassword` enabled until the user sets a new password.
 3. Receives a short search payload from the app.
 4. Calls the OpenAI Responses API server-side.
@@ -35,27 +35,16 @@ This worker sits between the public GitHub Pages app and the private OpenAI API 
 
 Admin user creation note:
 
-- `POST /auth/users` ignores any submitted password and creates the account with `1234`.
-- `PATCH /auth/users/:username` can reset a user to `1234` or to another password of at least 8 characters.
+- `POST /auth/users` ignores any submitted password and creates the account with the configured temporary password policy.
+- `PATCH /auth/users/:username` can reset a user to the temporary password policy or to another password of at least 8 characters.
 - `DELETE /auth/users/:username` removes a user and clears their active sessions. It refuses to delete the current admin or the last enabled admin.
 - `POST /auth/change-password` still requires the user's new password to be at least 8 characters.
 
-## Required secret
+## Runtime secrets / vars
 
-- `OPENAI_API_KEY`
-
-## Optional secrets / vars
-
-- `BOOTSTRAP_ADMIN_USERNAME`
-- `BOOTSTRAP_ADMIN_PASSWORD`
-  - used only when the user store is empty
-  - no built-in default account exists anymore
-- `SHARED_SECRET`
-  - optional fallback for non-login internal use
-- `OPENAI_MODEL`
-- `OPENAI_REASONING_EFFORT`
-- `OPENAI_BASE_URL`
-- `ALLOWED_ORIGINS`
+- AI service keys, bootstrap admin settings, and allowed-origin values must stay in private worker settings.
+- Do not record exact secret names, account IDs, passwords, or managed endpoint addresses in public docs.
+- No built-in default admin account exists anymore.
 
 ## Durable Object
 
@@ -84,8 +73,8 @@ Important:
 ```bash
 cd workers/openai-assist
 wrangler login
-wrangler secret put OPENAI_API_KEY
-wrangler secret put BOOTSTRAP_ADMIN_PASSWORD
+wrangler secret put <private-ai-service-key-secret>
+wrangler secret put <private-bootstrap-admin-password-secret>
 wrangler deploy
 ```
 
@@ -95,23 +84,23 @@ Recommended vars:
 ALLOWED_ORIGINS = "https://gunh0906.github.io"
 OPENAI_MODEL = "gpt-4o-mini"
 OPENAI_REASONING_EFFORT = "low"
-BOOTSTRAP_ADMIN_USERNAME = "admin"
+# Keep bootstrap admin identity in private deployment settings.
 ```
 
 ## What to enter in the phone app
 
 In the web app menu:
 
-- `프록시 URL`: `https://<your-worker>.workers.dev/assist`
-- first deploy only: set `BOOTSTRAP_ADMIN_USERNAME` and `BOOTSTRAP_ADMIN_PASSWORD`
+- AI connection URL: enter the managed endpoint provided through the private operations channel.
+- first deploy only: set the private bootstrap admin identity and password settings
 - log in with that bootstrap admin account once
 - change the admin password immediately if needed
 - Create normal users from the admin section if needed
 
 Do not enter:
 
-- `sk-...`
-- `https://api.openai.com/v1/...`
+- raw AI service keys
+- upstream AI API URLs
 
 ## Suggested runtime policy
 
