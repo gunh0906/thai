@@ -67,7 +67,9 @@ export function createRenderer({
     const displayVocabResults = aiDisplayState.aiOnly ? aiDisplayState.aiResult?.vocab || [] : vocabResults;
     const displaySentenceResults = aiDisplayState.aiOnly ? aiDisplayState.aiResult?.sentences || [] : sentenceResults;
 
-    elements.searchInput.value = state.query;
+    if (document.activeElement !== elements.searchInput) {
+      elements.searchInput.value = state.query;
+    }
     elements.datasetNote.textContent = baseData.note || "";
     if (elements.searchForm) {
       elements.searchForm.hidden = adminView;
