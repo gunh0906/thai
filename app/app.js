@@ -1,6 +1,6 @@
 ﻿const STORAGE_KEY = "thai-pocketbook-custom-v1";
 import { createAiAssistRequester } from "./ai/request-ai-assist.js";
-import { createRenderAiAssist } from "./ai/render-ai-assist.js?v=20260424k";
+import { createRenderAiAssist } from "./ai/render-ai-assist.js?v=20260424l";
 import { createRenderAdminUsersList } from "./admin/render-admin-users.js?v=20260424e";
 import { createRenderAuthSection } from "./auth/render-auth.js";
 import { createBoot, bootstrapApp } from "./core/boot.js";
@@ -25,7 +25,7 @@ const EXPORT_VERSION = 1;
 const AI_STORAGE_KEY = "thai-pocketbook-ai-v1";
 const AUTH_STORAGE_KEY = "thai-pocketbook-auth-v1";
 const UI_LANGUAGE_STORAGE_KEY = "thai-pocketbook-ui-language-v1";
-const APP_VERSION = "20260424k";
+const APP_VERSION = "20260424l";
 const DATA_INDEX_SCRIPT_SRC = "./data-index.js?v=20260424h";
 const DATA_CORE_SCRIPT_SRC = "./data-core.js?v=20260424g";
 const DATA_SCRIPT_SRC = "./data.js?v=20260422a";
@@ -82,7 +82,7 @@ const UI_TEXT = {
     "ai.panel.kicker": "AI 번역",
     "ai.panel.title": "입력한 표현을 AI가 바로 번역한 결과",
     "ai.button.manual": "AI 번역",
-    "ai.button.retry": "AI 다시 번역",
+    "ai.button.retry": "AI 번역",
     "ai.button.loading": "AI 번역 중...",
     "admin.workspace.kicker": "관리자",
     "admin.workspace.title": "관리자 작업 공간",
@@ -309,7 +309,7 @@ const UI_TEXT = {
     "ai.panel.kicker": "AI แปล",
     "ai.panel.title": "ผลแปลที่ AI แปลจากข้อความที่พิมพ์",
     "ai.button.manual": "AI แปล",
-    "ai.button.retry": "ให้ AI แปลอีกครั้ง",
+    "ai.button.retry": "AI แปล",
     "ai.button.loading": "AI กำลังแปล...",
     "admin.workspace.kicker": "ผู้ดูแล",
     "admin.workspace.title": "พื้นที่จัดการผู้ดูแล",

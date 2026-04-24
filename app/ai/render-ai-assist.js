@@ -54,11 +54,7 @@ export function createRenderAiAssist({
     const aiOnly = isAiOnlyModeActive(context);
 
     elements.aiAssistButton.disabled = !query || isLoading;
-    elements.aiAssistButton.textContent = isLoading
-      ? t("ai.button.loading")
-      : aiMode === "manual"
-        ? t("ai.button.manual")
-        : t("ai.button.retry");
+    elements.aiAssistButton.textContent = isLoading ? t("ai.button.loading") : t("ai.button.manual");
     elements.aiAssistButton.title = !configured
       ? t("auth.error.endpointMissing")
       : !authorized

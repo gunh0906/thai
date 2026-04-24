@@ -287,6 +287,47 @@ button:active {
   gap: 10px;
 }
 
+#aiAssistButton {
+  position: relative;
+  overflow: hidden;
+  padding-inline: 18px;
+  border: 1px solid rgba(22, 112, 99, 0.26);
+  background:
+    linear-gradient(135deg, rgba(235, 250, 246, 0.96), rgba(255, 248, 238, 0.96)),
+    #ffffff;
+  color: var(--green);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.72),
+    0 14px 30px rgba(22, 112, 99, 0.12);
+}
+
+#aiAssistButton::before {
+  content: "AI";
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--green), var(--accent));
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+}
+
+#aiAssistButton:hover {
+  border-color: rgba(22, 112, 99, 0.42);
+  background:
+    linear-gradient(135deg, rgba(225, 248, 242, 1), rgba(255, 241, 218, 1)),
+    #ffffff;
+  color: var(--green);
+}
+
+#aiAssistButton[disabled] {
+  opacity: 0.78;
+}
+
 .hero-meta {
   display: grid;
   gap: 8px;
