@@ -11,6 +11,29 @@ export function createRenderAiAssist({
   compactText,
   createEntryCard,
 }) {
+  function createManualProgress() {
+    const wrapper = document.createElement("div");
+    wrapper.className = "ai-manual-progress";
+
+    const bar = document.createElement("div");
+    bar.className = "ai-manual-progress-bar";
+    bar.setAttribute("role", "progressbar");
+    bar.setAttribute("aria-valuemin", "0");
+    bar.setAttribute("aria-valuemax", "100");
+    bar.setAttribute("aria-label", t("ai.progress.manual"));
+
+    const fill = document.createElement("span");
+    fill.className = "ai-manual-progress-fill";
+    bar.appendChild(fill);
+
+    const label = document.createElement("span");
+    label.className = "ai-manual-progress-label";
+    label.textContent = t("ai.progress.manual");
+
+    wrapper.append(bar, label);
+    return wrapper;
+  }
+
   return function renderAiAssist(context) {
     if (!elements.aiAssistButton || !elements.aiAssistPanel) return;
     if (isAdminWorkspaceView()) {
@@ -64,6 +87,9 @@ export function createRenderAiAssist({
         state.aiAssist.trigger === "auto" ? getAiModeLabel(aiMode) : t("ai.meta.manual");
       elements.aiAssistStatus.hidden = false;
       elements.aiAssistStatus.textContent = t("ai.status.loading");
+      if (state.aiAssist.trigger !== "auto") {
+        elements.aiAssistResults.appendChild(createManualProgress());
+      }
       return;
     }
 

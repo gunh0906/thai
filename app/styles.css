@@ -857,6 +857,55 @@ button:active {
   margin-bottom: 12px;
 }
 
+.ai-manual-progress {
+  display: grid;
+  gap: 10px;
+  padding: 16px;
+  border: 1px solid rgba(22, 112, 99, 0.16);
+  border-radius: var(--radius-md);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(238, 248, 245, 0.92)),
+    var(--surface);
+}
+
+.ai-manual-progress-bar {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(22, 112, 99, 0.12);
+}
+
+.ai-manual-progress-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 42%;
+  border-radius: inherit;
+  background:
+    linear-gradient(90deg, rgba(22, 112, 99, 0.12), rgba(22, 112, 99, 0.86), rgba(249, 162, 67, 0.88));
+  box-shadow: 0 8px 24px rgba(22, 112, 99, 0.24);
+  animation: ai-progress-sweep 1.15s ease-in-out infinite;
+}
+
+.ai-manual-progress-label {
+  color: var(--muted);
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+@keyframes ai-progress-sweep {
+  0% {
+    transform: translateX(-70%);
+  }
+  50% {
+    transform: translateX(90%);
+  }
+  100% {
+    transform: translateX(240%);
+  }
+}
+
 .ai-summary-card {
   gap: 8px;
 }

@@ -1,6 +1,6 @@
 ﻿const STORAGE_KEY = "thai-pocketbook-custom-v1";
 import { createAiAssistRequester } from "./ai/request-ai-assist.js";
-import { createRenderAiAssist } from "./ai/render-ai-assist.js";
+import { createRenderAiAssist } from "./ai/render-ai-assist.js?v=20260424k";
 import { createRenderAdminUsersList } from "./admin/render-admin-users.js?v=20260424e";
 import { createRenderAuthSection } from "./auth/render-auth.js";
 import { createBoot, bootstrapApp } from "./core/boot.js";
@@ -25,7 +25,7 @@ const EXPORT_VERSION = 1;
 const AI_STORAGE_KEY = "thai-pocketbook-ai-v1";
 const AUTH_STORAGE_KEY = "thai-pocketbook-auth-v1";
 const UI_LANGUAGE_STORAGE_KEY = "thai-pocketbook-ui-language-v1";
-const APP_VERSION = "20260424j";
+const APP_VERSION = "20260424k";
 const DATA_INDEX_SCRIPT_SRC = "./data-index.js?v=20260424h";
 const DATA_CORE_SCRIPT_SRC = "./data-core.js?v=20260424g";
 const DATA_SCRIPT_SRC = "./data.js?v=20260422a";
@@ -212,6 +212,7 @@ const UI_TEXT = {
     "ai.meta.failed": "AI 번역 실패",
     "ai.meta.noResult": "AI가 확실한 번역 결과를 찾지 못했습니다.",
     "ai.status.loading": "AI가 검색어를 다시 해석하고 있어요.",
+    "ai.progress.manual": "AI 번역 요청을 보내고 있습니다.",
     "ai.status.aiOnlyEmpty": "LLM 전용 모드에서는 AI 결과만 보여줍니다. 검색어를 더 구체적으로 바꾸거나 모드를 변경해 주세요.",
     "ai.status.defaultEmpty": "로컬 결과를 먼저 쓰고, 더 구체적인 검색어로 다시 시도해 주세요.",
     "ai.settings.relogin": "프록시 주소가 바뀌어서 다시 로그인해 주세요.",
@@ -438,6 +439,7 @@ const UI_TEXT = {
     "ai.meta.failed": "AI แปลไม่สำเร็จ",
     "ai.meta.noResult": "AI ยังหาผลแปลที่มั่นใจไม่ได้",
     "ai.status.loading": "AI กำลังตีความคำค้นใหม่",
+    "ai.progress.manual": "กำลังส่งคำขอแปลด้วย AI",
     "ai.status.aiOnlyEmpty": "ในโหมด LLM เท่านั้นจะแสดงเฉพาะผลจาก AI ลองพิมพ์ให้เจาะจงขึ้นหรือเปลี่ยนโหมด",
     "ai.status.defaultEmpty": "ลองใช้ผลจากฐานข้อมูลก่อน แล้วค่อยค้นใหม่ด้วยคำที่เจาะจงขึ้น",
     "ai.settings.relogin": "ที่อยู่พร็อกซีเปลี่ยนแล้ว กรุณาเข้าสู่ระบบอีกครั้ง",
