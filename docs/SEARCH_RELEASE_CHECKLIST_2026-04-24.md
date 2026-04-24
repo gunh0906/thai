@@ -104,7 +104,9 @@
   - live JS has no `sk-...` key pattern
 - Remaining live gap
   - Authenticated `/assist` card proof still requires a valid session token.
-- Local environment warning
-  - Windows User environment currently has `NODE_TLS_REJECT_UNAUTHORIZED=0`.
-  - This does not expose the API key, but it disables TLS certificate verification for Node tools.
-  - It was intentionally left unchanged because removing it is a global user-level environment change.
+- Local environment hardening
+  - Windows User environment previously had `NODE_TLS_REJECT_UNAUTHORIZED=0`.
+  - This did not expose the API key, but it disabled TLS certificate verification for Node tools.
+  - The setting was removed from the Windows User environment; User/Machine now report `<unset>`.
+  - The already-running Codex host process still passes `SESSION=0` to child shells until restart.
+  - Clearing it per-command makes `wrangler` fail on the current corporate/VPN certificate chain, so the durable follow-up is Node corporate root CA configuration.

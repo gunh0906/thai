@@ -1293,10 +1293,13 @@
 ### Still unverified
 
 - Authenticated live `/assist` card proof is still pending because it requires a valid user session token.
-- Local Windows user environment has `NODE_TLS_REJECT_UNAUTHORIZED=0`.
-  - This is not a repository secret leak and does not expose the OpenAI API key.
-  - It disables TLS certificate verification for Node-based tools in future user sessions.
-  - It was not changed in this cycle because it is a global user-level environment setting and may affect unrelated Node/proxy workflows.
+- Local Windows user environment previously had `NODE_TLS_REJECT_UNAUTHORIZED=0`.
+  - This was not a repository secret leak and did not expose the OpenAI API key.
+  - It disabled TLS certificate verification for Node-based tools in future user sessions.
+  - It was removed from the Windows User environment; User/Machine now report `<unset>`.
+  - The already-running Codex host process still passes `SESSION=0` to child shells until the app/process is restarted.
+  - When cleared per-command, `wrangler` no longer shows the TLS-disable warning but fails on the current corporate/VPN certificate chain.
+  - Durable fix is to configure Node with the corporate root CA instead of restoring global TLS verification disablement.
 
 ### Immediate next start
 
