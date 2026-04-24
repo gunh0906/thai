@@ -1225,3 +1225,54 @@
 
 1. 인증된 관리자 세션으로 live `/assist`를 다시 호출해 `결재해 주세요` 같은 direct translation query에서 발음 fallback이 실제 카드에도 보이는지 확인하기
 2. browser runtime path blocker를 정리하거나 기존 `agent-browser --cdp 9222` fallback으로 live AI card screenshot proof 남기기
+
+## 27. Security and Worksite Search Update - 2026-04-24
+
+### Completed in this cycle
+
+- API key exposure check
+  - Cloudflare Worker secret list shows `OPENAI_API_KEY` only as `secret_text`.
+  - `workers/openai-assist/.dev.vars` is absent locally.
+  - `.gitignore` keeps `workers/openai-assist/.dev.vars` and `workers/openai-assist/.wrangler/` ignored.
+  - Git-tracked secret-related files are limited to `workers/openai-assist/.dev.vars.example`.
+  - Full git history scan for real `sk-...` key patterns returned `MATCH_COUNT=0`.
+- Local production / equipment / company-life vocabulary expansion
+  - Added production terms: `생산계획`, `작업표준서`, `작업일보`, `로트번호`, `수량`, `재고`, `재작업`, `폐기`, `불량 원인`, `조치`.
+  - Added equipment terms: `설비 점검`, `윤활유`, `냉각수`, `압력`, `온도`, `계측기`, `버니어캘리퍼스`, `토크렌치`.
+  - Added company-life terms: `승인대기`, `회의록`.
+  - Added matching representative sentences and query bundles for each term.
+- Search filter / ranking correction
+  - Specific worksite object intents now suppress generic generated vocab such as `이거` and `끝나다` when they would outrank a concrete local object.
+  - `correctiveActionWork` now wins over generic `completion` for queries such as `조치 완료했어요`.
+  - Worksite precision object ids receive an extra ranking penalty when a candidate has no matching object hit.
+- Cache-busting
+  - `APP_VERSION` and `app.js` query string were bumped from `20260424a` to `20260424b`.
+
+### Verification performed
+
+- Syntax / data checks
+  - `node --check app/app.js`
+  - `node --check app/search/worksite-domain-data.js`
+  - `node --check app/search/intent-analyzer.js`
+  - `node --check app/search/search-engine.js`
+  - `node --check scripts/audit_search.js`
+  - JSON parse check for `scripts/search_regression_cases.json`
+- Targeted search checks
+  - `node scripts/audit_search.js --regression-category worksite-production` -> `10 / 10`
+  - `node scripts/audit_search.js --regression-category worksite-equipment` -> `8 / 8`
+  - `node scripts/audit_search.js --regression-category company-life` -> `15 / 15`
+  - Direct spot-check: `이건 폐기해야 해요` now returns vocab top1 `폐기`.
+  - Direct spot-check: `조치 완료했어요` now returns vocab top1 `조치`.
+- Full regression
+  - `node scripts/audit_search.js --regression` -> `171 / 171`
+
+### Still unverified
+
+- Live Pages has not yet been rechecked for `app.js?v=20260424b` in this local checkpoint.
+- Authenticated live `/assist` AI card remains the separate session-auth verification gap from the previous deploy note.
+
+### Immediate next start
+
+1. Commit and push the `20260424b` static/search update.
+2. Verify live HTML returns `app.js?v=20260424b`.
+3. In an authenticated browser session, spot-check `이건 폐기해야 해요`, `조치 완료했어요`, and one AI `/assist` card.

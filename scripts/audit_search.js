@@ -167,6 +167,7 @@ function buildAppContext(rootDir) {
         uniqueById,
         uniqueByMeaning,
         mergeGeneratedEntrySets,
+        refineGeneratedVocabForSpecificObject,
         finalizeSearchEntries,
         isSentenceLikeVocabEntry,
         isUtilityLabelVocabEntry,
@@ -225,6 +226,7 @@ function createSearchRunner(context) {
       generatedPredicate,
       generatedThaiMeaning
     );
+    const refinedGeneratedVocab = api.refineGeneratedVocabForSpecificObject(generatedAssist.vocab, profile);
     const exactSentence = numberMode || dateMode ? null : api.findExactEntry(merged.sentences, profile, { includeTemplates: true });
     const strictPhraseMode = Boolean(profile.templateTerms.length || (profile.objectTerms.length && profile.actionTerms.length));
     const exactSentenceIsExactQuery = exactSentence && api.compactText(exactSentence.korean) === api.compactText(query);
@@ -235,10 +237,11 @@ function createSearchRunner(context) {
         !api.shouldKeepExactSentenceMatch(exactSentence, profile))
         ? null
         : exactSentence;
-    const refinedVocab =
+    const baseRefinedVocab =
       generatedAssist.vocab.length || generatedAssist.sentences.length
         ? preliminaryVocab.filter((entry) => entry.source !== "generated-bulk")
         : preliminaryVocab;
+    const refinedVocab = api.refineGeneratedVocabForSpecificObject(baseRefinedVocab, profile);
     const rawVocab = numberMode
       ? generated.vocab
       : dateMode
@@ -247,7 +250,7 @@ function createSearchRunner(context) {
         ? generatedTimeQuestion.vocab
         : timeMode
           ? generatedTime.vocab
-          : api.uniqueByMeaning(api.uniqueById([...generatedAssist.vocab, ...refinedVocab]));
+          : api.uniqueByMeaning(api.uniqueById([...refinedGeneratedVocab, ...refinedVocab]));
     const vocab = api.finalizeSearchEntries(rawVocab, profile, "vocab", 5);
 
     const refinedSentenceCandidates =
@@ -259,12 +262,12 @@ function createSearchRunner(context) {
               ? api.getSentenceResults(
                   merged.sentences,
                   profile,
-                  api.uniqueByMeaning([...generatedAssist.vocab, ...refinedVocab])
+                  api.uniqueByMeaning([...refinedGeneratedVocab, ...refinedVocab])
                 ).filter((entry) => entry.source !== "generated-bulk")
               : api.getSentenceResults(
                   merged.sentences,
                   profile,
-                  api.uniqueByMeaning([...generatedAssist.vocab, ...refinedVocab])
+                  api.uniqueByMeaning([...refinedGeneratedVocab, ...refinedVocab])
                 ));
     const rawSentences = (
       numberMode

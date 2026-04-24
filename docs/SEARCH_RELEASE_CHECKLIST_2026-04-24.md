@@ -63,3 +63,31 @@
 1. 인증된 live 세션으로 `결재해 주세요` direct translation query 실행
 2. AI 결과 카드에서 `한국어 발음 미보강` 대신 복구된 발음 텍스트가 보이는지 확인
 3. screenshot artifact 남기기
+
+## 7. Follow-up release candidate - 20260424b
+
+- Scope
+  - Static app/search update only.
+  - Worker secret/config remains unchanged.
+- Security checkpoint
+  - `npx wrangler secret list` shows `OPENAI_API_KEY` as `secret_text`.
+  - `workers/openai-assist/.dev.vars` is absent.
+  - `git ls-files workers/openai-assist/.wrangler workers/openai-assist/.dev.vars workers/openai-assist/.dev.vars.example` tracks only `.dev.vars.example`.
+  - Full git history key-pattern scan: `MATCH_COUNT=0`.
+- Search checkpoint
+  - Added 20 local worksite/company vocab entries and 20 matching representative sentences.
+  - Added worksite-specific object rules, query bundles, tag detection terms, and regression cases.
+  - Added filter/ranking protection so generic generated vocab does not outrank concrete worksite terms.
+- Verification
+  - `node --check app/app.js`
+  - `node --check app/search/worksite-domain-data.js`
+  - `node --check app/search/intent-analyzer.js`
+  - `node --check app/search/search-engine.js`
+  - `node --check scripts/audit_search.js`
+  - `node scripts/audit_search.js --regression-category worksite-production` -> `10 / 10`
+  - `node scripts/audit_search.js --regression-category worksite-equipment` -> `8 / 8`
+  - `node scripts/audit_search.js --regression-category company-life` -> `15 / 15`
+  - `node scripts/audit_search.js --regression` -> `171 / 171`
+- Deploy check still required
+  - After push, live HTML must return `app.js?v=20260424b`.
+  - Authenticated live AI card proof remains required for `/assist`.

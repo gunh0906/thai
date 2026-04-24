@@ -1202,5 +1202,165 @@
       "vocabTop1": "반장",
       "sentenceTop1": "반장님 어디 계세요?"
     }
+  },
+  {
+    "category": "worksite-production",
+    "query": "생산계획 확인해 주세요",
+    "expect": {
+      "vocabTop1": "생산계획",
+      "sentenceTop1": "생산계획 확인해 주세요"
+    }
+  },
+  {
+    "category": "worksite-production",
+    "query": "작업표준서 보여 주세요",
+    "expect": {
+      "vocabTop1": "작업표준서",
+      "sentenceTop1": "작업표준서 보여 주세요"
+    }
+  },
+  {
+    "category": "worksite-production",
+    "query": "작업일보 작성했어요",
+    "expect": {
+      "vocabTop1": "작업일보",
+      "sentenceTop1": "작업일보 작성했어요"
+    }
+  },
+  {
+    "category": "worksite-production",
+    "query": "로트번호 확인해 주세요",
+    "expect": {
+      "vocabTop1": "로트번호",
+      "sentenceTop1": "로트번호 확인해 주세요"
+    }
+  },
+  {
+    "category": "worksite-production",
+    "query": "수량이 맞지 않아요",
+    "expect": {
+      "vocabTop1": "수량",
+      "sentenceTop1": "수량이 맞지 않아요"
+    }
+  },
+  {
+    "category": "worksite-production",
+    "query": "재고가 부족해요",
+    "expect": {
+      "vocabTop1": "재고",
+      "sentenceTop1": "재고가 부족해요"
+    }
+  },
+  {
+    "category": "worksite-production",
+    "query": "재작업해야 해요",
+    "expect": {
+      "vocabTop1": "재작업",
+      "sentenceTop1": "재작업해야 해요"
+    }
+  },
+  {
+    "category": "worksite-production",
+    "query": "이건 폐기해야 해요",
+    "expect": {
+      "vocabTop1": "폐기",
+      "sentenceTop1": "이건 폐기해야 해요?"
+    }
+  },
+  {
+    "category": "worksite-production",
+    "query": "불량 원인을 확인해 주세요",
+    "expect": {
+      "vocabTop1": "불량 원인",
+      "sentenceTop1": "불량 원인을 확인해 주세요"
+    }
+  },
+  {
+    "category": "worksite-production",
+    "query": "조치 완료했어요",
+    "expect": {
+      "vocabTop1": "조치",
+      "sentenceTop1": "조치 완료했어요"
+    }
+  },
+  {
+    "category": "worksite-equipment",
+    "query": "설비 점검해 주세요",
+    "expect": {
+      "vocabTop1": "설비 점검",
+      "sentenceTop1": "설비 점검해 주세요"
+    }
+  },
+  {
+    "category": "worksite-equipment",
+    "query": "윤활유가 부족해요",
+    "expect": {
+      "vocabTop1": "윤활유",
+      "sentenceTop1": "윤활유가 부족해요"
+    }
+  },
+  {
+    "category": "worksite-equipment",
+    "query": "냉각수가 부족해요",
+    "expect": {
+      "vocabTop1": "냉각수",
+      "sentenceTop1": "냉각수가 부족해요"
+    }
+  },
+  {
+    "category": "worksite-equipment",
+    "query": "압력이 낮아요",
+    "expect": {
+      "vocabTop1": "압력",
+      "sentenceTop1": "압력이 낮아요"
+    }
+  },
+  {
+    "category": "worksite-equipment",
+    "query": "온도가 높아요",
+    "expect": {
+      "vocabTop1": "온도",
+      "sentenceTop1": "온도가 높아요"
+    }
+  },
+  {
+    "category": "worksite-equipment",
+    "query": "계측기 빌려 주세요",
+    "expect": {
+      "vocabTop1": "계측기",
+      "sentenceTop1": "계측기 빌려 주세요"
+    }
+  },
+  {
+    "category": "worksite-equipment",
+    "query": "버니어캘리퍼스 있어요?",
+    "expect": {
+      "vocabTop1": "버니어캘리퍼스",
+      "sentenceTop1": "버니어캘리퍼스 있어요?"
+    }
+  },
+  {
+    "category": "worksite-equipment",
+    "query": "토크렌치가 필요해요",
+    "expect": {
+      "vocabTop1": "토크렌치",
+      "sentenceTop1": "토크렌치가 필요해요"
+    }
+  },
+  {
+    "category": "company-life",
+    "query": "승인 대기 중이에요",
+    "expect": {
+      "vocabTop1": "승인대기",
+      "sentenceTop1": "승인 대기 중이에요"
+    }
+  },
+  {
+    "category": "company-life",
+    "query": "회의록 올렸어요",
+    "expect": {
+      "vocabTop1": "회의록",
+      "sentenceTop1": "회의록 올렸어요"
+    }
   }
 ]

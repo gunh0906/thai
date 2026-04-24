@@ -46,6 +46,28 @@ export function createSearchEngine({
     "refundService",
     "cancellationService",
   ]);
+  const WORKSITE_PRECISION_OBJECT_IDS = new Set([
+    "productionPlanWork",
+    "workStandardDocument",
+    "dailyWorkReport",
+    "lotNumberWork",
+    "quantityWork",
+    "inventoryWork",
+    "reworkProcess",
+    "scrapProcess",
+    "defectCauseWork",
+    "correctiveActionWork",
+    "equipmentInspection",
+    "lubricantSupply",
+    "coolantSupply",
+    "pressureStatus",
+    "temperatureStatus",
+    "measuringTool",
+    "vernierCaliperTool",
+    "torqueWrenchTool",
+    "approvalPendingWork",
+    "meetingMinutesWork",
+  ]);
 
   function hasParcelServiceIntent(searchProfile) {
     return Boolean(searchProfile?.objectIds?.some((id) => PARCEL_SERVICE_OBJECT_IDS.has(id)));
@@ -202,6 +224,9 @@ export function createSearchEngine({
       score += kind === "sentence" ? 340 : 210;
     }
     score += getEntrySourceScore(entry, kind);
+    if (searchProfile.objectIds?.some((id) => WORKSITE_PRECISION_OBJECT_IDS.has(id)) && !objectHits.size) {
+      score -= kind === "sentence" ? 240 : 360;
+    }
     if (searchProfile.objectIds?.some((id) => ["reportWork", "reportDocumentWork"].includes(id))) {
       if (/홀더|드릴|비트|엔드밀|커터|공구/.test(index.korean)) {
         score -= kind === "sentence" ? 260 : 320;

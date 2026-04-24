@@ -83,6 +83,26 @@ export function createIntentAnalyzer({
     "productionLine",
     "emergencyStopButton",
     "defectItem",
+    "productionPlanWork",
+    "workStandardDocument",
+    "dailyWorkReport",
+    "lotNumberWork",
+    "quantityWork",
+    "inventoryWork",
+    "reworkProcess",
+    "scrapProcess",
+    "defectCauseWork",
+    "correctiveActionWork",
+    "equipmentInspection",
+    "lubricantSupply",
+    "coolantSupply",
+    "pressureStatus",
+    "temperatureStatus",
+    "measuringTool",
+    "vernierCaliperTool",
+    "torqueWrenchTool",
+    "approvalPendingWork",
+    "meetingMinutesWork",
   ];
   const GENERIC_WORK_OBJECT_RULE_IDS = ["factoryWork", "workTask", "machine", "hr", "time", "workHours", "problem"];
 
@@ -185,6 +205,9 @@ export function createIntentAnalyzer({
     }
     if (objectRules.some((rule) => rule.id === "reportDocumentWork")) {
       objectRules = objectRules.filter((rule) => !["reportWork", "tool"].includes(rule.id));
+    }
+    if (objectRules.some((rule) => rule.id === "correctiveActionWork")) {
+      objectRules = objectRules.filter((rule) => rule.id !== "completion");
     }
     if (objectRules.some((rule) => ["productionLine", "emergencyStopButton"].includes(rule.id))) {
       objectRules = objectRules.filter((rule) => rule.id !== "machine");

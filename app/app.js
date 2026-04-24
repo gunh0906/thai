@@ -25,7 +25,7 @@ const EXPORT_VERSION = 1;
 const AI_STORAGE_KEY = "thai-pocketbook-ai-v1";
 const AUTH_STORAGE_KEY = "thai-pocketbook-auth-v1";
 const UI_LANGUAGE_STORAGE_KEY = "thai-pocketbook-ui-language-v1";
-const APP_VERSION = "20260424a";
+const APP_VERSION = "20260424b";
 const DEFAULT_PROXY_ENDPOINT = "https://thai-pocketbook-ai.rjsghks87.workers.dev/assist";
 const AI_ASSIST_MIN_QUERY_LENGTH = 2;
 const AI_RESULT_LIMITS = {
@@ -3162,6 +3162,226 @@ const SEARCH_OBJECT_RULES = [
     phrases: ["불량이 나왔어요", "이거 불량품이에요"],
   },
   {
+    id: "productionPlanWork",
+    patterns: [/생산계획|생산\s*계획|생산일정/],
+    focusTerms: ["생산계획"],
+    terms: ["생산계획", "생산", "계획"],
+    related: ["생산계획 확인해 주세요"],
+    display: ["생산계획"],
+    tags: ["일터"],
+    preferTags: ["일터"],
+    phrases: ["생산계획 확인해 주세요"],
+  },
+  {
+    id: "workStandardDocument",
+    patterns: [/작업표준서|표준작업서|작업\s*표준서|작업\s*기준서/],
+    focusTerms: ["작업표준서"],
+    terms: ["작업표준서", "표준"],
+    related: ["작업표준서 보여 주세요"],
+    display: ["작업표준서"],
+    tags: ["일터"],
+    preferTags: ["일터"],
+    phrases: ["작업표준서 보여 주세요"],
+  },
+  {
+    id: "dailyWorkReport",
+    patterns: [/작업일보|일일작업보고서|작업\s*일보/],
+    focusTerms: ["작업일보"],
+    terms: ["작업일보", "보고"],
+    related: ["작업일보 작성했어요"],
+    display: ["작업일보"],
+    tags: ["일터"],
+    preferTags: ["일터"],
+    phrases: ["작업일보 작성했어요"],
+  },
+  {
+    id: "lotNumberWork",
+    patterns: [/로트번호|로트\s*번호|LOT\s*번호|랏번호/i],
+    focusTerms: ["로트번호"],
+    terms: ["로트번호", "LOT번호"],
+    related: ["로트번호 확인해 주세요"],
+    display: ["로트번호"],
+    tags: ["일터"],
+    preferTags: ["일터"],
+    phrases: ["로트번호 확인해 주세요"],
+  },
+  {
+    id: "quantityWork",
+    patterns: [/수량|개수|수량이\s*맞지|수량\s*부족/],
+    focusTerms: ["수량"],
+    terms: ["수량", "개수"],
+    related: ["수량이 맞지 않아요"],
+    display: ["수량"],
+    tags: ["일터", "숫자·시간"],
+    preferTags: ["일터"],
+    phrases: ["수량이 맞지 않아요"],
+  },
+  {
+    id: "inventoryWork",
+    patterns: [/재고|스톡|재고가\s*부족|재고\s*부족/],
+    focusTerms: ["재고"],
+    terms: ["재고", "스톡"],
+    related: ["재고가 부족해요"],
+    display: ["재고"],
+    tags: ["일터", "숫자·시간"],
+    preferTags: ["일터"],
+    phrases: ["재고가 부족해요"],
+  },
+  {
+    id: "reworkProcess",
+    patterns: [/재작업|수정작업|다시\s*작업|다시\s*손/],
+    focusTerms: ["재작업"],
+    terms: ["재작업", "수정작업"],
+    related: ["재작업해야 해요"],
+    display: ["재작업"],
+    tags: ["일터"],
+    preferTags: ["일터"],
+    phrases: ["재작업해야 해요"],
+  },
+  {
+    id: "scrapProcess",
+    patterns: [/폐기|폐품|버려|버리|스크랩/],
+    focusTerms: ["폐기"],
+    terms: ["폐기", "스크랩"],
+    related: ["이건 폐기해야 해요?"],
+    display: ["폐기"],
+    tags: ["일터"],
+    preferTags: ["일터"],
+    phrases: ["이건 폐기해야 해요?"],
+  },
+  {
+    id: "defectCauseWork",
+    patterns: [/(불량|하자).*(원인|이유)|(?:원인|이유).*(불량|하자)/],
+    focusTerms: ["불량 원인"],
+    terms: ["불량 원인", "불량", "원인"],
+    related: ["불량 원인을 확인해 주세요"],
+    display: ["불량 원인"],
+    tags: ["일터"],
+    preferTags: ["일터"],
+    phrases: ["불량 원인을 확인해 주세요"],
+  },
+  {
+    id: "correctiveActionWork",
+    patterns: [/조치|대응|수정\s*완료|조치\s*완료|해결/],
+    focusTerms: ["조치"],
+    terms: ["조치", "대응"],
+    related: ["조치 완료했어요"],
+    display: ["조치"],
+    tags: ["일터"],
+    preferTags: ["일터"],
+    phrases: ["조치 완료했어요"],
+  },
+  {
+    id: "equipmentInspection",
+    patterns: [/설비\s*점검|장비\s*점검|기계\s*점검|점검.*(설비|장비|기계)/],
+    focusTerms: ["설비 점검"],
+    terms: ["설비 점검", "설비", "점검"],
+    related: ["설비 점검해 주세요"],
+    display: ["설비 점검"],
+    tags: ["일터"],
+    preferTags: ["일터"],
+    phrases: ["설비 점검해 주세요"],
+  },
+  {
+    id: "lubricantSupply",
+    patterns: [/윤활유|오일|윤활\s*오일/],
+    focusTerms: ["윤활유"],
+    terms: ["윤활유", "오일"],
+    related: ["윤활유가 부족해요"],
+    display: ["윤활유"],
+    tags: ["일터"],
+    preferTags: ["일터"],
+    phrases: ["윤활유가 부족해요"],
+  },
+  {
+    id: "coolantSupply",
+    patterns: [/냉각수|쿨런트|냉각\s*수/],
+    focusTerms: ["냉각수"],
+    terms: ["냉각수", "쿨런트"],
+    related: ["냉각수가 부족해요"],
+    display: ["냉각수"],
+    tags: ["일터"],
+    preferTags: ["일터"],
+    phrases: ["냉각수가 부족해요"],
+  },
+  {
+    id: "pressureStatus",
+    patterns: [/압력|유압|공압|압력이\s*낮|압력이\s*높/],
+    focusTerms: ["압력"],
+    terms: ["압력"],
+    related: ["압력이 낮아요"],
+    display: ["압력"],
+    tags: ["일터", "숫자·시간"],
+    preferTags: ["일터"],
+    phrases: ["압력이 낮아요"],
+  },
+  {
+    id: "temperatureStatus",
+    patterns: [/온도|온도가\s*높|온도가\s*낮|열이\s*많/],
+    focusTerms: ["온도"],
+    terms: ["온도"],
+    related: ["온도가 높아요"],
+    display: ["온도"],
+    tags: ["일터", "숫자·시간"],
+    preferTags: ["일터"],
+    phrases: ["온도가 높아요"],
+  },
+  {
+    id: "measuringTool",
+    patterns: [/계측기|측정기|측정\s*장비|측정\s*도구/],
+    focusTerms: ["계측기"],
+    terms: ["계측기", "측정기"],
+    related: ["계측기 빌려 주세요"],
+    display: ["계측기"],
+    tags: ["일터"],
+    preferTags: ["일터"],
+    phrases: ["계측기 빌려 주세요"],
+  },
+  {
+    id: "vernierCaliperTool",
+    patterns: [/버니어|캘리퍼스|칼리퍼스|vernier|caliper/i],
+    focusTerms: ["버니어캘리퍼스"],
+    terms: ["버니어캘리퍼스", "캘리퍼스"],
+    related: ["버니어캘리퍼스 있어요?"],
+    display: ["버니어캘리퍼스"],
+    tags: ["일터"],
+    preferTags: ["일터"],
+    phrases: ["버니어캘리퍼스 있어요?"],
+  },
+  {
+    id: "torqueWrenchTool",
+    patterns: [/토크렌치|토크\s*렌치|torque/i],
+    focusTerms: ["토크렌치"],
+    terms: ["토크렌치", "토크 렌치"],
+    related: ["토크렌치가 필요해요"],
+    display: ["토크렌치"],
+    tags: ["일터"],
+    preferTags: ["일터"],
+    phrases: ["토크렌치가 필요해요"],
+  },
+  {
+    id: "approvalPendingWork",
+    patterns: [/승인대기|승인\s*대기|승인\s*중|승인\s*기다/],
+    focusTerms: ["승인대기"],
+    terms: ["승인대기", "승인"],
+    related: ["승인 대기 중이에요"],
+    display: ["승인대기"],
+    tags: ["일터"],
+    preferTags: ["일터"],
+    phrases: ["승인 대기 중이에요"],
+  },
+  {
+    id: "meetingMinutesWork",
+    patterns: [/회의록|미팅노트|회의\s*기록/],
+    focusTerms: ["회의록"],
+    terms: ["회의록"],
+    related: ["회의록 올렸어요"],
+    display: ["회의록"],
+    tags: ["일터"],
+    preferTags: ["일터"],
+    phrases: ["회의록 올렸어요"],
+  },
+  {
     id: "moldRoomFacility",
     patterns: [/금형실|몰드실|금형\s*실/],
     focusTerms: ["금형실"],
@@ -5154,6 +5374,146 @@ const QUERY_ALIASES = [
     tags: ["일터"],
   },
   {
+    matches: ["생산계획확인해주세요", "생산계획보여주세요"],
+    primary: ["생산계획"],
+    related: ["생산계획 확인해 주세요"],
+    display: ["생산계획"],
+    tags: ["일터"],
+  },
+  {
+    matches: ["작업표준서보여주세요", "표준작업서보여주세요"],
+    primary: ["작업표준서"],
+    related: ["작업표준서 보여 주세요"],
+    display: ["작업표준서"],
+    tags: ["일터"],
+  },
+  {
+    matches: ["작업일보작성했어요", "일일작업보고서작성했어요"],
+    primary: ["작업일보"],
+    related: ["작업일보 작성했어요"],
+    display: ["작업일보"],
+    tags: ["일터"],
+  },
+  {
+    matches: ["로트번호확인해주세요", "lot번호확인해주세요", "LOT번호확인해주세요"],
+    primary: ["로트번호"],
+    related: ["로트번호 확인해 주세요"],
+    display: ["로트번호"],
+    tags: ["일터"],
+  },
+  {
+    matches: ["수량이맞지않아요", "수량이안맞아요"],
+    primary: ["수량"],
+    related: ["수량이 맞지 않아요"],
+    display: ["수량"],
+    tags: ["일터", "숫자·시간"],
+  },
+  {
+    matches: ["재고가부족해요", "스톡이부족해요"],
+    primary: ["재고"],
+    related: ["재고가 부족해요"],
+    display: ["재고"],
+    tags: ["일터", "숫자·시간"],
+  },
+  {
+    matches: ["재작업해야해요", "다시작업해야해요"],
+    primary: ["재작업"],
+    related: ["재작업해야 해요"],
+    display: ["재작업"],
+    tags: ["일터"],
+  },
+  {
+    matches: ["이건폐기해야해요", "폐기해야해요"],
+    primary: ["폐기"],
+    related: ["이건 폐기해야 해요?"],
+    display: ["폐기"],
+    tags: ["일터"],
+  },
+  {
+    matches: ["불량원인을확인해주세요", "불량원인확인해주세요"],
+    primary: ["불량 원인"],
+    related: ["불량 원인을 확인해 주세요"],
+    display: ["불량 원인"],
+    tags: ["일터"],
+  },
+  {
+    matches: ["조치완료했어요", "수정완료했어요"],
+    primary: ["조치"],
+    related: ["조치 완료했어요"],
+    display: ["조치"],
+    tags: ["일터"],
+  },
+  {
+    matches: ["설비점검해주세요", "장비점검해주세요"],
+    primary: ["설비 점검"],
+    related: ["설비 점검해 주세요"],
+    display: ["설비 점검"],
+    tags: ["일터"],
+  },
+  {
+    matches: ["윤활유가부족해요", "오일이부족해요"],
+    primary: ["윤활유"],
+    related: ["윤활유가 부족해요"],
+    display: ["윤활유"],
+    tags: ["일터"],
+  },
+  {
+    matches: ["냉각수가부족해요", "쿨런트가부족해요"],
+    primary: ["냉각수"],
+    related: ["냉각수가 부족해요"],
+    display: ["냉각수"],
+    tags: ["일터"],
+  },
+  {
+    matches: ["압력이낮아요"],
+    primary: ["압력"],
+    related: ["압력이 낮아요"],
+    display: ["압력"],
+    tags: ["일터", "숫자·시간"],
+  },
+  {
+    matches: ["온도가높아요"],
+    primary: ["온도"],
+    related: ["온도가 높아요"],
+    display: ["온도"],
+    tags: ["일터", "숫자·시간"],
+  },
+  {
+    matches: ["계측기빌려주세요", "측정기빌려주세요"],
+    primary: ["계측기"],
+    related: ["계측기 빌려 주세요"],
+    display: ["계측기"],
+    tags: ["일터"],
+  },
+  {
+    matches: ["버니어캘리퍼스있어요", "캘리퍼스있어요"],
+    primary: ["버니어캘리퍼스"],
+    related: ["버니어캘리퍼스 있어요?"],
+    display: ["버니어캘리퍼스"],
+    tags: ["일터"],
+  },
+  {
+    matches: ["토크렌치가필요해요", "토크렌치필요해요"],
+    primary: ["토크렌치"],
+    related: ["토크렌치가 필요해요"],
+    display: ["토크렌치"],
+    tags: ["일터"],
+  },
+  {
+    matches: ["승인대기중이에요"],
+    primary: ["승인대기"],
+    related: ["승인 대기 중이에요"],
+    display: ["승인대기"],
+    tags: ["일터"],
+  },
+  {
+    matches: ["회의록올렸어요"],
+    primary: ["회의록"],
+    related: ["회의록 올렸어요"],
+    display: ["회의록"],
+    tags: ["일터"],
+  },
+  {
     matches: ["금형실이어디예요"],
     primary: ["금형실"],
     related: ["금형실이 어디예요?"],
@@ -6459,7 +6819,34 @@ function detectTags(...parts) {
     이동: ["어디", "왼쪽", "오른쪽", "길", "가다", "오다", "집", "위치", "화장실"],
     쇼핑: ["얼마", "비싸", "깎", "카드", "사이즈", "색", "가격", "영수증"],
     건강: ["아프", "병원", "약", "화장실", "열", "기침", "조심"],
-    일터: ["확인", "완료", "문제", "기다리", "빠르", "느리", "작업", "기계", "공장"],
+    일터: [
+      "확인",
+      "완료",
+      "문제",
+      "기다리",
+      "빠르",
+      "느리",
+      "작업",
+      "기계",
+      "공장",
+      "생산",
+      "로트",
+      "수량",
+      "재고",
+      "재작업",
+      "폐기",
+      "불량",
+      "설비",
+      "윤활유",
+      "냉각수",
+      "압력",
+      "온도",
+      "계측기",
+      "캘리퍼스",
+      "토크렌치",
+      "승인",
+      "회의록",
+    ],
     "숫자·시간": ["오늘", "내일", "어제", "아침", "저녁", "요일", "시간", "오후", "월"],
   };
 
@@ -8470,6 +8857,40 @@ function mergeGeneratedEntrySets(...groups) {
   };
 }
 
+const SPECIFIC_OBJECT_GENERIC_GENERATED_VOCAB = new Set([
+  "이거",
+  "이것",
+  "이건",
+  "그거",
+  "그것",
+  "끝나다",
+  "완료",
+  "완료하다",
+  "완성",
+  "완성하다",
+]);
+
+function refineGeneratedVocabForSpecificObject(generatedVocab, searchProfile) {
+  if (!Array.isArray(generatedVocab) || !generatedVocab.length || !searchProfile?.objectTerms?.length) {
+    return generatedVocab;
+  }
+
+  const objectTerms = searchProfile.objectTerms.filter(Boolean);
+  if (!objectTerms.length) return generatedVocab;
+
+  let removedGeneric = false;
+  const filtered = generatedVocab.filter((entry) => {
+    const index = buildSearchIndex(entry);
+    const hasObjectHit = objectTerms.some((term) => matchesCoreField(index, term));
+    if (hasObjectHit) return true;
+    const isGenericGeneratedVocab = SPECIFIC_OBJECT_GENERIC_GENERATED_VOCAB.has(compactText(entry?.korean || ""));
+    if (isGenericGeneratedVocab) removedGeneric = true;
+    return !isGenericGeneratedVocab;
+  });
+
+  return removedGeneric ? filtered : generatedVocab;
+}
+
 function findExactEntry(entries, searchProfile, options = {}) {
   if (!searchProfile.query) return null;
   const includeSupport = options.includeSupport ?? false;
@@ -10203,6 +10624,7 @@ function computeSearchComputation(query = state.query) {
     generatedPredicate,
     generatedThaiMeaning
   );
+  const refinedGeneratedVocab = refineGeneratedVocabForSpecificObject(generatedAssist.vocab, searchProfile);
   const composedMode = Boolean(generatedAssist.vocab.length || generatedAssist.sentences.length);
   const strictPhraseMode = Boolean(
     searchProfile.templateTerms.length || (searchProfile.objectTerms.length && searchProfile.actionTerms.length)
@@ -10216,9 +10638,10 @@ function computeSearchComputation(query = state.query) {
       !shouldKeepExactSentenceMatch(exactSentenceMatch, searchProfile))
       ? null
       : exactSentenceMatch;
-  const refinedVocabResults = composedMode
+  const baseRefinedVocabResults = composedMode
     ? preliminaryVocabResults.filter((entry) => entry.source !== "generated-bulk")
     : preliminaryVocabResults;
+  const refinedVocabResults = refineGeneratedVocabForSpecificObject(baseRefinedVocabResults, searchProfile);
   const refinedSentenceCandidates =
     generatedAssist.suppressFallbackSentences
       ? []
@@ -10226,13 +10649,13 @@ function computeSearchComputation(query = state.query) {
         ? searchEngine.getSentenceResults(
             sentenceSource,
             searchProfile,
-            uniqueByMeaning([...generatedAssist.vocab, ...refinedVocabResults])
+            uniqueByMeaning([...refinedGeneratedVocab, ...refinedVocabResults])
           ).filter((entry) => entry.source !== "generated-bulk")
         : !numberMode && !dateMode && !timeQuestionMode && !timeMode
           ? searchEngine.getSentenceResults(
               sentenceSource,
               searchProfile,
-              uniqueByMeaning([...generatedAssist.vocab, ...refinedVocabResults])
+              uniqueByMeaning([...refinedGeneratedVocab, ...refinedVocabResults])
             )
           : [];
   const rawVocabResults = numberMode
@@ -10243,7 +10666,7 @@ function computeSearchComputation(query = state.query) {
       ? generatedTimeQuestion.vocab
       : timeMode
         ? generatedTime.vocab
-        : uniqueByMeaning(uniqueById([...generatedAssist.vocab, ...refinedVocabResults]));
+        : uniqueByMeaning(uniqueById([...refinedGeneratedVocab, ...refinedVocabResults]));
   const vocabResults = query
     ? finalizeSearchEntries(rawVocabResults, searchProfile, "vocab", RESULT_LIMITS.vocab)
     : [];
