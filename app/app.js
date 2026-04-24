@@ -25,7 +25,8 @@ const EXPORT_VERSION = 1;
 const AI_STORAGE_KEY = "thai-pocketbook-ai-v1";
 const AUTH_STORAGE_KEY = "thai-pocketbook-auth-v1";
 const UI_LANGUAGE_STORAGE_KEY = "thai-pocketbook-ui-language-v1";
-const APP_VERSION = "20260424f";
+const APP_VERSION = "20260424g";
+const DATA_CORE_SCRIPT_SRC = "./data-core.js?v=20260424g";
 const DATA_SCRIPT_SRC = "./data.js?v=20260422a";
 const INITIAL_AUTH_PASSWORD = "1234";
 const DEFAULT_PROXY_ENDPOINT = "https://thai-pocketbook-ai.rjsghks87.workers.dev/assist";
@@ -621,9 +622,16 @@ function normalizeBaseData(rawData) {
   };
 }
 
-let baseData = normalizeBaseData(window.BASE_DATA);
+function hasBaseDataEntries(rawData) {
+  return Boolean((rawData?.vocab || []).length || (rawData?.sentences || []).length);
+}
+
+let baseData = normalizeBaseData(window.BASE_DATA || window.BASE_DATA_CORE);
+let baseDataLoadStage = hasBaseDataEntries(window.BASE_DATA) ? "full" : hasBaseDataEntries(window.BASE_DATA_CORE) ? "core" : "empty";
 let baseDataLoadPromise = null;
+let baseDataFullLoadPromise = null;
 let baseDataLoadError = "";
+let baseDataFullLoadError = "";
 
 const THAI_SCRIPT_OVERRIDE_PAIRS = [
   ["저는", "ผม"],
@@ -7170,52 +7178,112 @@ function hasLoadedBaseData() {
   return Boolean((baseData.vocab && baseData.vocab.length) || (baseData.sentences && baseData.sentences.length));
 }
 
-function markBaseDataLoaded(rawData) {
+function hasLoadedFullBaseData() {
+  return baseDataLoadStage === "full" && hasLoadedBaseData();
+}
+
+function markBaseDataLoaded(rawData, options = {}) {
   const nextBaseData = normalizeBaseData(rawData);
   Object.keys(baseData).forEach((key) => {
     delete baseData[key];
   });
   Object.assign(baseData, nextBaseData);
+  baseDataLoadStage = options.stage || "core";
   hydratedBaseDataCache = null;
   hydratedBaseMergedEntriesCache = null;
   clearDerivedSearchCaches();
   baseDataLoadError = "";
+  if (baseDataLoadStage === "full") {
+    baseDataFullLoadError = "";
+  }
 }
 
 function ensureBaseDataLoaded(options = {}) {
   if (hasLoadedBaseData()) {
     return Promise.resolve(baseData);
   }
-  if (window.BASE_DATA && ((window.BASE_DATA.vocab || []).length || (window.BASE_DATA.sentences || []).length)) {
-    markBaseDataLoaded(window.BASE_DATA);
+  if (hasBaseDataEntries(window.BASE_DATA)) {
+    markBaseDataLoaded(window.BASE_DATA, { stage: "full" });
+    return Promise.resolve(baseData);
+  }
+  if (hasBaseDataEntries(window.BASE_DATA_CORE)) {
+    markBaseDataLoaded(window.BASE_DATA_CORE, { stage: "core" });
     return Promise.resolve(baseData);
   }
   if (baseDataLoadPromise) return baseDataLoadPromise;
 
   baseDataLoadPromise = new Promise((resolve, reject) => {
-    const existingScript = document.querySelector(`script[data-base-data-loader="true"]`);
+    const existingScript = document.querySelector(`script[data-core-data-loader="true"]`);
     const script = existingScript || document.createElement("script");
-    script.dataset.baseDataLoader = "true";
+    script.dataset.coreDataLoader = "true";
     script.async = true;
-    script.src = DATA_SCRIPT_SRC;
+    script.src = DATA_CORE_SCRIPT_SRC;
     script.onload = () => {
-      markBaseDataLoaded(window.BASE_DATA);
+      if (!hasBaseDataEntries(window.BASE_DATA_CORE)) {
+        baseDataLoadError = "핵심 검색 데이터가 비어 있습니다. 새로고침 후 다시 시도해 주세요.";
+        baseDataLoadPromise = null;
+        reject(new Error(baseDataLoadError));
+        return;
+      }
+      markBaseDataLoaded(window.BASE_DATA_CORE, { stage: "core" });
       if (options.renderAfter !== false) {
         render();
       }
       resolve(baseData);
     };
     script.onerror = () => {
-      baseDataLoadError = "데이터 파일을 불러오지 못했습니다. 네트워크를 확인한 뒤 다시 시도해 주세요.";
+      baseDataLoadError = "핵심 검색 데이터를 불러오지 못했습니다. 네트워크를 확인한 뒤 다시 시도해 주세요.";
       baseDataLoadPromise = null;
       reject(new Error(baseDataLoadError));
     };
     if (!existingScript) {
-      document.head.appendChild(script);
+      (document.head || document.body || document.documentElement).appendChild(script);
     }
   });
 
   return baseDataLoadPromise;
+}
+
+function ensureFullBaseDataLoaded(options = {}) {
+  if (hasLoadedFullBaseData()) {
+    return Promise.resolve(baseData);
+  }
+  if (hasBaseDataEntries(window.BASE_DATA)) {
+    markBaseDataLoaded(window.BASE_DATA, { stage: "full" });
+    return Promise.resolve(baseData);
+  }
+  if (baseDataFullLoadPromise) return baseDataFullLoadPromise;
+
+  baseDataFullLoadPromise = new Promise((resolve, reject) => {
+    const existingScript = document.querySelector(`script[data-full-data-loader="true"]`);
+    const script = existingScript || document.createElement("script");
+    script.dataset.fullDataLoader = "true";
+    script.async = true;
+    script.src = DATA_SCRIPT_SRC;
+    script.onload = () => {
+      if (!hasBaseDataEntries(window.BASE_DATA)) {
+        baseDataFullLoadError = "전체 검색 데이터가 비어 있습니다. 핵심 결과는 계속 사용할 수 있습니다.";
+        baseDataFullLoadPromise = null;
+        reject(new Error(baseDataFullLoadError));
+        return;
+      }
+      markBaseDataLoaded(window.BASE_DATA, { stage: "full" });
+      if (options.renderAfter !== false) {
+        render();
+      }
+      resolve(baseData);
+    };
+    script.onerror = () => {
+      baseDataFullLoadError = "전체 검색 데이터를 보강하지 못했습니다. 핵심 결과는 계속 사용할 수 있습니다.";
+      baseDataFullLoadPromise = null;
+      reject(new Error(baseDataFullLoadError));
+    };
+    if (!existingScript) {
+      (document.head || document.body || document.documentElement).appendChild(script);
+    }
+  });
+
+  return baseDataFullLoadPromise;
 }
 
 function buildSearchComputationCacheKey(query) {
@@ -10902,6 +10970,7 @@ const { performSearch, queueSearch, applyQuickSearch, jumpToSection } = createSe
   render,
   isBrowsingState,
   ensureBaseDataLoaded,
+  ensureFullBaseDataLoaded,
   setSearchButtonBusy,
   cancelNextFrame,
   requestNextFrame,

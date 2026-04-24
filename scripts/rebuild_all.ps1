@@ -4,6 +4,7 @@ $ErrorActionPreference = "Stop"
 $repoRoot = Split-Path -Parent $PSScriptRoot
 
 python (Join-Path $PSScriptRoot "build_data.py")
+node (Join-Path $PSScriptRoot "build_data_shards.js")
 python (Join-Path $PSScriptRoot "build_single_file.py")
 
 Write-Host ""

@@ -4,6 +4,7 @@ export function createSearchActions({
   render,
   isBrowsingState,
   ensureBaseDataLoaded,
+  ensureFullBaseDataLoaded,
   setSearchButtonBusy,
   cancelNextFrame,
   requestNextFrame,
@@ -13,6 +14,13 @@ export function createSearchActions({
     if (String(query || "").trim() && typeof ensureBaseDataLoaded === "function") {
       await ensureBaseDataLoaded({ renderAfter: false });
     }
+  }
+
+  function warmFullSearchData(query) {
+    if (!String(query || "").trim() || typeof ensureFullBaseDataLoaded !== "function") return;
+    ensureFullBaseDataLoaded({ renderAfter: true }).catch((error) => {
+      console.error("전체 검색 데이터 보강 실패", error);
+    });
   }
 
   async function performSearch(nextQuery = elements.searchInput.value.trim(), options = {}) {
@@ -31,6 +39,7 @@ export function createSearchActions({
       state.selectedVocabId = null;
       state.revealedThaiIds = new Set();
       render();
+      warmFullSearchData(query);
       if (options.scrollResults && !isBrowsingState()) {
         elements.resultStack.scrollIntoView({ behavior: "smooth", block: "start" });
       }
