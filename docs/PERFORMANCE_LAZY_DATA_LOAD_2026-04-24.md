@@ -37,6 +37,28 @@
 - Loaded local data after search: `12985` vocab, `8196` sentences
 - Search result smoke after lazy load: `금형` returned 1 vocab card and 10 sentence cards
 
+## Post-Push Verification
+
+- Git commit: `111df53 Lazy-load search data on first access`
+- Pushed to `origin/main`
+- Live HTML: `https://gunh0906.github.io/thai/`
+  - contains `app.js?v=20260424f`
+  - no blocking `data.js` script tag
+- Live app JS:
+  - contains `APP_VERSION = "20260424f"`
+  - contains lazy `DATA_SCRIPT_SRC`
+  - no direct `const baseData = window.BASE_DATA` blocking path
+- Live browser performance probe:
+  - `DOMContentLoaded`: 3621 ms
+  - `load`: 3622 ms
+  - `data.js` requests at `DOMContentLoaded`: 0
+  - `data.js` requests at `load`: 0
+  - `data.js` requests after 3 seconds idle: 0
+  - `data.js` requested by search: yes
+  - `data.js` requests after search: 1
+  - loaded data after search: `12985` vocab, `8196` sentences
+  - `금형` search result smoke: 1 vocab card, 10 sentence cards
+
 ## Next Start Point
 
 - If first search feels slow on mobile, the next blocker is payload splitting: move `data.js` into scenario/search-index shards and load only the matching shard first.
