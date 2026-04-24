@@ -9,6 +9,7 @@ export function createRenderAdminUsersList({
   requestWorkerJson,
   sanitizeAuthUser,
   saveAuthState,
+  initialAuthPassword,
   render,
 }) {
   return function renderAdminUsersList() {
@@ -96,16 +97,7 @@ export function createRenderAdminUsersList({
       enabledWrap.append(enabledInput, enabledText);
       enabledLabel.append(enabledTitle, enabledWrap);
 
-      const passwordLabel = document.createElement("label");
-      passwordLabel.className = "wide";
-      const passwordTitle = document.createElement("span");
-      passwordTitle.textContent = t("auth.users.resetPassword");
-      const passwordInput = document.createElement("input");
-      passwordInput.type = "password";
-      passwordInput.placeholder = t("auth.users.resetPasswordPlaceholder");
-      passwordLabel.append(passwordTitle, passwordInput);
-
-      grid.append(roleLabel, aiLabel, enabledLabel, passwordLabel);
+      grid.append(roleLabel, aiLabel, enabledLabel);
       card.appendChild(grid);
 
       if (selfUser) {
@@ -123,6 +115,19 @@ export function createRenderAdminUsersList({
       saveButton.textContent = t("auth.users.save");
       wirePressFeedback(saveButton);
 
+      const resetButton = document.createElement("button");
+      resetButton.type = "button";
+      resetButton.className = "mini-button";
+      resetButton.textContent = t("auth.users.resetToInitial");
+      wirePressFeedback(resetButton);
+
+      const deleteButton = document.createElement("button");
+      deleteButton.type = "button";
+      deleteButton.className = "mini-button danger";
+      deleteButton.textContent = t("auth.users.delete");
+      deleteButton.disabled = selfUser;
+      wirePressFeedback(deleteButton);
+
       saveButton.addEventListener("click", async () => {
         saveButton.disabled = true;
         if (elements.authAdminFeedback) {
@@ -135,9 +140,6 @@ export function createRenderAdminUsersList({
             canUseAi: aiInput.checked,
             enabled: enabledInput.checked,
           };
-          if (String(passwordInput.value || "").trim()) {
-            payload.resetPassword = String(passwordInput.value || "").trim();
-          }
 
           const data = await requestWorkerJson(`/auth/users/${encodeURIComponent(user.username)}`, {
             method: "PATCH",
@@ -150,7 +152,6 @@ export function createRenderAdminUsersList({
             state.auth.me = updatedUser;
             saveAuthState();
           }
-          passwordInput.value = "";
           if (elements.authAdminFeedback) {
             elements.authAdminFeedback.textContent = t("auth.users.saved", { username: user.username });
           }
@@ -164,7 +165,73 @@ export function createRenderAdminUsersList({
         }
       });
 
-      actions.appendChild(saveButton);
+      resetButton.addEventListener("click", async () => {
+        if (!window.confirm(t("auth.users.resetConfirm", { username: user.username }))) return;
+
+        resetButton.disabled = true;
+        if (elements.authAdminFeedback) {
+          elements.authAdminFeedback.textContent = t("auth.users.resetting", { username: user.username });
+        }
+
+        try {
+          const data = await requestWorkerJson(`/auth/users/${encodeURIComponent(user.username)}`, {
+            method: "PATCH",
+            body: {
+              role: user.role,
+              canUseAi: Boolean(user.canUseAi),
+              enabled: user.enabled !== false,
+              resetPassword: initialAuthPassword,
+            },
+          });
+
+          const updatedUser = sanitizeAuthUser(data?.user);
+          state.auth.users = state.auth.users.map((item) => (item?.username === updatedUser?.username ? updatedUser : item));
+          if (updatedUser?.username === state.auth.me?.username) {
+            state.auth.me = updatedUser;
+            saveAuthState();
+          }
+          if (elements.authAdminFeedback) {
+            elements.authAdminFeedback.textContent = t("auth.users.resetDone", { username: user.username });
+          }
+          render();
+        } catch (error) {
+          if (elements.authAdminFeedback) {
+            elements.authAdminFeedback.textContent = error instanceof Error ? error.message : t("auth.users.resetFailed");
+          }
+        } finally {
+          resetButton.disabled = false;
+        }
+      });
+
+      deleteButton.addEventListener("click", async () => {
+        if (deleteButton.disabled) return;
+        if (!window.confirm(t("auth.users.deleteConfirm", { username: user.username }))) return;
+
+        deleteButton.disabled = true;
+        if (elements.authAdminFeedback) {
+          elements.authAdminFeedback.textContent = t("auth.users.deleting", { username: user.username });
+        }
+
+        try {
+          await requestWorkerJson(`/auth/users/${encodeURIComponent(user.username)}`, {
+            method: "DELETE",
+          });
+
+          state.auth.users = state.auth.users.filter((item) => item?.username !== user.username);
+          if (elements.authAdminFeedback) {
+            elements.authAdminFeedback.textContent = t("auth.users.deleted", { username: user.username });
+          }
+          render();
+        } catch (error) {
+          if (elements.authAdminFeedback) {
+            elements.authAdminFeedback.textContent = error instanceof Error ? error.message : t("auth.users.deleteFailed");
+          }
+        } finally {
+          deleteButton.disabled = selfUser;
+        }
+      });
+
+      actions.append(saveButton, resetButton, deleteButton);
       card.appendChild(actions);
       elements.authUsersList.appendChild(card);
     });

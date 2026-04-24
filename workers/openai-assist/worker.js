@@ -1186,6 +1186,44 @@ export class AuthStore {
     return authStoreJsonResponse({ ok: true, user: sanitizeUser(user) });
   }
 
+  async handleUsersDelete(request, usernameFromPath) {
+    const auth = await this.requireUser(request, { requireAdmin: true });
+    if (auth.error) return auth.error;
+
+    const username = normalizeUsername(usernameFromPath);
+    const user = auth.users[username];
+    if (!user) {
+      return authStoreJsonResponse({ error: "사용자를 찾지 못했습니다." }, 404);
+    }
+
+    const isSelf = username === normalizeUsername(auth.user.username);
+    if (isSelf) {
+      return authStoreJsonResponse({ error: "현재 로그인한 관리자 계정은 삭제할 수 없습니다." }, 400);
+    }
+
+    const enabledAdminCount = this.countEnabledAdmins(auth.users);
+    if (user.role === "admin" && user.enabled !== false && enabledAdminCount <= 1) {
+      return authStoreJsonResponse({ error: "마지막 관리자 계정은 삭제할 수 없습니다." }, 400);
+    }
+
+    delete auth.users[username];
+
+    let sessionsChanged = false;
+    Object.entries(auth.sessions).forEach(([tokenHash, session]) => {
+      if (normalizeUsername(session?.username) === username) {
+        delete auth.sessions[tokenHash];
+        sessionsChanged = true;
+      }
+    });
+
+    await this.saveUsers(auth.users);
+    if (sessionsChanged) {
+      await this.saveSessions(auth.sessions);
+    }
+
+    return authStoreJsonResponse({ ok: true, username });
+  }
+
   async handleInternalVerifySession(request) {
     const url = new URL(request.url);
     const requireAi = url.searchParams.get("requireAi") === "true";
@@ -1219,6 +1257,9 @@ export class AuthStore {
     }
     if (request.method === "PATCH" && url.pathname.startsWith("/auth/users/")) {
       return this.handleUsersPatch(request, decodeURIComponent(url.pathname.replace("/auth/users/", "")));
+    }
+    if (request.method === "DELETE" && url.pathname.startsWith("/auth/users/")) {
+      return this.handleUsersDelete(request, decodeURIComponent(url.pathname.replace("/auth/users/", "")));
     }
     if (request.method === "GET" && url.pathname === "/internal/verify-session") {
       return this.handleInternalVerifySession(request);

@@ -31,11 +31,13 @@ This worker sits between the public GitHub Pages app and the private OpenAI API 
 - `GET /auth/users`
 - `POST /auth/users`
 - `PATCH /auth/users/:username`
+- `DELETE /auth/users/:username`
 
 Admin user creation note:
 
 - `POST /auth/users` ignores any submitted password and creates the account with `1234`.
 - `PATCH /auth/users/:username` can reset a user to `1234` or to another password of at least 8 characters.
+- `DELETE /auth/users/:username` removes a user and clears their active sessions. It refuses to delete the current admin or the last enabled admin.
 - `POST /auth/change-password` still requires the user's new password to be at least 8 characters.
 
 ## Required secret

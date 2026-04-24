@@ -25,7 +25,7 @@ const EXPORT_VERSION = 1;
 const AI_STORAGE_KEY = "thai-pocketbook-ai-v1";
 const AUTH_STORAGE_KEY = "thai-pocketbook-auth-v1";
 const UI_LANGUAGE_STORAGE_KEY = "thai-pocketbook-ui-language-v1";
-const APP_VERSION = "20260424c";
+const APP_VERSION = "20260424d";
 const INITIAL_AUTH_PASSWORD = "1234";
 const DEFAULT_PROXY_ENDPOINT = "https://thai-pocketbook-ai.rjsghks87.workers.dev/assist";
 const AI_ASSIST_MIN_QUERY_LENGTH = 2;
@@ -183,8 +183,16 @@ const UI_TEXT = {
     "auth.users.aiAllowed": "AI 검색 허용",
     "auth.users.accountState": "계정 상태",
     "auth.users.accountUsable": "사용 가능",
-    "auth.users.resetPassword": "비밀번호 재설정",
-    "auth.users.resetPasswordPlaceholder": "비워두면 그대로 둡니다",
+    "auth.users.resetToInitial": "1234로 초기화",
+    "auth.users.resetConfirm": "\"{{username}}\" 계정 비밀번호를 1234로 초기화할까요?",
+    "auth.users.resetting": "\"{{username}}\" 계정 비밀번호를 1234로 초기화하는 중입니다.",
+    "auth.users.resetDone": "\"{{username}}\" 계정 비밀번호를 1234로 초기화했습니다.",
+    "auth.users.resetFailed": "비밀번호 초기화에 실패했습니다.",
+    "auth.users.delete": "삭제",
+    "auth.users.deleteConfirm": "\"{{username}}\" 계정을 삭제할까요? 삭제하면 되돌릴 수 없습니다.",
+    "auth.users.deleting": "\"{{username}}\" 계정을 삭제하는 중입니다.",
+    "auth.users.deleted": "\"{{username}}\" 계정을 삭제했습니다.",
+    "auth.users.deleteFailed": "계정 삭제에 실패했습니다.",
     "auth.users.selfProtected": "현재 로그인한 관리자 계정은 권한 변경이나 비활성화를 여기서 막아 두었습니다.",
     "auth.users.save": "저장",
     "auth.users.saving": "\"{{username}}\" 계정을 저장하는 중입니다.",
@@ -400,8 +408,16 @@ const UI_TEXT = {
     "auth.users.aiAllowed": "อนุญาตค้นหา AI",
     "auth.users.accountState": "สถานะบัญชี",
     "auth.users.accountUsable": "ใช้งานได้",
-    "auth.users.resetPassword": "รีเซ็ตรหัสผ่าน",
-    "auth.users.resetPasswordPlaceholder": "ปล่อยว่างเพื่อคงเดิมไว้",
+    "auth.users.resetToInitial": "รีเซ็ตเป็น 1234",
+    "auth.users.resetConfirm": "รีเซ็ตรหัสผ่านบัญชี \"{{username}}\" เป็น 1234 หรือไม่?",
+    "auth.users.resetting": "กำลังรีเซ็ตรหัสผ่านบัญชี \"{{username}}\" เป็น 1234",
+    "auth.users.resetDone": "รีเซ็ตรหัสผ่านบัญชี \"{{username}}\" เป็น 1234 แล้ว",
+    "auth.users.resetFailed": "รีเซ็ตรหัสผ่านไม่สำเร็จ",
+    "auth.users.delete": "ลบ",
+    "auth.users.deleteConfirm": "ลบบัญชี \"{{username}}\" หรือไม่? เมื่อลบแล้วจะย้อนกลับไม่ได้",
+    "auth.users.deleting": "กำลังลบบัญชี \"{{username}}\"",
+    "auth.users.deleted": "ลบบัญชี \"{{username}}\" แล้ว",
+    "auth.users.deleteFailed": "ลบบัญชีไม่สำเร็จ",
     "auth.users.selfProtected": "บัญชีผู้ดูแลที่กำลังล็อกอินอยู่ถูกกันไม่ให้เปลี่ยนสิทธิ์หรือปิดใช้งานจากหน้านี้",
     "auth.users.save": "บันทึก",
     "auth.users.saving": "กำลังบันทึกบัญชี \"{{username}}\"",
@@ -10189,8 +10205,10 @@ async function loadAdminUsers(options = {}) {
     state.auth.users = Array.isArray(data?.users) ? data.users.map((user) => sanitizeAuthUser(user)).filter(Boolean) : [];
     state.auth.userListStatus = "ready";
   } catch (error) {
-    state.auth.users = [];
-    state.auth.userListStatus = "error";
+    if (!options.preserveOnError) {
+      state.auth.users = [];
+    }
+    state.auth.userListStatus = options.preserveOnError && state.auth.users.length ? "ready" : "error";
     if (!options.silent && elements.authAdminFeedback) {
       elements.authAdminFeedback.textContent = error instanceof Error ? error.message : t("auth.users.loadFailed");
     }
@@ -10210,6 +10228,7 @@ const renderAdminUsersList = createRenderAdminUsersList({
   requestWorkerJson,
   sanitizeAuthUser,
   saveAuthState,
+  initialAuthPassword: INITIAL_AUTH_PASSWORD,
   render: () => render(),
 });
 
@@ -10363,7 +10382,7 @@ async function submitAuthUserCreate(event) {
   }
 
   try {
-    await requestWorkerJson("/auth/users", {
+    const data = await requestWorkerJson("/auth/users", {
       method: "POST",
       body: {
         username,
@@ -10373,6 +10392,14 @@ async function submitAuthUserCreate(event) {
         enabled,
       },
     });
+    const createdUser = sanitizeAuthUser(data?.user);
+    if (createdUser) {
+      state.auth.users = [
+        createdUser,
+        ...state.auth.users.filter((item) => item?.username !== createdUser.username),
+      ];
+      state.auth.userListStatus = "ready";
+    }
 
     elements.authUserCreateForm?.reset();
     if (elements.authCreatePasswordInput) elements.authCreatePasswordInput.value = INITIAL_AUTH_PASSWORD;
@@ -10381,7 +10408,7 @@ async function submitAuthUserCreate(event) {
     if (elements.authAdminFeedback) {
       elements.authAdminFeedback.textContent = t("auth.users.created", { username });
     }
-    await loadAdminUsers({ silent: true });
+    await loadAdminUsers({ silent: true, preserveOnError: true });
     render();
   } catch (error) {
     if (elements.authAdminFeedback) {

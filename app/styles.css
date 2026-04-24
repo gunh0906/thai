@@ -1390,6 +1390,12 @@ body::after {
   color: var(--danger);
 }
 
+.mini-button.danger {
+  border-color: rgba(234, 29, 44, 0.26);
+  background: rgba(234, 29, 44, 0.08);
+  color: var(--danger);
+}
+
 @media (max-width: 760px) {
   .page-shell {
     padding: 10px 8px 34px;
