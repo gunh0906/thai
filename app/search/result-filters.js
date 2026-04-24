@@ -40,6 +40,10 @@ export function createSearchResultFilters({
     return [...prioritized, ...entries.filter((entry) => !predicate(entry))];
   }
 
+  function hasDisplayThaiScript(entry) {
+    return Boolean(getThaiScriptText(entry));
+  }
+
   function isWaterRequestSearch(searchProfile) {
     return /(?:^|\s)물\s*(?:주세요|주세여|줘요|줘|있어요|있나요)?$|생수|차가운\s*물|따뜻한\s*물|찬물|냉수/.test(
       searchProfile.normalized
@@ -259,6 +263,7 @@ export function createSearchResultFilters({
           ? filterEntriesIfEnough(result, (entry) => isEntryGenericDirectionRelated(entry, searchProfile), 1)
           : prioritizeEntriesIfEnough(result, (entry) => isEntryGenericDirectionRelated(entry, searchProfile), 1);
     }
+    result = prioritizeEntriesIfEnough(result, hasDisplayThaiScript, 1);
     if (kind === "sentence") {
       result = prependExactSentenceMatches(result, searchProfile);
     }

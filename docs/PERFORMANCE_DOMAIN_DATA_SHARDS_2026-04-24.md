@@ -83,6 +83,22 @@
   - final full data: `12985` vocab, `8196` sentences
   - result cards: 8 vocab, 5 sentences
 
+## Language Pairing Final Check
+
+- Risk found: some Korean searches could show pronunciation-only `태국 문자 미보강` entries above entries that already had Thai script.
+- Fix: final result trimming now prioritizes entries with displayable Thai script before fallback pronunciation-only entries.
+- Local app version: `20260424j`
+- Regression:
+  - `node --check app/app.js`: passed
+  - `node --check app/search/result-filters.js`: passed
+  - `node scripts/audit_search.js --regression`: `171 / 171`
+- Browser pairing checks passed:
+  - `금형`: first card showed `금형` + `แม่พิมพ์`
+  - `기계가 멈췄습니다`: first card had Korean + Thai script and no `미보강`
+  - `급여명세서 보여주세요`: first card showed `급여명세서` + `สลิปเงินเดือน`
+  - `화장실 어디예요`: first card showed `화장실` + `ห้องน้ำ`
+  - `얼마예요`: first card showed `얼마예요` + `เท่าไร`
+
 ## Next Start Point
 
 - If weak mobile networks still feel slow, reduce `data-index.js` further by replacing token-level routing with a smaller hand-authored domain keyword manifest.
