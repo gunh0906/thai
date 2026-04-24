@@ -4,6 +4,15 @@
 
 이 문서는 다음 채팅에서 바로 이어서 작업할 수 있도록, 현재 프로젝트의 문제를 구조적으로 정리하고 우선순위가 있는 개선 계획으로 만든 문서입니다.
 
+## 실행 상태 (2026-04-24 업데이트)
+
+- Deploy closure
+  - `app/index.html` / `app/app.js` 배포 버전을 `20260424a`로 올리고 `main` 커밋 `28a03b5`를 GitHub Pages에 푸시했다.
+  - live `https://gunh0906.github.io/thai/` HTML이 `app.js?v=20260424a`를 반환하는 것까지 확인했다.
+  - `npx wrangler deploy`로 `thai-pocketbook-ai`를 재배포했고 live worker version id는 `555e512c-588a-4c9a-bc82-2a9cf8152b12`다.
+  - `node --check` 11종, `node scripts/audit_search.js --regression` `151 / 151`, UTF-8 VM harness `buildPrompt()/normalizeResult()` check를 모두 통과했다.
+  - 아직 남은 live gap은 인증된 session으로 `/assist` 실제 응답과 AI card UI를 한 번 더 확인하는 것이다.
+
 ## 실행 상태 (2026-04-23 업데이트)
 
 - Phase 1

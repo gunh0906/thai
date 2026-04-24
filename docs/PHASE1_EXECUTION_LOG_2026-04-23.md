@@ -1168,3 +1168,60 @@
 1. `mold / office-life / hr-docs / reporting-approval` supplemental group를 `app.js` 밖 data module로 더 찢기기
 2. `service-location / safety-gear / material-logistics / line-status / supervisor-call` worksite group를 `worksite-domain-data.js` 내부에서 다시 세분화하기
 3. 실제 worker credential이 준비된 세션에서 `/assist` live endpoint spot-check를 붙여 AI assist network path까지 닫기
+
+## 26. Deploy Update - 2026-04-24 (Live Pages + Worker)
+
+### Completed in this cycle
+
+- `app/index.html`
+  - 배포 자산 cache-busting version을 `20260424a`로 올렸다.
+  - `manifest`, `styles`, `app.js` query string을 새 배포 버전으로 통일했다.
+- `app/app.js`
+  - `APP_VERSION`을 `20260424a`로 올렸다.
+- Git / Pages
+  - `main`에 `28a03b5 Refactor search runtime and ship AI assist fallback` 커밋을 만들고 `origin/main`으로 푸시했다.
+  - GitHub Pages live HTML이 새 자산 버전을 가리키는 것까지 확인했다.
+- Cloudflare Worker
+  - `npx wrangler deploy`로 `thai-pocketbook-ai`를 재배포했다.
+  - live worker version id: `555e512c-588a-4c9a-bc82-2a9cf8152b12`
+
+### Verification performed
+
+- pre-deploy static / syntax
+  - `node --check app/app.js`
+  - `node --check app/search/search-runtime.js`
+  - `node --check app/search/worksite-domain-data.js`
+  - `node --check app/search/intent-analyzer.js`
+  - `node --check app/search/search-profile.js`
+  - `node --check app/search/search-engine.js`
+  - `node --check app/search/generators.js`
+  - `node --check app/search/generated-assist-helpers.js`
+  - `node --check app/search/result-filters.js`
+  - `node --check scripts/audit_search.js`
+  - `node --check workers/openai-assist/worker.js`
+- search regression
+  - `node scripts/audit_search.js --regression`
+  - 결과: `151 / 151` 통과
+- AI worker functional check
+  - UTF-8 VM harness로 `buildPrompt()`와 `normalizeResult()`를 직접 실행했다.
+  - 확인 결과
+    - prompt에 `sentences[0]` direct-translation rule이 포함됨
+    - compact `Context:{...}` line 출력
+    - local sentence pronunciation fallback 복구
+    - local vocab pronunciation fallback 복구
+- live deployment signals
+  - `https://gunh0906.github.io/thai/` HTML이 `manifest/styles/app.js` 모두 `20260424a`를 가리킴
+  - `https://thai-pocketbook-ai.rjsghks87.workers.dev/health` -> `{ ok: true, service: "thai-pocketbook-ai", auth: "session" }`
+
+### Still unverified
+
+- live `/assist` end-to-end response
+  - worker가 session auth를 요구하므로 unauthenticated probe는 `Unauthorized.` 응답이었다.
+  - 현재 세션에서는 인증된 live user session token을 사용하지 않았다.
+- live browser AI card smoke
+  - in-app browser runtime이 `failed to start codex app-server: 지정된 경로를 찾을 수 없습니다. (os error 3)`로 막혀 자동 UI 확인을 붙이지 못했다.
+
+### Immediate next start
+
+1. 인증된 관리자 세션으로 live `/assist`를 다시 호출해 `결재해 주세요` 같은 direct translation query에서 발음 fallback이 실제 카드에도 보이는지 확인하기
+2. browser runtime path blocker를 정리하거나 기존 `agent-browser --cdp 9222` fallback으로 live AI card screenshot proof 남기기
