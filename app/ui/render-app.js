@@ -223,11 +223,19 @@ export function createRenderer({
     if (!adminView && shouldAutoRunAiAssist(currentSearchContext)) {
       const alreadyRequested =
         state.aiAssist.query === currentSearchContext.query &&
-        (state.aiAssist.status === "loading" || state.aiAssist.status === "done");
+        (state.aiAssist.status === "loading" || state.aiAssist.status === "done" || state.aiAssist.status === "error");
       if (!alreadyRequested) {
         windowRef.setTimeout(() => {
           const requestAiAssist = typeof getRequestAiAssist === "function" ? getRequestAiAssist() : null;
-          if (state.lastSearchContext?.query === currentSearchContext.query && typeof requestAiAssist === "function") {
+          const sameQueryStillPending = state.aiAssist.query === currentSearchContext.query;
+          const hasSettledAutoAttempt =
+            sameQueryStillPending &&
+            (state.aiAssist.status === "loading" || state.aiAssist.status === "done" || state.aiAssist.status === "error");
+          if (
+            state.lastSearchContext?.query === currentSearchContext.query &&
+            !hasSettledAutoAttempt &&
+            typeof requestAiAssist === "function"
+          ) {
             requestAiAssist(currentSearchContext, { trigger: "auto" });
           }
         }, 20);

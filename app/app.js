@@ -17,7 +17,7 @@ import {
   WORKSITE_SUPPLEMENTAL_SENTENCE_GROUPS,
   WORKSITE_SUPPLEMENTAL_VOCAB_GROUPS,
 } from "./search/worksite-domain-data.js";
-import { createRenderer } from "./ui/render-app.js?v=20260424i";
+import { createRenderer } from "./ui/render-app.js?v=20260425a";
 import { sortByReferenceOrder, unique } from "./utils/array.js";
 import { compactText, escapeHtml, normalizeText } from "./utils/text.js";
 
@@ -25,7 +25,7 @@ const EXPORT_VERSION = 1;
 const AI_STORAGE_KEY = "thai-pocketbook-ai-v1";
 const AUTH_STORAGE_KEY = "thai-pocketbook-auth-v1";
 const UI_LANGUAGE_STORAGE_KEY = "thai-pocketbook-ui-language-v1";
-const APP_VERSION = "20260424l";
+const APP_VERSION = "20260425a";
 const DATA_INDEX_SCRIPT_SRC = "./data-index.js?v=20260424h";
 const DATA_CORE_SCRIPT_SRC = "./data-core.js?v=20260424g";
 const DATA_SCRIPT_SRC = "./data.js?v=20260422a";
