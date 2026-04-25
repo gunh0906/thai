@@ -18,9 +18,9 @@ export function createSearchActions({
 
   function warmFullSearchData(query) {
     if (!String(query || "").trim() || typeof ensureFullBaseDataLoaded !== "function") return;
-    ensureFullBaseDataLoaded({ renderAfter: true }).catch((error) => {
-      console.error("전체 검색 데이터 보강 실패", error);
-    });
+    // Do not auto-load the legacy 10MB full dataset after a search.
+    // Query-specific shards are enough for interactive search, and loading the
+    // full file here can block mobile taps while the browser parses it.
   }
 
   async function performSearch(nextQuery = elements.searchInput.value.trim(), options = {}) {

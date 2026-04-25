@@ -5,7 +5,7 @@ import { createRenderAdminUsersList } from "./admin/render-admin-users.js?v=2026
 import { createRenderAuthSection } from "./auth/render-auth.js";
 import { createBoot, bootstrapApp } from "./core/boot.js";
 import { createWireEvents } from "./core/wire-events.js";
-import { createSearchActions } from "./search/search-actions.js";
+import { createSearchActions } from "./search/search-actions.js?v=20260425b";
 import { createGeneratedAssistHelpers } from "./search/generated-assist-helpers.js";
 import { createSearchGenerators } from "./search/generators.js";
 import { createIntentAnalyzer } from "./search/intent-analyzer.js";
@@ -25,7 +25,7 @@ const EXPORT_VERSION = 1;
 const AI_STORAGE_KEY = "thai-pocketbook-ai-v1";
 const AUTH_STORAGE_KEY = "thai-pocketbook-auth-v1";
 const UI_LANGUAGE_STORAGE_KEY = "thai-pocketbook-ui-language-v1";
-const APP_VERSION = "20260425a";
+const APP_VERSION = "20260425b";
 const DATA_INDEX_SCRIPT_SRC = "./data-index.js?v=20260424h";
 const DATA_CORE_SCRIPT_SRC = "./data-core.js?v=20260424g";
 const DATA_SCRIPT_SRC = "./data.js?v=20260422a";
