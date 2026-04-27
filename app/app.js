@@ -25,7 +25,7 @@ const EXPORT_VERSION = 1;
 const AI_STORAGE_KEY = "thai-pocketbook-ai-v1";
 const AUTH_STORAGE_KEY = "thai-pocketbook-auth-v1";
 const UI_LANGUAGE_STORAGE_KEY = "thai-pocketbook-ui-language-v1";
-const APP_VERSION = "20260427b";
+const APP_VERSION = "20260427c";
 const DATA_INDEX_SCRIPT_SRC = "./data-index.js?v=20260424h";
 const DATA_CORE_SCRIPT_SRC = "./data-core.js?v=20260424g";
 const DATA_SCRIPT_SRC = "./data.js?v=20260422a";
@@ -6171,6 +6171,7 @@ const elements = {
   authAccountMeta: document.querySelector("#authAccountMeta"),
   authCurrentPasswordInput: document.querySelector("#authCurrentPasswordInput"),
   authNewPasswordInput: document.querySelector("#authNewPasswordInput"),
+  authSessionFeedback: document.querySelector("#authSessionFeedback"),
   authChangePasswordButton: document.querySelector("#authChangePasswordButton"),
   authLogoutButton: document.querySelector("#authLogoutButton"),
   authAdminSection: document.querySelector("#authAdminSection"),
@@ -10658,6 +10659,11 @@ async function submitAuthLogin(event) {
         ? t("auth.login.successChangeRequired")
         : t("auth.login.success");
     }
+    if (elements.authSessionFeedback) {
+      elements.authSessionFeedback.textContent = state.auth.me?.mustChangePassword
+        ? t("auth.login.successChangeRequired")
+        : "";
+    }
 
     if (isCurrentUserAdmin()) {
       await loadAdminUsers({ silent: true });
@@ -10689,17 +10695,20 @@ async function handleAuthLogout() {
 async function handleAuthChangePassword() {
   const currentPassword = String(elements.authCurrentPasswordInput?.value || "").trim();
   const newPassword = String(elements.authNewPasswordInput?.value || "").trim();
+  const feedbackElement = elements.authSessionFeedback || elements.authFeedback;
 
   if (!currentPassword || !newPassword) {
-    if (elements.authFeedback) {
-      elements.authFeedback.textContent = t("auth.password.missing");
+    if (feedbackElement) {
+      feedbackElement.textContent = t("auth.password.missing");
     }
     return;
   }
 
-  if (elements.authFeedback) {
-    elements.authFeedback.textContent = t("auth.password.progress");
+  if (feedbackElement) {
+    feedbackElement.textContent = t("auth.password.progress");
   }
+  state.auth.checking = true;
+  render();
 
   try {
     const data = await requestWorkerJson("/auth/change-password", {
@@ -10715,14 +10724,16 @@ async function handleAuthChangePassword() {
     saveAuthState();
     if (elements.authCurrentPasswordInput) elements.authCurrentPasswordInput.value = "";
     if (elements.authNewPasswordInput) elements.authNewPasswordInput.value = "";
-    if (elements.authFeedback) {
-      elements.authFeedback.textContent = t("auth.password.success");
+    if (feedbackElement) {
+      feedbackElement.textContent = t("auth.password.success");
     }
-    render();
   } catch (error) {
-    if (elements.authFeedback) {
-      elements.authFeedback.textContent = error instanceof Error ? error.message : t("auth.password.failed");
+    if (feedbackElement) {
+      feedbackElement.textContent = error instanceof Error ? error.message : t("auth.password.failed");
     }
+  } finally {
+    state.auth.checking = false;
+    render();
   }
 }
 
