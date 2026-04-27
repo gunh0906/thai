@@ -56,6 +56,7 @@ export function createWireEvents({
       elements.menuCloseButton,
       elements.menuOpenSearchViewButton,
       elements.menuOpenAdminViewButton,
+      elements.adminWorkspaceSearchButton,
       elements.exportButton,
       elements.importButton,
       elements.clearCustomButton,
@@ -107,6 +108,12 @@ export function createWireEvents({
     elements.menuOpenAdminViewButton?.addEventListener("click", () => {
       setCurrentView("admin");
       closeMenu();
+    });
+
+    elements.adminWorkspaceSearchButton?.addEventListener("click", () => {
+      setCurrentView("search");
+      closeMenu();
+      elements.searchInput?.focus();
     });
 
     elements.menuCloseButton.addEventListener("click", closeMenu);

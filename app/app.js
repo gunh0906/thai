@@ -1,10 +1,10 @@
 ﻿const STORAGE_KEY = "thai-pocketbook-custom-v1";
 import { createAiAssistRequester } from "./ai/request-ai-assist.js";
 import { createRenderAiAssist } from "./ai/render-ai-assist.js?v=20260424l";
-import { createRenderAdminUsersList } from "./admin/render-admin-users.js?v=20260424e";
+import { createRenderAdminUsersList } from "./admin/render-admin-users.js?v=20260427a";
 import { createRenderAuthSection } from "./auth/render-auth.js";
 import { createBoot, bootstrapApp } from "./core/boot.js";
-import { createWireEvents } from "./core/wire-events.js";
+import { createWireEvents } from "./core/wire-events.js?v=20260427a";
 import { createSearchActions } from "./search/search-actions.js?v=20260425b";
 import { createGeneratedAssistHelpers } from "./search/generated-assist-helpers.js";
 import { createSearchGenerators } from "./search/generators.js";
@@ -25,7 +25,7 @@ const EXPORT_VERSION = 1;
 const AI_STORAGE_KEY = "thai-pocketbook-ai-v1";
 const AUTH_STORAGE_KEY = "thai-pocketbook-auth-v1";
 const UI_LANGUAGE_STORAGE_KEY = "thai-pocketbook-ui-language-v1";
-const APP_VERSION = "20260425b";
+const APP_VERSION = "20260427a";
 const DATA_INDEX_SCRIPT_SRC = "./data-index.js?v=20260424h";
 const DATA_CORE_SCRIPT_SRC = "./data-core.js?v=20260424g";
 const DATA_SCRIPT_SRC = "./data.js?v=20260422a";
@@ -86,6 +86,7 @@ const UI_TEXT = {
     "ai.button.loading": "AI 번역 중...",
     "admin.workspace.kicker": "관리자",
     "admin.workspace.title": "관리자 작업 공간",
+    "admin.workspace.searchAction": "검색 화면",
     "results.vocab.kicker": "단어",
     "results.vocab.title": "먼저 잡아둘 핵심 단어",
     "results.sentence.kicker": "회화",
@@ -313,6 +314,7 @@ const UI_TEXT = {
     "ai.button.loading": "AI กำลังแปล...",
     "admin.workspace.kicker": "ผู้ดูแล",
     "admin.workspace.title": "พื้นที่จัดการผู้ดูแล",
+    "admin.workspace.searchAction": "หน้าค้นหา",
     "results.vocab.kicker": "คำศัพท์",
     "results.vocab.title": "คำหลักที่ควรรู้ก่อน",
     "results.sentence.kicker": "บทสนทนา",
@@ -6182,6 +6184,7 @@ const elements = {
   authUsersList: document.querySelector("#authUsersList"),
   adminAiSection: document.querySelector("#adminAiSection"),
   adminWorkspacePanel: document.querySelector("#adminWorkspacePanel"),
+  adminWorkspaceSearchButton: document.querySelector("#adminWorkspaceSearchButton"),
   adminWorkspaceGrid: document.querySelector("#adminWorkspaceGrid"),
   adminWorkspaceSummary: document.querySelector("#adminWorkspaceSummary"),
   statsSection: document.querySelector("#statsSection"),
@@ -10217,6 +10220,11 @@ function setCurrentView(nextView = "search") {
   const resolved = nextView === "admin" && isCurrentUserAdmin() ? "admin" : "search";
   state.currentView = resolved;
   render();
+  if (resolved === "admin") {
+    loadAdminUsers({ preserveOnError: true }).catch((error) => {
+      console.error("관리자 사용자 목록 새로고침 실패", error);
+    });
+  }
 }
 
 function hideLegacyMenuAuthSection() {

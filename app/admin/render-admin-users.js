@@ -25,12 +25,19 @@ export function createRenderAdminUsersList({
       return;
     }
 
-    if (!state.auth.users.length) {
+    const visibleUsers = state.auth.users.filter((user) => {
+      const username = String(user?.username || "").trim();
+      if (!username) return false;
+      if (username.toLowerCase() === "admin") return false;
+      return username !== state.auth.me?.username;
+    });
+
+    if (!visibleUsers.length) {
       elements.authUsersList.appendChild(createEmptyState(t("auth.users.empty")));
       return;
     }
 
-    state.auth.users.forEach((user) => {
+    visibleUsers.forEach((user) => {
       const card = document.createElement("article");
       card.className = "entry-card auth-user-card";
 

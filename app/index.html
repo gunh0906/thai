@@ -8,7 +8,7 @@
     <title>태국어 포켓북</title>
     <link rel="manifest" href="./manifest.webmanifest?v=20260424b" />
     <link rel="icon" href="./icon.svg?v=20260416x" type="image/svg+xml" />
-    <link rel="stylesheet" href="./styles.css?v=20260424f" />
+    <link rel="stylesheet" href="./styles.css?v=20260427a" />
   </head>
   <body>
     <div class="page-shell">
@@ -139,8 +139,13 @@
               <p class="section-kicker" data-ui-key="admin.workspace.kicker">관리자</p>
               <h2 data-ui-key="admin.workspace.title">관리자 작업 공간</h2>
             </div>
-            <p id="adminWorkspaceSummary" class="section-description"></p>
+            <div class="admin-workspace-actions">
+              <button id="adminWorkspaceSearchButton" class="ghost-button" type="button" data-ui-key="admin.workspace.searchAction">
+                검색 화면
+              </button>
+            </div>
           </div>
+          <p id="adminWorkspaceSummary" class="section-description"></p>
           <div id="adminWorkspaceGrid" class="admin-workspace-grid"></div>
         </section>
 
@@ -515,6 +520,6 @@
       </div>
     </aside>
 
-    <script type="module" src="./app.js?v=20260425b"></script>
+    <script type="module" src="./app.js?v=20260427a"></script>
   </body>
 </html>

@@ -423,6 +423,12 @@ button:active {
   gap: 16px;
 }
 
+.admin-workspace-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
 .admin-workspace-grid .menu-section {
   margin: 0;
   padding: 18px;
