@@ -112,6 +112,10 @@ function normalizeUsername(value) {
   return cleanText(value).toLowerCase();
 }
 
+function getUsernameLength(value) {
+  return Array.from(String(value || "")).length;
+}
+
 function getBootstrapAdminUsername(env) {
   return normalizeUsername(env.BOOTSTRAP_ADMIN_USERNAME || "");
 }
@@ -153,7 +157,7 @@ function corsHeaders(request, env) {
   const allowOrigin = resolveCorsOrigin(request, env);
   return {
     "Access-Control-Allow-Origin": allowOrigin,
-    "Access-Control-Allow-Methods": "GET,POST,PATCH,OPTIONS",
+    "Access-Control-Allow-Methods": "GET,POST,PATCH,DELETE,OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type, Authorization",
     "Access-Control-Max-Age": "86400",
     Vary: "Origin",
@@ -619,7 +623,9 @@ async function verifyPassword(password, record) {
 }
 
 function validateUsername(value) {
-  return /^[a-z0-9._-]{3,32}$/i.test(normalizeUsername(value));
+  const username = normalizeUsername(value);
+  const length = getUsernameLength(username);
+  return length >= 2 && length <= 32 && /^[a-z0-9._\-\uAC00-\uD7A3\u3131-\u318E]+$/i.test(username);
 }
 
 function validatePassword(value) {
@@ -1105,7 +1111,7 @@ export class AuthStore {
     const enabled = body?.enabled !== false;
 
     if (!validateUsername(username)) {
-      return authStoreJsonResponse({ error: "아이디는 영문, 숫자, 점, 밑줄, 하이픈만 3~32자로 만들어 주세요." }, 400);
+      return authStoreJsonResponse({ error: "아이디는 한글, 영문, 숫자, 점, 밑줄, 하이픈만 2~32자로 만들어 주세요." }, 400);
     }
     if (!validateTemporaryPassword(password)) {
       return authStoreJsonResponse({ error: "초기 비밀번호는 1234여야 합니다." }, 400);

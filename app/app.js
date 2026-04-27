@@ -25,7 +25,7 @@ const EXPORT_VERSION = 1;
 const AI_STORAGE_KEY = "thai-pocketbook-ai-v1";
 const AUTH_STORAGE_KEY = "thai-pocketbook-auth-v1";
 const UI_LANGUAGE_STORAGE_KEY = "thai-pocketbook-ui-language-v1";
-const APP_VERSION = "20260427a";
+const APP_VERSION = "20260427b";
 const DATA_INDEX_SCRIPT_SRC = "./data-index.js?v=20260424h";
 const DATA_CORE_SCRIPT_SRC = "./data-core.js?v=20260424g";
 const DATA_SCRIPT_SRC = "./data.js?v=20260422a";
@@ -115,7 +115,7 @@ const UI_TEXT = {
     "admin.users.title": "사용자 관리",
     "admin.users.description": "관리자만 새 아이디를 만들고 권한을 줄 수 있습니다.",
     "admin.users.newUsername": "새 아이디",
-    "admin.users.newUsernamePlaceholder": "예: worker01",
+    "admin.users.newUsernamePlaceholder": "예: 홍길동, worker01",
     "admin.users.tempPassword": "초기 비밀번호",
     "admin.users.tempPasswordPlaceholder": "1234 고정",
     "admin.users.initialPasswordHint": "새 사용자는 1234로 처음 로그인한 뒤 비밀번호를 바로 변경해야 합니다.",
@@ -343,7 +343,7 @@ const UI_TEXT = {
     "admin.users.title": "จัดการผู้ใช้",
     "admin.users.description": "เฉพาะผู้ดูแลเท่านั้นที่สร้างบัญชีใหม่และกำหนดสิทธิ์ได้",
     "admin.users.newUsername": "ชื่อผู้ใช้ใหม่",
-    "admin.users.newUsernamePlaceholder": "เช่น worker01",
+    "admin.users.newUsernamePlaceholder": "เช่น 홍길동, worker01",
     "admin.users.tempPassword": "รหัสผ่านเริ่มต้น",
     "admin.users.tempPasswordPlaceholder": "กำหนดเป็น 1234",
     "admin.users.initialPasswordHint": "ผู้ใช้ใหม่จะเข้าสู่ระบบครั้งแรกด้วย 1234 แล้วต้องเปลี่ยนรหัสผ่านทันที",
