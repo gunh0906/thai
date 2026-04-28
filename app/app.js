@@ -25,7 +25,7 @@ const EXPORT_VERSION = 1;
 const AI_STORAGE_KEY = "thai-pocketbook-ai-v1";
 const AUTH_STORAGE_KEY = "thai-pocketbook-auth-v1";
 const UI_LANGUAGE_STORAGE_KEY = "thai-pocketbook-ui-language-v1";
-const APP_VERSION = "20260427c";
+const APP_VERSION = "20260428a";
 const DATA_INDEX_SCRIPT_SRC = "./data-index.js?v=20260424h";
 const DATA_CORE_SCRIPT_SRC = "./data-core.js?v=20260424g";
 const DATA_SCRIPT_SRC = "./data.js?v=20260422a";
@@ -7620,7 +7620,12 @@ async function requestWorkerJson(path, options = {}) {
       resetAuthState(t("auth.error.sessionExpired"));
       render();
     }
-    throw new Error(String(data?.error || data?.message || `요청 실패 (${response.status})`));
+    const baseMessage = String(data?.error || data?.message || `요청 실패 (${response.status})`);
+    const detailParts = [];
+    if (data?.code) detailParts.push(`코드 ${data.code}`);
+    if (data?.providerStatus) detailParts.push(`OpenAI ${data.providerStatus}`);
+    if (data?.errorId) detailParts.push(`추적 ${data.errorId}`);
+    throw new Error(detailParts.length ? `${baseMessage} (${detailParts.join(" · ")})` : baseMessage);
   }
 
   return data;

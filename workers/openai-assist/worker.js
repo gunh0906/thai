@@ -216,6 +216,100 @@ function supportsReasoningEffort(model) {
   return /^(gpt-5|o1|o3|o4)/.test(normalized);
 }
 
+function includesAny(value, needles) {
+  const normalized = cleanText(value).toLowerCase();
+  return needles.some((needle) => normalized.includes(needle));
+}
+
+function createErrorId(prefix = "ai") {
+  return `${prefix}-${createRandomToken(6)}`;
+}
+
+function getOpenAiErrorInfo(payload) {
+  const error = payload?.error || {};
+  return {
+    code: cleanText(error.code || ""),
+    type: cleanText(error.type || ""),
+    message: redactSensitiveText(error.message || ""),
+  };
+}
+
+function classifyOpenAiError(status, info, model) {
+  const fingerprint = [info.code, info.type, info.message].join(" ").toLowerCase();
+  const modelText = cleanText(model || DEFAULT_MODEL);
+
+  if (status === 401 || includesAny(fingerprint, ["invalid_api_key", "incorrect api key", "api key provided"])) {
+    return {
+      code: "OPENAI_KEY_REJECTED",
+      retryable: false,
+      httpStatus: 502,
+      error: "OpenAI 키가 서버에서 거부되었습니다. Worker secret의 OpenAI 키를 다시 등록해야 합니다.",
+    };
+  }
+
+  if (status === 403 && includesAny(fingerprint, ["unsupported_country", "country", "region", "territory"])) {
+    return {
+      code: "OPENAI_REGION_OR_ROUTE_BLOCKED",
+      retryable: true,
+      httpStatus: 502,
+      error:
+        "OpenAI가 현재 Worker 호출 경로나 지역을 거부했습니다. 같은 키가 어떤 때는 되고 어떤 때는 안 되면 Cloudflare 경로/지역 차단 가능성이 큽니다.",
+    };
+  }
+
+  if (status === 403 && includesAny(fingerprint, ["model", "does not have access", "not have access", "unsupported"])) {
+    return {
+      code: "OPENAI_MODEL_ACCESS_DENIED",
+      retryable: false,
+      httpStatus: 502,
+      error: `OpenAI 프로젝트가 현재 모델(${modelText})을 사용할 권한이 없습니다. Worker의 OPENAI_MODEL 권한을 확인해야 합니다.`,
+    };
+  }
+
+  if (status === 403) {
+    return {
+      code: "OPENAI_PROJECT_PERMISSION_DENIED",
+      retryable: false,
+      httpStatus: 502,
+      error: "OpenAI 프로젝트/조직 권한이 이 요청을 거부했습니다. 키 자체보다 프로젝트 권한이나 제한 설정을 확인해야 합니다.",
+    };
+  }
+
+  if (status === 429 && includesAny(fingerprint, ["insufficient_quota", "quota", "billing"])) {
+    return {
+      code: "OPENAI_QUOTA_OR_BILLING_LIMIT",
+      retryable: false,
+      httpStatus: 429,
+      error: "OpenAI 결제/쿼터 한도 때문에 AI 요청이 거부되었습니다. 사용량 한도나 결제 상태를 확인해야 합니다.",
+    };
+  }
+
+  if (status === 429) {
+    return {
+      code: "OPENAI_RATE_LIMITED",
+      retryable: true,
+      httpStatus: 429,
+      error: "OpenAI 호출이 잠시 많아서 제한되었습니다. 잠시 뒤 다시 시도해 주세요.",
+    };
+  }
+
+  if (status >= 500) {
+    return {
+      code: "OPENAI_UPSTREAM_UNSTABLE",
+      retryable: true,
+      httpStatus: 502,
+      error: "OpenAI 서버가 잠시 불안정합니다. 잠시 뒤에 다시 시도해 주세요.",
+    };
+  }
+
+  return {
+    code: `OPENAI_HTTP_${status || "UNKNOWN"}`,
+    retryable: false,
+    httpStatus: 502,
+    error: info.message || "OpenAI 요청이 실패했습니다.",
+  };
+}
+
 function containsHangul(text) {
   return /[가-힣]/.test(String(text || ""));
 }
@@ -825,52 +919,30 @@ async function handleAssist(request, env) {
 
   const openaiPayload = await openaiResponse.json().catch(() => ({}));
   if (!openaiResponse.ok) {
-    const providerMessage = redactSensitiveText(openaiPayload?.error?.message || "");
+    const errorId = createErrorId("openai");
+    const providerInfo = getOpenAiErrorInfo(openaiPayload);
+    const classifiedError = classifyOpenAiError(openaiResponse.status, providerInfo, model);
     console.error("OpenAI request failed", {
+      errorId,
       status: openaiResponse.status,
-      message: providerMessage || "OpenAI request failed.",
+      code: providerInfo.code,
+      type: providerInfo.type,
+      message: providerInfo.message || "OpenAI request failed.",
+      model,
     });
-
-    if (openaiResponse.status === 401 || openaiResponse.status === 403) {
-      return jsonResponse(
-        request,
-        env,
-        {
-          error: "AI 서버의 OpenAI 키가 올바르지 않거나 권한이 없습니다. 관리자에게 OpenAI 키를 다시 등록해 달라고 해 주세요.",
-        },
-        502
-      );
-    }
-
-    if (openaiResponse.status === 429) {
-      return jsonResponse(
-        request,
-        env,
-        {
-          error: "AI 서버 호출이 잠시 많습니다. 조금 뒤에 다시 시도해 주세요.",
-        },
-        429
-      );
-    }
-
-    if (openaiResponse.status >= 500) {
-      return jsonResponse(
-        request,
-        env,
-        {
-          error: "AI 서버가 잠시 불안정합니다. 잠시 뒤에 다시 시도해 주세요.",
-        },
-        502
-      );
-    }
 
     return jsonResponse(
       request,
       env,
       {
-        error: providerMessage || "OpenAI request failed.",
+        error: classifiedError.error,
+        code: classifiedError.code,
+        errorId,
+        providerStatus: openaiResponse.status,
+        retryable: classifiedError.retryable,
+        model,
       },
-      502
+      classifiedError.httpStatus
     );
   }
 
