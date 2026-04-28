@@ -2,6 +2,9 @@ name = "thai-pocketbook-ai"
 main = "worker.js"
 compatibility_date = "2026-04-16"
 
+[placement]
+region = "aws:us-east-1"
+
 [[durable_objects.bindings]]
 name = "AUTH_STORE"
 class_name = "AuthStore"
